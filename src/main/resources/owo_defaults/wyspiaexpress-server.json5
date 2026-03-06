@@ -1,0 +1,40 @@
+{
+  /*  Valid shop entries:
+          Format: ITEM_NAME;PRICE;PURCHASE_LIMIT;TYPE
+          Example: KNIFE;50;1;WEAPON
+          Type can take values from: WEAPON, TOOL, POISON; it only affects the ui in shop
+          PURCHASE_LIMIT is still WIP, not implemented yet
+
+      Valid items:
+      KNIFE, REVOLVER, GRENADE, PSYCHO_MODE, POISON_VIAL, SCORPION,
+      FIRECRACKER, LOCKPICK, CROWBAR, BODY_BAG, BLACKOUT, NOTE
+
+  */
+  "exampleShopEntries": [
+    "KNIFE;50;-1;WEAPON",
+    "PSYCHO_MODE;300;-1;WEAPON"
+  ],
+  // Config options for BANDIT.
+  "banditConfig": {
+    // Basic role configuration.
+    "basic": {
+      // Whether this civilian role has shop.
+      "enableShop": true,
+      // Shop options.
+      "shopConfig": {
+        // Shop entries
+        "shopEntries": []
+      },
+      // Starting items.
+      "items": [],
+      // Maximum sprint time. -1 to have infinite stamina.
+      "maxSprintTime": 200,
+      // Minimum number of players to spawn this role. Can only take values from 1 to 20
+      "minimumPlayerSpawn": 5,
+      // Maximum number of this role spawning. Can only take values from 0 to 20
+      "maximumSpawn": 1,
+      // Can see the game timer
+      "seeTimer": false
+    }
+  }
+}
