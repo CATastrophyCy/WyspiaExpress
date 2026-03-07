@@ -1,7 +1,6 @@
 package org.cat.express.wyspiaexpress.config;
 
-import blue.endless.jankson.Comment;
-import dev.doctor4t.wathe.cca.PlayerMoodComponent;
+
 import dev.doctor4t.wathe.util.ShopEntry;
 import org.cat.express.wyspiaexpress.Wyspiaexpress;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;

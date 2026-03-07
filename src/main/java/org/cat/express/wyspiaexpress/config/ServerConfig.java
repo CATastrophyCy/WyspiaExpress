@@ -4,9 +4,6 @@ package org.cat.express.wyspiaexpress.config;
 import blue.endless.jankson.Comment;
 import io.wispforest.owo.config.Option;
 import io.wispforest.owo.config.annotation.*;
-import org.cat.express.wyspiaexpress.Wyspiaexpress;
-import pro.fazeclan.river.stupid_express.mixin.role.avaricious.AvariciousGoldPayout;
-
 import java.util.ArrayList;
 import java.util.List;
 
