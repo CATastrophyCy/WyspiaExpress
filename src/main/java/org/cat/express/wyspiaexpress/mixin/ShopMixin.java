@@ -37,11 +37,12 @@ public abstract class ShopMixin {
         var basicConfig = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(playerRole);
         if (basicConfig != null) {
             if(basicConfig.enableShop()) {
-                WyspiaExpressServerConfig.ShopConfig config = WyspiaExpressRoles.ROLES_SHOP_CONFIG.get(playerRole);
-                List<ShopEntry> shop = ShopUtil.fromShopEntryConfigs(ShopConfig.fromStrings(config.shopEntries()));
+
+                List<ShopEntry> shop = ShopUtil.fromShopEntryConfigs(ShopConfig.fromStrings(basicConfig.shopEntries()));
                 if (index < 0 || index >= shop.size()) return;
                 ShopEntry entries = shop.get(index);
-                if (PlayerPurchaseComponent.handlePurchase(this.player, this.balance, entries.stack().getItem(), entries.price())) {
+
+                if (ShopUtil.handlePurchase(this.player, this.balance, entries.stack().getItem(), entries.price())) {
                     this.balance -= entries.price();
                     this.sync();
                 }

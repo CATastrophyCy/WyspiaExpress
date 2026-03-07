@@ -47,23 +47,19 @@ public abstract class ShopMixin extends LimitedHandledScreen<PlayerScreenHandler
             accessor.getChildren().removeIf(w -> w instanceof LimitedInventoryScreen.StoreItemWidget);
             accessor.getSelectables().removeIf(w -> w instanceof LimitedInventoryScreen.StoreItemWidget);
             if(basicConfig.enableShop()) {
-                // check if shop config is available
-                WyspiaExpressServerConfig.ShopConfig config = WyspiaExpressRoles.ROLES_SHOP_CONFIG.get(playerRole);
-                if (config != null) {
-
-                    // Replaces the shop with our own
-                    List<ShopEntry> entries = ShopUtil.fromShopEntryConfigs(ShopConfig.fromStrings(config.shopEntries()));
-                    int apart = 36;
-                    int x = this.width / 2 - (entries.size()) * apart / 2 + 9;
-                    int shouldBeY = (this.height - 32) / 2;
-                    int y = shouldBeY - 46;
-                    for (int i = 0; i < entries.size(); ++i) {
-                        this.addDrawableChild(new LimitedInventoryScreen.StoreItemWidget(
-                                (LimitedInventoryScreen) (Object) this, x + apart * i, y, entries.get(i), i
-                        ));
-                    }
-
+                // Replaces the shop with our own
+                List<ShopEntry> entries = ShopUtil.fromShopEntryConfigs(ShopConfig.fromStrings(basicConfig.shopEntries()));
+                // Need to add logic to count the times bough of each item to the player via component, and here we only draw those that he can still buy
+                int apart = 36;
+                int x = this.width / 2 - (entries.size()) * apart / 2 + 9;
+                int shouldBeY = (this.height - 32) / 2;
+                int y = shouldBeY - 46;
+                for (int i = 0; i < entries.size(); ++i) {
+                    this.addDrawableChild(new LimitedInventoryScreen.StoreItemWidget(
+                            (LimitedInventoryScreen) (Object) this, x + apart * i, y, entries.get(i), i
+                    ));
                 }
+
             }
         }
     }

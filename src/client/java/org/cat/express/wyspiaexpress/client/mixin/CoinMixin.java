@@ -23,7 +23,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class CoinMixin {
     @Shadow public static float offsetDelta;
     @Shadow public static StoreRenderer.MoneyNumberRenderer view;
-    // change the rendering of the coin code to mine
+    /**
+     * Changes the coin rendering logic
+     * the normal behaviour just checks if the player is a killer to render
+     * here we base it on if the role has shop enabled
+    */
     @Inject(method = "renderHud", at = @At("HEAD"), cancellable = true)
     private static void incomeIcon(@NotNull TextRenderer renderer, @NotNull ClientPlayerEntity player, @NotNull DrawContext context, float delta, @NotNull CallbackInfo ci) {
         if (MinecraftClient.getInstance().player == null) return;
@@ -31,6 +35,7 @@ public class CoinMixin {
             Role role = GameWorldComponent.KEY.get(player.getWorld()).getRole(player);
             var config = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role);
             if (config != null) {
+                // we can add another check to only render if the shop has items to buy
                 if (config.enableShop()) {
                     int balance = PlayerShopComponent.KEY.get(player).balance;
                     if (view.getTarget() != (float) balance) {

@@ -1,14 +1,21 @@
 package org.cat.express.wyspiaexpress;
 
 import java.util.HashMap;
+import java.util.List;
+
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
+import dev.doctor4t.wathe.util.ShopEntry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.agmas.harpymodloader.Harpymodloader;
+import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
 import org.agmas.harpymodloader.modifiers.Modifier;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressServerConfig;
+import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
+import org.cat.express.wyspiaexpress.shop.ShopUtil;
 
 import static org.BsXinQin.kinswathe.KinsWatheRoles.*;
 import static org.agmas.noellesroles.Noellesroles.*;
@@ -20,14 +27,13 @@ public class WyspiaExpressRoles {
 
     public static void init() {
         registerRoleConfigs();
+        registerStartingItems();
         limitRoleSpawn();
     }
 
     private static final HashMap<String, Role> ROLES = new HashMap<>();
     public static final HashMap<Role, WyspiaExpressServerConfig.RoleBasicConfig> ROLES_BASIC_CONFIG = new HashMap<>();
 
-    // this map here is necessary right now because of how the config is structured, I will change this in the future
-    public static final HashMap<Role, WyspiaExpressServerConfig.ShopConfig> ROLES_SHOP_CONFIG = new HashMap<>();
 
     public static HashMap<String, Role> getRoles() {return ROLES;}
     private static final HashMap<String, Modifier> MODIFIERS = new HashMap<>();
@@ -74,35 +80,55 @@ public class WyspiaExpressRoles {
         }));
 
     }
+    public static void registerStartingItems(){
+        ModdedRoleAssigned.EVENT.register((player, role)->{
+            var basicConfig = ROLES_BASIC_CONFIG.get(role);
+            if(basicConfig != null){
+                List<EnumShopEntry> startingItems = basicConfig.items();
+                List<Integer> startingItemAmount = basicConfig.itemAmount();
+                for(int i = 0; i < startingItems.size(); i++) {
+                    EnumShopEntry entry = startingItems.get(i);
+                    int amount = 1;
+                    if( i < startingItemAmount.size()){
+                        amount = startingItemAmount.get(i);
+                    }
+                    //
+                    ItemStack item = ShopUtil.fromEnumShopEntry(entry);
+                    item.setCount(amount);
+                    player.giveItemStack(item);
+                }
+            }
+        });
+    }
     public static void registerRoleConfigs(){
 
         registerRoleBasicConfig(BANDIT, Wyspiaexpress.CONFIG.roleConfig.banditConfig.basic);
-        ROLES_SHOP_CONFIG.put(BANDIT,Wyspiaexpress.CONFIG.roleConfig.banditConfig.basic.shopConfig);
+
         // Starry Express roles
         registerRoleBasicConfig(MUZZLER, Wyspiaexpress.CONFIG.roleConfig.muzzlerConfig.basic);
-        ROLES_SHOP_CONFIG.put(MUZZLER,Wyspiaexpress.CONFIG.roleConfig.muzzlerConfig.basic.shopConfig);
+
         // Stupid Express roles
         registerRoleBasicConfig(AVARICIOUS, Wyspiaexpress.CONFIG.roleConfig.avariciousConfig.basic);
-        ROLES_SHOP_CONFIG.put(AVARICIOUS,Wyspiaexpress.CONFIG.roleConfig.necromancerConfig.basic.shopConfig);
+
         registerRoleBasicConfig(NECROMANCER, Wyspiaexpress.CONFIG.roleConfig.necromancerConfig.basic);
-        ROLES_SHOP_CONFIG.put(NECROMANCER,Wyspiaexpress.CONFIG.roleConfig.necromancerConfig.basic.shopConfig);
+
         // Noelles role
         registerRoleBasicConfig(MORPHLING, Wyspiaexpress.CONFIG.roleConfig.morphlingConfig.basic);
-        ROLES_SHOP_CONFIG.put(MORPHLING,Wyspiaexpress.CONFIG.roleConfig.morphlingConfig.basic.shopConfig);
+
         registerRoleBasicConfig(PHANTOM, Wyspiaexpress.CONFIG.roleConfig.phantomConfig.basic);
-        ROLES_SHOP_CONFIG.put(PHANTOM,Wyspiaexpress.CONFIG.roleConfig.phantomConfig.basic.shopConfig);
+
         registerRoleBasicConfig(SWAPPER, Wyspiaexpress.CONFIG.roleConfig.swapperConfig.basic);
-        ROLES_SHOP_CONFIG.put(SWAPPER,Wyspiaexpress.CONFIG.roleConfig.swapperConfig.basic.shopConfig);
+
         // Kin's wathe roles
         registerRoleBasicConfig(BODYMAKER, Wyspiaexpress.CONFIG.roleConfig.bodymakerConfig.basic);
-        ROLES_SHOP_CONFIG.put(BODYMAKER,Wyspiaexpress.CONFIG.roleConfig.bodymakerConfig.basic.shopConfig);
+
         registerRoleBasicConfig(CLEANER, Wyspiaexpress.CONFIG.roleConfig.cleanerConfig.basic);
-        ROLES_SHOP_CONFIG.put(CLEANER,Wyspiaexpress.CONFIG.roleConfig.cleanerConfig.basic.shopConfig);
+
         registerRoleBasicConfig(HUNTER, Wyspiaexpress.CONFIG.roleConfig.hunterConfig.basic);
-        ROLES_SHOP_CONFIG.put(HUNTER,Wyspiaexpress.CONFIG.roleConfig.hunterConfig.basic.shopConfig);
+
         registerRoleBasicConfig(KIDNAPPER, Wyspiaexpress.CONFIG.roleConfig.kidnapperConfig.basic);
-        ROLES_SHOP_CONFIG.put(KIDNAPPER,Wyspiaexpress.CONFIG.roleConfig.kidnapperConfig.basic.shopConfig);
+
         registerRoleBasicConfig(DRUGMAKER, Wyspiaexpress.CONFIG.roleConfig.drugmakerConfig.basic);
-        ROLES_SHOP_CONFIG.put(DRUGMAKER,Wyspiaexpress.CONFIG.roleConfig.drugmakerConfig.basic.shopConfig);
+
     }
 }

@@ -1,6 +1,7 @@
 package org.cat.express.wyspiaexpress.config;
 
 import blue.endless.jankson.Comment;
+import dev.doctor4t.wathe.cca.PlayerMoodComponent;
 import dev.doctor4t.wathe.util.ShopEntry;
 import org.cat.express.wyspiaexpress.Wyspiaexpress;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
@@ -10,9 +11,6 @@ import java.util.List;
 
 // I'll change this in the future so shopEntries list becomes a variable of the RoleBasicConfig's wrapper
 public class ShopConfig {
-
-    @Comment("Shop entries")
-    public List<String> shopEntries = new ArrayList<>();
 
     // decode the formatted string to a list of ShopEntryConfig
     public static List<ShopEntryConfig> fromStrings(List<String> shopEntries) {

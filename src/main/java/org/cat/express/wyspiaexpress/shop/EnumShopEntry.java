@@ -14,7 +14,7 @@ public enum EnumShopEntry {
     BLACKOUT,
     NOTE,
     // Starry express
-    TAPE,
+    TAPE, // this seems to work fine with any role
     // Noelle's
     FAKE_KNIFE,
     DELUSION_VIAL,
@@ -28,13 +28,13 @@ public enum EnumShopEntry {
     COOKED_CHIKEN,
     COOKED_BEEF,
     PILL,
-    MEDICAL_KIT,
+    MEDICAL_KIT, // this seems to work fine with any role
     ACID_BARREL,
-    HUNTING_KNIFE,
-    KNOCKOUT_DRUG,
-    DREAM_IMPRINT,
-    BLOWGUN,
-    POISON_INJECTOR,
+    HUNTING_KNIFE, // this requires the user to have Hunter role to be able to sprint faster
+    KNOCKOUT_DRUG, // this seems to work fine with any role
+    DREAM_IMPRINT, // this requires the user to have Dreamer role to work properly
+    BLOWGUN, // this seems to work fine with any role
+    POISON_INJECTOR, // this seems to work fine with any role
 
 }
 
