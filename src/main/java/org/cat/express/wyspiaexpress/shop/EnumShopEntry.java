@@ -35,6 +35,7 @@ public enum EnumShopEntry {
     DREAM_IMPRINT, // this requires the user to have Dreamer role to work properly
     BLOWGUN, // this seems to work fine with any role
     POISON_INJECTOR, // this seems to work fine with any role
-
+    // custom
+    FUN_BOX,
 }
 

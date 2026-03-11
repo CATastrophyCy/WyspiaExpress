@@ -5,6 +5,7 @@ import dev.doctor4t.wathe.index.WatheItems;
 import dev.doctor4t.wathe.index.WatheSounds;
 import dev.doctor4t.wathe.util.ShopEntry;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -15,15 +16,22 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.agmas.noellesroles.ModItems;
+import org.agmas.noellesroles.Noellesroles;
+import org.agmas.noellesroles.config.NoellesRolesConfig;
 import org.aussiebox.starexpress.item.StarryExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.config.ShopConfig;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ShopUtil {
+    public static final List<Item> FUN_BOX_RARE_POOL = List.of(WyspiaExpressItems.FAKE_REVOLVER, WatheItems.KNIFE,
+            KinsWatheItems.MEDICAL_KIT, ModItems.DEFENSE_VIAL, ModItems.MASTER_KEY, ModItems.ROLE_MINE, KinsWatheItems.PILL, KinsWatheItems.PAN);
+    public static final List<Item> FUN_BOX_NORMAL_POOL = List.of(WatheItems.NOTE, WatheItems.FIRECRACKER, ModItems.DELUSION_VIAL);
 
     public static boolean handlePurchase(@NotNull PlayerEntity player, int balance, @NotNull Item item, int price) {
         if (balance >= price && !player.getItemCooldownManager().isCoolingDown(item)) {
@@ -33,10 +41,11 @@ public class ShopUtil {
                 PlayerShopComponent.useBlackout(player);
             } else if (item == WatheItems.PSYCHO_MODE) {
                 PlayerShopComponent.usePsychoMode(player);
+            } else if (item == WyspiaExpressItems.FUN_BOX) {
+                openFunBox(player);
             } else {
                 player.giveItemStack(item.getDefaultStack());
             }
-
             if (player instanceof ServerPlayerEntity serverPlayer) {
                 serverPlayer.networkHandler.sendPacket(new PlaySoundS2CPacket(Registries.SOUND_EVENT.getEntry(WatheSounds.UI_SHOP_BUY), SoundCategory.PLAYERS, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), 1.0F, 0.9F + player.getRandom().nextFloat() * 0.2F, serverPlayer.getRandom().nextLong()));
             }
@@ -49,6 +58,42 @@ public class ShopUtil {
             }
 
             return false;
+        }
+    }
+    public static void openFunBox(@NotNull PlayerEntity player){
+
+        // 25 chance rare pool
+        if( player.getRandom().nextInt(4) == 0){
+            PlayerInventory inv = player.getInventory();
+            Set<Item> hotbarItems = new HashSet<>();
+            // Collect unique items from hotbar (slots 0-8)
+            for (int i = 0; i < PlayerInventory.getHotbarSize(); i++) {
+                ItemStack stack = inv.getStack(i);
+                if (!stack.isEmpty()) {
+                    hotbarItems.add(stack.getItem());
+                }
+            }
+            // don't give item that he already have
+            List<Item> filtered = FUN_BOX_RARE_POOL.stream()
+                    .filter(item -> !hotbarItems.contains(item))
+                    .toList();
+            int random = player.getRandom().nextInt(filtered.size());
+            player.giveItemStack(filtered.get(random).getDefaultStack());
+        }
+        else{
+        // normal pool
+            int random = player.getRandom().nextInt(5);
+            if(random >= 3){
+                Item item = FUN_BOX_NORMAL_POOL.get(random);
+                if(item.equals(WatheItems.NOTE)){
+                    player.giveItemStack(new ItemStack(WatheItems.NOTE, 4));
+                }
+                else if(item.equals(WatheItems.FIRECRACKER)){
+                    player.giveItemStack(new ItemStack(WatheItems.FIRECRACKER, 2));
+                }
+                else
+                    player.giveItemStack(item.getDefaultStack());
+            }
         }
     }
     public static List<ShopEntry> fromShopEntryConfigs(List<ShopConfig.ShopEntryConfig> shopConfigs ) {
@@ -161,6 +206,9 @@ public class ShopUtil {
                 break;
             case POISON_INJECTOR:
                 item = KinsWatheItems.POISON_INJECTOR.getDefaultStack();
+                break;
+            case FUN_BOX:
+                item = WyspiaExpressItems.FUN_BOX.getDefaultStack();
                 break;
             default:
         }

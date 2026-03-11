@@ -70,6 +70,16 @@ public class WyspiaExpressRoles {
             -1,
             true
     ));
+    public static Role GAMBLER = registerRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "gambler"),
+            0x118C4F,
+            true,
+            false,
+            Role.MoodType.REAL,
+            200,
+            false
+    ));
+
     private static void registerRoleBasicConfig(Role role, WyspiaExpressServerConfig.RoleBasicConfig config) {
         ROLES_BASIC_CONFIG.put(role, config);
     }
@@ -142,6 +152,7 @@ public class WyspiaExpressRoles {
         registerRoleBasicConfig(BANDIT, WyspiaExpress.CONFIG.roleConfig.banditConfig.basic);
         registerRoleBasicConfig(NOTE_TAKER, WyspiaExpress.CONFIG.roleConfig.noteTakerConfig.basic);
         registerRoleBasicConfig(EDGE_LORD,WyspiaExpress.CONFIG.roleConfig.edgeLordConfig.basic);
+        registerRoleBasicConfig(GAMBLER, WyspiaExpress.CONFIG.roleConfig.gamblerConfig.basic);
         // Starry Express roles
         registerRoleBasicConfig(MUZZLER, WyspiaExpress.CONFIG.roleConfig.muzzlerConfig.basic);
 

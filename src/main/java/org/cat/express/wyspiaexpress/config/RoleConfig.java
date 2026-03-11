@@ -11,7 +11,8 @@ public class RoleConfig {
     @Nest public NoteTakerConfig noteTakerConfig = new NoteTakerConfig();
     @Comment("Config options for EDGE_LORD")
     @Nest public EdgeLordConfig edgeLordConfig = new EdgeLordConfig();
-
+    @Comment("Config options for GAMBLER")
+    @Nest public GamblerConfig  gamblerConfig = new GamblerConfig();
     // Starry Express
     @Comment("Config options for MUZZLER.")
     @Nest public MuzzlerConfig muzzlerConfig = new MuzzlerConfig();
@@ -68,6 +69,10 @@ public class RoleConfig {
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
     }
     public static class EdgeLordConfig {
+        @Comment("Basic role configuration.")
+        @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+    }
+    public static class GamblerConfig {
         @Comment("Basic role configuration.")
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
     }

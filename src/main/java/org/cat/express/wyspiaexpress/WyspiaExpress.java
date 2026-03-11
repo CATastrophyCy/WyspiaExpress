@@ -53,7 +53,6 @@ public class WyspiaExpress implements ModInitializer {
         ServerLoginNetworking.registerGlobalReceiver(
                 VersionCheckNetwork.VERSION_QUERY_ID,
                 (server, handler, understood, buf, synchronizer, responseSender) -> {
-                    // If client doesn't understand the channel, they don't have your mod
                     if (!understood) {
                         handler.disconnect(Text.literal(
                                 "You must install " + WyspiaExpress.MOD_ID + " to join this server."));
