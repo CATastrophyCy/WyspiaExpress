@@ -4,6 +4,7 @@ import dev.doctor4t.wathe.api.event.AllowPlayerPunching;
 import dev.doctor4t.wathe.api.event.ShouldDropOnDeath;
 import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
+import dev.doctor4t.wathe.index.WatheItems;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -14,6 +15,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressServerConfig;
+import org.cat.express.wyspiaexpress.items.FakeRevolverItem;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
@@ -26,11 +28,24 @@ public class WyspiaExpressItems {
     public static void init(){
         registerItemConfig();
 
+        registerItems();
         registerEvents();
     }
+
+    public static final Item FAKE_REVOLVER = registerItem(new FakeRevolverItem(new Item.Settings().maxCount(1)), "fake_revolver");
+
     public static void registerItemConfig(){
+        // custom items
+        ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.FAKE_REVOLVER).getItem(), WyspiaExpress.CONFIG.itemConfig.fakeRevolverConfig.basic);
+        // other mods
         ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.FAKE_KNIFE).getItem(), WyspiaExpress.CONFIG.itemConfig.fakeKnifeConfig.basic);
         ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.MEDICAL_KIT).getItem(), WyspiaExpress.CONFIG.itemConfig.medicalKitConfig.basic);
+
+    }
+    public static void registerItems(){
+        // custom items
+        registerItemCooldown(FAKE_REVOLVER,0,30);
+        registerItemGroup(FAKE_REVOLVER, WatheItems.EQUIPMENT_GROUP);
     }
     public static Item registerItem(Item item, String id) {
         Identifier itemID = Identifier.of(WyspiaExpress.MOD_ID, id);
