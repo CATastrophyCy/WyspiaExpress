@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "priority": 500,
   "mixins": [
+    "KinsWatheCommandMixin",
     "PassiveIncomeMixin",
     "ShopMixin",
     "TaskIncomeMixin"
