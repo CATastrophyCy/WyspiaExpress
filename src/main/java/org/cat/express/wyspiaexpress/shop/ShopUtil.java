@@ -83,7 +83,8 @@ public class ShopUtil {
         else{
         // normal pool
             int random = player.getRandom().nextInt(5);
-            if(random >= 3){
+            // if this roles 3 and 4 then you lost the gamble
+            if(random < 3){
                 Item item = FUN_BOX_NORMAL_POOL.get(random);
                 if(item.equals(WatheItems.NOTE)){
                     player.giveItemStack(new ItemStack(WatheItems.NOTE, 4));
