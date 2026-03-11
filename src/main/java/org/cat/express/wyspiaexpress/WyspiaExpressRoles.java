@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
+import org.agmas.harpymodloader.events.ResetPlayerEvent;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
 import org.agmas.harpymodloader.modifiers.Modifier;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressServerConfig;
@@ -47,8 +48,8 @@ public class WyspiaExpressRoles {
             false,
             true,
             Role.MoodType.FAKE,
-            WyspiaExpress.CONFIG.roleConfig.banditConfig.basic.maxSprintTime(),
-            WyspiaExpress.CONFIG.roleConfig.banditConfig.basic.seeTimer()
+            -1,
+            true
     ));
 
     public static Role NOTE_TAKER = registerRole(new Role(
@@ -57,8 +58,8 @@ public class WyspiaExpressRoles {
             true,
             false,
             Role.MoodType.REAL,
-            WyspiaExpress.CONFIG.roleConfig.noteTakerConfig.basic.maxSprintTime(),
-            WyspiaExpress.CONFIG.roleConfig.noteTakerConfig.basic.seeTimer()
+            200,
+            false
     ));
     public static Role EDGE_LORD = registerRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "edge_lord"),
@@ -66,8 +67,8 @@ public class WyspiaExpressRoles {
             false,
             true,
             Role.MoodType.FAKE,
-            WyspiaExpress.CONFIG.roleConfig.edgeLordConfig.basic.maxSprintTime(),
-            WyspiaExpress.CONFIG.roleConfig.edgeLordConfig.basic.seeTimer()
+            -1,
+            true
     ));
     private static void registerRoleBasicConfig(Role role, WyspiaExpressServerConfig.RoleBasicConfig config) {
         ROLES_BASIC_CONFIG.put(role, config);
@@ -130,7 +131,10 @@ public class WyspiaExpressRoles {
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, -1 , 0, true, false, false));
             }
         });
-
+        ResetPlayerEvent.EVENT.register(((playerEntity) -> {
+            // remove night_vision
+            playerEntity.removeStatusEffect(StatusEffects.NIGHT_VISION);
+        }));
     }
 
     public static void registerRoleConfigs(){
