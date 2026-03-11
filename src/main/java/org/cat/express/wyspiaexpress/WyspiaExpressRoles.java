@@ -6,6 +6,8 @@ import java.util.List;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.agmas.harpymodloader.Harpymodloader;
@@ -26,7 +28,8 @@ public class WyspiaExpressRoles {
 
     public static void init() {
         registerRoleConfigs();
-        registerStartingItems();
+
+        registerRoleAssigned();
         limitRoleSpawn();
     }
 
@@ -58,7 +61,15 @@ public class WyspiaExpressRoles {
             WyspiaExpress.CONFIG.roleConfig.noteTakerConfig.basic.maxSprintTime(),
             WyspiaExpress.CONFIG.roleConfig.noteTakerConfig.basic.seeTimer()
     ));
-
+    public static Role EDGE_LORD = registerRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "edge_lord"),
+            0x4A4A4A,
+            false,
+            true,
+            Role.MoodType.FAKE,
+            WyspiaExpress.CONFIG.roleConfig.edgeLordConfig.basic.maxSprintTime(),
+            WyspiaExpress.CONFIG.roleConfig.edgeLordConfig.basic.seeTimer()
+    ));
     private static void registerRoleBasicConfig(Role role, WyspiaExpressServerConfig.RoleBasicConfig config) {
         ROLES_BASIC_CONFIG.put(role, config);
     }
@@ -89,6 +100,10 @@ public class WyspiaExpressRoles {
         }));
 
     }
+    public static void registerRoleAssigned(){
+        registerStartingItems();
+        registerRoleEffect();
+    }
     public static void registerStartingItems(){
         ModdedRoleAssigned.EVENT.register((player, role)->{
             var basicConfig = ROLES_BASIC_CONFIG.get(role);
@@ -109,10 +124,21 @@ public class WyspiaExpressRoles {
             }
         });
     }
+    public static void registerRoleEffect(){
+        ModdedRoleAssigned.EVENT.register((player, role)->{
+            if(role.equals(EDGE_LORD)){
+                // give edge lord night vision
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, -1 , 0, true, false, false));
+            }
+        });
+
+    }
+
     public static void registerRoleConfigs(){
         // mine
         registerRoleBasicConfig(BANDIT, WyspiaExpress.CONFIG.roleConfig.banditConfig.basic);
         registerRoleBasicConfig(NOTE_TAKER, WyspiaExpress.CONFIG.roleConfig.noteTakerConfig.basic);
+        registerRoleBasicConfig(EDGE_LORD,WyspiaExpress.CONFIG.roleConfig.edgeLordConfig.basic);
         // Starry Express roles
         registerRoleBasicConfig(MUZZLER, WyspiaExpress.CONFIG.roleConfig.muzzlerConfig.basic);
 

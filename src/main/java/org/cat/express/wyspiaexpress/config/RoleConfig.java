@@ -9,7 +9,8 @@ public class RoleConfig {
     @Nest public BanditConfig banditConfig = new BanditConfig();
     @Comment("Config options for AWESOME_BINGLUS")
     @Nest public NoteTakerConfig noteTakerConfig = new NoteTakerConfig();
-
+    @Comment("Config options for EDGE_LORD")
+    @Nest public EdgeLordConfig edgeLordConfig = new EdgeLordConfig();
 
     // Starry Express
     @Comment("Config options for MUZZLER.")
@@ -57,6 +58,10 @@ public class RoleConfig {
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
     }
     public static class NoteTakerConfig {
+        @Comment("Basic role configuration.")
+        @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+    }
+    public static class EdgeLordConfig {
         @Comment("Basic role configuration.")
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
     }

@@ -7,9 +7,19 @@
   "announcement.role.wyspiaexpress.note_taker": "Amazing Note Taker",
   "announcement.goals.wyspiaexpress.note_taker": "Observe, and take notes. You are amazing and not binglus anymore",
 
+  "announcement.role.wyspiaexpress.edge_lord": "The Edgelord Delusional Cursed Assassin of Darkness and Coffee Addiction",
+  "announcement.goals.wyspiaexpress.edge_lord": "Assassinate everyone in the darkness you manifest, embrace your inner edgelord, but be careful to not cut yourself.",
+
   "guidebook.namespace.wyspiaexpress": "Mod: WyspiaExpress",
 
   "guidebook.role.wyspiaexpress:note_taker": "Amazing Note Taker",
   "guidebook.role.title.wyspiaexpress:note_taker": "NOTES",
-  "guidebook.role.description.wyspiaexpress:note_taker": "Legends says that this civilian was once called 'Awesome Binglus'.\n\nYou are amazing and makes sure everyone knows that with your notes"
+  "guidebook.role.description.wyspiaexpress:note_taker": "Legends says that this civilian was once called 'Awesome Binglus'.\n\nYou are amazing and makes sure everyone knows that with your notes",
+
+  "guidebook.role.wyspiaexpress:edge_lord": "The Edgelord Delusional Cursed Assassin of Darkness and Coffee Addiction",
+
+  "guidebook.role.title.wyspiaexpress:edge_lord": "Assassination, Shadows and Coffee",
+
+  "guidebook.role.description.wyspiaexpress:edge_lord": "The Edgelord Delusional Cursed Assassin of Darkness and Coffee Addiction has keen vision even in the deepest shadows \",I was born in the dark\", this alongside the Assassin's reduced cost blackout allows them to truly be a master of shadows. Just dont forget a coffee break between lapses of your curse and its darker impulses. Lastly be careful not to cut yourself on your own edge."
+
 }
