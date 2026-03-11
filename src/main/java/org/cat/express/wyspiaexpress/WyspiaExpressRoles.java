@@ -21,8 +21,7 @@ import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import static org.BsXinQin.kinswathe.KinsWatheRoles.*;
 import static org.agmas.noellesroles.Noellesroles.*;
 import static org.aussiebox.starexpress.StarryExpressRoles.MUZZLER;
-import static pro.fazeclan.river.stupid_express.constants.SERoles.AVARICIOUS;
-import static pro.fazeclan.river.stupid_express.constants.SERoles.NECROMANCER;
+import static pro.fazeclan.river.stupid_express.constants.SERoles.*;
 
 public class WyspiaExpressRoles {
 
@@ -147,6 +146,9 @@ public class WyspiaExpressRoles {
 
         registerRoleBasicConfig(NECROMANCER, WyspiaExpress.CONFIG.roleConfig.necromancerConfig.basic);
 
+        registerRoleBasicConfig(AMNESIAC, WyspiaExpress.CONFIG.roleConfig.amnesiacConfig.basic);
+
+        registerRoleBasicConfig(THIEF, WyspiaExpress.CONFIG.roleConfig.thiefConfig.basic);
         // Noelles role
         registerRoleBasicConfig(MORPHLING, WyspiaExpress.CONFIG.roleConfig.morphlingConfig.basic);
 

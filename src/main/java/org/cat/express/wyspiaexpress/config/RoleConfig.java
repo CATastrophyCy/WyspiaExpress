@@ -22,6 +22,12 @@ public class RoleConfig {
 
     @Comment("Config options for AVARICIOUS.")
     @Nest public AvariciousConfig avariciousConfig = new AvariciousConfig();
+
+    @Comment("Config options for AMNESIAC")
+    @Nest public AmnesiacConfig amnesiacConfig = new AmnesiacConfig();
+
+    @Comment("Config options for THIEF")
+    @Nest public ThiefConfig thiefConfig = new ThiefConfig();
     // Noelle's role
 
     @Comment("Config options for MORPHLING.")
@@ -79,7 +85,14 @@ public class RoleConfig {
         @Comment("Basic role configuration.")
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
     }
-
+    public static class AmnesiacConfig{
+        @Comment("Basic role configuration.")
+        @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+    }
+    public static class ThiefConfig{
+        @Comment("Basic role configuration.")
+        @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+    }
     // Noelle's role
     public static class MorphlingConfig{
         @Comment("Basic role configuration.")

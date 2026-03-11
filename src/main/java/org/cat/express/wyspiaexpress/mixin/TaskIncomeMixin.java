@@ -22,6 +22,13 @@ public abstract class TaskIncomeMixin {
     @Inject(method = "setMood", at = @At("HEAD"))
     void giveCoinsForMood(float mood, CallbackInfo ci) {
         GameWorldComponent gameWorldComponent = (GameWorldComponent)GameWorldComponent.KEY.get(player.getWorld());
+
+        /**
+         *  role with FAKE MOOD just have setmood to always set the mood to 1, making so it never decreases
+         *  and getMood to always return one
+         *  but when they complete a task this is still getting called with mood value greater than the getMood() returns
+         *  so role with fake mood should still get money
+          */
         if (mood > getMood()) {
             Role role = gameWorldComponent.getRole(player);
             if (role != null) {
