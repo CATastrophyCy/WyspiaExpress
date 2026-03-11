@@ -2,13 +2,12 @@ package org.cat.express.wyspiaexpress.config;
 
 
 import dev.doctor4t.wathe.util.ShopEntry;
-import org.cat.express.wyspiaexpress.Wyspiaexpress;
+import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// I'll change this in the future so shopEntries list becomes a variable of the RoleBasicConfig's wrapper
 public class ShopConfig {
 
     // decode the formatted string to a list of ShopEntryConfig
@@ -31,7 +30,7 @@ public class ShopConfig {
             ShopEntryConfig shopEntryConfig = new ShopEntryConfig();
             // Skip invalidly formatted entries
             if (parts.length != 4) {
-                Wyspiaexpress.LOGGER.warn("Invalid shop entry format: {}", s);
+                WyspiaExpress.LOGGER.warn("Invalid shop entry format: {}", s);
                 return shopEntryConfig;
             }
             try {
@@ -45,7 +44,7 @@ public class ShopConfig {
                 shopEntryConfig.purchaseLimit = limit;
                 shopEntryConfig.type = type;
             } catch (IllegalArgumentException e) {
-                Wyspiaexpress.LOGGER.warn("Failed to parse shop entry: {}", s);
+                WyspiaExpress.LOGGER.warn("Failed to parse shop entry: {}", s);
             }
             return shopEntryConfig;
         }

@@ -107,7 +107,8 @@ public class ShopUtil {
             // Starryexpress
             case TAPE:
                 item =  StarryExpressItems.TAPE.getDefaultStack();
-                break; // Noelle's Roles
+                break;
+            // Noelle's Roles
             case FAKE_KNIFE:
                 item =  ModItems.FAKE_KNIFE.getDefaultStack();
                 break;
@@ -133,7 +134,7 @@ public class ShopUtil {
             case COOKED_PORKCHOP:
                 item = Items.COOKED_PORKCHOP.getDefaultStack();
                 break;
-            case COOKED_CHIKEN: // Retained your spelling from the enum
+            case COOKED_CHIKEN:
                 item = Items.COOKED_CHICKEN.getDefaultStack();
                 break;
             case COOKED_BEEF:

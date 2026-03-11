@@ -40,13 +40,23 @@ public class WyspiaExpressRoles {
 
     // This bandit is an attempt at making a custom Role, right now it seems to work
     public static Role BANDIT = registerRole(new Role(
-            Identifier.of(Wyspiaexpress.MOD_ID, "bandit"),
+            Identifier.of(WyspiaExpress.MOD_ID, "bandit"),
             0xCC0066,
             false,
             true,
             Role.MoodType.FAKE,
-            Wyspiaexpress.CONFIG.roleConfig.banditConfig.basic.maxSprintTime(),
-            Wyspiaexpress.CONFIG.roleConfig.banditConfig.basic.seeTimer()
+            WyspiaExpress.CONFIG.roleConfig.banditConfig.basic.maxSprintTime(),
+            WyspiaExpress.CONFIG.roleConfig.banditConfig.basic.seeTimer()
+    ));
+
+    public static Role NOTE_TAKER = registerRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "note_taker"),
+            0x9BFFA8,
+            true,
+            false,
+            Role.MoodType.REAL,
+            WyspiaExpress.CONFIG.roleConfig.noteTakerConfig.basic.maxSprintTime(),
+            WyspiaExpress.CONFIG.roleConfig.noteTakerConfig.basic.seeTimer()
     ));
 
     private static void registerRoleBasicConfig(Role role, WyspiaExpressServerConfig.RoleBasicConfig config) {
@@ -100,34 +110,35 @@ public class WyspiaExpressRoles {
         });
     }
     public static void registerRoleConfigs(){
-
-        registerRoleBasicConfig(BANDIT, Wyspiaexpress.CONFIG.roleConfig.banditConfig.basic);
-
+        // mine
+        registerRoleBasicConfig(BANDIT, WyspiaExpress.CONFIG.roleConfig.banditConfig.basic);
+        registerRoleBasicConfig(NOTE_TAKER, WyspiaExpress.CONFIG.roleConfig.noteTakerConfig.basic);
         // Starry Express roles
-        registerRoleBasicConfig(MUZZLER, Wyspiaexpress.CONFIG.roleConfig.muzzlerConfig.basic);
+        registerRoleBasicConfig(MUZZLER, WyspiaExpress.CONFIG.roleConfig.muzzlerConfig.basic);
 
         // Stupid Express roles
-        registerRoleBasicConfig(AVARICIOUS, Wyspiaexpress.CONFIG.roleConfig.avariciousConfig.basic);
+        registerRoleBasicConfig(AVARICIOUS, WyspiaExpress.CONFIG.roleConfig.avariciousConfig.basic);
 
-        registerRoleBasicConfig(NECROMANCER, Wyspiaexpress.CONFIG.roleConfig.necromancerConfig.basic);
+        registerRoleBasicConfig(NECROMANCER, WyspiaExpress.CONFIG.roleConfig.necromancerConfig.basic);
 
         // Noelles role
-        registerRoleBasicConfig(MORPHLING, Wyspiaexpress.CONFIG.roleConfig.morphlingConfig.basic);
+        registerRoleBasicConfig(MORPHLING, WyspiaExpress.CONFIG.roleConfig.morphlingConfig.basic);
 
-        registerRoleBasicConfig(PHANTOM, Wyspiaexpress.CONFIG.roleConfig.phantomConfig.basic);
+        registerRoleBasicConfig(PHANTOM, WyspiaExpress.CONFIG.roleConfig.phantomConfig.basic);
 
-        registerRoleBasicConfig(SWAPPER, Wyspiaexpress.CONFIG.roleConfig.swapperConfig.basic);
+        registerRoleBasicConfig(SWAPPER, WyspiaExpress.CONFIG.roleConfig.swapperConfig.basic);
 
+        registerRoleBasicConfig(NOISEMAKER,WyspiaExpress.CONFIG.roleConfig.noiseMakerConfig.basic);
         // Kin's wathe roles
-        registerRoleBasicConfig(BODYMAKER, Wyspiaexpress.CONFIG.roleConfig.bodymakerConfig.basic);
+        registerRoleBasicConfig(BODYMAKER, WyspiaExpress.CONFIG.roleConfig.bodymakerConfig.basic);
 
-        registerRoleBasicConfig(CLEANER, Wyspiaexpress.CONFIG.roleConfig.cleanerConfig.basic);
+        registerRoleBasicConfig(CLEANER, WyspiaExpress.CONFIG.roleConfig.cleanerConfig.basic);
 
-        registerRoleBasicConfig(HUNTER, Wyspiaexpress.CONFIG.roleConfig.hunterConfig.basic);
+        registerRoleBasicConfig(HUNTER, WyspiaExpress.CONFIG.roleConfig.hunterConfig.basic);
 
-        registerRoleBasicConfig(KIDNAPPER, Wyspiaexpress.CONFIG.roleConfig.kidnapperConfig.basic);
+        registerRoleBasicConfig(KIDNAPPER, WyspiaExpress.CONFIG.roleConfig.kidnapperConfig.basic);
 
-        registerRoleBasicConfig(DRUGMAKER, Wyspiaexpress.CONFIG.roleConfig.drugmakerConfig.basic);
+        registerRoleBasicConfig(DRUGMAKER, WyspiaExpress.CONFIG.roleConfig.drugmakerConfig.basic);
 
     }
 }

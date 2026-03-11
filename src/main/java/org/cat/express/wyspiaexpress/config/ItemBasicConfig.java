@@ -6,5 +6,7 @@ public class ItemBasicConfig {
     @Comment("Render Item on hand?")
     public boolean renderItemOnHand = true;
     @Comment("Can punch players")
-    public boolean canPunchPlayers = true;
+    public boolean canPunchPlayers = false;
+    @Comment("Should drop on death")
+    public boolean dropOnDeath = false;
 }

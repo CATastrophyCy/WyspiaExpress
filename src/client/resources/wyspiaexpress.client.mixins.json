@@ -5,9 +5,10 @@
   "compatibilityLevel": "JAVA_21",
   "priority": 500,
   "client": [
-    "ShopMixin",
+    "CoinMixin",
+    "ItemHandViewMixin",
     "ScreenAccessor",
-    "CoinMixin"
+    "ShopMixin"
   ],
   "injectors": {
     "defaultRequire": 1

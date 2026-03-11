@@ -4,8 +4,12 @@ import blue.endless.jankson.Comment;
 import io.wispforest.owo.config.annotation.Nest;
 
 public class RoleConfig {
+    // mine
     @Comment("Config options for BANDIT.")
     @Nest public BanditConfig banditConfig = new BanditConfig();
+    @Comment("Config options for AWESOME_BINGLUS")
+    @Nest public NoteTakerConfig noteTakerConfig = new NoteTakerConfig();
+
 
     // Starry Express
     @Comment("Config options for MUZZLER.")
@@ -28,6 +32,8 @@ public class RoleConfig {
     @Comment("Config options for SWAPPER.")
     @Nest public SwapperConfig swapperConfig = new SwapperConfig();
 
+    @Comment("Config options for NOISE_MAKER.")
+    @Nest public NoiseMakerConfig noiseMakerConfig = new NoiseMakerConfig();
     // Kin's wathe
 
     @Comment("Config options for BODYMAKER.")
@@ -45,8 +51,12 @@ public class RoleConfig {
     @Comment("Config options for DRUGMAKER.")
     @Nest public DrugmakerConfig drugmakerConfig = new DrugmakerConfig();
 
-
+    // Mine
     public static class BanditConfig {
+        @Comment("Basic role configuration.")
+        @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+    }
+    public static class NoteTakerConfig {
         @Comment("Basic role configuration.")
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
     }
@@ -80,6 +90,12 @@ public class RoleConfig {
         @Comment("Basic role configuration.")
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
     }
+
+    public static class NoiseMakerConfig{
+        @Comment("Basic role configuration.")
+        @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+    }
+
     // Kin's wathe
     public static class BodymakerConfig{
         @Comment("Basic role configuration.")

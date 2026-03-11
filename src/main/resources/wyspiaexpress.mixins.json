@@ -6,7 +6,8 @@
   "priority": 500,
   "mixins": [
     "PassiveIncomeMixin",
-    "ShopMixin"
+    "ShopMixin",
+    "TaskIncomeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,0 +1,15 @@
+{
+  "key.wyspiaexpress.ability": "Ability",
+  "tip.wyspiaexpress.cooldown": "Ability usable in %ss",
+  "tip.wyspiaexpress.ability.can_use": "Use %s to activate ability",
+  "tip.wyspiaexpress.ability.not_enough_money": "%s§f\uE781§r required to activate ability",
+
+  "announcement.role.wyspiaexpress.note_taker": "Amazing Note Taker",
+  "announcement.goals.wyspiaexpress.note_taker": "Observe, and take notes. You are amazing and not binglus anymore",
+
+  "guidebook.namespace.wyspiaexpress": "Mod: WyspiaExpress",
+
+  "guidebook.role.wyspiaexpress:note_taker": "Amazing Note Taker",
+  "guidebook.role.title.wyspiaexpress:note_taker": "NOTES",
+  "guidebook.role.description.wyspiaexpress:note_taker": "Legends says that this civilian was once called 'Awesome Binglus'.\n\nYou are amazing and makes sure everyone knows that with your notes"
+}

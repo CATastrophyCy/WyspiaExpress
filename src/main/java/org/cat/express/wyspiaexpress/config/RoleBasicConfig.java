@@ -12,12 +12,12 @@ import java.util.List;
 public class RoleBasicConfig {
 
     @Comment("Whether this role has shop.")
-    public boolean enableShop = true;
+    public boolean enableShop = false;
     @Comment("Shop entries.")
     public List<String> shopEntries = new ArrayList<>();
     @Comment("Has passive income. WIP, doesn't have any effect on other mods role that has passive income enabled")
-    public boolean passiveIncome = true;
-    @Comment("Amount of income from task. WIP, doesn't have any effect right now")
+    public boolean passiveIncome = false;
+    @Comment("Amount of income from task. WIP, for any non custom roles please set this to 0, unless they didn't earn money originally")
     public int taskIncome = 0;
     @Comment("Starting items.")
     public List<EnumShopEntry> items = new ArrayList<>();

@@ -11,7 +11,6 @@ import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.text.Text;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.config.ShopConfig;
-import org.cat.express.wyspiaexpress.config.WyspiaExpressServerConfig;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;

@@ -10,7 +10,6 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.math.MathHelper;
-import org.BsXinQin.kinswathe.KinsWatheRoles;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class CoinMixin {
     @Shadow public static float offsetDelta;
     @Shadow public static StoreRenderer.MoneyNumberRenderer view;
+
     /**
      * Changes the coin rendering logic
      * the normal behaviour just checks if the player is a killer to render
@@ -36,6 +36,7 @@ public class CoinMixin {
             var config = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role);
             if (config != null) {
                 // we can add another check to only render if the shop has items to buy
+
                 if (config.enableShop()) {
                     int balance = PlayerShopComponent.KEY.get(player).balance;
                     if (view.getTarget() != (float) balance) {

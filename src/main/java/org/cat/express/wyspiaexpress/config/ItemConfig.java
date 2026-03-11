@@ -14,11 +14,11 @@ public class ItemConfig {
 
     public static class FakeKnifeConfig{
         @Comment("Basic item configuration")
-        public ItemBasicConfig basic = new ItemBasicConfig();
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
     }
 
     public static class MedicalKitConfig{
         @Comment("Basic item configuration")
-        public ItemBasicConfig basic = new ItemBasicConfig();
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
     }
 }

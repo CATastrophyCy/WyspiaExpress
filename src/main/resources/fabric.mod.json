@@ -15,7 +15,9 @@
   "entrypoints": {
     "fabric-datagen": ["org.cat.express.wyspiaexpress.client.WyspiaexpressDataGenerator"],
     "client": ["org.cat.express.wyspiaexpress.client.WyspiaexpressClient"],
-    "main": ["org.cat.express.wyspiaexpress.Wyspiaexpress"]
+    "main": [
+      "org.cat.express.wyspiaexpress.WyspiaExpress"
+    ]
   },
 
   "mixins": [
