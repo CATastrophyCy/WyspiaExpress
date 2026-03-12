@@ -6,26 +6,27 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
-import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
+import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.cat.express.wyspiaexpress.config.WyspiaExpressServerConfig;
 
 public class WyspiaExpress implements ModInitializer {
     public static final String MOD_ID = "wyspiaexpress";
 
     // Create the global logger
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static final WyspiaExpressServerConfig CONFIG = WyspiaExpressServerConfig.createAndLoad();
+    public static final WyspiaExpressRolesConfig ROLES_CONFIG = WyspiaExpressRolesConfig.createAndLoad();
+    public static final WyspiaExpressItemsConfig ITEMS_CONFIG = WyspiaExpressItemsConfig.createAndLoad();
 
     @Override
     public void onInitialize() {
         LOGGER.info("WyspiaExpress is initializing...");
+        ROLES_CONFIG.save();
+        ITEMS_CONFIG.save();
         WyspiaExpressRoles.init();
         WyspiaExpressItems.init();
         registerVersionCheck();

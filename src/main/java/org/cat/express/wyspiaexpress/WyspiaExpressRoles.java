@@ -15,7 +15,7 @@ import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.agmas.harpymodloader.events.ResetPlayerEvent;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
 import org.agmas.harpymodloader.modifiers.Modifier;
-import org.cat.express.wyspiaexpress.config.WyspiaExpressServerConfig;
+import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 
@@ -34,7 +34,7 @@ public class WyspiaExpressRoles {
     }
 
     private static final HashMap<String, Role> ROLES = new HashMap<>();
-    public static final HashMap<Role, WyspiaExpressServerConfig.RoleBasicConfig> ROLES_BASIC_CONFIG = new HashMap<>();
+    public static final HashMap<Role, WyspiaExpressRolesConfig.RoleBasicConfig> ROLES_BASIC_CONFIG = new HashMap<>();
 
 
     public static HashMap<String, Role> getRoles() {return ROLES;}
@@ -80,7 +80,7 @@ public class WyspiaExpressRoles {
             false
     ));
 
-    private static void registerRoleBasicConfig(Role role, WyspiaExpressServerConfig.RoleBasicConfig config) {
+    private static void registerRoleBasicConfig(Role role, WyspiaExpressRolesConfig.RoleBasicConfig config) {
         ROLES_BASIC_CONFIG.put(role, config);
     }
     public static Role registerRole(Role role) {
@@ -98,7 +98,7 @@ public class WyspiaExpressRoles {
     public static void limitRoleSpawn(){
         ServerTickEvents.END_SERVER_TICK.register(((server) -> {
             for( Role role : ROLES_BASIC_CONFIG.keySet()){
-                WyspiaExpressServerConfig.RoleBasicConfig config = ROLES_BASIC_CONFIG.get(role);
+                WyspiaExpressRolesConfig.RoleBasicConfig config = ROLES_BASIC_CONFIG.get(role);
                 if (server.getPlayerManager().getCurrentPlayerCount() >= config.minimumPlayerSpawn())
                 {
                     Harpymodloader.setRoleMaximum(role,config.maximumSpawn());
@@ -149,39 +149,38 @@ public class WyspiaExpressRoles {
 
     public static void registerRoleConfigs(){
         // mine
-        registerRoleBasicConfig(BANDIT, WyspiaExpress.CONFIG.roleConfig.banditConfig.basic);
-        registerRoleBasicConfig(NOTE_TAKER, WyspiaExpress.CONFIG.roleConfig.noteTakerConfig.basic);
-        registerRoleBasicConfig(EDGE_LORD,WyspiaExpress.CONFIG.roleConfig.edgeLordConfig.basic);
-        registerRoleBasicConfig(GAMBLER, WyspiaExpress.CONFIG.roleConfig.gamblerConfig.basic);
+        registerRoleBasicConfig(BANDIT, WyspiaExpress.ROLES_CONFIG.roleConfig.banditConfig.basic);
+        registerRoleBasicConfig(NOTE_TAKER, WyspiaExpress.ROLES_CONFIG.roleConfig.noteTakerConfig.basic);
+        registerRoleBasicConfig(EDGE_LORD,WyspiaExpress.ROLES_CONFIG.roleConfig.edgeLordConfig.basic);
+        registerRoleBasicConfig(GAMBLER, WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.basic);
         // Starry Express roles
-        registerRoleBasicConfig(MUZZLER, WyspiaExpress.CONFIG.roleConfig.muzzlerConfig.basic);
-
+        registerRoleBasicConfig(MUZZLER, WyspiaExpress.ROLES_CONFIG.roleConfig.starryExpress.muzzlerConfig.basic);
         // Stupid Express roles
-        registerRoleBasicConfig(AVARICIOUS, WyspiaExpress.CONFIG.roleConfig.avariciousConfig.basic);
+        registerRoleBasicConfig(AVARICIOUS, WyspiaExpress.ROLES_CONFIG.roleConfig.stupidExpress.avariciousConfig.basic);
 
-        registerRoleBasicConfig(NECROMANCER, WyspiaExpress.CONFIG.roleConfig.necromancerConfig.basic);
+        registerRoleBasicConfig(NECROMANCER, WyspiaExpress.ROLES_CONFIG.roleConfig.stupidExpress.necromancerConfig.basic);
 
-        registerRoleBasicConfig(AMNESIAC, WyspiaExpress.CONFIG.roleConfig.amnesiacConfig.basic);
+        registerRoleBasicConfig(AMNESIAC, WyspiaExpress.ROLES_CONFIG.roleConfig.stupidExpress.amnesiacConfig.basic);
 
-        registerRoleBasicConfig(THIEF, WyspiaExpress.CONFIG.roleConfig.thiefConfig.basic);
+        registerRoleBasicConfig(THIEF, WyspiaExpress.ROLES_CONFIG.roleConfig.stupidExpress.thiefConfig.basic);
         // Noelles role
-        registerRoleBasicConfig(MORPHLING, WyspiaExpress.CONFIG.roleConfig.morphlingConfig.basic);
+        registerRoleBasicConfig(MORPHLING, WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.morphlingConfig.basic);
 
-        registerRoleBasicConfig(PHANTOM, WyspiaExpress.CONFIG.roleConfig.phantomConfig.basic);
+        registerRoleBasicConfig(PHANTOM, WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.phantomConfig.basic);
 
-        registerRoleBasicConfig(SWAPPER, WyspiaExpress.CONFIG.roleConfig.swapperConfig.basic);
+        registerRoleBasicConfig(SWAPPER, WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.swapperConfig.basic);
 
-        registerRoleBasicConfig(NOISEMAKER,WyspiaExpress.CONFIG.roleConfig.noiseMakerConfig.basic);
+        registerRoleBasicConfig(NOISEMAKER,WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.noiseMakerConfig.basic);
         // Kin's wathe roles
-        registerRoleBasicConfig(BODYMAKER, WyspiaExpress.CONFIG.roleConfig.bodymakerConfig.basic);
+        registerRoleBasicConfig(BODYMAKER, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.bodymakerConfig.basic);
 
-        registerRoleBasicConfig(CLEANER, WyspiaExpress.CONFIG.roleConfig.cleanerConfig.basic);
+        registerRoleBasicConfig(CLEANER, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.cleanerConfig.basic);
 
-        registerRoleBasicConfig(HUNTER, WyspiaExpress.CONFIG.roleConfig.hunterConfig.basic);
+        registerRoleBasicConfig(HUNTER, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.hunterConfig.basic);
 
-        registerRoleBasicConfig(KIDNAPPER, WyspiaExpress.CONFIG.roleConfig.kidnapperConfig.basic);
+        registerRoleBasicConfig(KIDNAPPER, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.kidnapperConfig.basic);
 
-        registerRoleBasicConfig(DRUGMAKER, WyspiaExpress.CONFIG.roleConfig.drugmakerConfig.basic);
+        registerRoleBasicConfig(DRUGMAKER, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.drugmakerConfig.basic);
 
     }
 }

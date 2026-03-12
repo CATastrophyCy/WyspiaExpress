@@ -14,7 +14,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import org.cat.express.wyspiaexpress.config.WyspiaExpressServerConfig;
+import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
 import org.cat.express.wyspiaexpress.items.FakeRevolverItem;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 public class WyspiaExpressItems {
 
-    public static final HashMap<Item, WyspiaExpressServerConfig.ItemBasicConfig> ITEMS_BASIC_CONFIG = new HashMap<>();
+    public static final HashMap<Item, WyspiaExpressItemsConfig.ItemBasicConfig> ITEMS_BASIC_CONFIG = new HashMap<>();
 
     public static void init(){
         registerItemConfig();
@@ -37,10 +37,10 @@ public class WyspiaExpressItems {
     
     public static void registerItemConfig(){
         // custom items
-        ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.FAKE_REVOLVER).getItem(), WyspiaExpress.CONFIG.itemConfig.fakeRevolverConfig.basic);
+        ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.FAKE_REVOLVER).getItem(), WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.basic);
         // other mods
-        ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.FAKE_KNIFE).getItem(), WyspiaExpress.CONFIG.itemConfig.fakeKnifeConfig.basic);
-        ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.MEDICAL_KIT).getItem(), WyspiaExpress.CONFIG.itemConfig.medicalKitConfig.basic);
+        ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.FAKE_KNIFE).getItem(), WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeKnifeConfig.basic);
+        ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.MEDICAL_KIT).getItem(), WyspiaExpress.ITEMS_CONFIG.itemConfig.medicalKitConfig.basic);
 
     }
     public static void registerItems(){

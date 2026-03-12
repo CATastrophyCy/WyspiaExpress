@@ -77,24 +77,26 @@ public class ShopUtil {
             List<Item> filtered = FUN_BOX_RARE_POOL.stream()
                     .filter(item -> !hotbarItems.contains(item))
                     .toList();
-            int random = player.getRandom().nextInt(filtered.size());
-            player.giveItemStack(filtered.get(random).getDefaultStack());
-        }
-        else{
-        // normal pool
-            int random = player.getRandom().nextInt(5);
-            // if this roles 3 and 4 then you lost the gamble
-            if(random < 3){
-                Item item = FUN_BOX_NORMAL_POOL.get(random);
-                if(item.equals(WatheItems.NOTE)){
-                    player.giveItemStack(new ItemStack(WatheItems.NOTE, 4));
-                }
-                else if(item.equals(WatheItems.FIRECRACKER)){
-                    player.giveItemStack(new ItemStack(WatheItems.FIRECRACKER, 2));
-                }
-                else
-                    player.giveItemStack(item.getDefaultStack());
+            if(!filtered.isEmpty()) {
+                int random = player.getRandom().nextInt(filtered.size());
+                player.giveItemStack(filtered.get(random).getDefaultStack());
+                return;
             }
+        }
+        // normal pool
+        int random = player.getRandom().nextInt(5);
+        // if this roles 3 and 4 then you lost the gamble
+        if(random < 3){
+            Item item = FUN_BOX_NORMAL_POOL.get(random);
+            if(item.equals(WatheItems.NOTE)){
+                player.giveItemStack(new ItemStack(WatheItems.NOTE, 4));
+            }
+            else if(item.equals(WatheItems.FIRECRACKER)){
+                player.giveItemStack(new ItemStack(WatheItems.FIRECRACKER, 2));
+            }
+            else
+                player.giveItemStack(item.getDefaultStack());
+
         }
     }
     public static List<ShopEntry> fromShopEntryConfigs(List<ShopConfig.ShopEntryConfig> shopConfigs ) {
