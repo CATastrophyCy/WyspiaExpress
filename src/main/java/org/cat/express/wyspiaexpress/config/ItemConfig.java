@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress.config;
 
 import blue.endless.jankson.Comment;
 import io.wispforest.owo.config.annotation.Nest;
+import io.wispforest.owo.config.annotation.RangeConstraint;
 
 public class ItemConfig {
     // mine
@@ -18,6 +19,9 @@ public class ItemConfig {
     public static class FakeRevolverConfig{
         @Comment("Basic item configuration")
         @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds, minimum 0")
+        public int cooldown = 20;
+
     }
     // other mods
     public static class FakeKnifeConfig{

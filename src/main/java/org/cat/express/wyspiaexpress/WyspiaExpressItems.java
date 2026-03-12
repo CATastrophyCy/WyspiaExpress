@@ -45,7 +45,9 @@ public class WyspiaExpressItems {
     }
     public static void registerItems(){
         // custom items
-        registerItemCooldown(FAKE_REVOLVER,0,30);
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.cooldown() > 0) {
+            registerItemCooldown(FAKE_REVOLVER, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.cooldown());
+        }
         registerItemGroup(FAKE_REVOLVER, WatheItems.EQUIPMENT_GROUP);
     }
     public static Item registerItem(Item item, String id) {
