@@ -1,3 +1,6 @@
 {
-  "parent": "minecraft:item/chest",
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "wyspiaexpress:item/fun_box"
+  }
 }

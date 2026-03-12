@@ -32,6 +32,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
     public static void registerItemToolTips(){
         ItemTooltipCallback.EVENT.register(((itemStack, tooltipContext, tooltipType, list) -> {
             ItemToolTip.addItemtip(WyspiaExpressItems.FAKE_REVOLVER, itemStack, list);
+            ItemToolTip.addItemtip(WyspiaExpressItems.FUN_BOX, itemStack, list);
         }));
     }
 }

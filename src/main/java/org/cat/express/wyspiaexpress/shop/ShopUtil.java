@@ -92,7 +92,7 @@ public class ShopUtil {
                 player.giveItemStack(new ItemStack(WatheItems.NOTE, 4));
             }
             else if(item.equals(WatheItems.FIRECRACKER)){
-                player.giveItemStack(new ItemStack(WatheItems.FIRECRACKER, 2));
+                player.giveItemStack(new ItemStack(WatheItems.FIRECRACKER, 1));
             }
             else
                 player.giveItemStack(item.getDefaultStack());
