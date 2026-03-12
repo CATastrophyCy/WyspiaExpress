@@ -21,11 +21,9 @@ public class WyspiaexpressClient implements ClientModInitializer {
         ClientLoginNetworking.registerGlobalReceiver(
                 VersionCheckNetwork.VERSION_QUERY_ID,
                 (client, handler, buf, listenerAdder) -> {
-
                     String clientVersion = WyspiaExpress.getVersion();
                     PacketByteBuf reply = PacketByteBufs.create();
                     reply.writeString(clientVersion);
-
                     return CompletableFuture.completedFuture(reply);
                 }
         );
