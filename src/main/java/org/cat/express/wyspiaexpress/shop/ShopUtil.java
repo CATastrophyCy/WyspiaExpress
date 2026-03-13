@@ -16,8 +16,6 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.agmas.noellesroles.ModItems;
-import org.agmas.noellesroles.Noellesroles;
-import org.agmas.noellesroles.config.NoellesRolesConfig;
 import org.aussiebox.starexpress.item.StarryExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.config.ShopConfig;
