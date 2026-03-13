@@ -171,7 +171,7 @@ public class ShopUtil {
                 item = ModItems.MASTER_KEY.getDefaultStack();
                 break;
             case FAKE_REVOLVER:
-                item = ModItems.FAKE_REVOLVER.getDefaultStack();
+                item = WyspiaExpressItems.FAKE_REVOLVER.getDefaultStack();
                 break;
             // Kin's Wathe
             case PAN:
