@@ -10,6 +10,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
+import org.cat.express.wyspiaexpress.config.WyspiaExpressServerConfig;
 import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +22,13 @@ public class WyspiaExpress implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final WyspiaExpressRolesConfig ROLES_CONFIG = WyspiaExpressRolesConfig.createAndLoad();
     public static final WyspiaExpressItemsConfig ITEMS_CONFIG = WyspiaExpressItemsConfig.createAndLoad();
-
+    public static final WyspiaExpressServerConfig SERVER_CONFIG = WyspiaExpressServerConfig.createAndLoad();
     @Override
     public void onInitialize() {
         LOGGER.info("WyspiaExpress is initializing...");
         ROLES_CONFIG.save();
         ITEMS_CONFIG.save();
+        SERVER_CONFIG.save();
         WyspiaExpressRoles.init();
         WyspiaExpressItems.init();
         registerVersionCheck();
