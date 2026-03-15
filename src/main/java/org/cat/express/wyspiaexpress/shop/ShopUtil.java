@@ -17,6 +17,7 @@ import net.minecraft.text.Text;
 import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.agmas.noellesroles.ModItems;
 import org.aussiebox.starexpress.item.StarryExpressItems;
+import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.config.ShopConfig;
 import org.jetbrains.annotations.NotNull;
@@ -60,8 +61,7 @@ public class ShopUtil {
     }
     public static void openFunBox(@NotNull PlayerEntity player){
 
-        // 25 chance rare pool
-        if( player.getRandom().nextInt(4) == 0){
+        if( player.getRandom().nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.goodPoolChance()){
             PlayerInventory inv = player.getInventory();
             Set<Item> hotbarItems = new HashSet<>();
             // Collect unique items from hotbar (slots 0-8)
@@ -82,20 +82,21 @@ public class ShopUtil {
             }
         }
         // normal pool
-        int random = player.getRandom().nextInt(5);
-        // if this roles 3 and 4 then you lost the gamble
-        if(random < 3){
-            Item item = FUN_BOX_NORMAL_POOL.get(random);
-            if(item.equals(WatheItems.NOTE)){
-                player.giveItemStack(new ItemStack(WatheItems.NOTE, 4));
-            }
-            else if(item.equals(WatheItems.FIRECRACKER)){
-                player.giveItemStack(new ItemStack(WatheItems.FIRECRACKER, 1));
-            }
-            else
-                player.giveItemStack(item.getDefaultStack());
 
+        if(player.getRandom().nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.badPoolMissChance())
+            return; // loss the gamble
+
+        Item item = FUN_BOX_NORMAL_POOL.get(player.getRandom().nextInt(FUN_BOX_NORMAL_POOL.size()));
+        if(item.equals(WatheItems.NOTE)){
+            player.giveItemStack(new ItemStack(WatheItems.NOTE, 4));
         }
+        else if(item.equals(WatheItems.FIRECRACKER)){
+            player.giveItemStack(new ItemStack(WatheItems.FIRECRACKER, 1));
+        }
+        else
+            player.giveItemStack(item.getDefaultStack());
+
+
     }
     public static List<ShopEntry> fromShopEntryConfigs(List<ShopConfig.ShopEntryConfig> shopConfigs ) {
         List<ShopEntry> shopEntries = new ArrayList<>();

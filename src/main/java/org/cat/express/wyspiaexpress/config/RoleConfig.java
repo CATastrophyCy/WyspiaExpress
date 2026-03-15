@@ -39,6 +39,10 @@ public class RoleConfig {
     public static class GamblerConfig {
         @Comment("Basic role configuration.")
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        @Comment("Good pool chance.")
+        public double goodPoolChance = 0.30;
+        @Comment("Bad pool miss chance.")
+        public double badPoolMissChance = 0.40;
     }
     // Starry Express
     public static class StarryExpressRoles{
