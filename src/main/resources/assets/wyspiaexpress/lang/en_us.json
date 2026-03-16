@@ -4,6 +4,8 @@
   "tip.wyspiaexpress.ability.can_use": "Use %s to activate ability",
   "tip.wyspiaexpress.ability.not_enough_money": "%s§f\uE781§r required to activate ability",
 
+  "item.wyspiaexpress.tp_ready": "Teleport to Ready Area",
+
   "item.wyspiaexpress.fake_revolver": "Fake Revolver",
   "item.wyspiaexpress.fake_revolver.tooltip": "It's just a fake gun, only makes loud noises when fired.",
 

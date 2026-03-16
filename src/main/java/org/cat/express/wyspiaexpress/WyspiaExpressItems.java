@@ -16,6 +16,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
 import org.cat.express.wyspiaexpress.items.FakeRevolverItem;
+import org.cat.express.wyspiaexpress.items.TpReadyItem;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +35,8 @@ public class WyspiaExpressItems {
 
     public static final Item FAKE_REVOLVER = registerItem(new FakeRevolverItem(new Item.Settings().maxCount(1)), "fake_revolver");
     public static final Item FUN_BOX = registerItem( new Item(new Item.Settings()), "fun_box");
-    
+    public static final Item TP_READY = registerItem(new TpReadyItem(new Item.Settings().maxCount(1)), "tp_ready");
+
     public static void registerItemConfig(){
         // custom items
         ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.FAKE_REVOLVER).getItem(), WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.basic);

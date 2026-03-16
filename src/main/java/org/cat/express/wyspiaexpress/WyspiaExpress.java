@@ -31,6 +31,7 @@ public class WyspiaExpress implements ModInitializer {
         SERVER_CONFIG.save();
         WyspiaExpressRoles.init();
         WyspiaExpressItems.init();
+        WyspiaExpressGameFunctions.init();
         registerVersionCheck();
 
         LOGGER.info("WyspiaExpress finished initializing.");
@@ -58,7 +59,7 @@ public class WyspiaExpress implements ModInitializer {
                 (server, handler, understood, buf, synchronizer, responseSender) -> {
                     if (!understood) {
                         handler.disconnect(Text.literal(
-                                "You must install " + WyspiaExpress.MOD_ID + " to join this server."));
+                                "You must install " + WyspiaExpress.MOD_ID + " version " + WyspiaExpress.getVersion() +  " to join this server."));
                         return;
                     }
 
