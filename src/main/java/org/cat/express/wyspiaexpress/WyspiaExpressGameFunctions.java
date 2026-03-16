@@ -123,7 +123,7 @@ public class WyspiaExpressGameFunctions {
         }
     }
     private static void itemBoundsCheck(ServerWorld world) {
-        Box playArea = MapVariablesWorldComponent.KEY.get(world).getReadyArea();
+        Box playArea = MapVariablesWorldComponent.KEY.get(world).getPlayArea();
         if (playArea == null) return;
         List<Entity> targets = new ArrayList<>();
         for (PlayerEntity p : world.getPlayers()) {
