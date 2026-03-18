@@ -8,6 +8,7 @@
     "KillerAlwaysGuesserMixin",
     "KinsWatheCommandMixin",
     "PassiveIncomeMixin",
+    "PlayerCrawlSpeedMixin",
     "ShopMixin",
     "TaskIncomeMixin"
   ],
