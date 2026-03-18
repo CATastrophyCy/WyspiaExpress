@@ -155,7 +155,7 @@ public class ShopUtil {
                 break;
             // Noelle's Roles
             case FAKE_KNIFE:
-                item =  WyspiaExpressItems.FAKE_REVOLVER.getDefaultStack();
+                item =  ModItems.FAKE_KNIFE.getDefaultStack();
                 break;
             case DELUSION_VIAL:
                 item =  ModItems.DELUSION_VIAL.getDefaultStack();
