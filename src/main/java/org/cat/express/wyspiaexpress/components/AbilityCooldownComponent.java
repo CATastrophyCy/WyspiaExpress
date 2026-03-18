@@ -13,7 +13,8 @@ import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
 
 
 public class AbilityCooldownComponent implements AutoSyncedComponent, ServerTickingComponent, ClientTickingComponent{
-    public static final ComponentKey<AbilityCooldownComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(WyspiaExpress.MOD_ID, "ability_cooldown"), AbilityCooldownComponent.class);
+    public static final ComponentKey<AbilityCooldownComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(WyspiaExpress.MOD_ID, "ability_cooldown"),
+            AbilityCooldownComponent.class);
     private final PlayerEntity player;
     public int cooldown = 0;
     public AbilityCooldownComponent(@NotNull PlayerEntity player) {

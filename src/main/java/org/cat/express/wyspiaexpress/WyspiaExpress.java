@@ -11,6 +11,7 @@ import net.minecraft.text.Text;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressServerConfig;
+import org.cat.express.wyspiaexpress.packets.ReanimatorReviveC2SPacket;
 import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class WyspiaExpress implements ModInitializer {
         WyspiaExpressItems.init();
         WyspiaExpressGameFunctions.init();
         registerVersionCheck();
-
+        registerPackets();
         LOGGER.info("WyspiaExpress finished initializing.");
     }
 
@@ -72,5 +73,8 @@ public class WyspiaExpress implements ModInitializer {
                     }
                 }
         );
+    }
+    private void registerPackets(){
+        ReanimatorReviveC2SPacket.register();
     }
 }

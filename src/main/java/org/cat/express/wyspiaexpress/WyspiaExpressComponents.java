@@ -1,7 +1,7 @@
 package org.cat.express.wyspiaexpress;
 import net.minecraft.entity.player.PlayerEntity;
-import org.BsXinQin.kinswathe.component.*;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
+import org.cat.express.wyspiaexpress.components.roles.ReanimatorReviveComponent;
 import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import org.ladysnake.cca.api.v3.entity.EntityComponentInitializer;
@@ -16,6 +16,6 @@ public class WyspiaExpressComponents implements EntityComponentInitializer, Worl
     }
     @Override
     public void registerWorldComponentFactories(@NotNull WorldComponentFactoryRegistry registry) {
-
+        registry.register(ReanimatorReviveComponent.KEY, ReanimatorReviveComponent::new);
     }
 }

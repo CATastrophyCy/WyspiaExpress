@@ -1,9 +1,13 @@
 {
   "key.wyspiaexpress.ability": "Ability",
-  "tip.wyspiaexpress.cooldown": "Ability usable in %ss",
+  "tip.wyspiaexpress.ability.cooldown": "Ability usable in %ss",
   "tip.wyspiaexpress.ability.can_use": "Use %s to activate ability",
   "tip.wyspiaexpress.ability.not_enough_money": "%s§f\uE781§r required to activate ability",
 
+  "tip.wyspiaexpress.ability.reanimator.no_revive": "There is no available revive",
+  "tip.wyspiaexpress.ability.reanimator.revive": "%s available revives",
+
+  "hud.wyspiaexpress.reanimator.revive": "Press %s to revive",
   "item.wyspiaexpress.tp_ready": "Teleport to Ready Area",
 
   "item.wyspiaexpress.fake_revolver": "Fake Revolver",
@@ -20,6 +24,13 @@
 
   "announcement.role.wyspiaexpress.gambler": "The Gambler",
   "announcement.goals.wyspiaexpress.gambler": "Spin the wheel, and survive.",
+
+  "announcement.role.wyspiaexpress.reanimator": "Reanimator",
+  "announcement.goals.wyspiaexpress.reanimator": "Reanimate the dead to do your biding.",
+
+
+  "announcement.role.wyspiaexpress.reanimator_ghoul": "Fragile Ghoul",
+  "announcement.goals.wyspiaexpress.reanimator_ghoul": "You have been reanimated from death, serve your master.",
 
   "guidebook.namespace.wyspiaexpress": "Mod: WyspiaExpress",
 

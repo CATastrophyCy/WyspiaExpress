@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress.config;
 
 import blue.endless.jankson.Comment;
 import io.wispforest.owo.config.annotation.Nest;
+import org.jetbrains.annotations.Range;
 
 public class RoleConfig {
     // mine
@@ -13,7 +14,8 @@ public class RoleConfig {
     @Nest public EdgeLordConfig edgeLordConfig = new EdgeLordConfig();
     @Comment("Config options for GAMBLER")
     @Nest public GamblerConfig  gamblerConfig = new GamblerConfig();
-
+    @Comment("Config options for REANIMATOR.")
+    @Nest public ReanimatorConfig reanimatorConfig = new ReanimatorConfig();
     // Starry Express
     @Nest public StarryExpressRoles starryExpress = new StarryExpressRoles();
     // Stupid Express
@@ -44,6 +46,26 @@ public class RoleConfig {
         @Comment("Bad pool miss chance.")
         public double badPoolMissChance = 0.40;
     }
+    public static class ReanimatorConfig {
+        @Comment("Basic role configuration.")
+        @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        @Comment("Additional revive. Note the Reanimator can't revive when the number of alive killers is greater or equal to {Starting killer amount + this number}")
+        public int additionalRevive = 1;
+        @Comment("Cooldown for the ability, in seconds.")
+        public int cooldown = 180;
+        @Comment("Range to activate ability.")
+        public double range = 3.0;
+        @Comment("The amount of coin revived player starts with")
+        public int startingCoin = 75;
+        @Comment("Configuration for their GHOUL")
+        @Nest public ReanimatorGhoulConfig ghoulConfig = new ReanimatorGhoulConfig();
+
+        // Reanimator revived roles
+        public static class ReanimatorGhoulConfig{
+            @Comment("Basic role configuration")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+    }
     // Starry Express
     public static class StarryExpressRoles{
         @Comment("Config options for MUZZLER.")
@@ -57,7 +79,7 @@ public class RoleConfig {
 
     // Stupid Express
     public static class StupidExpressRoles{
-        @Comment("Config options for NECROMANCERG.")
+        @Comment("Config options for NECROMANCER, from Stupid Express.")
         @Nest public NecromancerConfig necromancerConfig = new NecromancerConfig();
 
         @Comment("Config options for AVARICIOUS.")

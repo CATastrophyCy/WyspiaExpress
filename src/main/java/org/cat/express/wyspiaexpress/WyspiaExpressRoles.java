@@ -79,7 +79,24 @@ public class WyspiaExpressRoles {
             200,
             false
     ));
-
+    public static Role REANIMATOR = registerRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "reanimator"),
+            0x4B0082,
+            false,
+            true,
+            Role.MoodType.FAKE,
+            -1,
+            true
+    ));
+    public static Role REANIMATOR_GHOUL = registerRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "reanimator_ghoul"),
+            0x5d3954,
+            false,
+            true,
+            Role.MoodType.FAKE,
+            600,
+            true
+    ));
     private static void registerRoleBasicConfig(Role role, WyspiaExpressRolesConfig.RoleBasicConfig config) {
         ROLES_BASIC_CONFIG.put(role, config);
     }
@@ -153,6 +170,8 @@ public class WyspiaExpressRoles {
         registerRoleBasicConfig(NOTE_TAKER, WyspiaExpress.ROLES_CONFIG.roleConfig.noteTakerConfig.basic);
         registerRoleBasicConfig(EDGE_LORD,WyspiaExpress.ROLES_CONFIG.roleConfig.edgeLordConfig.basic);
         registerRoleBasicConfig(GAMBLER, WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.basic);
+        registerRoleBasicConfig(REANIMATOR, WyspiaExpress.ROLES_CONFIG.roleConfig.reanimatorConfig.basic);
+        registerRoleBasicConfig(REANIMATOR_GHOUL, WyspiaExpress.ROLES_CONFIG.roleConfig.reanimatorConfig.ghoulConfig.basic);
         // Starry Express roles
         registerRoleBasicConfig(MUZZLER, WyspiaExpress.ROLES_CONFIG.roleConfig.starryExpress.muzzlerConfig.basic);
         // Stupid Express roles

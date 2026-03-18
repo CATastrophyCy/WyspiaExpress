@@ -17,6 +17,13 @@
     "client": ["org.cat.express.wyspiaexpress.client.WyspiaexpressClient"],
     "main": [
       "org.cat.express.wyspiaexpress.WyspiaExpress"
+    ],
+    "cardinal-components": ["org.cat.express.wyspiaexpress.WyspiaExpressComponents"]
+  },
+  "custom": {
+    "cardinal-components": [
+      "wyspiaexpress:ability_cooldown",
+      "wyspiaexpress:reanimator_revive_component"
     ]
   },
 

@@ -15,5 +15,9 @@
   },
   "overwrites": {
     "requireAnnotations": true
-  }
+  },
+  "mixins": [
+    "roles.reanimator.ReanimatorTargetHudMixin",
+    "roles.reanimator.ReanimatorHudMixin"
+  ]
 }

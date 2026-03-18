@@ -5,12 +5,14 @@
   "compatibilityLevel": "JAVA_21",
   "priority": 500,
   "mixins": [
+    "HMLGameInitializeMixin",
     "KillerAlwaysGuesserMixin",
     "KinsWatheCommandMixin",
     "PassiveIncomeMixin",
     "PlayerCrawlSpeedMixin",
     "ShopMixin",
-    "TaskIncomeMixin"
+    "TaskIncomeMixin",
+    "roles.ReanimatorKillerDeathMixin"
   ],
   "injectors": {
     "defaultRequire": 1

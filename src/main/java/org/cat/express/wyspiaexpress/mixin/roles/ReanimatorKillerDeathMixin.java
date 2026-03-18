@@ -1,0 +1,45 @@
+package org.cat.express.wyspiaexpress.mixin.roles;
+
+import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.game.GameFunctions;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
+import org.cat.express.wyspiaexpress.components.roles.ReanimatorReviveComponent;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+@Mixin(GameFunctions.class)
+public abstract class ReanimatorKillerDeathMixin {
+        @Inject(
+                method = "killPlayer(Lnet/minecraft/entity/player/PlayerEntity;ZLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)V",
+                at = @At("TAIL")
+        )
+        private static void addKillStat(PlayerEntity victim, boolean spawnBody, PlayerEntity killer, Identifier deathReason, CallbackInfo ci) {
+
+            var component = GameWorldComponent.KEY.get(victim.getWorld());
+            if (component.canUseKillerFeatures(victim)) {
+                var reviveComponent = ReanimatorReviveComponent.KEY.get(victim.getWorld());
+                // count killers that are still alive
+                if(victim.getWorld().getPlayers().stream().filter(component::canUseKillerFeatures).filter(GameFunctions::isPlayerAliveAndSurvival).count() >= reviveComponent.getMaxRevives())
+                    return;
+                reviveComponent.incrementAvailableRevives();
+                reviveComponent.sync();
+            }
+
+        }
+
+        @Inject(
+                method = "finalizeGame",
+                at = @At("TAIL")
+        )
+        private static void resetNecroStat(ServerWorld world, CallbackInfo ci) {
+            var component = ReanimatorReviveComponent.KEY.get(world);
+            component.reset();
+
+        }
+
+
+}
