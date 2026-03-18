@@ -20,7 +20,7 @@ public abstract class PlayerCrawlSpeedMixin extends LivingEntity {
     public float overrideMovementSpeed(float original) {
         PlayerEntity self = (PlayerEntity) (Object) this;
         if (GameFunctions.isPlayerAliveAndSurvival(self) && isCrawling(self)) {
-            return original * ( 1 + WyspiaExpress.SERVER_CONFIG.crawlSpeedMultiplier());
+            return (float) (original * ( 1 + WyspiaExpress.SERVER_CONFIG.crawlSpeedMultiplier()));
         }
         return original;
     }
