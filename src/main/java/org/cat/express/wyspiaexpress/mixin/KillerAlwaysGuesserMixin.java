@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
-
 @Mixin(ModdedMurderGameMode.class)
 public class KillerAlwaysGuesserMixin {
 
@@ -22,9 +21,15 @@ public class KillerAlwaysGuesserMixin {
     void assignGuesser(int desiredRoleCount, ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players, @NotNull CallbackInfo ci){
         if(WyspiaExpress.SERVER_CONFIG.killerAlwaysGuesser()) {
             WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(serverWorld);
+            int count = 0;
             for (ServerPlayerEntity player : players) {
-                if (!worldModifierComponent.isModifier(player, Noellesroles.GUESSER) && gameWorldComponent.canUseKillerFeatures(player))
+                if (!worldModifierComponent.isModifier(player, Noellesroles.GUESSER) && gameWorldComponent.canUseKillerFeatures(player)) {
                     worldModifierComponent.addModifier(player.getUuid(), Noellesroles.GUESSER);
+                    count++;
+                }
+                if( count >= WyspiaExpress.SERVER_CONFIG.maximumGuessers())
+                    break;
+
             }
         }
     }

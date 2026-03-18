@@ -16,7 +16,8 @@ public class ServerConfig {
     public double crawlSpeedMultiplier = 1.0;
     @Comment("Wheter killer role will always have guesser added. With this enabled it is recommended to have guesser disabled.")
     public boolean killerAlwaysGuesser = false;
-
+    @Comment("Maximum amount of guessers when killerAlwaysGuesser is enabled.")
+    public int maximumGuessers = 1;
     @Comment("Whether to enable item bound checking, this will make out of bound item tp to closest dead body.")
     public boolean enableItemBoundChecking = true;
 
