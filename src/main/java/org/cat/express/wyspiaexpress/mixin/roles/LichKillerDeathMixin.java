@@ -5,14 +5,14 @@ import dev.doctor4t.wathe.game.GameFunctions;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import org.cat.express.wyspiaexpress.components.roles.ReanimatorReviveComponent;
+import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameFunctions.class)
-public abstract class ReanimatorKillerDeathMixin {
+public abstract class LichKillerDeathMixin {
         @Inject(
                 method = "killPlayer(Lnet/minecraft/entity/player/PlayerEntity;ZLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)V",
                 at = @At("TAIL")
@@ -21,7 +21,7 @@ public abstract class ReanimatorKillerDeathMixin {
 
             var component = GameWorldComponent.KEY.get(victim.getWorld());
             if (component.canUseKillerFeatures(victim)) {
-                var reviveComponent = ReanimatorReviveComponent.KEY.get(victim.getWorld());
+                var reviveComponent = LichReviveComponent.KEY.get(victim.getWorld());
                 // count killers that are still alive
                 if(victim.getWorld().getPlayers().stream().filter(component::canUseKillerFeatures).filter(GameFunctions::isPlayerAliveAndSurvival).count() >= reviveComponent.getMaxRevives())
                     return;
@@ -36,7 +36,7 @@ public abstract class ReanimatorKillerDeathMixin {
                 at = @At("TAIL")
         )
         private static void resetNecroStat(ServerWorld world, CallbackInfo ci) {
-            var component = ReanimatorReviveComponent.KEY.get(world);
+            var component = LichReviveComponent.KEY.get(world);
             component.reset();
 
         }

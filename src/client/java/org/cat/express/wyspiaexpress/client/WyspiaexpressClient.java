@@ -18,7 +18,7 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.client.items.ItemToolTip;
-import org.cat.express.wyspiaexpress.client.roles.ReanimatorUtil;
+import org.cat.express.wyspiaexpress.client.roles.LichUtil;
 import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
 import org.lwjgl.glfw.GLFW;
 
@@ -66,8 +66,8 @@ public class WyspiaexpressClient implements ClientModInitializer {
             if (abilityBind.isPressed()) {
                 GameWorldComponent gameWorld = GameWorldComponent.KEY.get(MinecraftClient.getInstance().player.getWorld());
                 Role role = gameWorld.getRole(client.player);
-                if(role == WyspiaExpressRoles.REANIMATOR){
-                    ReanimatorUtil.sendReanimatePacket(client);
+                if(role == WyspiaExpressRoles.LICH){
+                    LichUtil.sendLichPacket(client);
                 }
             }
         });

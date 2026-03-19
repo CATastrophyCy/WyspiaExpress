@@ -2,7 +2,6 @@ package org.cat.express.wyspiaexpress.config;
 
 import blue.endless.jankson.Comment;
 import io.wispforest.owo.config.annotation.Nest;
-import org.jetbrains.annotations.Range;
 
 public class RoleConfig {
     // mine
@@ -14,8 +13,8 @@ public class RoleConfig {
     @Nest public EdgeLordConfig edgeLordConfig = new EdgeLordConfig();
     @Comment("Config options for GAMBLER")
     @Nest public GamblerConfig  gamblerConfig = new GamblerConfig();
-    @Comment("Config options for REANIMATOR.")
-    @Nest public ReanimatorConfig reanimatorConfig = new ReanimatorConfig();
+    @Comment("Config options for LICH.")
+    @Nest public LichConfig lichConfig = new LichConfig();
     // Starry Express
     @Nest public StarryExpressRoles starryExpress = new StarryExpressRoles();
     // Stupid Express
@@ -46,10 +45,10 @@ public class RoleConfig {
         @Comment("Bad pool miss chance.")
         public double badPoolMissChance = 0.40;
     }
-    public static class ReanimatorConfig {
+    public static class LichConfig {
         @Comment("Basic role configuration.")
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
-        @Comment("Additional revive. Note the Reanimator can't revive when the number of alive killers is greater or equal to {Starting killer amount + this number}")
+        @Comment("Additional revive. Note the LICH can't revive when the number of alive killers is greater or equal to {Starting killer amount + this number}")
         public int additionalRevive = 1;
         @Comment("Cooldown for the ability, in seconds.")
         public int cooldown = 180;
@@ -58,10 +57,10 @@ public class RoleConfig {
         @Comment("The amount of coin revived player starts with")
         public int startingCoin = 75;
         @Comment("Configuration for their GHOUL")
-        @Nest public ReanimatorGhoulConfig ghoulConfig = new ReanimatorGhoulConfig();
+        @Nest public LichGhoulConfig ghoulConfig = new LichGhoulConfig();
 
-        // Reanimator revived roles
-        public static class ReanimatorGhoulConfig{
+        // Lich revived roles
+        public static class LichGhoulConfig {
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }

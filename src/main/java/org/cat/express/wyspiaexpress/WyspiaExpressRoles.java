@@ -79,8 +79,8 @@ public class WyspiaExpressRoles {
             200,
             false
     ));
-    public static Role REANIMATOR = registerRole(new Role(
-            Identifier.of(WyspiaExpress.MOD_ID, "reanimator"),
+    public static Role LICH = registerRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "lich"),
             0x4B0082,
             false,
             true,
@@ -88,8 +88,8 @@ public class WyspiaExpressRoles {
             -1,
             true
     ));
-    public static Role REANIMATOR_GHOUL = registerRole(new Role(
-            Identifier.of(WyspiaExpress.MOD_ID, "reanimator_ghoul"),
+    public static Role LICH_GHOUL = registerRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "lich_ghoul"),
             0x5d3954,
             false,
             true,
@@ -170,8 +170,8 @@ public class WyspiaExpressRoles {
         registerRoleBasicConfig(NOTE_TAKER, WyspiaExpress.ROLES_CONFIG.roleConfig.noteTakerConfig.basic);
         registerRoleBasicConfig(EDGE_LORD,WyspiaExpress.ROLES_CONFIG.roleConfig.edgeLordConfig.basic);
         registerRoleBasicConfig(GAMBLER, WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.basic);
-        registerRoleBasicConfig(REANIMATOR, WyspiaExpress.ROLES_CONFIG.roleConfig.reanimatorConfig.basic);
-        registerRoleBasicConfig(REANIMATOR_GHOUL, WyspiaExpress.ROLES_CONFIG.roleConfig.reanimatorConfig.ghoulConfig.basic);
+        registerRoleBasicConfig(LICH, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.basic);
+        registerRoleBasicConfig(LICH_GHOUL, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.ghoulConfig.basic);
         // Starry Express roles
         registerRoleBasicConfig(MUZZLER, WyspiaExpress.ROLES_CONFIG.roleConfig.starryExpress.muzzlerConfig.basic);
         // Stupid Express roles

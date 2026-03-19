@@ -12,7 +12,7 @@
     "PlayerCrawlSpeedMixin",
     "ShopMixin",
     "TaskIncomeMixin",
-    "roles.ReanimatorKillerDeathMixin"
+    "roles.LichKillerDeathMixin"
   ],
   "injectors": {
     "defaultRequire": 1

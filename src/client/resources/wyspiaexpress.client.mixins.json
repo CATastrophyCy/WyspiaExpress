@@ -17,7 +17,7 @@
     "requireAnnotations": true
   },
   "mixins": [
-    "roles.reanimator.ReanimatorTargetHudMixin",
-    "roles.reanimator.ReanimatorHudMixin"
+    "roles.lich.LichTargetHudMixin",
+    "roles.lich.LichHudMixin"
   ]
 }

@@ -4,10 +4,10 @@
   "tip.wyspiaexpress.ability.can_use": "Use %s to activate ability",
   "tip.wyspiaexpress.ability.not_enough_money": "%s§f\uE781§r required to activate ability",
 
-  "tip.wyspiaexpress.ability.reanimator.no_revive": "There is no available revive",
-  "tip.wyspiaexpress.ability.reanimator.revive": "%s available revives",
+  "tip.wyspiaexpress.ability.lich.no_revive": "There is no available revive",
+  "tip.wyspiaexpress.ability.lich.revive": "%s available revives",
 
-  "hud.wyspiaexpress.reanimator.revive": "Press %s to revive",
+  "hud.wyspiaexpress.lich.revive": "Press %s to revive",
   "item.wyspiaexpress.tp_ready": "Teleport to Ready Area",
 
   "item.wyspiaexpress.fake_revolver": "Fake Revolver",
@@ -25,12 +25,12 @@
   "announcement.role.wyspiaexpress.gambler": "The Gambler",
   "announcement.goals.wyspiaexpress.gambler": "Spin the wheel, and survive.",
 
-  "announcement.role.wyspiaexpress.reanimator": "Reanimator",
-  "announcement.goals.wyspiaexpress.reanimator": "Reanimate the dead to do your biding.",
+  "announcement.role.wyspiaexpress.lich": "Lich",
+  "announcement.goals.wyspiaexpress.lich": "Reanimate the dead to do your biding.",
 
 
-  "announcement.role.wyspiaexpress.reanimator_ghoul": "Fragile Ghoul",
-  "announcement.goals.wyspiaexpress.reanimator_ghoul": "You have been reanimated from death, serve your master.",
+  "announcement.role.wyspiaexpress.lich_ghoul": "Fragile Ghoul",
+  "announcement.goals.wyspiaexpress.lich_ghoul": "You have been reanimated from death, serve your master.",
 
   "guidebook.namespace.wyspiaexpress": "Mod: WyspiaExpress",
 
@@ -44,5 +44,10 @@
 
   "guidebook.role.wyspiaexpress:gambler": "The Gambler",
   "guidebook.role.title.wyspiaexpress:gambler": "The one who never lost a bet",
-  "guidebook.role.description.wyspiaexpress:gambler": "They're no stranger to chance, but their chance has gone to another level. Their mastery of luck manipulation leads them to a game of roulette that they must survive. They can get a random item from a mystery box."
+  "guidebook.role.description.wyspiaexpress:gambler": "They're no stranger to chance, but their chance has gone to another level. Their mastery of luck manipulation leads them to a game of roulette that they must survive. They can get a random item from a mystery box.",
+
+  "guidebook.role.wyspiaexpress:lich": "Lich",
+  "guidebook.role.title.wyspiaexpress:lich": "Master of necromancy",
+  "guidebook.role.description.wyspiaexpress:lich": "WIP"
+
 }

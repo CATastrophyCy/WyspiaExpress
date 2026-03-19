@@ -10,16 +10,16 @@ import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
-public class ReanimatorReviveComponent implements AutoSyncedComponent{
-    public static final ComponentKey<ReanimatorReviveComponent> KEY =
+public class LichReviveComponent implements AutoSyncedComponent{
+    public static final ComponentKey<LichReviveComponent> KEY =
             ComponentRegistry.getOrCreate(
-                    Identifier.of(WyspiaExpress.MOD_ID, "reanimator_revive_component"),
-                    ReanimatorReviveComponent.class
+                    Identifier.of(WyspiaExpress.MOD_ID, "lich_revive_component"),
+                    LichReviveComponent.class
             );
     @NotNull private final World world;
     private int availableRevives;
     private int maxRevives;
-    public ReanimatorReviveComponent(@NotNull World world) {
+    public LichReviveComponent(@NotNull World world) {
         this.world = world;
     }
     public void sync() {

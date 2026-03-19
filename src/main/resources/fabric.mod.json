@@ -23,7 +23,7 @@
   "custom": {
     "cardinal-components": [
       "wyspiaexpress:ability_cooldown",
-      "wyspiaexpress:reanimator_revive_component"
+      "wyspiaexpress:lich_revive_component"
     ]
   },
 
