@@ -37,5 +37,6 @@ public enum EnumShopEntry {
     POISON_INJECTOR, // this seems to work fine with any role
     // custom
     FUN_BOX,
+    MEGAPHONE,
 }
 

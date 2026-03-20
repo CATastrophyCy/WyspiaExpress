@@ -212,6 +212,8 @@ public class ShopUtil {
             case FUN_BOX:
                 item = WyspiaExpressItems.FUN_BOX.getDefaultStack();
                 break;
+            case MEGAPHONE:
+                item = WyspiaExpressItems.MEGAPHONE.getDefaultStack();
             default:
         }
         return item;

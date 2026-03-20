@@ -16,6 +16,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
 import org.cat.express.wyspiaexpress.items.FakeRevolverItem;
+import org.cat.express.wyspiaexpress.items.MegaphoneItem;
 import org.cat.express.wyspiaexpress.items.TpReadyItem;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
@@ -36,10 +37,12 @@ public class WyspiaExpressItems {
     public static final Item FAKE_REVOLVER = registerItem(new FakeRevolverItem(new Item.Settings().maxCount(1)), "fake_revolver");
     public static final Item FUN_BOX = registerItem( new Item(new Item.Settings()), "fun_box");
     public static final Item TP_READY = registerItem(new TpReadyItem(new Item.Settings().maxCount(1)), "tp_ready");
+    public static final Item MEGAPHONE = registerItem(new MegaphoneItem(new Item.Settings().maxCount(64)), "megaphone");
 
     public static void registerItemConfig(){
         // custom items
-        ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.FAKE_REVOLVER).getItem(), WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.basic);
+        ITEMS_BASIC_CONFIG.put(FAKE_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.basic);
+        ITEMS_BASIC_CONFIG.put(MEGAPHONE, WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.basic);
         // other mods
         ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.FAKE_KNIFE).getItem(), WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeKnifeConfig.basic);
         ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.MEDICAL_KIT).getItem(), WyspiaExpress.ITEMS_CONFIG.itemConfig.medicalKitConfig.basic);
@@ -50,7 +53,11 @@ public class WyspiaExpressItems {
         if(WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.cooldown() > 0) {
             registerItemCooldown(FAKE_REVOLVER, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.cooldown());
         }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.cooldown() > 0) {
+            registerItemCooldown(MEGAPHONE, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.cooldown());
+        }
         registerItemGroup(FAKE_REVOLVER, WatheItems.EQUIPMENT_GROUP);
+        registerItemGroup(MEGAPHONE, WatheItems.EQUIPMENT_GROUP);
     }
     public static Item registerItem(Item item, String id) {
         Identifier itemID = Identifier.of(WyspiaExpress.MOD_ID, id);

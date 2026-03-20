@@ -7,6 +7,9 @@
   "tip.wyspiaexpress.ability.lich.no_revive": "There is no available revive",
   "tip.wyspiaexpress.ability.lich.revive": "%s available revives",
 
+  "tip.wyspiaexpress.items.megaphone": "A body has been reported",
+  "tip.wyspiaexpress.items.megaphone_spectator": "A body has been reported by %s",
+
   "hud.wyspiaexpress.lich.revive": "Press %s to revive",
   "item.wyspiaexpress.tp_ready": "Teleport to Ready Area",
 
@@ -15,6 +18,9 @@
 
   "item.wyspiaexpress.fun_box": "\"Fun Box\"",
   "item.wyspiaexpress.fun_box.tooltip": "You wanna know whats in the box? BUY IT!",
+
+  "item.wyspiaexpress.megaphone": "Megaphone",
+  "item.wyspiaexpress.megaphone.tooltip": "Right click to report a dead body.",
 
   "announcement.role.wyspiaexpress.note_taker": "Amazing Note Taker",
   "announcement.goals.wyspiaexpress.note_taker": "Observe, and take notes. You are amazing and not binglus anymore",
@@ -49,5 +55,4 @@
   "guidebook.role.wyspiaexpress:lich": "Lich",
   "guidebook.role.title.wyspiaexpress:lich": "Master of necromancy",
   "guidebook.role.description.wyspiaexpress:lich": "WIP"
-
 }
