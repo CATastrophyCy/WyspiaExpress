@@ -32,7 +32,7 @@ public class ItemConfig {
         @Nest public ItemBasicConfig basic = new ItemBasicConfig();
         @Comment("Cooldown, in seconds, minimum 0")
         public int cooldown = 60;
-        @Comment("Duration of the glowing effect on the reported body")
+        @Comment("Duration, in seconds, of the glowing effect on the reported body")
         public int duration = 60;
     }
 

@@ -1,6 +1,7 @@
 package org.cat.express.wyspiaexpress.items;
 
 import dev.doctor4t.wathe.entity.PlayerBodyEntity;
+import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -40,8 +41,10 @@ public class MegaphoneItem extends Item{
                 }
             }
             component.setReported(true);
-            playerBody.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.duration()
-                    , 0, true, false, false));
+            playerBody.addStatusEffect(new StatusEffectInstance(
+                    StatusEffects.GLOWING,
+                    GameConstants.getInTicks(0,WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.duration()),
+                    0, true, false, false));
             return ActionResult.SUCCESS;
         }
 
