@@ -23,7 +23,8 @@ public abstract class LichKillerDeathMixin {
             if (component.canUseKillerFeatures(victim)) {
                 var reviveComponent = LichReviveComponent.KEY.get(victim.getWorld());
                 // count killers that are still alive
-                if(victim.getWorld().getPlayers().stream().filter(component::canUseKillerFeatures).filter(GameFunctions::isPlayerAliveAndSurvival).count() >= reviveComponent.getMaxRevives())
+                if(victim.getWorld().getPlayers().stream().filter(component::canUseKillerFeatures).filter(GameFunctions::isPlayerAliveAndSurvival).count()
+                        + reviveComponent.getAvailableRevives() >= reviveComponent.getMaxRevives())
                     return;
                 reviveComponent.incrementAvailableRevives();
                 reviveComponent.sync();
