@@ -12,6 +12,7 @@
     "PlayerCrawlSpeedMixin",
     "ShopMixin",
     "TaskIncomeMixin",
+    "items.TapeMixin",
     "roles.LichKillerDeathMixin"
   ],
   "injectors": {
