@@ -1,5 +1,8 @@
 {
-  "parent": "wathe:item/revolver",
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "wathe:item/revolver"
+  },
   "display": {
     "thirdperson_righthand": {
       "rotation": [ 0, -90, 55 ],

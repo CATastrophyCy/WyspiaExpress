@@ -6,10 +6,12 @@
   "priority": 500,
   "client": [
     "CoinMixin",
+    "ItemArmPoseMixin",
     "ItemHandViewMixin",
     "ScreenAccessor",
     "ShopMixin",
-    "ItemArmPoseMixin"
+    "items.fakeRevolver.FakeRevolverHoldingMixin",
+    "items.fakeRevolver.FakeRevolverMixin"
   ],
   "injectors": {
     "defaultRequire": 1
