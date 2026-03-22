@@ -44,7 +44,7 @@ public class WyspiaExpressGameFunctions {
                 if (gwc.isRunning() && wc.isPlayerDead(joining.getUuid())) {
                     joining.changeGameMode(GameMode.SPECTATOR);
                 }
-                else if(joining.hasPermissionLevel(2)){ // op join in creative mode
+                else if(joining.hasPermissionLevel(2) && !gwc.isRunning()){ // op join in creative mode
                     joining.changeGameMode(GameMode.CREATIVE);
                 }
                 else{
