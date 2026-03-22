@@ -106,6 +106,7 @@ public class RoleConfig {
             @Comment("Basic role configuration.")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
+
     }
     // Noelle's role
     public static class NoellesRoles{
@@ -120,6 +121,21 @@ public class RoleConfig {
 
         @Comment("Config options for NOISE_MAKER.")
         @Nest public NoiseMakerConfig noiseMakerConfig = new NoiseMakerConfig();
+
+        @Comment("Config options for CORONER.")
+        @Nest public CoronerConfig coronerConfig = new CoronerConfig();
+
+        @Comment("Config options for CONDUCTOR.")
+        @Nest public ConductorConfig conductorConfig = new ConductorConfig();
+
+        @Comment("Config options for TRAPPER.")
+        @Nest public TrapperConfig trapperConfig = new TrapperConfig();
+
+        @Comment("Config options for MIMIC.")
+        @Nest public MimicConfig mimicConfig = new MimicConfig();
+
+        @Comment("Config options for VULTURE.")
+        @Nest public VultureConfig vultureConfig = new VultureConfig();
 
         public static class MorphlingConfig{
             @Comment("Basic role configuration.")
@@ -137,6 +153,31 @@ public class RoleConfig {
         }
 
         public static class NoiseMakerConfig{
+            @Comment("Basic role configuration.")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+
+        public static class CoronerConfig{
+            @Comment("Basic role configuration.")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+
+        public static class ConductorConfig{
+            @Comment("Basic role configuration.")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+
+        public static class TrapperConfig{
+            @Comment("Basic role configuration.")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+
+        public static class MimicConfig{
+            @Comment("Basic role configuration.")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+
+        public static class VultureConfig{
             @Comment("Basic role configuration.")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
@@ -161,6 +202,12 @@ public class RoleConfig {
         @Comment("Config options for DRUGMAKER.")
         @Nest public DrugmakerConfig drugmakerConfig = new DrugmakerConfig();
 
+        @Comment("Config options for DETECTIVE.")
+        @Nest public DetectiveConfig detectiveConfig = new DetectiveConfig();
+
+        @Comment("Config options for PHYSICIAN.")
+        @Nest public PhysicianConfig physicianConfig = new PhysicianConfig();
+
         public static class BodymakerConfig{
             @Comment("Basic role configuration.")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
@@ -182,6 +229,16 @@ public class RoleConfig {
         }
 
         public static class DrugmakerConfig{
+            @Comment("Basic role configuration.")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+
+        public static class DetectiveConfig{
+            @Comment("Basic role configuration.")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+
+        public static class PhysicianConfig{
             @Comment("Basic role configuration.")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
