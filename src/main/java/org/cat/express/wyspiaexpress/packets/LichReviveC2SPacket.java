@@ -24,6 +24,7 @@ import org.agmas.harpymodloader.Harpymodloader;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
+import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.jetbrains.annotations.NotNull;
 
@@ -89,6 +90,9 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
                     revived.teleportTo(target);
                     revived.changeGameMode(GameMode.ADVENTURE);
                     body.remove(Entity.RemovalReason.DISCARDED); // like it never existed
+
+                    var world_component = WorldComponent.KEY.get(player.getWorld());
+                    world_component.removePlayerDead(revived.getUuid());
 
                     gameWorldComponent.addRole(revived, selectedRole);
                     PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(revived);

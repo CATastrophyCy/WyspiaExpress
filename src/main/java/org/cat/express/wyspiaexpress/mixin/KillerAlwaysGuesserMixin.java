@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 @Mixin(ModdedMurderGameMode.class)
-public class KillerAlwaysGuesserMixin {
+public abstract class KillerAlwaysGuesserMixin {
 
     @Inject(method = "assignModifiers", at = @At("TAIL"), cancellable = false)
     void assignGuesser(int desiredRoleCount, ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players, @NotNull CallbackInfo ci){

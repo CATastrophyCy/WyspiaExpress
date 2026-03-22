@@ -10,10 +10,10 @@
     "KinsWatheCommandMixin",
     "PassiveIncomeMixin",
     "PlayerCrawlSpeedMixin",
+    "PlayerDeathMixin",
     "ShopMixin",
     "TaskIncomeMixin",
-    "items.TapeMixin",
-    "roles.LichKillerDeathMixin"
+    "TrainMapEffectMixin"
   ],
   "injectors": {
     "defaultRequire": 1

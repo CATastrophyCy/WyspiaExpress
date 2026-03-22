@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(ModdedMurderGameMode.class)
-public class HMLGameInitializeMixin {
+public abstract class HMLGameInitializeMixin {
     @Inject(method = "initializeGame", at = @At("TAIL"), cancellable = false)
     void initializeGame(ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players, CallbackInfo ci) {
         if(!HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.LICH.identifier().toString())){

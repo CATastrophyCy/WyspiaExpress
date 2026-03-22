@@ -4,6 +4,7 @@ import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.MapVariablesWorldComponent;
 import dev.doctor4t.wathe.index.WatheEntities;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,8 +14,10 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameMode;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
+import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.config.ServerConfig;
 
 import java.util.ArrayList;
@@ -28,9 +31,29 @@ public class WyspiaExpressGameFunctions {
     private static final Map<RegistryKey<World>, Boolean> prevStarting = new ConcurrentHashMap<>();
     public static void init(){
         registerEndWorldTick();
+        registerOnJoin();
     }
 
-    public static void registerEndWorldTick(){
+    private static void registerOnJoin(){
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            ServerPlayerEntity joining = handler.player;
+            server.execute(() -> {
+                ServerWorld overworld = server.getOverworld();
+                GameWorldComponent gwc = GameWorldComponent.KEY.get(overworld);
+                WorldComponent wc = WorldComponent.KEY.get(overworld);
+                if (gwc.isRunning() && wc.isPlayerDead(joining.getUuid())) {
+                    joining.changeGameMode(GameMode.SPECTATOR);
+                }
+                else if(joining.hasPermissionLevel(2)){ // op join in creative mode
+                    joining.changeGameMode(GameMode.CREATIVE);
+                }
+                else{
+                    joining.changeGameMode(GameMode.ADVENTURE);
+                }
+            });
+        });
+    }
+    private static void registerEndWorldTick(){
         ServerTickEvents.END_WORLD_TICK.register(world -> {
             if (!(world instanceof ServerWorld serverWorld)) return;
             GameWorldComponent gwc = GameWorldComponent.KEY.get(world);

@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 // this is to fix Kins Wathe removing player effects at the start of the game inappropriately
 // it removed feather falling from FEATHER modifier and also the NIGHT_VISION effect from EDGE_LORD in my mod
 @Mixin(KinsWatheGameSettings.class)
-public class KinsWatheCommandMixin {
+public abstract class KinsWatheCommandMixin {
     @Inject(method = "setCommands", at = @At("HEAD"), cancellable = true)
     private static void setCommands(@NotNull MinecraftServer server, @NotNull CallbackInfo ci){
         server.getCommandManager().executeWithPrefix(server.getCommandSource().withSilent(), "kill @e[type=wathe:player_body]");

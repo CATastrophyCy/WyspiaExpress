@@ -3,6 +3,7 @@ import dev.doctor4t.wathe.entity.PlayerBodyEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
 import org.cat.express.wyspiaexpress.components.PlayerBodyEntityComponent;
+import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.entity.EntityComponentFactoryRegistry;
@@ -21,5 +22,6 @@ public class WyspiaExpressComponents implements EntityComponentInitializer, Worl
     @Override
     public void registerWorldComponentFactories(@NotNull WorldComponentFactoryRegistry registry) {
         registry.register(LichReviveComponent.KEY, LichReviveComponent::new);
+        registry.register(WorldComponent.KEY, WorldComponent::new);
     }
 }
