@@ -34,6 +34,8 @@ public class ItemConfig {
         public int cooldown = 60;
         @Comment("Duration, in seconds, of the glowing effect on the reported body")
         public int duration = 60;
+        @Comment("Reporting sound volume")
+        public float volume = 1.0f;
     }
 
     // other mods

@@ -37,7 +37,7 @@ public class WyspiaExpressItems {
     public static final Item FAKE_REVOLVER = registerItem(new FakeRevolverItem(new Item.Settings().maxCount(1)), "fake_revolver");
     public static final Item FUN_BOX = registerItem( new Item(new Item.Settings()), "fun_box");
     public static final Item TP_READY = registerItem(new TpReadyItem(new Item.Settings().maxCount(1)), "tp_ready");
-    public static final Item MEGAPHONE = registerItem(new MegaphoneItem(new Item.Settings().maxCount(64)), "megaphone");
+    public static final Item MEGAPHONE = registerItem(new MegaphoneItem(new Item.Settings().maxCount(1)), "megaphone");
 
     public static void registerItemConfig(){
         // custom items

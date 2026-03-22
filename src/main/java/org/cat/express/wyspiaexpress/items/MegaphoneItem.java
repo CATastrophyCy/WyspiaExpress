@@ -9,11 +9,13 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
+import org.cat.express.wyspiaexpress.WyspiaExpressSounds;
 import org.cat.express.wyspiaexpress.components.PlayerBodyEntityComponent;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,13 +34,15 @@ public class MegaphoneItem extends Item{
             for(PlayerEntity playerEntity : player.getWorld().getPlayers()) {
                 if(GameFunctions.isPlayerAliveAndSurvival(playerEntity)) {
                     playerEntity.sendMessage(Text.translatable("tip.wyspiaexpress.items.megaphone"), true);
-                    //playerEntity.playSoundToPlayer(SoundEvents., SoundCategory.PLAYERS, 1.0f, 1.0f);
+
                 }
                 else if(GameFunctions.isPlayerSpectatingOrCreative(playerEntity) ) {
-                    playerEntity.sendMessage(Text.translatable("tip.wyspiaexpress.items.megaphone_spectator", playerEntity.getName()
+                    playerEntity.sendMessage(Text.translatable("tip.wyspiaexpress.items.megaphone_spectator", player.getName()
                             ), true);
-                    //
                 }
+                playerEntity.playSoundToPlayer(WyspiaExpressSounds.ITEM_MEGAPHONE_REPORT, SoundCategory.PLAYERS,
+                        WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.volume()
+                        , 1.0f);
             }
             component.setReported(true);
             playerBody.addStatusEffect(new StatusEffectInstance(
