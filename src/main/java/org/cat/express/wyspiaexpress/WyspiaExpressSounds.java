@@ -1,7 +1,6 @@
 package org.cat.express.wyspiaexpress;
 
 import dev.doctor4t.ratatouille.util.registrar.SoundEventRegistrar;
-import dev.doctor4t.wathe.index.WatheSounds;
 import net.minecraft.sound.SoundEvent;
 
 public interface WyspiaExpressSounds {
