@@ -24,7 +24,8 @@
     "cardinal-components": [
       "wyspiaexpress:ability_cooldown",
       "wyspiaexpress:lich_revive_component",
-      "wyspiaexpress:player_body"
+      "wyspiaexpress:player_body",
+      "wyspiaexpress:world_component"
     ]
   },
 
