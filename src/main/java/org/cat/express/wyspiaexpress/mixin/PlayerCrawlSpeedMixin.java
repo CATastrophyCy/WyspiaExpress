@@ -1,4 +1,5 @@
 package org.cat.express.wyspiaexpress.mixin;
+
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import dev.doctor4t.wathe.game.GameFunctions;
 import net.minecraft.entity.EntityPose;
@@ -13,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(value = PlayerEntity.class, priority = 2000)
 public abstract class PlayerCrawlSpeedMixin extends LivingEntity {
+
     protected PlayerCrawlSpeedMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -26,7 +28,11 @@ public abstract class PlayerCrawlSpeedMixin extends LivingEntity {
     }
     @Unique
     private boolean isCrawling(PlayerEntity player) {
-        return player.getPose() == EntityPose.SWIMMING
+        EntityPose pose = player.getPose();
+        if(WyspiaExpress.CRAWL_MOD_LOADED && pose.name().equals("CRAWLING")) {
+            return true;
+        }
+        return pose == EntityPose.SWIMMING
                 && !player.isTouchingWater()
                 && !player.isInLava()
                 && !player.isSleeping();

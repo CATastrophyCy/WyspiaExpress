@@ -24,6 +24,9 @@ public class WyspiaExpress implements ModInitializer {
     public static final WyspiaExpressRolesConfig ROLES_CONFIG = WyspiaExpressRolesConfig.createAndLoad();
     public static final WyspiaExpressItemsConfig ITEMS_CONFIG = WyspiaExpressItemsConfig.createAndLoad();
     public static final WyspiaExpressServerConfig SERVER_CONFIG = WyspiaExpressServerConfig.createAndLoad();
+
+    public final static boolean CRAWL_MOD_LOADED = FabricLoader.getInstance().isModLoaded("crawl");
+
     @Override
     public void onInitialize() {
         LOGGER.info("WyspiaExpress is initializing...");
@@ -32,6 +35,7 @@ public class WyspiaExpress implements ModInitializer {
         SERVER_CONFIG.save();
         WyspiaExpressRoles.init();
         WyspiaExpressItems.init();
+        WyspiaExpressSounds.init();
         WyspiaExpressGameFunctions.init();
         registerVersionCheck();
         registerPackets();
