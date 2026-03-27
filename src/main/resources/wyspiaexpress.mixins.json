@@ -6,6 +6,7 @@
   "priority": 500,
   "mixins": [
     "HMLGameInitializeMixin",
+    "HMLModifierMixin",
     "KillerAlwaysGuesserMixin",
     "KinsWatheCommandMixin",
     "PassiveIncomeMixin",
