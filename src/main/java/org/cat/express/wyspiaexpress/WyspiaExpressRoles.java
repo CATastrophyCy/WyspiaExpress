@@ -5,13 +5,19 @@ import java.util.List;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
+import dev.doctor4t.wathe.index.WatheItems;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.LoreComponent;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
+import org.agmas.harpymodloader.events.ModifierAssigned;
 import org.agmas.harpymodloader.events.ResetPlayerEvent;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
 import org.agmas.harpymodloader.modifiers.Modifier;
@@ -30,6 +36,7 @@ public class WyspiaExpressRoles {
         registerRoleConfigs();
 
         registerRoleAssigned();
+        registerModifierAssigned();
         limitRoleSpawn();
     }
 
@@ -97,6 +104,19 @@ public class WyspiaExpressRoles {
             600,
             true
     ));
+
+    public static Modifier EMPLOYEE = registerModifier(new Modifier(
+            Identifier.of(WyspiaExpress.MOD_ID, "employee"),
+            0x0D3B66,
+            null,null,
+            false,false));
+
+    public static Modifier VENT_CRAWLER = registerModifier(new Modifier(
+            Identifier.of(WyspiaExpress.MOD_ID, "vent_crawler"),
+            0x5A6B7A,
+            null,null,
+            false,false));
+
     private static void registerRoleBasicConfig(Role role, WyspiaExpressRolesConfig.RoleBasicConfig config) {
         ROLES_BASIC_CONFIG.put(role, config);
     }
@@ -130,6 +150,16 @@ public class WyspiaExpressRoles {
     public static void registerRoleAssigned(){
         registerStartingItems();
         registerRoleEffect();
+    }
+    public static void registerModifierAssigned(){
+        ModifierAssigned.EVENT.register( (player, modifier) -> {
+            if(modifier.equals(EMPLOYEE)){
+                ItemStack itemStack = new ItemStack(WatheItems.KEY);
+                itemStack.apply(DataComponentTypes.LORE, LoreComponent.DEFAULT, component ->
+                        new LoreComponent(Text.literal("Employee Key").getWithStyle(Style.EMPTY.withItalic(false).withColor(0xFF8C00))));
+                player.giveItemStack(itemStack);
+            }
+        });
     }
     public static void registerStartingItems(){
         ModdedRoleAssigned.EVENT.register((player, role)->{

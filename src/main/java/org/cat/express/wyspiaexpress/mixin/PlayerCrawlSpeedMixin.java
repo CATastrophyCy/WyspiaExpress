@@ -1,13 +1,13 @@
 package org.cat.express.wyspiaexpress.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import dev.doctor4t.wathe.game.GameFunctions;
-import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
+import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,10 +21,19 @@ public abstract class PlayerCrawlSpeedMixin extends LivingEntity {
     @ModifyReturnValue(method = "getMovementSpeed", at = @At("RETURN"))
     public float wyspiaexpress$overrideMovementSpeed(float original) {
         PlayerEntity self = (PlayerEntity) (Object) this;
-        if (GameFunctions.isPlayerAliveAndSurvival(self) && self.isCrawling()) {
-            return (float) (original * ( 1 + WyspiaExpress.SERVER_CONFIG.crawlSpeedMultiplier()));
+        if (isCrawling(self)) {
+            return getMovementSpeed(self, original);
         }
         return original;
+    }
+    @Unique
+    private float getMovementSpeed(PlayerEntity player, float original) {
+        WorldModifierComponent wmc = WorldModifierComponent.KEY.get(player.getWorld());
+        float speed = (float) (original * ( 1 + WyspiaExpress.SERVER_CONFIG.crawlSpeedMultiplier()));
+        if(wmc.isModifier(player, WyspiaExpressRoles.VENT_CRAWLER)){
+            speed *= 1.5F;
+        }
+        return speed;
     }
     @Unique
     private boolean isCrawling(PlayerEntity player) {
@@ -38,7 +47,6 @@ public abstract class PlayerCrawlSpeedMixin extends LivingEntity {
         if (currentHeight < 1.0F && !player.isSwimming() && !player.isFallFlying()) {
             return true;
         }
-
         return false;
     }
 }

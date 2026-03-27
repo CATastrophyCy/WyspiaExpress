@@ -34,25 +34,36 @@
   "announcement.role.wyspiaexpress.lich": "Lich",
   "announcement.goals.wyspiaexpress.lich": "Reanimate the dead to do your biding.",
 
-
   "announcement.role.wyspiaexpress.lich_ghoul": "Fragile Ghoul",
   "announcement.goals.wyspiaexpress.lich_ghoul": "You have been reanimated from death, serve your master.",
+
+
+  "announcement.modifier.wyspiaexpress.employee": "Employee",
+  "announcement.modifier.wyspiaexpress.vent_crawler": "Professional Vent Crawler",
 
   "guidebook.namespace.wyspiaexpress": "Mod: WyspiaExpress",
 
   "guidebook.role.wyspiaexpress:note_taker": "Amazing Note Taker",
-  "guidebook.role.title.wyspiaexpress:note_taker": "NOTES",
-  "guidebook.role.description.wyspiaexpress:note_taker": "Legends says that this civilian was once called 'Awesome Binglus'.\n\nYou are amazing and makes sure everyone knows that with your notes",
+    "guidebook.role.title.wyspiaexpress:note_taker": "NOTES",
+    "guidebook.role.description.wyspiaexpress:note_taker": "Legends says that this civilian was once called 'Awesome Binglus'.\n\nYou are amazing and makes sure everyone knows that with your notes",
 
   "guidebook.role.wyspiaexpress:edge_lord": "The Edgelord Delusional Cursed Assassin of Darkness and Coffee Addiction",
-  "guidebook.role.title.wyspiaexpress:edge_lord": "Assassination, Shadows and Coffee",
-  "guidebook.role.description.wyspiaexpress:edge_lord": "The Edgelord Delusional Cursed Assassin of Darkness and Coffee Addiction has keen vision even in the deepest shadows \",I was born in the dark\", this alongside the Assassin's reduced cost blackout allows them to truly be a master of shadows. Just dont forget a coffee break between lapses of your curse and its darker impulses. Lastly be careful not to cut yourself on your own edge.",
+    "guidebook.role.title.wyspiaexpress:edge_lord": "Assassination, Shadows and Coffee",
+    "guidebook.role.description.wyspiaexpress:edge_lord": "The Edgelord Delusional Cursed Assassin of Darkness and Coffee Addiction has keen vision even in the deepest shadows \",I was born in the dark\", this alongside the Assassin's reduced cost blackout allows them to truly be a master of shadows. Just dont forget a coffee break between lapses of your curse and its darker impulses. Lastly be careful not to cut yourself on your own edge.",
 
   "guidebook.role.wyspiaexpress:gambler": "The Gambler",
-  "guidebook.role.title.wyspiaexpress:gambler": "The one who never lost a bet",
-  "guidebook.role.description.wyspiaexpress:gambler": "They're no stranger to chance, but their chance has gone to another level. Their mastery of luck manipulation leads them to a game of roulette that they must survive. They can get a random item from a mystery box.",
+    "guidebook.role.title.wyspiaexpress:gambler": "The one who never lost a bet",
+    "guidebook.role.description.wyspiaexpress:gambler": "They're no stranger to chance, but their chance has gone to another level. Their mastery of luck manipulation leads them to a game of roulette that they must survive. They can get a random item from a mystery box.",
 
   "guidebook.role.wyspiaexpress:lich": "Lich",
-  "guidebook.role.title.wyspiaexpress:lich": "Master of necromancy",
-  "guidebook.role.description.wyspiaexpress:lich": "WIP"
+    "guidebook.role.title.wyspiaexpress:lich": "Master of necromancy",
+    "guidebook.role.description.wyspiaexpress:lich": "WIP",
+
+  "guidebook.role.wyspiaexpress:employee": "Employee",
+    "guidebook.role.title.wyspiaexpress:employee": "Average worker at Wyspia Express",
+    "guidebook.role.description.wyspiaexpress:employee": "You get no benefit other than a key called \"Employee Key\". This key can open some doors",
+
+  "guidebook.role.wyspiaexpress:vent_crawler": "Professional Vent Crawler",
+    "guidebook.role.title.wyspiaexpress:vent_crawler": "Sus ඞ",
+    "guidebook.role.description.wyspiaexpress:vent_crawler": "Why are you venting? GUYS RED IS SUS !!!\n\n Gain 50% increased speed when crawling"
 }
