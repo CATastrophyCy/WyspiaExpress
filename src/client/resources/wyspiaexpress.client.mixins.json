@@ -6,8 +6,10 @@
   "priority": 500,
   "client": [
     "CoinMixin",
+    "GraverobberCoronerHudMixin",
     "ItemArmPoseMixin",
     "ItemHandViewMixin",
+    "LoverCrashMixin",
     "ScreenAccessor",
     "ShopMixin",
     "items.fakeRevolver.FakeRevolverHoldingMixin",

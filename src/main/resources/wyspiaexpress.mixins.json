@@ -11,6 +11,7 @@
     "PassiveIncomeMixin",
     "PlayerCrawlSpeedMixin",
     "PlayerDeathMixin",
+    "PlayerShieldMixin",
     "ShopMixin",
     "TaskIncomeMixin",
     "TrainMapEffectMixin"
