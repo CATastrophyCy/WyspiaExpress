@@ -34,7 +34,7 @@ public abstract class ShopMixin extends LimitedHandledScreen<PlayerScreenHandler
     // we run this when return, this ovewrrites all shop logic injected by other mods
     // if any of the injected mods calls cancel then this would break
     @Inject(method = "init", at = @At("RETURN"))
-    protected void injectCustomShopLogic(CallbackInfo ci) {
+    protected void wyspiaexpress$injectCustomShopLogic(CallbackInfo ci) {
         GameWorldComponent gameWorld = GameWorldComponent.KEY.get(this.player.getWorld());
         Role playerRole = gameWorld.getRole(this.player);
         var basicConfig = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(playerRole);

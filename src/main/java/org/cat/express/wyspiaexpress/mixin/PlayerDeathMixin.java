@@ -18,7 +18,7 @@ public abstract class PlayerDeathMixin {
                 method = "killPlayer(Lnet/minecraft/entity/player/PlayerEntity;ZLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)V",
                 at = @At("TAIL")
         )
-        private static void addKillStat(PlayerEntity victim, boolean spawnBody, PlayerEntity killer, Identifier deathReason, CallbackInfo ci) {
+        private static void wyspiaexpress$addKillStat(PlayerEntity victim, boolean spawnBody, PlayerEntity killer, Identifier deathReason, CallbackInfo ci) {
 
             var component = GameWorldComponent.KEY.get(victim.getWorld());
             if (component.canUseKillerFeatures(victim)) {
@@ -37,7 +37,7 @@ public abstract class PlayerDeathMixin {
                 method = "finalizeGame",
                 at = @At("TAIL")
         )
-        private static void resetStat(ServerWorld world, CallbackInfo ci) {
+        private static void wyspiaexpress$resetStat(ServerWorld world, CallbackInfo ci) {
             var component = LichReviveComponent.KEY.get(world);
             component.reset();
             var world_component = WorldComponent.KEY.get(world);

@@ -18,7 +18,7 @@ import java.util.List;
 public abstract class KillerAlwaysGuesserMixin {
 
     @Inject(method = "assignModifiers", at = @At("TAIL"), cancellable = false)
-    void assignGuesser(int desiredRoleCount, ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players, @NotNull CallbackInfo ci){
+    void wyspiaexpress$assignGuesser(int desiredRoleCount, ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players, @NotNull CallbackInfo ci){
         if(WyspiaExpress.SERVER_CONFIG.killerAlwaysGuesser()) {
             WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(serverWorld);
             int count = 0;

@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(KinsWatheGameSettings.class)
 public abstract class KinsWatheCommandMixin {
     @Inject(method = "setCommands", at = @At("HEAD"), cancellable = true)
-    private static void setCommands(@NotNull MinecraftServer server, @NotNull CallbackInfo ci){
+    private static void wyspiaexpress$setCommands(@NotNull MinecraftServer server, @NotNull CallbackInfo ci){
         server.getCommandManager().executeWithPrefix(server.getCommandSource().withSilent(), "kill @e[type=wathe:player_body]");
         server.getCommandManager().executeWithPrefix(server.getCommandSource().withSilent(), "kill @e[type=item]");
         if (FabricLoader.getInstance().isModLoaded("noellesroles")) {

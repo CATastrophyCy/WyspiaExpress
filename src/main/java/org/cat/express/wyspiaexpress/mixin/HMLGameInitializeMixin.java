@@ -18,7 +18,7 @@ import java.util.List;
 @Mixin(ModdedMurderGameMode.class)
 public abstract class HMLGameInitializeMixin {
     @Inject(method = "initializeGame", at = @At("TAIL"), cancellable = false)
-    void initializeGame(ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players, CallbackInfo ci) {
+    void wyspiaexpress$initializeGame(ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players, CallbackInfo ci) {
         if(!HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.LICH.identifier().toString())){
             int maximumLichRevive = WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.additionalRevive();
             var component = LichReviveComponent.KEY.get(serverWorld);

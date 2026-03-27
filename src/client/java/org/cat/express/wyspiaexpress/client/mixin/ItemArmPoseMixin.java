@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(PlayerEntityRenderer.class)
 public class ItemArmPoseMixin {
     @WrapOperation(method = "getArmPose", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getStackInHand(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;"))
-    private static ItemStack view(AbstractClientPlayerEntity instance, Hand hand, Operation<ItemStack> original) {
+    private static ItemStack wyspiaexpress$view(AbstractClientPlayerEntity instance, Hand hand, Operation<ItemStack> original) {
 
         ItemStack ret = original.call(instance, hand);
         var config = WyspiaExpressItems.ITEMS_BASIC_CONFIG.get(ret.getItem());

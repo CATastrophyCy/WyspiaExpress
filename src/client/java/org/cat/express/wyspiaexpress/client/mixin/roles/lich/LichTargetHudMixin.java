@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class LichTargetHudMixin {
 
     @Inject(method = "renderHud", at = @At("TAIL"))
-    private static void getTargetHud(TextRenderer renderer, ClientPlayerEntity player, DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
+    private static void wyspiaexpress$getTargetHud(TextRenderer renderer, ClientPlayerEntity player, DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         if (LichUtil.BODY == null || !GameFunctions.isPlayerAliveAndSurvival(player)) return;
         GameWorldComponent gameWorld = GameWorldComponent.KEY.get(player.getWorld());
         AbilityCooldownComponent ability = AbilityCooldownComponent.KEY.get(player);
@@ -49,7 +49,7 @@ public abstract class LichTargetHudMixin {
     }
 
     @Inject(method = "renderHud", at = @At(value = "INVOKE", target = "Ldev/doctor4t/wathe/game/GameFunctions;isPlayerSpectatingOrCreative(Lnet/minecraft/entity/player/PlayerEntity;)Z"))
-    private static void getTarget(TextRenderer renderer, @NotNull ClientPlayerEntity player, DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
+    private static void wyspiaexpress$getTarget(TextRenderer renderer, @NotNull ClientPlayerEntity player, DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         GameWorldComponent gameWorld = GameWorldComponent.KEY.get(player.getWorld());
         if (!gameWorld.isRole(player, WyspiaExpressRoles.LICH)) {
             LichUtil.BODY = null;return;}

@@ -20,7 +20,7 @@ public abstract class TaskIncomeMixin {
     @Shadow @Final private PlayerEntity player;
 
     @Inject(method = "setMood", at = @At("HEAD"))
-    void giveCoinsForMood(float mood, CallbackInfo ci) {
+    void wyspiaexpress$giveCoinsForMood(float mood, CallbackInfo ci) {
         GameWorldComponent gameWorldComponent = (GameWorldComponent)GameWorldComponent.KEY.get(player.getWorld());
 
         /**

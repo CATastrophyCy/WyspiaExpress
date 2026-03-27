@@ -81,7 +81,7 @@ public class WyspiaExpressRoles {
     ));
     public static Role LICH = registerRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "lich"),
-            0x4B0082,
+            0x37947b,
             false,
             true,
             Role.MoodType.FAKE,

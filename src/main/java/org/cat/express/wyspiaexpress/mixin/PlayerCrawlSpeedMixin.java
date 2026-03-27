@@ -19,7 +19,7 @@ public abstract class PlayerCrawlSpeedMixin extends LivingEntity {
         super(entityType, world);
     }
     @ModifyReturnValue(method = "getMovementSpeed", at = @At("RETURN"))
-    public float overrideMovementSpeed(float original) {
+    public float wyspiaexpress$overrideMovementSpeed(float original) {
         PlayerEntity self = (PlayerEntity) (Object) this;
         if (GameFunctions.isPlayerAliveAndSurvival(self) && self.isCrawling()) {
             return (float) (original * ( 1 + WyspiaExpress.SERVER_CONFIG.crawlSpeedMultiplier()));

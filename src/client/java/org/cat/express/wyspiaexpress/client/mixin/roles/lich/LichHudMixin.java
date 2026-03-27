@@ -24,7 +24,7 @@ public abstract class LichHudMixin {
     @Shadow public abstract TextRenderer getTextRenderer();
 
     @Inject(method = "render", at = @At("TAIL"))
-    public void lichHud(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
+    public void wyspiaexpress$lichHud(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         var player =  MinecraftClient.getInstance().player;
         if(player == null) return;
         GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(player.getWorld());

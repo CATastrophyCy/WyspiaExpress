@@ -14,7 +14,7 @@ import java.util.List;
 @Mixin(HarpyExpressTrainMapEffect.class)
 public abstract class TrainMapEffectMixin {
     @Inject(method = "initializeMapEffects", at = @At("TAIL"))
-    private void removeLetter(ServerWorld serverWorld, List<ServerPlayerEntity> players, CallbackInfo ci) {
+    private void wyspiaexpress$removeLetter(ServerWorld serverWorld, List<ServerPlayerEntity> players, CallbackInfo ci) {
         for (ServerPlayerEntity player : players) {
             for (int i = 0; i < player.getInventory().size(); i++) {
                 ItemStack stack = player.getInventory().getStack(i);

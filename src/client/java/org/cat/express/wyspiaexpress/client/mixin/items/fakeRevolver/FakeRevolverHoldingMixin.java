@@ -31,14 +31,14 @@ public class FakeRevolverHoldingMixin <T extends LivingEntity> {
         public ModelPart head;
 
         @Inject(method = "positionRightArm", at = @At("TAIL"))
-        private void wathe$holdRevolverRightArm(T entity, CallbackInfo ci) {
+        private void wyspiaexpress$holdRevolverRightArm(T entity, CallbackInfo ci) {
             if (isHoldingGun(entity) && entity.getMainArm() == Arm.RIGHT) {
                 holdGun(this.rightArm, this.leftArm, this.head, true);
             }
         }
 
         @Inject(method = "positionLeftArm", at = @At("TAIL"))
-        private void wathe$wathe$holdRevolverLeftArm(T entity, CallbackInfo ci) {
+        private void wyspiaexpress$holdRevolverLeftArm(T entity, CallbackInfo ci) {
             if (isHoldingGun(entity) && entity.getMainArm() != Arm.RIGHT) {
                 holdGun(this.rightArm, this.leftArm, this.head, false);
             }

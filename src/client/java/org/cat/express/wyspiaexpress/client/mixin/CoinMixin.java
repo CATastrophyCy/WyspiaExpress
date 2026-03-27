@@ -29,7 +29,7 @@ public class CoinMixin {
      * here we base it on if the role has shop enabled
     */
     @Inject(method = "renderHud", at = @At("HEAD"), cancellable = true)
-    private static void incomeIcon(@NotNull TextRenderer renderer, @NotNull ClientPlayerEntity player, @NotNull DrawContext context, float delta, @NotNull CallbackInfo ci) {
+    private static void wyspiaexpress$incomeIcon(@NotNull TextRenderer renderer, @NotNull ClientPlayerEntity player, @NotNull DrawContext context, float delta, @NotNull CallbackInfo ci) {
         if (MinecraftClient.getInstance().player == null) return;
         if (WatheClient.isPlayerAliveAndInSurvival()) {
             Role role = GameWorldComponent.KEY.get(player.getWorld()).getRole(player);

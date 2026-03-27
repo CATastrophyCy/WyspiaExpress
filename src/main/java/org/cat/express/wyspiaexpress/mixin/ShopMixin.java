@@ -27,7 +27,7 @@ public abstract class ShopMixin {
     @Shadow @Final @NotNull private PlayerEntity player;
 
     @Inject(method = "tryBuy", at = @At("HEAD"), cancellable = true)
-    void tryBuy(int index, @NotNull CallbackInfo ci) {
+    void wyspiaexpress$tryBuy(int index, @NotNull CallbackInfo ci) {
         GameWorldComponent gameWorld = GameWorldComponent.KEY.get(this.player.getWorld());
         Role playerRole = gameWorld.getRole(this.player);
         var basicConfig = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(playerRole);

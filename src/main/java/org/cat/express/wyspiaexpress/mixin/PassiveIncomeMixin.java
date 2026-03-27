@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class PassiveIncomeMixin {
     // passive income
     @WrapOperation(method = "tickServerGameLoop", at = @At(value = "INVOKE", target = "Ldev/doctor4t/wathe/cca/GameWorldComponent;canUseKillerFeatures(Lnet/minecraft/entity/player/PlayerEntity;)Z"))
-    public boolean setPassiveIncome(@NotNull GameWorldComponent gameWorld, @NotNull PlayerEntity player, @NotNull Operation<Boolean> original) {
+    public boolean wyspiaexpress$setPassiveIncome(@NotNull GameWorldComponent gameWorld, @NotNull PlayerEntity player, @NotNull Operation<Boolean> original) {
         Role role = gameWorld.getRole(player);
         var config = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role);
         if (config != null && config.passiveIncome()) return true;
