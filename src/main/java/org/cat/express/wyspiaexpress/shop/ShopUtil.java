@@ -30,7 +30,7 @@ import java.util.Set;
 public class ShopUtil {
     public static final List<Item> FUN_BOX_RARE_POOL = List.of(WyspiaExpressItems.FAKE_REVOLVER, WatheItems.KNIFE,
             KinsWatheItems.MEDICAL_KIT, ModItems.DEFENSE_VIAL, ModItems.MASTER_KEY, ModItems.ROLE_MINE, KinsWatheItems.PILL, KinsWatheItems.PAN);
-    public static final List<Item> FUN_BOX_NORMAL_POOL = List.of(WatheItems.NOTE, WatheItems.FIRECRACKER, ModItems.DELUSION_VIAL);
+    public static final List<Item> FUN_BOX_NORMAL_POOL = List.of(WatheItems.NOTE, WatheItems.FIRECRACKER, WyspiaExpressItems.MEGAPHONE);
 
     public static boolean handlePurchase(@NotNull PlayerEntity player, int balance, @NotNull Item item, int price) {
         if (balance >= price && !player.getItemCooldownManager().isCoolingDown(item)) {
@@ -71,7 +71,7 @@ public class ShopUtil {
                     hotbarItems.add(stack.getItem());
                 }
             }
-            // don't give item that he already have
+            // don't give item that they already have
             List<Item> filtered = FUN_BOX_RARE_POOL.stream()
                     .filter(item -> !hotbarItems.contains(item))
                     .toList();
@@ -85,17 +85,12 @@ public class ShopUtil {
 
         if(player.getRandom().nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.badPoolMissChance())
             return; // loss the gamble
-
         Item item = FUN_BOX_NORMAL_POOL.get(player.getRandom().nextInt(FUN_BOX_NORMAL_POOL.size()));
         if(item.equals(WatheItems.NOTE)){
             player.giveItemStack(new ItemStack(WatheItems.NOTE, 4));
         }
-        else if(item.equals(WatheItems.FIRECRACKER)){
-            player.giveItemStack(new ItemStack(WatheItems.FIRECRACKER, 1));
-        }
         else
             player.giveItemStack(item.getDefaultStack());
-
 
     }
     public static List<ShopEntry> fromShopEntryConfigs(List<ShopConfig.ShopEntryConfig> shopConfigs ) {
