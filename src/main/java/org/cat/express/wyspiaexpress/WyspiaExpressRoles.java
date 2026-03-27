@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import org.agmas.harpymodloader.events.ModifierAssigned;
 import org.agmas.harpymodloader.events.ResetPlayerEvent;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
 import org.agmas.harpymodloader.modifiers.Modifier;
+import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
@@ -28,6 +30,7 @@ import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import static org.BsXinQin.kinswathe.KinsWatheRoles.*;
 import static org.agmas.noellesroles.Noellesroles.*;
 import static org.aussiebox.starexpress.StarryExpressRoles.MUZZLER;
+import static org.aussiebox.starexpress.StarryExpressRoles.STARSTRUCK;
 import static pro.fazeclan.river.stupid_express.constants.SERoles.*;
 
 public class WyspiaExpressRoles {
@@ -108,13 +111,13 @@ public class WyspiaExpressRoles {
     public static Modifier EMPLOYEE = registerModifier(new Modifier(
             Identifier.of(WyspiaExpress.MOD_ID, "employee"),
             0x0D3B66,
-            null,null,
+            new ArrayList<>(List.of(CONDUCTOR)),null,
             false,false));
 
     public static Modifier VENT_CRAWLER = registerModifier(new Modifier(
             Identifier.of(WyspiaExpress.MOD_ID, "vent_crawler"),
             0x5A6B7A,
-            null,null,
+            new ArrayList<>(List.of(STARSTRUCK)),null,
             false,false));
 
     private static void registerRoleBasicConfig(Role role, WyspiaExpressRolesConfig.RoleBasicConfig config) {
