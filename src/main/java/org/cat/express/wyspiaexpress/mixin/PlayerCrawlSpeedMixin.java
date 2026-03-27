@@ -21,20 +21,24 @@ public abstract class PlayerCrawlSpeedMixin extends LivingEntity {
     @ModifyReturnValue(method = "getMovementSpeed", at = @At("RETURN"))
     public float overrideMovementSpeed(float original) {
         PlayerEntity self = (PlayerEntity) (Object) this;
-        if (GameFunctions.isPlayerAliveAndSurvival(self) && isCrawling(self)) {
+        if (GameFunctions.isPlayerAliveAndSurvival(self) && self.isCrawling()) {
             return (float) (original * ( 1 + WyspiaExpress.SERVER_CONFIG.crawlSpeedMultiplier()));
         }
         return original;
     }
     @Unique
     private boolean isCrawling(PlayerEntity player) {
-        EntityPose pose = player.getPose();
-        if(WyspiaExpress.CRAWL_MOD_LOADED && pose.name().equals("CRAWLING")) {
+        if (player.isCrawling()) {
             return true;
         }
-        return pose == EntityPose.SWIMMING
-                && !player.isTouchingWater()
-                && !player.isInLava()
-                && !player.isSleeping();
+        if (player.getPose().name().contains("CRAWL") || player.getPose().name().contains("PRON")) {
+            return true;
+        }
+        float currentHeight = player.getDimensions(player.getPose()).height();
+        if (currentHeight < 1.0F && !player.isSwimming() && !player.isFallFlying()) {
+            return true;
+        }
+
+        return false;
     }
 }

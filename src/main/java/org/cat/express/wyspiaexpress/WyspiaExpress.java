@@ -25,8 +25,6 @@ public class WyspiaExpress implements ModInitializer {
     public static final WyspiaExpressItemsConfig ITEMS_CONFIG = WyspiaExpressItemsConfig.createAndLoad();
     public static final WyspiaExpressServerConfig SERVER_CONFIG = WyspiaExpressServerConfig.createAndLoad();
 
-    public final static boolean CRAWL_MOD_LOADED = FabricLoader.getInstance().isModLoaded("crawl");
-
     @Override
     public void onInitialize() {
         LOGGER.info("WyspiaExpress is initializing...");
