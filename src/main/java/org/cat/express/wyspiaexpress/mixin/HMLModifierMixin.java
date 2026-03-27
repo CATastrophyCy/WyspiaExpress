@@ -8,6 +8,8 @@ import org.agmas.harpymodloader.events.ModifierAssigned;
 import org.agmas.harpymodloader.modded_murder.ModdedMurderGameMode;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
 import org.agmas.harpymodloader.modifiers.Modifier;
+import org.agmas.noellesroles.Noellesroles;
+import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -101,6 +103,18 @@ public abstract class HMLModifierMixin {
                 worldModifierComponent.addModifier(player.getUuid(), mod);
                 ModifierAssigned.EVENT.invoker().assignModifier(player, mod);
                 currentlyAssigned.put(mod, currentlyAssigned.get(mod) + 1);
+            }
+        }
+        if(WyspiaExpress.SERVER_CONFIG.killerAlwaysGuesser()) {
+            int count = 0;
+            for (ServerPlayerEntity player : players) {
+                if (!worldModifierComponent.isModifier(player, Noellesroles.GUESSER) && gameWorldComponent.canUseKillerFeatures(player)) {
+                    worldModifierComponent.addModifier(player.getUuid(), Noellesroles.GUESSER);
+                    count++;
+                }
+                if( count >= WyspiaExpress.SERVER_CONFIG.maximumGuessers())
+                    break;
+
             }
         }
         // 4. Announcements
