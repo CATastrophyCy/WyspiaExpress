@@ -29,9 +29,9 @@ public abstract class PlayerCrawlSpeedMixin extends LivingEntity {
     @Unique
     private float getMovementSpeed(PlayerEntity player, float original) {
         WorldModifierComponent wmc = WorldModifierComponent.KEY.get(player.getWorld());
-        float speed = (float) (original * ( 1 + WyspiaExpress.SERVER_CONFIG.crawlSpeedMultiplier()));
+        float speed = (float) (original *  WyspiaExpress.SERVER_CONFIG.crawlSpeedMultiplier() );
         if(wmc.isModifier(player, WyspiaExpressRoles.VENT_CRAWLER)){
-            speed *= 1.5F;
+            speed = (float) (speed * WyspiaExpress.MODIFIERS_CONFIG.ventCrawlerConfig.crawlSpeedModifier());
         }
         return speed;
     }

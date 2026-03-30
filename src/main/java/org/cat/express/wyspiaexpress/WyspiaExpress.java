@@ -9,6 +9,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
+import org.cat.express.wyspiaexpress.config.WyspiaExpressModifiersConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressServerConfig;
 import org.cat.express.wyspiaexpress.packets.LichReviveC2SPacket;
@@ -22,13 +23,14 @@ public class WyspiaExpress implements ModInitializer {
     // Create the global logger
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final WyspiaExpressRolesConfig ROLES_CONFIG = WyspiaExpressRolesConfig.createAndLoad();
+    public static final WyspiaExpressModifiersConfig MODIFIERS_CONFIG = WyspiaExpressModifiersConfig.createAndLoad();
     public static final WyspiaExpressItemsConfig ITEMS_CONFIG = WyspiaExpressItemsConfig.createAndLoad();
     public static final WyspiaExpressServerConfig SERVER_CONFIG = WyspiaExpressServerConfig.createAndLoad();
-
     @Override
     public void onInitialize() {
         LOGGER.info("WyspiaExpress is initializing...");
         ROLES_CONFIG.save();
+        MODIFIERS_CONFIG.save();
         ITEMS_CONFIG.save();
         SERVER_CONFIG.save();
         WyspiaExpressRoles.init();
