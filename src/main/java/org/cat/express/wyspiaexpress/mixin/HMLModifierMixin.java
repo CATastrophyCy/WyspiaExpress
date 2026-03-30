@@ -93,10 +93,6 @@ public abstract class HMLModifierMixin {
                 if (getPlayerModCount(player, worldModifierComponent) >= HarpyModLoaderConfig.HANDLER.instance().modifierMaximum) {
                     break;
                 }
-                // Skip disabled modifiers
-                if (HarpyModLoaderConfig.HANDLER.instance().disabledModifiers.contains(mod.identifier.toString())) {
-                    continue;
-                }
                 // Skip if this modifier has already been handed out the maximum amount of times globally
                 if (currentlyAssigned.get(mod) >= maxAllowedPerMod.get(mod)) {
                     continue;

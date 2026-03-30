@@ -29,7 +29,7 @@ import java.util.Set;
 
 public class ShopUtil {
     public static final List<Item> FUN_BOX_RARE_POOL = List.of(WyspiaExpressItems.FAKE_REVOLVER, WatheItems.KNIFE,
-            KinsWatheItems.MEDICAL_KIT, ModItems.DEFENSE_VIAL, ModItems.MASTER_KEY, ModItems.ROLE_MINE, KinsWatheItems.PILL, KinsWatheItems.PAN);
+            KinsWatheItems.MEDICAL_KIT, ModItems.MASTER_KEY, ModItems.ROLE_MINE, KinsWatheItems.PILL, KinsWatheItems.PAN);
     public static final List<Item> FUN_BOX_NORMAL_POOL = List.of(WatheItems.NOTE, WatheItems.FIRECRACKER, WyspiaExpressItems.MEGAPHONE);
 
     public static boolean handlePurchase(@NotNull PlayerEntity player, int balance, @NotNull Item item, int price) {
