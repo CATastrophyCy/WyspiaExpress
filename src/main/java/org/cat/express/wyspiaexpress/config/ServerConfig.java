@@ -12,8 +12,8 @@ import java.util.List;
 @Sync(Option.SyncMode.OVERRIDE_CLIENT)
 @Config(name = "wyspiaexpress/general", wrapperName = "WyspiaExpressServerConfig")
 public class ServerConfig {
-    @Comment("Add this percentage to crawling speed. i.e. 0.5 means crawling is 50% faster")
-    public double crawlSpeedMultiplier = 1.0;
+    @Comment("Multiply to crawling speed. i.e. 1.5 means crawling is 50% faster")
+    public double crawlSpeedMultiplier = 2.0;
     @Comment("Wheter killer role will always have guesser added. With this enabled it is recommended to have guesser disabled.")
     public boolean killerAlwaysGuesser = false;
     @Comment("Maximum amount of guessers when killerAlwaysGuesser is enabled.")
