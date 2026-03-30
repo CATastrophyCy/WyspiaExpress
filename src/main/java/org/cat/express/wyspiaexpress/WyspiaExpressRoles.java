@@ -6,16 +6,19 @@ import java.util.List;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
+import dev.doctor4t.wathe.cca.MapVariablesWorldComponent;
 import dev.doctor4t.wathe.index.WatheItems;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.LoreComponent;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Box;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.agmas.harpymodloader.events.ModifierAssigned;
@@ -136,9 +139,18 @@ public class WyspiaExpressRoles {
 
     public static void limitRoleSpawn(){
         ServerTickEvents.END_SERVER_TICK.register(((server) -> {
+            // this only takes into account the overworld
+            Box readyArea = MapVariablesWorldComponent.KEY.get(server.getOverworld()).getReadyArea();
+            Box playArea = MapVariablesWorldComponent.KEY.get(server.getOverworld()).getPlayArea();
+            int count = 0;
+            for(PlayerEntity player : server.getPlayerManager().getPlayerList()){
+                if(readyArea.contains(player.getPos()) || playArea.contains(player.getPos())){
+                    count++;
+                }
+            }
             for( Role role : ROLES_BASIC_CONFIG.keySet()){
                 WyspiaExpressRolesConfig.RoleBasicConfig config = ROLES_BASIC_CONFIG.get(role);
-                if (server.getPlayerManager().getCurrentPlayerCount() >= config.minimumPlayerSpawn())
+                if (count >= config.minimumPlayerSpawn())
                 {
                     Harpymodloader.setRoleMaximum(role,config.maximumSpawn());
                 }
