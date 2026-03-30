@@ -35,7 +35,7 @@ public class ShopUtil {
     public static boolean handlePurchase(@NotNull PlayerEntity player, int balance, @NotNull Item item, int price) {
         if (balance >= price && !player.getItemCooldownManager().isCoolingDown(item)) {
             if (item == WatheItems.NOTE) {
-                player.giveItemStack(new ItemStack(WatheItems.NOTE, 4));
+                player.giveItemStack(new ItemStack(WatheItems.NOTE, 3));
             } else if (item == WatheItems.BLACKOUT) {
                 PlayerShopComponent.useBlackout(player);
             } else if (item == WatheItems.PSYCHO_MODE) {
@@ -82,9 +82,10 @@ public class ShopUtil {
             }
         }
         // normal pool
-
-        if(player.getRandom().nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.badPoolMissChance())
+        if(player.getRandom().nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.badPoolMissChance()) {
+            PlayerShopComponent.KEY.get(player).addToBalance(WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.missCompensationCoin());
             return; // loss the gamble
+        }
         Item item = FUN_BOX_NORMAL_POOL.get(player.getRandom().nextInt(FUN_BOX_NORMAL_POOL.size()));
         if(item.equals(WatheItems.NOTE)){
             player.giveItemStack(new ItemStack(WatheItems.NOTE, 4));

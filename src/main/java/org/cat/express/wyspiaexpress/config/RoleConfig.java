@@ -44,6 +44,8 @@ public class RoleConfig {
         public double goodPoolChance = 0.30;
         @Comment("Bad pool miss chance.")
         public double badPoolMissChance = 0.40;
+        @Comment("Miss compensation coin")
+        public int missCompensationCoin = 0;
     }
     public static class LichConfig {
         @Comment("Basic role configuration.")
