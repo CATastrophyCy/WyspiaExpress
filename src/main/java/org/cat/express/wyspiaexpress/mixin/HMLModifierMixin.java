@@ -28,7 +28,7 @@ import java.util.*;
 public abstract class HMLModifierMixin {
 
     @Inject(method = "assignModifiers", at = @At("HEAD"), cancellable = true)
-    public void onAssignModifiers(int desiredRoleCount, ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players, CallbackInfo ci) {
+    public void wyspiaexpress$onAssignModifiers(int desiredRoleCount, ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players, CallbackInfo ci) {
         WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(serverWorld);
         worldModifierComponent.getModifiers().clear();
 
