@@ -14,7 +14,8 @@
     "PlayerShieldMixin",
     "ShopMixin",
     "TaskIncomeMixin",
-    "TrainMapEffectMixin"
+    "TrainMapEffectMixin",
+    "WeightsResetMixin"
   ],
   "injectors": {
     "defaultRequire": 1
