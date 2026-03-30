@@ -13,7 +13,7 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -21,20 +21,18 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.Texts;
 import net.minecraft.util.Formatting;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import java.util.*;
 
 @Mixin(ModdedMurderGameMode.class) // Replace with the actual class name
 public abstract class HMLModifierMixin {
-    @Redirect(
-            method = "initializeGame",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lorg/agmas/harpymodloader/modded_murder/ModdedMurderGameMode;" +
-                            "assignModifiers(ILnet/minecraft/server/world/ServerWorld;" +
-                            "Ldev/doctor4t/wathe/cca/GameWorldComponent;Ljava/util/List;)V"
-            )
+    @Inject(
+            method = "assignModifiers",
+            at = @At("HEAD"),
+            cancellable = true
     )
-    public void wyspiaexpress$onAssignModifiers(ModdedMurderGameMode instance, int desiredRoleCount, ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players) {
+    public void wyspiaexpress$onAssignModifiers(int desiredRoleCount, ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players, CallbackInfo ci){
         WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(serverWorld);
         worldModifierComponent.getModifiers().clear();
 
@@ -137,6 +135,7 @@ public abstract class HMLModifierMixin {
                 }
             }
         }
+        ci.cancel();
     }
 
     @Unique
