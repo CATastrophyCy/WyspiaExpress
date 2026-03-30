@@ -13,8 +13,7 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -26,13 +25,20 @@ import java.util.*;
 
 @Mixin(ModdedMurderGameMode.class) // Replace with the actual class name
 public abstract class HMLModifierMixin {
-
-    @Inject(method = "assignModifiers", at = @At("HEAD"), cancellable = true)
-    public void wyspiaexpress$onAssignModifiers(int desiredRoleCount, ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players, CallbackInfo ci) {
+    @Redirect(
+            method = "initializeGame",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lorg/agmas/harpymodloader/modded_murder/ModdedMurderGameMode;" +
+                            "assignModifiers(ILnet/minecraft/server/world/ServerWorld;" +
+                            "Ldev/doctor4t/wathe/cca/GameWorldComponent;Ljava/util/List;)V"
+            )
+    )
+    public void wyspiaexpress$onAssignModifiers(ModdedMurderGameMode instance, int desiredRoleCount, ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players) {
         WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(serverWorld);
         worldModifierComponent.getModifiers().clear();
 
-        // 1. Pre-calculate the maximum allowed distribution for each modifier
+        // Pre-calculate the maximum allowed distribution for each modifier
         Map<Modifier, Integer> maxAllowedPerMod = new HashMap<>();
         Map<Modifier, Integer> currentlyAssigned = new HashMap<>();
         int killerMods = (int) HMLModifiers.MODIFIERS.stream().filter(m -> m.killerOnly).count();
@@ -49,7 +55,7 @@ public abstract class HMLModifierMixin {
             maxAllowedPerMod.put(mod, target);
         }
 
-        // 2. Handle forced modifiers FIRST
+        // Handle forced modifiers
         if (!Harpymodloader.FORCED_MODDED_MODIFIER.isEmpty()) {
             for (Modifier mod : HMLModifiers.MODIFIERS) {
                 if (Harpymodloader.FORCED_MODDED_MODIFIER.containsKey(mod)) {
@@ -65,11 +71,15 @@ public abstract class HMLModifierMixin {
             }
         }
 
-        // 3. Player-Centric Random Assignment
+        // Random Assignment
         List<ServerPlayerEntity> shuffledPlayers = new ArrayList<>(players);
         Collections.shuffle(shuffledPlayers); // Randomize who gets to "draw" first
         Random rand = new Random();
-        List<Modifier> randomModsForPlayer = new ArrayList<>(HMLModifiers.MODIFIERS);
+
+        List<Modifier> randomModsForPlayer = new ArrayList<>(HMLModifiers.MODIFIERS.stream()
+                .filter(mod -> !HarpyModLoaderConfig.HANDLER.instance().disabledModifiers.contains(mod.identifier.toString()))
+                .toList());
+
         for (ServerPlayerEntity player : shuffledPlayers) {
             // Check if player is already full from forced modifiers
             if (getPlayerModCount(player, worldModifierComponent) >= HarpyModLoaderConfig.HANDLER.instance().modifierMaximum) {
@@ -105,9 +115,10 @@ public abstract class HMLModifierMixin {
                 currentlyAssigned.put(mod, currentlyAssigned.get(mod) + 1);
             }
         }
+        // Give killer guesser
         if(WyspiaExpress.SERVER_CONFIG.killerAlwaysGuesser()) {
             int count = 0;
-            for (ServerPlayerEntity player : players) {
+            for (ServerPlayerEntity player : shuffledPlayers) {
                 if (!worldModifierComponent.isModifier(player, Noellesroles.GUESSER) && gameWorldComponent.canUseKillerFeatures(player)) {
                     worldModifierComponent.addModifier(player.getUuid(), Noellesroles.GUESSER);
                     count++;
@@ -117,7 +128,7 @@ public abstract class HMLModifierMixin {
 
             }
         }
-        // 4. Announcements
+        // Announcements
         for (ServerPlayerEntity player : players) {
             if (worldModifierComponent.getModifiers(player) != null && !worldModifierComponent.getModifiers(player).isEmpty()) {
                 MutableText modifiersText = Text.translatable("announcement.modifier").formatted(Formatting.GRAY)
@@ -130,7 +141,6 @@ public abstract class HMLModifierMixin {
                 }
             }
         }
-        ci.cancel();
     }
 
     @Unique
