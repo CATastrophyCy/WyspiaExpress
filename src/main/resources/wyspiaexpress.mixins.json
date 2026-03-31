@@ -7,7 +7,6 @@
   "mixins": [
     "HMLGameInitializeMixin",
     "HMLModifierMixin",
-    "KinsWatheCommandMixin",
     "PassiveIncomeMixin",
     "PlayerCrawlSpeedMixin",
     "PlayerDeathMixin",

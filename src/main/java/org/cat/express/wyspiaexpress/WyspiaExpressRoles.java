@@ -46,6 +46,7 @@ public class WyspiaExpressRoles {
     }
 
     private static final HashMap<String, Role> ROLES = new HashMap<>();
+    private static final HashMap<String, Role> NON_MURDER_ROLES = new HashMap<>();
     public static final HashMap<Role, WyspiaExpressRolesConfig.RoleBasicConfig> ROLES_BASIC_CONFIG = new HashMap<>();
 
 
@@ -54,7 +55,7 @@ public class WyspiaExpressRoles {
     public static HashMap<String, Modifier> getModifiers() {return MODIFIERS;}
 
     // This bandit is an attempt at making a custom Role, right now it seems to work
-    public static Role BANDIT = registerRole(new Role(
+    public static Role BANDIT = registerNonMurderRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "bandit"),
             0xCC0066,
             false,
@@ -130,7 +131,11 @@ public class WyspiaExpressRoles {
         ROLES.put(role.identifier().getPath(), role);
         return role;
     }
-
+    public static Role registerNonMurderRole(Role role){
+        Harpymodloader.NON_MURDER_ROLES.add(role);
+        NON_MURDER_ROLES.put(role.identifier().getPath(), role);
+        return role;
+    }
     public static Modifier registerModifier(Modifier modifier) {
         HMLModifiers.registerModifier(modifier);
         MODIFIERS.put(modifier.identifier().getPath(), modifier);
