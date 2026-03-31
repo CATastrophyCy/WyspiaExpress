@@ -5,6 +5,12 @@ import io.wispforest.owo.config.annotation.Nest;
 
 public class ItemConfig {
     // mine
+    @Comment("Psycho mode, in seconds")
+    public int pyschoModeCooldown = 300;
+    @Comment("Blackout cooldown, in seconds")
+    public int blackoutCooldown = 180;
+    @Comment("Power restore cooldown, in seconds")
+    public int powerRestoreCooldown = 180;
     @Comment("Configuration for FAKE_REVOLVER")
     @Nest public FakeRevolverConfig fakeRevolverConfig = new FakeRevolverConfig();
 
@@ -17,6 +23,8 @@ public class ItemConfig {
     @Comment("Configuration for MEDICAL_KIT")
     @Nest public MedicalKitConfig medicalKitConfig = new MedicalKitConfig();
 
+    @Comment("Configuration for WRENCH")
+    @Nest public WrenchConfig wrenchConfig = new WrenchConfig();
 
     // mine
     public static class FakeRevolverConfig{
@@ -49,4 +57,8 @@ public class ItemConfig {
         @Nest public ItemBasicConfig basic = new ItemBasicConfig();
     }
 
+    public static class WrenchConfig{
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+    }
 }

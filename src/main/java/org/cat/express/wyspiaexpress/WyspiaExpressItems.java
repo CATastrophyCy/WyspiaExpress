@@ -14,6 +14,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
 import org.cat.express.wyspiaexpress.items.FakeRevolverItem;
 import org.cat.express.wyspiaexpress.items.MegaphoneItem;
@@ -46,6 +47,7 @@ public class WyspiaExpressItems {
         // other mods
         ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.FAKE_KNIFE).getItem(), WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeKnifeConfig.basic);
         ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.MEDICAL_KIT).getItem(), WyspiaExpress.ITEMS_CONFIG.itemConfig.medicalKitConfig.basic);
+        ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.WRENCH).getItem(), WyspiaExpress.ITEMS_CONFIG.itemConfig.wrenchConfig.basic);
 
     }
     public static void registerItems(){
@@ -55,6 +57,15 @@ public class WyspiaExpressItems {
         }
         if(WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.cooldown() > 0) {
             registerItemCooldown(MEGAPHONE, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.cooldown());
+        }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.pyschoModeCooldown() > 0) {
+            registerItemCooldown(WatheItems.PSYCHO_MODE, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.pyschoModeCooldown());
+        }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.blackoutCooldown() > 0) {
+            registerItemCooldown(WatheItems.BLACKOUT, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.blackoutCooldown());
+        }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.powerRestoreCooldown() > 0) {
+            registerItemCooldown(KinsWatheItems.ICON_POWER_RESTORATION, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.powerRestoreCooldown());
         }
         registerItemGroup(FAKE_REVOLVER, WatheItems.EQUIPMENT_GROUP);
         registerItemGroup(MEGAPHONE, WatheItems.EQUIPMENT_GROUP);

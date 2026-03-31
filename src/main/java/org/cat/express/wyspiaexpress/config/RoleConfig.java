@@ -7,7 +7,7 @@ public class RoleConfig {
     // mine
     @Comment("Config options for BANDIT.")
     @Nest public BanditConfig banditConfig = new BanditConfig();
-    @Comment("Config options for AWESOME_BINGLUS")
+    @Comment("Config options for NOTE_TAKER")
     @Nest public NoteTakerConfig noteTakerConfig = new NoteTakerConfig();
     @Comment("Config options for EDGE_LORD")
     @Nest public EdgeLordConfig edgeLordConfig = new EdgeLordConfig();

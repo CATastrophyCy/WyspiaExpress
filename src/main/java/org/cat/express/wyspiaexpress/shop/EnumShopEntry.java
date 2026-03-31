@@ -35,8 +35,14 @@ public enum EnumShopEntry {
     DREAM_IMPRINT, // this requires the user to have Dreamer role to work properly
     BLOWGUN, // this seems to work fine with any role
     POISON_INJECTOR, // this seems to work fine with any role
+    WRENCH,
+    CAPTURE_DEVICE,
+    ICON_POWER_RESTORATION,
+    ICON_WEAPON_COOLDOWN_REFRESH,
+    ICON_ABILITY_COOLDOWN_REFRESH,
+    ICON_POTION_EFFECT_REFRESH,
     // custom
     FUN_BOX,
-    MEGAPHONE,
+    MEGAPHONE
 }
 

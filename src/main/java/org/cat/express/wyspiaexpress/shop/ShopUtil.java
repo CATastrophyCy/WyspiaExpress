@@ -1,9 +1,13 @@
 package org.cat.express.wyspiaexpress.shop;
 
+import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerShopComponent;
+import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.index.WatheItems;
 import dev.doctor4t.wathe.index.WatheSounds;
 import dev.doctor4t.wathe.util.ShopEntry;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
@@ -13,8 +17,12 @@ import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import org.BsXinQin.kinswathe.KinsWatheItems;
+import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
+import org.BsXinQin.kinswathe.roles.hacker.HackerComponent;
+import org.BsXinQin.kinswathe.roles.technician.TechnicianComponent;
 import org.agmas.noellesroles.ModItems;
 import org.aussiebox.starexpress.item.StarryExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
@@ -22,14 +30,14 @@ import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.config.ShopConfig;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 
 public class ShopUtil {
     public static final List<Item> FUN_BOX_RARE_POOL = List.of(WyspiaExpressItems.FAKE_REVOLVER, WatheItems.KNIFE,
-            KinsWatheItems.MEDICAL_KIT, ModItems.MASTER_KEY, ModItems.ROLE_MINE, KinsWatheItems.PILL, KinsWatheItems.PAN);
+            KinsWatheItems.MEDICAL_KIT, ModItems.MASTER_KEY, ModItems.ROLE_MINE,
+            KinsWatheItems.PILL, KinsWatheItems.PAN, KinsWatheItems.WRENCH, KinsWatheItems.CAPTURE_DEVICE);
     public static final List<Item> FUN_BOX_NORMAL_POOL = List.of(WatheItems.NOTE, WatheItems.FIRECRACKER, WyspiaExpressItems.MEGAPHONE);
 
     public static boolean handlePurchase(@NotNull PlayerEntity player, int balance, @NotNull Item item, int price) {
@@ -40,6 +48,14 @@ public class ShopUtil {
                 PlayerShopComponent.useBlackout(player);
             } else if (item == WatheItems.PSYCHO_MODE) {
                 PlayerShopComponent.usePsychoMode(player);
+            } else if (item == KinsWatheItems.ICON_WEAPON_COOLDOWN_REFRESH) {
+                HackerComponent.refreshWeaponCooldown(player);
+            } else if (item == KinsWatheItems.ICON_ABILITY_COOLDOWN_REFRESH) {
+                HackerComponent.refreshAbilityCooldown(player);
+            } else if (item == KinsWatheItems.ICON_POTION_EFFECT_REFRESH) {
+                handlePotionRefresh(player);
+            } else if (item == KinsWatheItems.ICON_POWER_RESTORATION) {
+                TechnicianComponent.stopBlackout(player);
             } else if (item == WyspiaExpressItems.FUN_BOX) {
                 openFunBox(player);
             } else {
@@ -93,6 +109,26 @@ public class ShopUtil {
         else
             player.giveItemStack(item.getDefaultStack());
 
+    }
+    public static void handlePotionRefresh(PlayerEntity player) {
+        player.getItemCooldownManager().set(KinsWatheItems.ICON_POTION_EFFECT_REFRESH,
+                GameConstants.ITEM_COOLDOWNS.get(KinsWatheItems.ICON_POTION_EFFECT_REFRESH));
+        GameWorldComponent gameWorld = GameWorldComponent.KEY.get(player.getWorld());
+        for(ServerPlayerEntity serverPlayer : player.getServer().getPlayerManager().getPlayerList()) {
+            if (serverPlayer != null && gameWorld.canUseKillerFeatures(serverPlayer)) {
+                PlayerEffectComponent playerEffect = PlayerEffectComponent.KEY.get(serverPlayer);
+                serverPlayer.sendMessage(Text.translatable("tip.kinswathe.hacker.potion_effect_refresh").withColor(Color.YELLOW.getRGB()), true);
+                serverPlayer.playSoundToPlayer(SoundEvents.ENTITY_ALLAY_ITEM_GIVEN, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+                for(StatusEffectInstance effect : serverPlayer.getStatusEffects()) {
+                    var types =  effect.getEffectType();
+                    if (! types.equals(StatusEffects.INVISIBILITY) && ! types.equals(StatusEffects.NIGHT_VISION)) {
+                        serverPlayer.removeStatusEffect(effect.getEffectType());
+                    }
+                }
+                playerEffect.reset();
+            }
+        }
     }
     public static List<ShopEntry> fromShopEntryConfigs(List<ShopConfig.ShopEntryConfig> shopConfigs ) {
         List<ShopEntry> shopEntries = new ArrayList<>();
@@ -205,6 +241,25 @@ public class ShopUtil {
             case POISON_INJECTOR:
                 item = KinsWatheItems.POISON_INJECTOR.getDefaultStack();
                 break;
+            case WRENCH:
+                item = KinsWatheItems.WRENCH.getDefaultStack();
+                break;
+            case CAPTURE_DEVICE:
+                item = KinsWatheItems.CAPTURE_DEVICE.getDefaultStack();
+                break;
+            case ICON_POWER_RESTORATION:
+                item = KinsWatheItems.ICON_POWER_RESTORATION.getDefaultStack();
+                break;
+            case ICON_WEAPON_COOLDOWN_REFRESH:
+                item = KinsWatheItems.ICON_WEAPON_COOLDOWN_REFRESH.getDefaultStack();
+                break;
+            case ICON_ABILITY_COOLDOWN_REFRESH:
+                item = KinsWatheItems.ICON_ABILITY_COOLDOWN_REFRESH.getDefaultStack();
+                break;
+            case ICON_POTION_EFFECT_REFRESH:
+                item = KinsWatheItems.ICON_POTION_EFFECT_REFRESH.getDefaultStack();
+                break;
+            // customs
             case FUN_BOX:
                 item = WyspiaExpressItems.FUN_BOX.getDefaultStack();
                 break;
