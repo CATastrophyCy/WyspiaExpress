@@ -14,7 +14,8 @@
     "ShopMixin",
     "TaskIncomeMixin",
     "TrainMapEffectMixin",
-    "WeightsResetMixin"
+    "WeightsResetMixin",
+    "roles.ThiefItemRuleMixin"
   ],
   "injectors": {
     "defaultRequire": 1
