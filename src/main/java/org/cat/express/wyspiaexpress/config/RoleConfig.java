@@ -210,6 +210,12 @@ public class RoleConfig {
         @Comment("Config options for PHYSICIAN.")
         @Nest public PhysicianConfig physicianConfig = new PhysicianConfig();
 
+        @Comment("Config options for TECHNICIAN")
+        @Nest public TechnicianConfig technicianConfig = new TechnicianConfig();
+
+        @Comment("Config options for HACKER")
+        @Nest public HackerConfig hackerConfig = new HackerConfig();
+
         public static class BodymakerConfig{
             @Comment("Basic role configuration.")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
@@ -241,6 +247,14 @@ public class RoleConfig {
         }
 
         public static class PhysicianConfig{
+            @Comment("Basic role configuration.")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+        public static class TechnicianConfig{
+            @Comment("Basic role configuration.")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+        public static class HackerConfig{
             @Comment("Basic role configuration.")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
