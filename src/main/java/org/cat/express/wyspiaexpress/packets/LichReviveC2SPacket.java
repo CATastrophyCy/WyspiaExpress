@@ -86,7 +86,7 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
 
                     // revive player and give them the role
                     var selectedRole = roles.getFirst();
-                    TeleportTarget target = new TeleportTarget(player.getServerWorld(), body.getPos(), Vec3d.ZERO, body.getYaw(), body.getPitch(), TeleportTarget.NO_OP);
+                    TeleportTarget target = new TeleportTarget(player.getServerWorld(),player.getPos(), Vec3d.ZERO, body.getYaw(), body.getPitch(), TeleportTarget.NO_OP);
                     revived.teleportTo(target);
                     revived.changeGameMode(GameMode.ADVENTURE);
                     body.remove(Entity.RemovalReason.DISCARDED); // like it never existed
