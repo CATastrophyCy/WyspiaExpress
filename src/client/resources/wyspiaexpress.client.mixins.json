@@ -13,7 +13,8 @@
     "ScreenAccessor",
     "ShopMixin",
     "items.fakeRevolver.FakeRevolverHoldingMixin",
-    "items.fakeRevolver.FakeRevolverMixin"
+    "items.fakeRevolver.FakeRevolverMixin",
+    "modifiers.guesser.GuesserScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
