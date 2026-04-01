@@ -7,6 +7,7 @@
   "mixins": [
     "HMLGameInitializeMixin",
     "HMLModifierMixin",
+    "items.grenade.GrenadeCooldownMixin",
     "PassiveIncomeMixin",
     "PlayerCrawlSpeedMixin",
     "PlayerDeathMixin",
