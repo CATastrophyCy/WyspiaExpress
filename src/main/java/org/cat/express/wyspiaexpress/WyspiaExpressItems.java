@@ -65,6 +65,9 @@ public class WyspiaExpressItems {
         if(WyspiaExpress.ITEMS_CONFIG.itemConfig.knifeCooldown() >= 0) {
             registerItemCooldown(WatheItems.KNIFE, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.knifeCooldown());
         }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.bodyBagCooldown() >= 0) {
+            registerItemCooldown(WatheItems.BODY_BAG, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.bodyBagCooldown());
+        }
         if(WyspiaExpress.ITEMS_CONFIG.itemConfig.psychoModeCooldown() >= 0) {
             registerItemCooldown(WatheItems.PSYCHO_MODE, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.psychoModeCooldown());
         }

@@ -9,6 +9,8 @@ public class ItemConfig {
     public int revolverCooldown = 10;
     @Comment("KNIFE cooldown, in seconds")
     public int knifeCooldown = 60;
+    @Comment("BODY_BAG cooldown, in seconds")
+    public int bodyBagCooldown = 180;
     @Comment("PSYCHO_MODE, in seconds")
     public int psychoModeCooldown = 300;
     @Comment("BLACKOUT cooldown, in seconds")
