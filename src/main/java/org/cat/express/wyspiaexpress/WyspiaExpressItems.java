@@ -52,21 +52,64 @@ public class WyspiaExpressItems {
     }
     public static void registerItems(){
         // custom items
-        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.cooldown() > 0) {
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.cooldown() >= 0) {
             registerItemCooldown(FAKE_REVOLVER, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.cooldown());
         }
-        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.cooldown() > 0) {
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.cooldown() >= 0) {
             registerItemCooldown(MEGAPHONE, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.cooldown());
         }
-        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.pyschoModeCooldown() > 0) {
-            registerItemCooldown(WatheItems.PSYCHO_MODE, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.pyschoModeCooldown());
+        // base wathe
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.revolverCooldown() >= 0) {
+            registerItemCooldown(WatheItems.REVOLVER, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.revolverCooldown());
         }
-        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.blackoutCooldown() > 0) {
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.knifeCooldown() >= 0) {
+            registerItemCooldown(WatheItems.KNIFE, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.knifeCooldown());
+        }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.psychoModeCooldown() >= 0) {
+            registerItemCooldown(WatheItems.PSYCHO_MODE, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.psychoModeCooldown());
+        }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.blackoutCooldown() >= 0) {
             registerItemCooldown(WatheItems.BLACKOUT, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.blackoutCooldown());
         }
-        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.powerRestoreCooldown() > 0) {
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.grenadeCooldown() >= 0) {
+            registerItemCooldown(WatheItems.GRENADE, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.grenadeCooldown());
+        }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.derringerCooldown() >= 0) {
+            registerItemCooldown(WatheItems.DERRINGER, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.derringerCooldown());
+        }
+        // kin's wathe
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.huntingKnifeCooldown() >= 0) {
+            registerItemCooldown(KinsWatheItems.HUNTING_KNIFE, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.huntingKnifeCooldown());
+        }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.poisonInjectorCooldown() >= 0) {
+            registerItemCooldown(KinsWatheItems.POISON_INJECTOR, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.poisonInjectorCooldown());
+        }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.blowGunCooldown() >= 0) {
+            registerItemCooldown(KinsWatheItems.BLOWGUN, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.blowGunCooldown());
+        }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.knockOutDrugCooldown() >= 0) {
+            registerItemCooldown(KinsWatheItems.KNOCKOUT_DRUG, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.knockOutDrugCooldown());
+        }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.captureDeviceCooldown() >= 0) {
+            registerItemCooldown(KinsWatheItems.CAPTURE_DEVICE, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.captureDeviceCooldown());
+        }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.panCooldown() >= 0) {
+            registerItemCooldown(KinsWatheItems.PAN, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.panCooldown());
+        }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.pillCooldown() >= 0) {
+            registerItemCooldown(KinsWatheItems.PILL, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.pillCooldown());
+        }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.acidBarrelCooldown() >= 0) {
+            registerItemCooldown(KinsWatheItems.SULFURIC_ACID_BARREL, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.acidBarrelCooldown());
+        }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.wrenchConfig.cooldown() >= 0) {
+            registerItemCooldown(KinsWatheItems.WRENCH, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.wrenchConfig.cooldown());
+        }
+        if(WyspiaExpress.ITEMS_CONFIG.itemConfig.powerRestoreCooldown() >= 0) {
             registerItemCooldown(KinsWatheItems.ICON_POWER_RESTORATION, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.powerRestoreCooldown());
         }
+
+        // registerItemGroups
         registerItemGroup(FAKE_REVOLVER, WatheItems.EQUIPMENT_GROUP);
         registerItemGroup(MEGAPHONE, WatheItems.EQUIPMENT_GROUP);
     }
