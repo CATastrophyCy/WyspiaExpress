@@ -1,0 +1,12 @@
+{
+  "item.kinswathe.blowgun.tooltip": "Point, right-click and shoot\nTarget that be shooted will be poisoned\n Has a cooldown",
+  "item.kinswathe.capture_device.tooltip": "Right-click to place down on floors\nTrap passing player and inform the user\nCapture Device will automatically disappear after a period of time\nInvisible to other players, both placed and in hand\n Has a cooldown",
+  "item.kinswathe.hunting_knife.tooltip": "Right-click, hold for a second and get close to your victim\nCompared to Knife, it has a longer holding-time\nIf stop holding after sprinting, two times holding-time cooldown\nAfter a kill, cannot be used for 45 seconds\nAttack to knock back / push a player (no cooldown)",
+  "item.kinswathe.knockout_drug.tooltip": "Use on a player to daze it for 20 seconds\nThe affected player will follow you\nUse sneaking key to release it\nSingle use, has a cooldown",
+  "item.kinswathe.medical_kit.tooltip": "Use on a player to remove poison\nHas a cooldown",
+  "item.kinswathe.pan.tooltip": "Right-click, hold for a second and stun target for 5 seconds\nIf shot during holding, destroy pan to protects player one extra hit of life\nHas a cooldown",
+  "item.kinswathe.pill.tooltip": "Right-click to eat\nProtects player one extra hit of life\nSingle use, has a cooldown",
+  "item.kinswathe.poison_injector.tooltip": "Use on a player to poison it\nIf target have been poisoned, directly cause death\nHas a cooldown",
+  "item.kinswathe.sulfuric_acid_barrel.tooltip": "Use on a dead body to dissolve it\nHas a cooldown",
+  "item.kinswathe.wrench.tooltip": "Use on any jammed or pried door to restore to normal\nHas a cooldown"
+}

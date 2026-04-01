@@ -1,0 +1,9 @@
+{
+  "item.wathe.blackout.tooltip": "Turn off all lights aboard for 15 to 20 seconds\nUse your instinct [left-alt] to see your targets in the dark\nActivated instantly on purchase, has a cooldown",
+  "item.wathe.body_bag.tooltip": "Use on a dead body to bag it up and remove it\nSingle use, has a cooldown",
+  "item.wathe.grenade.tooltip": "Right-click to throw, explodes on impact\nGood to clear groups of people, but be wary of the blast radius!\nSingle use, has a cooldown",
+  "item.wathe.knife.tooltip": "Right-click, hold for a second and get close to your victim\nAfter a kill, cannot be used for %s seconds\nAttack to knock back / push a player (no cooldown)",
+  "item.wathe.lockpick.tooltip": "Use on any locked door to open it (no cooldown)\nSneak-use on a door to jam it for 1 minute (has a cooldown)",
+  "item.wathe.psycho_mode.tooltip": "\"Do you like hurting other people?\"\nHides your identity and allows you to go crazy with a bat for 30 seconds\nBat kills on full swing and cannot be unselected for the duration of the ability\nActivated instantly upon purchase, has a cooldown",
+  "item.wathe.revolver.tooltip": "Point, right-click and shoot\nDrops if you kill an innocent. Has a cooldown"
+}
