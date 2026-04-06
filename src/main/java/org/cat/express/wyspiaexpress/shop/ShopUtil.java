@@ -36,7 +36,7 @@ import java.util.List;
 
 public class ShopUtil {
     public static final List<Item> FUN_BOX_RARE_POOL = List.of(WyspiaExpressItems.FAKE_REVOLVER, WatheItems.KNIFE,
-            KinsWatheItems.MEDICAL_KIT, ModItems.MASTER_KEY, ModItems.ROLE_MINE,
+            KinsWatheItems.MEDICAL_KIT, ModItems.MASTER_KEY,
             KinsWatheItems.PILL, KinsWatheItems.PAN, KinsWatheItems.WRENCH, KinsWatheItems.CAPTURE_DEVICE);
     public static final List<Item> FUN_BOX_NORMAL_POOL = List.of(WatheItems.NOTE, WatheItems.FIRECRACKER, WyspiaExpressItems.MEGAPHONE);
 
