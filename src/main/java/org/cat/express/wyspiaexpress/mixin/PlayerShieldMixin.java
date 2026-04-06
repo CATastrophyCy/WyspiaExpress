@@ -2,6 +2,8 @@ package org.cat.express.wyspiaexpress.mixin;
 
 import dev.doctor4t.wathe.api.event.AllowPlayerDeath;
 import dev.doctor4t.wathe.game.GameFunctions;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -16,6 +18,8 @@ public class PlayerShieldMixin {
     @Inject(method = "killPlayer(Lnet/minecraft/entity/player/PlayerEntity;ZLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)V", at = @At("HEAD"), cancellable = true)
     private static void wyspiaexpress$checkAllowPlayerDeath(PlayerEntity victim, boolean spawnBody, @Nullable PlayerEntity killer, Identifier deathReason, CallbackInfo ci) {
         if (!AllowPlayerDeath.EVENT.invoker().allowDeath(victim, killer, deathReason)) {
+            // right now hardcoded the slowness duration, need to change in the next version bump
+            victim.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS,2,0,true,true, false));
             ci.cancel();
         }
     }
