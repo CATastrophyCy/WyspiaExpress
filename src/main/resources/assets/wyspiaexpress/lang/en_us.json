@@ -4,8 +4,8 @@
   "tip.wyspiaexpress.ability.can_use": "Use %s to activate ability",
   "tip.wyspiaexpress.ability.not_enough_money": "%s§f\uE781§r required to activate ability",
 
-  "death_reason.wyspiaexpress.player_freeze": "cold as dead.",
-  "death_reason.wyspiaexpress.player_depressed": "consumed by depression.",
+  "death_reason.wyspiaexpress.player_freeze": "freezing.",
+  "death_reason.wyspiaexpress.player_depressed": "depression.",
 
   "tip.wyspiaexpress.ability.lich.no_revive": "There is no available revive",
   "tip.wyspiaexpress.ability.lich.revive": "%s available revives",

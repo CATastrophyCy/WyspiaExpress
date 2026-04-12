@@ -25,13 +25,11 @@ public class PlayerFreezeComponent implements AutoSyncedComponent, ServerTicking
     }
     @Override
     public void serverTick() {
-        if(WyspiaExpress.SERVER_CONFIG.freeze()) {
-            if (isSkyVisibleAdjacent(this.player)) {
+        if(WyspiaExpress.SERVER_CONFIG.freeze() ) {
+            if (isSkyVisibleAdjacent(this.player) && GameFunctions.isPlayerAliveAndSurvival(this.player)  ) {
                 freezeTick += 2;
                 this.sync();
                 if (freezeTick >= 2 * GameConstants.getInTicks(0, WyspiaExpress.SERVER_CONFIG.freezeTimer())) {
-                    this.reset();
-                    this.sync();
                     GameFunctions.killPlayer(this.player,true,null, Identifier.of(WyspiaExpress.MOD_ID, "player_freeze"));
                 }
             } else if (freezeTick > 0) {
