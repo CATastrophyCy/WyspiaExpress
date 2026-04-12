@@ -4,59 +4,75 @@ import blue.endless.jankson.Comment;
 import io.wispforest.owo.config.annotation.Nest;
 
 public class ItemConfig {
-    // mine
-    @Comment("REVOLVER cooldown, in seconds")
-    public int revolverCooldown = 10;
-    @Comment("KNIFE cooldown, in seconds")
-    public int knifeCooldown = 60;
-    @Comment("BODY_BAG cooldown, in seconds")
-    public int bodyBagCooldown = 180;
-    @Comment("PSYCHO_MODE, in seconds")
+
+    @Comment("Cooldown for PSYCHO_MODE, in seconds")
     public int psychoModeCooldown = 300;
-    @Comment("BLACKOUT cooldown, in seconds")
-    public int blackoutCooldown = 180;
-    @Comment("GRENADE cooldown, in seconds")
-    public int grenadeCooldown = 180;
-    @Comment("DERRINGER cooldown, in seconds")
-    public int derringerCooldown = 20;
-
-
-    @Comment("HUNTING_KNIFE cooldown, in seconds")
-    public int huntingKnifeCooldown = 45;
-    @Comment("POISON_INJECTOR cooldown, in seconds")
-    public int poisonInjectorCooldown = 60;
-    @Comment("BLOW_GUN cooldown, in seconds")
-    public int blowGunCooldown = 60;
-    @Comment("KNOCKOUT_DRUG cooldown, in seconds")
-    public int knockOutDrugCooldown = 45;
-    @Comment("CAPTURE_DEVICE cooldown, in seconds")
-    public int captureDeviceCooldown = 60;
-    @Comment("PAN cooldown, in seconds")
-    public int panCooldown = 45;
-    @Comment("PILL cooldown, in seconds")
-    public int pillCooldown = 180;
-    @Comment("ACID_BARREL, in seconds")
-    public int acidBarrelCooldown = 60;
-
-    @Comment("POWER_RESTORE cooldown, in seconds")
+    @Comment("Cooldown for BLACKOUT, in seconds")
+    public int blackOutCooldown = 165;
+    @Comment("Cooldown for POWER_RESTORE, in seconds")
     public int powerRestoreCooldown = 180;
 
-
-
+    // mine
     @Comment("Configuration for FAKE_REVOLVER")
     @Nest public FakeRevolverConfig fakeRevolverConfig = new FakeRevolverConfig();
 
     @Comment("Configuration for MEGAPHONE")
     @Nest public MegaphoneConfig megaphoneConfig = new MegaphoneConfig();
-    // other mods
+
+    // wathe
+    @Comment("Configuration for REVOLVER")
+    @Nest public RevolverConfig revolverConfig = new RevolverConfig();
+
+    @Comment("Configuration for KNIFE")
+    @Nest public KnifeConfig knifeConfig = new KnifeConfig();
+
+    @Comment("Configuration for LOCK_PICK")
+    @Nest public LockPickConfig lockPickConfig = new LockPickConfig();
+
+    @Comment("Configuration for BODY_BAG")
+    @Nest public BodyBagConfig bodyBagConfig = new BodyBagConfig();
+
+    @Comment("Configuration for GRENADE")
+    @Nest public GrenadeConfig grenadeConfig = new GrenadeConfig();
+
+    @Comment("Configuration for DERRINGER")
+    @Nest public DerringerConfig derringerConfig = new DerringerConfig();
+
+    // noelles roles
     @Comment("Configuration for FAKE_KNIFE")
     @Nest public FakeKnifeConfig fakeKnifeConfig = new FakeKnifeConfig();
+
+    // kin's wathe
+    @Comment("Configuration for HUNTING_KNIFE")
+    @Nest public HuntingKnifeConfig huntingKnifeConfig = new HuntingKnifeConfig();
+
+    @Comment("Configuration for POISON_INJECTOR")
+    @Nest public PoisonInjectorConfig poisonInjectorConfig = new PoisonInjectorConfig();
+
+    @Comment("Configuration for BLOWGUN")
+    @Nest public BlowgunConfig blowgunConfig = new BlowgunConfig();
+
+    @Comment("Configuration for KNOCKOUT_DRUG")
+    @Nest public KnockoutDrugConfig knockoutDrugConfig = new KnockoutDrugConfig();
+
+    @Comment("Configuration for CAPTURE_DEVICE")
+    @Nest public CaptureDeviceConfig captureDeviceConfig = new CaptureDeviceConfig();
+
+    @Comment("Configuration for PAN")
+    @Nest public PanConfig panConfig = new PanConfig();
+
+    @Comment("Configuration for PILL")
+    @Nest public PillConfig pillConfig = new PillConfig();
+
+    @Comment("Configuration for ACID_BARREL")
+    @Nest public AcidBarrelConfig acidBarrelConfig = new AcidBarrelConfig();
 
     @Comment("Configuration for MEDICAL_KIT")
     @Nest public MedicalKitConfig medicalKitConfig = new MedicalKitConfig();
 
     @Comment("Configuration for WRENCH")
     @Nest public WrenchConfig wrenchConfig = new WrenchConfig();
+
 
     // mine
     public static class FakeRevolverConfig{
@@ -66,7 +82,6 @@ public class ItemConfig {
         public int cooldown = 20;
 
     }
-
     public static class MegaphoneConfig{
         @Comment("Basic item configuration")
         @Nest public ItemBasicConfig basic = new ItemBasicConfig();
@@ -77,13 +92,97 @@ public class ItemConfig {
         @Comment("Reporting sound volume")
         public float volume = 1.0f;
     }
-
-    // other mods
+    // wathe
+    public static class RevolverConfig {
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds, minimum 0")
+        public int cooldown = 10;
+    }
+    public static class KnifeConfig {
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds, minimum 0")
+        public int cooldown = 60;
+    }
+    public static class LockPickConfig {
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds, minimum 0")
+        public int cooldown = 30;
+    }
+    public static class BodyBagConfig {
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds, minimum 0")
+        public int cooldown = 30;
+    }
+    public static class GrenadeConfig {
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds, minimum 0")
+        public int cooldown = 180;
+    }
+    public static class DerringerConfig {
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds, minimum 0")
+        public int cooldown = 30;
+    }
+    // noelles roles
     public static class FakeKnifeConfig{
         @Comment("Basic item configuration")
         @Nest public ItemBasicConfig basic = new ItemBasicConfig();
     }
-
+    // mine
+    public static class HuntingKnifeConfig{
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds")
+        public int cooldown = 45;
+    }
+    public static class PoisonInjectorConfig{
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds")
+        public int cooldown = 60;
+    }
+    public static class BlowgunConfig{
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds")
+        public int cooldown = 60;
+    }
+    public static class KnockoutDrugConfig{
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds")
+        public int cooldown = 45;
+    }
+    public static class CaptureDeviceConfig{
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds")
+        public int cooldown = 45;
+    }
+    public static class PanConfig{
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds")
+        public int cooldown = 45;
+    }
+    public static class PillConfig{
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds")
+        public int cooldown = 300;
+    }
+    public static class AcidBarrelConfig{
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds")
+        public int cooldown = 60;
+    }
     public static class MedicalKitConfig{
         @Comment("Basic item configuration")
         @Nest public ItemBasicConfig basic = new ItemBasicConfig();
