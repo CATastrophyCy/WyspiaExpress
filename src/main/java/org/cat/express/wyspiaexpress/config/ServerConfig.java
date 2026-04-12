@@ -14,6 +14,8 @@ import java.util.List;
 public class ServerConfig {
     @Comment("Multiply to crawling speed. i.e. 1.5 means crawling is 50% faster")
     public double crawlSpeedMultiplier = 2.0;
+    @Comment("Player stun tick after blocking damage")
+    public int blockStunTicks = 40;
     @Comment("Wheter killer role will always have guesser added. With this enabled it is recommended to have guesser disabled.")
     public boolean killerAlwaysGuesser = false;
     @Comment("Maximum amount of guessers when killerAlwaysGuesser is enabled.")
