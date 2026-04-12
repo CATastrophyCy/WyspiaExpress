@@ -25,6 +25,9 @@ import org.agmas.harpymodloader.events.ModifierAssigned;
 import org.agmas.harpymodloader.events.ResetPlayerEvent;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
 import org.agmas.harpymodloader.modifiers.Modifier;
+import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
+import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
+import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
@@ -210,6 +213,9 @@ public class WyspiaExpressRoles {
         ResetPlayerEvent.EVENT.register(((playerEntity) -> {
             // remove night_vision
             playerEntity.removeStatusEffect(StatusEffects.NIGHT_VISION);
+            PlayerDepressedComponent.KEY.get(playerEntity).reset();
+            PlayerFreezeComponent.KEY.get(playerEntity).reset();
+            AbilityCooldownComponent.KEY.get(playerEntity).reset();
         }));
     }
 

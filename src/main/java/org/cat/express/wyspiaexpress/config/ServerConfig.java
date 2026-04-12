@@ -18,6 +18,14 @@ public class ServerConfig {
     public int blockStunTicks = 40;
     @Comment("Wheter killer role will always have guesser added. With this enabled it is recommended to have guesser disabled")
     public boolean killerAlwaysGuesser = false;
+    @Comment("Enable freezing")
+    public boolean freeze = false;
+    @Comment("The time, in seconds, it takes for a player to die when staying outside for too long")
+    public int freezeTimer = 60;
+    @Comment("Enable depression killing")
+    public boolean depressionKilling = false;
+    @Comment("The time, in seconds, it takes for a player to die when staying depressed for too long")
+    public int depressedTimer = 90;
     @Comment("Maximum amount of guessers when killerAlwaysGuesser is enabled")
     public int maximumGuessers = 1;
     @Comment("Whether to enable item bound checking, this will make out of bound item tp to closest dead body")
