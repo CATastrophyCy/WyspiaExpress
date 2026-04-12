@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.components;
 
+import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
 import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
@@ -14,8 +15,6 @@ import org.ladysnake.cca.api.v3.component.ComponentRegistry;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
 
-import static dev.doctor4t.wathe.Wathe.isSkyVisibleAdjacent;
-
 public class PlayerDepressedComponent implements AutoSyncedComponent, ServerTickingComponent {
     public static final ComponentKey<PlayerDepressedComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(WyspiaExpress.MOD_ID, "player_depressed_component"),
             PlayerDepressedComponent.class);
@@ -28,7 +27,8 @@ public class PlayerDepressedComponent implements AutoSyncedComponent, ServerTick
     public void serverTick() {
         if(WyspiaExpress.SERVER_CONFIG.depressionKilling() ) {
             PlayerMoodComponent component = PlayerMoodComponent.KEY.get(this.player);
-            if (component.getMood() <= 0.01f && GameFunctions.isPlayerAliveAndSurvival(this.player)  ) {
+            GameWorldComponent gameWorld = GameWorldComponent.KEY.get(this.player.getWorld());
+            if (component.getMood() <= 0.01f && GameFunctions.isPlayerAliveAndSurvival(this.player)  && gameWorld.isRunning() ) {
                 depressionTick += 2;
                 this.sync();
                 if (depressionTick >= 2 * GameConstants.getInTicks(0, WyspiaExpress.SERVER_CONFIG.depressedTimer()) ) {

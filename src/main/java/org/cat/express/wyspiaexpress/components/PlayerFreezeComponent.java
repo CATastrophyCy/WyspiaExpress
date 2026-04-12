@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.components;
 
+import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,7 +27,8 @@ public class PlayerFreezeComponent implements AutoSyncedComponent, ServerTicking
     @Override
     public void serverTick() {
         if(WyspiaExpress.SERVER_CONFIG.freeze() ) {
-            if (isSkyVisibleAdjacent(this.player) && GameFunctions.isPlayerAliveAndSurvival(this.player)  ) {
+            GameWorldComponent gameWorld = GameWorldComponent.KEY.get(this.player.getWorld());
+            if (isSkyVisibleAdjacent(this.player) && GameFunctions.isPlayerAliveAndSurvival(this.player) && gameWorld.isRunning() ) {
                 freezeTick += 2;
                 this.sync();
                 if (freezeTick >= 2 * GameConstants.getInTicks(0, WyspiaExpress.SERVER_CONFIG.freezeTimer())) {
