@@ -16,20 +16,20 @@ public class ServerConfig {
     public double crawlSpeedMultiplier = 2.0;
     @Comment("Player stun tick after blocking damage")
     public int blockStunTicks = 40;
-    @Comment("Wheter killer role will always have guesser added. With this enabled it is recommended to have guesser disabled.")
+    @Comment("Wheter killer role will always have guesser added. With this enabled it is recommended to have guesser disabled")
     public boolean killerAlwaysGuesser = false;
-    @Comment("Maximum amount of guessers when killerAlwaysGuesser is enabled.")
+    @Comment("Maximum amount of guessers when killerAlwaysGuesser is enabled")
     public int maximumGuessers = 1;
-    @Comment("Whether to enable item bound checking, this will make out of bound item tp to closest dead body.")
+    @Comment("Whether to enable item bound checking, this will make out of bound item tp to closest dead body")
     public boolean enableItemBoundChecking = true;
 
-    @Comment("Whether to enable random start tp.")
+    @Comment("Whether to enable random start tp")
     public boolean enableRandomStartTp = true;
-    @Comment("The starting positions to tp player to, must be inside the ready area.")
+    @Comment("The starting positions to tp player to, must be inside the ready area")
     public List<String> randomStartTp = new ArrayList<>(List.of(
             "-1002.5, 2.0, -361.5, -90.0, 0.0"
     ));
-    @Comment("The position the TP item tps player to.")
+    @Comment("The position the TP item tps player to")
     @Nest public TpTargetPosition readyTrainTp = new TpTargetPosition();
 
     public static class TpTargetPosition {
