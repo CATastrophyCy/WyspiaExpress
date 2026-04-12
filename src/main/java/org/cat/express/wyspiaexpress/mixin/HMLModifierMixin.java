@@ -1,9 +1,11 @@
 package org.cat.express.wyspiaexpress.mixin;
 
+import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
+import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.agmas.harpymodloader.events.ModifierAssigned;
 import org.agmas.harpymodloader.modded_murder.ModdedMurderGameMode;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
@@ -22,6 +24,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.Texts;
 import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import pro.fazeclan.river.stupid_express.constants.SERoles;
 
 import java.util.*;
 
@@ -133,6 +136,14 @@ public abstract class HMLModifierMixin {
                 if (!HMLModifiers.MODIFIERS.isEmpty()) {
                     player.sendMessage(Text.translatable("announcement.no_modifiers").formatted(Formatting.DARK_GRAY), true);
                 }
+            }
+        }
+
+        // at the end, check if theres any civilians, give them amnesiac instead
+        for (ServerPlayerEntity player : players) {
+            if (gameWorldComponent.isRole(player, WatheRoles.CIVILIAN)) {
+                gameWorldComponent.addRole(player, SERoles.AMNESIAC);
+                ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, SERoles.AMNESIAC);
             }
         }
         ci.cancel();
