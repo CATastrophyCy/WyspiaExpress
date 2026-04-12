@@ -46,7 +46,11 @@ public abstract class HudRendererMixin {
     @Unique
     private void renderHeatBar(DrawContext context, float currentValue, float maxValue) {
         float percent = Math.clamp(currentValue / maxValue, 0, 1);
+
         if (percent <= 0) return;
+
+        float visualPercent = 1.0f - percent;
+
 
         // Bar dimensions and positioning (below MoodRenderer which is around y=20)
         int x = 26;
@@ -54,8 +58,9 @@ public abstract class HudRendererMixin {
         int maxWidth = 100;
         int height = 3;
 
-        int fillWidth = (int) (maxWidth * percent);
+        int fillWidth = (int) (maxWidth * visualPercent);
         if (fillWidth <= 0) return;
+
 
         int red = 255;
         int green = (int) (200 * (1f - percent));
@@ -73,6 +78,7 @@ public abstract class HudRendererMixin {
 
         MinecraftClient client = MinecraftClient.getInstance();
         int screenHeight = client.getWindow().getScaledHeight();
+        float visualPercent = 1.0f - percent;
 
         // Bar dimensions and positioning (Mid-Left)
         int x = 10;
@@ -83,7 +89,7 @@ public abstract class HudRendererMixin {
         int yBottom = screenHeight / 2 + (maxHeight / 2);
         int yTopBound = yBottom - maxHeight;
 
-        int fillHeight = (int) (maxHeight * percent);
+        int fillHeight = (int) (maxHeight * visualPercent);
         if (fillHeight <= 0) return;
 
         // Bottom-to-up rendering calculation
