@@ -57,7 +57,9 @@ public class ShopUtil {
     }
 
     private static void openFunBox(@NotNull PlayerEntity player){
-
+        if(FUN_BOX_RARE_POOL.isEmpty() || FUN_BOX_NORMAL_POOL.isEmpty()){
+            initFunBoxPool();
+        }
         if(player.getWorld().getRandom().nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.missChance()) {
             PlayerShopComponent.KEY.get(player).addToBalance(WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.missCompensationCoin());
             return; // loss the gamble
