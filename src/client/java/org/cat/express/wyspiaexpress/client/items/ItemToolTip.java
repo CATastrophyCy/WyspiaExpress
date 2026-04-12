@@ -21,14 +21,11 @@ public class ItemToolTip {
 
     private static final Map<Item, Integer> presetCooldowns = new HashMap<>();
 
-    private static boolean initialized = false;
     public static int getItemCooldownTicks(@NotNull Item item) {return presetCooldowns.getOrDefault(item, 0);}
 
     public static void initItemCooldown() {
-        if(initialized) return;
         WyspiaExpressItems.registerItemsCooldown();
         presetCooldowns.putAll(GameConstants.ITEM_COOLDOWNS);
-        initialized = true;
     }
 
     public static void addItemtip(@NotNull Item item, @NotNull ItemStack itemStack, @NotNull List<Text> list) {

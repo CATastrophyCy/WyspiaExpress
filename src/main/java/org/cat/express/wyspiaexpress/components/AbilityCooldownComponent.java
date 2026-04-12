@@ -8,11 +8,10 @@ import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
-import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
 import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
 
 
-public class AbilityCooldownComponent implements AutoSyncedComponent, ServerTickingComponent, ClientTickingComponent{
+public class AbilityCooldownComponent implements AutoSyncedComponent, ServerTickingComponent{
     public static final ComponentKey<AbilityCooldownComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(WyspiaExpress.MOD_ID, "ability_cooldown"),
             AbilityCooldownComponent.class);
     private final PlayerEntity player;
@@ -27,9 +26,6 @@ public class AbilityCooldownComponent implements AutoSyncedComponent, ServerTick
             this.sync();
         }
     }
-
-    @Override
-    public void clientTick() {}
     public void setAbilityCooldown(int ticks) {
         this.cooldown = ticks * 20;
         this.sync();

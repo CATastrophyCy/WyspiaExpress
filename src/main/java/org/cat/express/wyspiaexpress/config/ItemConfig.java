@@ -194,6 +194,6 @@ public class ItemConfig {
         @Comment("Basic item configuration")
         @Nest public ItemBasicConfig basic = new ItemBasicConfig();
         @Comment("Cooldown, in seconds")
-        public int cooldown = 120;
+        public int cooldown = 30;
     }
 }
