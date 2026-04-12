@@ -31,7 +31,7 @@ public class PlayerDepressedComponent implements AutoSyncedComponent, ServerTick
             if (component.getMood() <= 0.01f) {
                 depressionTick += 2;
                 this.sync();
-                if (depressionTick >= GameConstants.getInTicks(0, WyspiaExpress.SERVER_CONFIG.depressedTimer())) {
+                if (depressionTick >= 2 * GameConstants.getInTicks(0, WyspiaExpress.SERVER_CONFIG.depressedTimer())) {
                     this.reset();
                     this.sync();
                     GameFunctions.killPlayer(this.player,true,null, Identifier.of(WyspiaExpress.MOD_ID, "player_depressed"));

@@ -33,12 +33,12 @@ public abstract class HudRendererMixin {
         int freezeTick = PlayerFreezeComponent.KEY.get(client.player).getFreezeTick();
 
         if (depressedTick > 0 && WyspiaExpress.SERVER_CONFIG.depressionKilling()) {
-            int depressedTimerTick = WyspiaExpress.SERVER_CONFIG.depressedTimer() * 20;
+            int depressedTimerTick = WyspiaExpress.SERVER_CONFIG.depressedTimer() * 20 * 2;
             renderHeatBar(context, depressedTick, depressedTimerTick);
         }
 
         if (freezeTick > 0 && WyspiaExpress.SERVER_CONFIG.freeze()) {
-            int freezeTimer = WyspiaExpress.SERVER_CONFIG.freezeTimer() * 20 ;
+            int freezeTimer = WyspiaExpress.SERVER_CONFIG.freezeTimer() * 20 * 2 ;
             renderFreezeBar(context, freezeTick, freezeTimer);
         }
     }
