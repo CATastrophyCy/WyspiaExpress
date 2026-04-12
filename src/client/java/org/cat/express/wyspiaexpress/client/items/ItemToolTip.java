@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -20,9 +21,15 @@ public class ItemToolTip {
 
     private static final Map<Item, Integer> presetCooldowns = new HashMap<>();
 
+    private static boolean initialized = false;
     public static int getItemCooldownTicks(@NotNull Item item) {return presetCooldowns.getOrDefault(item, 0);}
 
-    public static void initItemCooldown() {presetCooldowns.putAll(GameConstants.ITEM_COOLDOWNS);}
+    public static void initItemCooldown() {
+        if(initialized) return;
+        WyspiaExpressItems.registerItemsCooldown();
+        presetCooldowns.putAll(GameConstants.ITEM_COOLDOWNS);
+        initialized = true;
+    }
 
     public static void addItemtip(@NotNull Item item, @NotNull ItemStack itemStack, @NotNull List<Text> list) {
         if (itemStack.isOf(item)) {

@@ -50,8 +50,50 @@ public class WyspiaExpressItems {
         ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.WRENCH), WyspiaExpress.ITEMS_CONFIG.itemConfig.wrenchConfig.basic);
 
     }
+
     public static void registerItems(){
-        // custom items
+        registerItemsCooldown();
+        // registerItemGroups
+        registerItemGroup(FAKE_REVOLVER, WatheItems.EQUIPMENT_GROUP);
+        registerItemGroup(MEGAPHONE, WatheItems.EQUIPMENT_GROUP);
+    }
+    public static Item registerItem(Item item, String id) {
+        Identifier itemID = Identifier.of(WyspiaExpress.MOD_ID, id);
+
+        return Registry.register(Registries.ITEM, itemID, item);
+    }
+    public static void setItemCooldown(@NotNull PlayerEntity player, @NotNull Item item, Hand hand) {
+        if (GameFunctions.isPlayerAliveAndSurvival(player)) {
+            player.getItemCooldownManager().set(item, GameConstants.ITEM_COOLDOWNS.get(item));
+            if (hand != null) player.getStackInHand(hand).decrement(1);
+        }
+    }
+    public static void registerItemCooldown(Item item, int minutes, int seconds) {
+        GameConstants.ITEM_COOLDOWNS.put(item, GameConstants.getInTicks(minutes, seconds));
+    }
+    public static void registerItemGroup(Item item, RegistryKey<ItemGroup> itemGroup){
+        ItemGroupEvents.modifyEntriesEvent(itemGroup).register( entries -> {
+            entries.add(item);
+        });
+    }
+    public static void registerEvents(){
+        registerPunchEvent();
+        registerDropEvent();
+    }
+    public static void registerPunchEvent(){
+        AllowPlayerPunching.EVENT.register(((playerEntity, playerEntity1) -> {
+            Item item = playerEntity.getMainHandStack().getItem();
+            var config = ITEMS_BASIC_CONFIG.get(item);
+            return config != null && config.canPunchPlayers();
+        }));
+    }
+    public static void registerDropEvent(){
+        ShouldDropOnDeath.EVENT.register(((itemStack, identifier) -> {
+            var config = ITEMS_BASIC_CONFIG.get(itemStack.getItem());
+            return config != null && config.dropOnDeath();
+        }));
+    }
+    public static void registerItemsCooldown(){
         if(WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.cooldown() >= 0) {
             registerItemCooldown(FAKE_REVOLVER, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.cooldown());
         }
@@ -111,45 +153,5 @@ public class WyspiaExpressItems {
         if(WyspiaExpress.ITEMS_CONFIG.itemConfig.powerRestoreCooldown() >= 0) {
             registerItemCooldown(KinsWatheItems.ICON_POWER_RESTORATION, 0, WyspiaExpress.ITEMS_CONFIG.itemConfig.powerRestoreCooldown());
         }
-
-        // registerItemGroups
-        registerItemGroup(FAKE_REVOLVER, WatheItems.EQUIPMENT_GROUP);
-        registerItemGroup(MEGAPHONE, WatheItems.EQUIPMENT_GROUP);
-    }
-    public static Item registerItem(Item item, String id) {
-        Identifier itemID = Identifier.of(WyspiaExpress.MOD_ID, id);
-
-        return Registry.register(Registries.ITEM, itemID, item);
-    }
-    public static void setItemCooldown(@NotNull PlayerEntity player, @NotNull Item item, Hand hand) {
-        if (GameFunctions.isPlayerAliveAndSurvival(player)) {
-            player.getItemCooldownManager().set(item, GameConstants.ITEM_COOLDOWNS.get(item));
-            if (hand != null) player.getStackInHand(hand).decrement(1);
-        }
-    }
-    public static void registerItemCooldown(Item item, int minutes, int seconds) {
-        GameConstants.ITEM_COOLDOWNS.put(item, GameConstants.getInTicks(minutes, seconds));
-    }
-    public static void registerItemGroup(Item item, RegistryKey<ItemGroup> itemGroup){
-        ItemGroupEvents.modifyEntriesEvent(itemGroup).register( entries -> {
-            entries.add(item);
-        });
-    }
-    public static void registerEvents(){
-        registerPunchEvent();
-        registerDropEvent();
-    }
-    public static void registerPunchEvent(){
-        AllowPlayerPunching.EVENT.register(((playerEntity, playerEntity1) -> {
-            Item item = playerEntity.getMainHandStack().getItem();
-            var config = ITEMS_BASIC_CONFIG.get(item);
-            return config != null && config.canPunchPlayers();
-        }));
-    }
-    public static void registerDropEvent(){
-        ShouldDropOnDeath.EVENT.register(((itemStack, identifier) -> {
-            var config = ITEMS_BASIC_CONFIG.get(itemStack.getItem());
-            return config != null && config.dropOnDeath();
-        }));
     }
 }
