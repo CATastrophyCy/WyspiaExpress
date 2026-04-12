@@ -35,6 +35,5 @@ public abstract class ThiefItemRuleMixin {
 
         list.remove(Identifier.of(Wathe.MOD_ID, "note"));
         list.remove(Identifier.of(Wathe.MOD_ID, "firecracker"));
-        list.remove(Identifier.of(Wathe.MOD_ID, "lockpick"));
     }
 }
