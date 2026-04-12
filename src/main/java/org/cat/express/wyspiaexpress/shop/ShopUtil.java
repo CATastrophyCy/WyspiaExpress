@@ -35,32 +35,12 @@ import java.util.*;
 import java.util.List;
 
 public class ShopUtil {
-    public static final List<Item> FUN_BOX_RARE_POOL = List.of(WyspiaExpressItems.FAKE_REVOLVER, WatheItems.KNIFE,
-            KinsWatheItems.MEDICAL_KIT, ModItems.MASTER_KEY,
-            KinsWatheItems.PILL, KinsWatheItems.PAN, KinsWatheItems.WRENCH, KinsWatheItems.CAPTURE_DEVICE);
-    public static final List<Item> FUN_BOX_NORMAL_POOL = List.of(WatheItems.NOTE, WatheItems.FIRECRACKER, WyspiaExpressItems.MEGAPHONE);
+    public static final List<Item> FUN_BOX_RARE_POOL = new ArrayList<>();
+    public static final List<Item> FUN_BOX_NORMAL_POOL = new ArrayList<>();
 
     public static boolean handlePurchase(@NotNull PlayerEntity player, int balance, @NotNull Item item, int price) {
         if (balance >= price && !player.getItemCooldownManager().isCoolingDown(item)) {
-            if (item == WatheItems.NOTE) {
-                player.giveItemStack(new ItemStack(WatheItems.NOTE, 3));
-            } else if (item == WatheItems.BLACKOUT) {
-                PlayerShopComponent.useBlackout(player);
-            } else if (item == WatheItems.PSYCHO_MODE) {
-                PlayerShopComponent.usePsychoMode(player);
-            } else if (item == KinsWatheItems.ICON_WEAPON_COOLDOWN_REFRESH) {
-                HackerComponent.refreshWeaponCooldown(player);
-            } else if (item == KinsWatheItems.ICON_ABILITY_COOLDOWN_REFRESH) {
-                HackerComponent.refreshAbilityCooldown(player);
-            } else if (item == KinsWatheItems.ICON_POTION_EFFECT_REFRESH) {
-                handlePotionRefresh(player);
-            } else if (item == KinsWatheItems.ICON_POWER_RESTORATION) {
-                TechnicianComponent.stopBlackout(player);
-            } else if (item == WyspiaExpressItems.FUN_BOX) {
-                openFunBox(player);
-            } else {
-                player.giveItemStack(item.getDefaultStack());
-            }
+            giveItem(player, item);
             if (player instanceof ServerPlayerEntity serverPlayer) {
                 serverPlayer.networkHandler.sendPacket(new PlaySoundS2CPacket(Registries.SOUND_EVENT.getEntry(WatheSounds.UI_SHOP_BUY), SoundCategory.PLAYERS, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), 1.0F, 0.9F + player.getRandom().nextFloat() * 0.2F, serverPlayer.getRandom().nextLong()));
             }
@@ -75,9 +55,14 @@ public class ShopUtil {
             return false;
         }
     }
-    public static void openFunBox(@NotNull PlayerEntity player){
 
-        if( player.getRandom().nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.goodPoolChance()){
+    private static void openFunBox(@NotNull PlayerEntity player){
+
+        if(player.getWorld().getRandom().nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.missChance()) {
+            PlayerShopComponent.KEY.get(player).addToBalance(WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.missCompensationCoin());
+            return; // loss the gamble
+        }
+        if( player.getWorld().getRandom().nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.goodPoolChance()){
             PlayerInventory inv = player.getInventory();
             Set<Item> hotbarItems = new HashSet<>();
             // Collect unique items from hotbar (slots 0-8)
@@ -92,23 +77,31 @@ public class ShopUtil {
                     .filter(item -> !hotbarItems.contains(item))
                     .toList();
             if(!filtered.isEmpty()) {
-                int random = player.getRandom().nextInt(filtered.size());
-                player.giveItemStack(filtered.get(random).getDefaultStack());
+                int random = player.getWorld().getRandom().nextInt(filtered.size());
+                giveItem(player, filtered.get(random));
                 return;
             }
         }
-        // normal pool
-        if(player.getRandom().nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.badPoolMissChance()) {
-            PlayerShopComponent.KEY.get(player).addToBalance(WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.missCompensationCoin());
-            return; // loss the gamble
-        }
-        Item item = FUN_BOX_NORMAL_POOL.get(player.getRandom().nextInt(FUN_BOX_NORMAL_POOL.size()));
-        if(item.equals(WatheItems.NOTE)){
-            player.giveItemStack(new ItemStack(WatheItems.NOTE, 4));
-        }
-        else
-            player.giveItemStack(item.getDefaultStack());
+        // bad pool
+        Item item = FUN_BOX_NORMAL_POOL.get(player.getWorld().getRandom().nextInt(FUN_BOX_NORMAL_POOL.size()));
+        giveItem(player, item);
+    }
 
+    private static void initFunBoxPool(){
+        if(FUN_BOX_RARE_POOL.isEmpty()) {
+            List<EnumShopEntry> items = WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.goodPool();
+            for (EnumShopEntry entry : items) {
+                Item item = ShopUtil.fromEnumShopEntry(entry);
+                FUN_BOX_RARE_POOL.add(item);
+            }
+        }
+        if(FUN_BOX_NORMAL_POOL.isEmpty()) {
+            List<EnumShopEntry> items = WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.badPool();
+            for (EnumShopEntry entry : items) {
+                Item item = ShopUtil.fromEnumShopEntry(entry);
+                FUN_BOX_NORMAL_POOL.add(item);
+            }
+        }
     }
     public static void handlePotionRefresh(PlayerEntity player) {
         player.getItemCooldownManager().set(KinsWatheItems.ICON_POTION_EFFECT_REFRESH,
@@ -138,133 +131,154 @@ public class ShopUtil {
         return shopEntries;
     }
     public static ShopEntry fromShopEntryConfig(ShopConfig.ShopEntryConfig entry) {
-        return new ShopEntry(fromEnumShopEntry(entry.item), entry.price, entry.type);
+        return new ShopEntry(fromEnumShopEntry(entry.item).getDefaultStack(), entry.price, entry.type);
+    }
+    private static void giveItem(@NotNull PlayerEntity player, Item item){
+        if(item.equals(WatheItems.NOTE)){
+            player.giveItemStack(new ItemStack(WatheItems.NOTE, 4));
+        } else if (item == WatheItems.BLACKOUT) {
+            PlayerShopComponent.useBlackout(player);
+        } else if (item == WatheItems.PSYCHO_MODE) {
+            PlayerShopComponent.usePsychoMode(player);
+        } else if (item == KinsWatheItems.ICON_WEAPON_COOLDOWN_REFRESH) {
+            HackerComponent.refreshWeaponCooldown(player);
+        } else if (item == KinsWatheItems.ICON_ABILITY_COOLDOWN_REFRESH) {
+            HackerComponent.refreshAbilityCooldown(player);
+        } else if (item == KinsWatheItems.ICON_POTION_EFFECT_REFRESH) {
+            handlePotionRefresh(player);
+        } else if (item == KinsWatheItems.ICON_POWER_RESTORATION) {
+            TechnicianComponent.stopBlackout(player);
+        } else if (item == WyspiaExpressItems.FUN_BOX) {
+            openFunBox(player);
+        } else {
+            player.giveItemStack(item.getDefaultStack());
+        }
     }
     // Return the corresponding ItemStack via getDefaultStack, which creates a new instance
-    public static ItemStack fromEnumShopEntry(EnumShopEntry entry ){
-        ItemStack item = null;
+    public static Item fromEnumShopEntry(EnumShopEntry entry ){
+        Item item = null;
         switch(entry){
             // Base Wathe items
             case KNIFE:
-                item = WatheItems.KNIFE.getDefaultStack();
+                item = WatheItems.KNIFE;
                 break;
             case REVOLVER:
-                item = WatheItems.REVOLVER.getDefaultStack();
+                item = WatheItems.REVOLVER;
                 break;
             case GRENADE:
-                item = WatheItems.GRENADE.getDefaultStack();
+                item = WatheItems.GRENADE;
                 break;
             case PSYCHO_MODE:
-                item = WatheItems.PSYCHO_MODE.getDefaultStack();
+                item = WatheItems.PSYCHO_MODE;
                 break;
             case POISON_VIAL:
-                item = WatheItems.POISON_VIAL.getDefaultStack();
+                item = WatheItems.POISON_VIAL;
                 break;
             case SCORPION:
-                item = WatheItems.SCORPION.getDefaultStack();
+                item = WatheItems.SCORPION;
                 break;
             case FIRECRACKER:
-                item = WatheItems.FIRECRACKER.getDefaultStack();
+                item = WatheItems.FIRECRACKER;
                 break;
             case LOCKPICK:
-                item = WatheItems.LOCKPICK.getDefaultStack();
+                item = WatheItems.LOCKPICK;
                 break;
             case CROWBAR:
-                item = WatheItems.CROWBAR.getDefaultStack();
+                item = WatheItems.CROWBAR;
                 break;
             case BODY_BAG:
-                item = WatheItems.BODY_BAG.getDefaultStack();
+                item = WatheItems.BODY_BAG;
                 break;
             case BLACKOUT:
-                item = WatheItems.BLACKOUT.getDefaultStack();
+                item = WatheItems.BLACKOUT;
                 break;
             case NOTE:
-                item = WatheItems.NOTE.getDefaultStack();
+                item = WatheItems.NOTE;
                 break;
             // Starryexpress
             case TAPE:
-                item =  StarryExpressItems.TAPE.getDefaultStack();
+                item =  StarryExpressItems.TAPE;
                 break;
             // Noelle's Roles
             case FAKE_KNIFE:
-                item =  ModItems.FAKE_KNIFE.getDefaultStack();
+                item =  ModItems.FAKE_KNIFE;
                 break;
             case DELUSION_VIAL:
-                item =  ModItems.DELUSION_VIAL.getDefaultStack();
+                item =  ModItems.DELUSION_VIAL;
                 break;
             case DEFENSE_VIAL:
-                item =  ModItems.DEFENSE_VIAL.getDefaultStack();
+                item =  ModItems.DEFENSE_VIAL;
                 break;
             case ROLE_MINE:
-                item = ModItems.ROLE_MINE.getDefaultStack();
+                item = ModItems.ROLE_MINE;
                 break;
             case MASTER_KEY:
-                item = ModItems.MASTER_KEY.getDefaultStack();
+                item = ModItems.MASTER_KEY;
                 break;
             case FAKE_REVOLVER:
-                item = WyspiaExpressItems.FAKE_REVOLVER.getDefaultStack();
+                item = WyspiaExpressItems.FAKE_REVOLVER;
                 break;
             // Kin's Wathe
             case PAN:
-                item = KinsWatheItems.PAN.getDefaultStack();
+                item = KinsWatheItems.PAN;
                 break;
             case COOKED_PORKCHOP:
-                item = Items.COOKED_PORKCHOP.getDefaultStack();
+                item = Items.COOKED_PORKCHOP;
                 break;
             case COOKED_CHIKEN:
-                item = Items.COOKED_CHICKEN.getDefaultStack();
+                item = Items.COOKED_CHICKEN;
                 break;
             case COOKED_BEEF:
-                item = Items.COOKED_BEEF.getDefaultStack();
+                item = Items.COOKED_BEEF;
                 break;
             case PILL:
-                item = KinsWatheItems.PILL.getDefaultStack();
+                item = KinsWatheItems.PILL;
                 break;
             case MEDICAL_KIT:
-                item = KinsWatheItems.MEDICAL_KIT.getDefaultStack();
+                item = KinsWatheItems.MEDICAL_KIT;
                 break;
             case ACID_BARREL:
-                item = KinsWatheItems.SULFURIC_ACID_BARREL.getDefaultStack();
+                item = KinsWatheItems.SULFURIC_ACID_BARREL;
                 break;
             case HUNTING_KNIFE:
-                item = KinsWatheItems.HUNTING_KNIFE.getDefaultStack();
+                item = KinsWatheItems.HUNTING_KNIFE;
                 break;
             case KNOCKOUT_DRUG:
-                item = KinsWatheItems.KNOCKOUT_DRUG.getDefaultStack();
+                item = KinsWatheItems.KNOCKOUT_DRUG;
                 break;
             case DREAM_IMPRINT:
-                item = KinsWatheItems.DREAM_IMPRINT.getDefaultStack();
+                item = KinsWatheItems.DREAM_IMPRINT;
                 break;
             case BLOWGUN:
-                item = KinsWatheItems.BLOWGUN.getDefaultStack();
+                item = KinsWatheItems.BLOWGUN;
                 break;
             case POISON_INJECTOR:
-                item = KinsWatheItems.POISON_INJECTOR.getDefaultStack();
+                item = KinsWatheItems.POISON_INJECTOR;
                 break;
             case WRENCH:
-                item = KinsWatheItems.WRENCH.getDefaultStack();
+                item = KinsWatheItems.WRENCH;
                 break;
             case CAPTURE_DEVICE:
-                item = KinsWatheItems.CAPTURE_DEVICE.getDefaultStack();
+                item = KinsWatheItems.CAPTURE_DEVICE;
                 break;
             case ICON_POWER_RESTORATION:
-                item = KinsWatheItems.ICON_POWER_RESTORATION.getDefaultStack();
+                item = KinsWatheItems.ICON_POWER_RESTORATION;
                 break;
             case ICON_WEAPON_COOLDOWN_REFRESH:
-                item = KinsWatheItems.ICON_WEAPON_COOLDOWN_REFRESH.getDefaultStack();
+                item = KinsWatheItems.ICON_WEAPON_COOLDOWN_REFRESH;
                 break;
             case ICON_ABILITY_COOLDOWN_REFRESH:
-                item = KinsWatheItems.ICON_ABILITY_COOLDOWN_REFRESH.getDefaultStack();
+                item = KinsWatheItems.ICON_ABILITY_COOLDOWN_REFRESH;
                 break;
             case ICON_POTION_EFFECT_REFRESH:
-                item = KinsWatheItems.ICON_POTION_EFFECT_REFRESH.getDefaultStack();
+                item = KinsWatheItems.ICON_POTION_EFFECT_REFRESH;
                 break;
             // customs
             case FUN_BOX:
-                item = WyspiaExpressItems.FUN_BOX.getDefaultStack();
+                item = WyspiaExpressItems.FUN_BOX;
                 break;
             case MEGAPHONE:
-                item = WyspiaExpressItems.MEGAPHONE.getDefaultStack();
+                item = WyspiaExpressItems.MEGAPHONE;
             default:
         }
         return item;

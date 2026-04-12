@@ -45,9 +45,9 @@ public class WyspiaExpressItems {
         ITEMS_BASIC_CONFIG.put(FAKE_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.basic);
         ITEMS_BASIC_CONFIG.put(MEGAPHONE, WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.basic);
         // other mods
-        ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.FAKE_KNIFE).getItem(), WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeKnifeConfig.basic);
-        ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.MEDICAL_KIT).getItem(), WyspiaExpress.ITEMS_CONFIG.itemConfig.medicalKitConfig.basic);
-        ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.WRENCH).getItem(), WyspiaExpress.ITEMS_CONFIG.itemConfig.wrenchConfig.basic);
+        ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.FAKE_KNIFE), WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeKnifeConfig.basic);
+        ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.MEDICAL_KIT), WyspiaExpress.ITEMS_CONFIG.itemConfig.medicalKitConfig.basic);
+        ITEMS_BASIC_CONFIG.put(ShopUtil.fromEnumShopEntry(EnumShopEntry.WRENCH), WyspiaExpress.ITEMS_CONFIG.itemConfig.wrenchConfig.basic);
 
     }
     public static void registerItems(){

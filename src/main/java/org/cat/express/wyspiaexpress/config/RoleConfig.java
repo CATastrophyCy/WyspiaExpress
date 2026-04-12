@@ -2,10 +2,13 @@ package org.cat.express.wyspiaexpress.config;
 
 import blue.endless.jankson.Comment;
 import io.wispforest.owo.config.annotation.Nest;
+import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
+
+import java.util.List;
 
 public class RoleConfig {
     // mine
-    @Comment("Config options for BANDIT.")
+    @Comment("Config options for BANDIT")
     @Nest public BanditConfig banditConfig = new BanditConfig();
     @Comment("Config options for NOTE_TAKER")
     @Nest public NoteTakerConfig noteTakerConfig = new NoteTakerConfig();
@@ -13,7 +16,7 @@ public class RoleConfig {
     @Nest public EdgeLordConfig edgeLordConfig = new EdgeLordConfig();
     @Comment("Config options for GAMBLER")
     @Nest public GamblerConfig  gamblerConfig = new GamblerConfig();
-    @Comment("Config options for LICH.")
+    @Comment("Config options for LICH")
     @Nest public LichConfig lichConfig = new LichConfig();
     // Starry Express
     @Nest public StarryExpressRoles starryExpress = new StarryExpressRoles();
@@ -26,35 +29,41 @@ public class RoleConfig {
 
     // Mine
     public static class BanditConfig {
-        @Comment("Basic role configuration.")
+        @Comment("Basic role configuration")
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
     }
     public static class NoteTakerConfig {
-        @Comment("Basic role configuration.")
+        @Comment("Basic role configuration")
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
     }
     public static class EdgeLordConfig {
-        @Comment("Basic role configuration.")
+        @Comment("Basic role configuration")
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
     }
     public static class GamblerConfig {
-        @Comment("Basic role configuration.")
+        @Comment("Basic role configuration")
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
-        @Comment("Good pool chance.")
+        @Comment("Miss chance")
+        public double missChance = 0.33;
+        @Comment("Good pool chance")
         public double goodPoolChance = 0.30;
-        @Comment("Bad pool miss chance.")
-        public double badPoolMissChance = 0.40;
+        @Comment("Good pool")
+        public List<EnumShopEntry> goodPool = List.of( EnumShopEntry.KNIFE,
+                EnumShopEntry.MEDICAL_KIT, EnumShopEntry.MASTER_KEY, EnumShopEntry.PAN, EnumShopEntry.WRENCH, EnumShopEntry.CAPTURE_DEVICE);
+        @Comment("Bad pool")
+        public List<EnumShopEntry> badPool = List.of( EnumShopEntry.NOTE,
+                EnumShopEntry.FIRECRACKER, EnumShopEntry.MEGAPHONE);
         @Comment("Miss compensation coin")
         public int missCompensationCoin = 0;
     }
     public static class LichConfig {
-        @Comment("Basic role configuration.")
+        @Comment("Basic role configuration")
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         @Comment("Additional revive. Note the LICH can't revive when the number of alive killers is greater or equal to {Starting killer amount + this number}")
         public int additionalRevive = 1;
-        @Comment("Cooldown for the ability, in seconds.")
+        @Comment("Cooldown for the ability, in seconds")
         public int cooldown = 180;
-        @Comment("Range to activate ability.")
+        @Comment("Range to activate ability")
         public double range = 3.0;
         @Comment("The amount of coin revived player starts with")
         public int startingCoin = 75;
@@ -69,21 +78,21 @@ public class RoleConfig {
     }
     // Starry Express
     public static class StarryExpressRoles{
-        @Comment("Config options for MUZZLER.")
+        @Comment("Config options for MUZZLER")
         @Nest public MuzzlerConfig muzzlerConfig = new MuzzlerConfig();
 
         public static class MuzzlerConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
     }
 
     // Stupid Express
     public static class StupidExpressRoles{
-        @Comment("Config options for NECROMANCER, from Stupid Express.")
+        @Comment("Config options for NECROMANCER, from Stupid Express")
         @Nest public NecromancerConfig necromancerConfig = new NecromancerConfig();
 
-        @Comment("Config options for AVARICIOUS.")
+        @Comment("Config options for AVARICIOUS")
         @Nest public AvariciousConfig avariciousConfig = new AvariciousConfig();
 
         @Comment("Config options for AMNESIAC")
@@ -93,94 +102,94 @@ public class RoleConfig {
         @Nest public ThiefConfig thiefConfig = new ThiefConfig();
 
         public static class NecromancerConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
         public static class AvariciousConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
         public static class AmnesiacConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
         public static class ThiefConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
 
     }
     // Noelle's role
     public static class NoellesRoles{
-        @Comment("Config options for MORPHLING.")
+        @Comment("Config options for MORPHLING")
         @Nest public MorphlingConfig morphlingConfig = new MorphlingConfig();
 
-        @Comment("Config options for PHANTOM.")
+        @Comment("Config options for PHANTOM")
         @Nest public PhantomConfig phantomConfig = new PhantomConfig();
 
-        @Comment("Config options for SWAPPER.")
+        @Comment("Config options for SWAPPER")
         @Nest public SwapperConfig swapperConfig = new SwapperConfig();
 
-        @Comment("Config options for NOISE_MAKER.")
+        @Comment("Config options for NOISE_MAKER")
         @Nest public NoiseMakerConfig noiseMakerConfig = new NoiseMakerConfig();
 
-        @Comment("Config options for CORONER.")
+        @Comment("Config options for CORONER")
         @Nest public CoronerConfig coronerConfig = new CoronerConfig();
 
-        @Comment("Config options for CONDUCTOR.")
+        @Comment("Config options for CONDUCTOR")
         @Nest public ConductorConfig conductorConfig = new ConductorConfig();
 
-        @Comment("Config options for TRAPPER.")
+        @Comment("Config options for TRAPPER")
         @Nest public TrapperConfig trapperConfig = new TrapperConfig();
 
-        @Comment("Config options for MIMIC.")
+        @Comment("Config options for MIMIC")
         @Nest public MimicConfig mimicConfig = new MimicConfig();
 
-        @Comment("Config options for VULTURE.")
+        @Comment("Config options for VULTURE")
         @Nest public VultureConfig vultureConfig = new VultureConfig();
 
         public static class MorphlingConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
 
         public static class PhantomConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
 
         public static class SwapperConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
 
         public static class NoiseMakerConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
 
         public static class CoronerConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
 
         public static class ConductorConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
 
         public static class TrapperConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
 
         public static class MimicConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
 
         public static class VultureConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
     }
@@ -189,25 +198,25 @@ public class RoleConfig {
     // Kin's wathe
 
     public static class KinsWatheRoles{
-        @Comment("Config options for BODYMAKER.")
+        @Comment("Config options for BODYMAKER")
         @Nest public BodymakerConfig bodymakerConfig = new BodymakerConfig();
 
-        @Comment("Config options for CLEANER.")
+        @Comment("Config options for CLEANER")
         @Nest public CleanerConfig cleanerConfig = new CleanerConfig();
 
-        @Comment("Config options for HUNTER.")
+        @Comment("Config options for HUNTER")
         @Nest public HunterConfig hunterConfig = new HunterConfig();
 
-        @Comment("Config options for KIDNAPPER.")
+        @Comment("Config options for KIDNAPPER")
         @Nest public KidnapperConfig kidnapperConfig = new KidnapperConfig();
 
-        @Comment("Config options for DRUGMAKER.")
+        @Comment("Config options for DRUGMAKER")
         @Nest public DrugmakerConfig drugmakerConfig = new DrugmakerConfig();
 
-        @Comment("Config options for DETECTIVE.")
+        @Comment("Config options for DETECTIVE")
         @Nest public DetectiveConfig detectiveConfig = new DetectiveConfig();
 
-        @Comment("Config options for PHYSICIAN.")
+        @Comment("Config options for PHYSICIAN")
         @Nest public PhysicianConfig physicianConfig = new PhysicianConfig();
 
         @Comment("Config options for TECHNICIAN")
@@ -217,45 +226,45 @@ public class RoleConfig {
         @Nest public HackerConfig hackerConfig = new HackerConfig();
 
         public static class BodymakerConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
 
         public static class CleanerConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
 
         public static class HunterConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
 
         public static class KidnapperConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
 
         public static class DrugmakerConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
 
         public static class DetectiveConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
 
         public static class PhysicianConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
         public static class TechnicianConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
         public static class HackerConfig{
-            @Comment("Basic role configuration.")
+            @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
     }

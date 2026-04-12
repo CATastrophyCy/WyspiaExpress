@@ -193,7 +193,7 @@ public class WyspiaExpressRoles {
                         amount = startingItemAmount.get(i);
                     }
                     //
-                    ItemStack item = ShopUtil.fromEnumShopEntry(entry);
+                    ItemStack item = ShopUtil.fromEnumShopEntry(entry).getDefaultStack();
                     item.setCount(amount);
                     player.giveItemStack(item);
                 }
