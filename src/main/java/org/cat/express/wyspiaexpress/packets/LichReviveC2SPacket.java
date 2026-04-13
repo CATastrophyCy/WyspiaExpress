@@ -6,10 +6,13 @@ import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.wathe.compat.TrainVoicePlugin;
 import dev.doctor4t.wathe.entity.PlayerBodyEntity;
 import dev.doctor4t.wathe.game.GameFunctions;
+import dev.doctor4t.wathe.index.WatheItems;
 import dev.doctor4t.wathe.util.AnnounceWelcomePayload;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -59,16 +62,14 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
         ServerPlayerEntity player = context.player();
         context.server().execute(() -> {
 
-            GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(player.getWorld());
-            AbilityCooldownComponent abilityPlayerComponent = (AbilityCooldownComponent) AbilityCooldownComponent.KEY.get(player);
+            GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
+            AbilityCooldownComponent abilityPlayerComponent = AbilityCooldownComponent.KEY.get(player);
             LichReviveComponent reviveComponent = LichReviveComponent.KEY.get(player.getWorld());
             if (gameWorldComponent.isRole(player, WyspiaExpressRoles.LICH) && GameFunctions.isPlayerAliveAndSurvival(player)
                 && reviveComponent.getAvailableRevives() > 0 && !abilityPlayerComponent.isCooldown()) {
 
                 List<PlayerBodyEntity> playerBodyEntities = player.getWorld().getEntitiesByType(TypeFilter.equals(PlayerBodyEntity.class),
-                        player.getBoundingBox().expand(10), (playerBodyEntity -> {
-                    return playerBodyEntity.getUuid().equals(payload.playerBody());
-                }));
+                        player.getBoundingBox().expand(10), (playerBodyEntity -> playerBodyEntity.getUuid().equals(payload.playerBody())));
 
                 if (!playerBodyEntities.isEmpty()) {
                     // check if the selected body can be revived
@@ -86,6 +87,15 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
 
                     // revive player and give them the role
                     var selectedRole = roles.getFirst();
+                    // clear their hotbar of items thats not Key
+                    PlayerInventory inv = revived.getInventory();
+                    for (int i = 0; i < PlayerInventory.getHotbarSize(); i++) {
+                        ItemStack stack = inv.getStack(i);
+                        // remove any item thats not key
+                        if (!stack.isOf(WatheItems.KEY)) {
+                            player.getInventory().setStack(i, ItemStack.EMPTY);
+                        }
+                    }
                     TeleportTarget target = new TeleportTarget(player.getServerWorld(),player.getPos(), Vec3d.ZERO, body.getYaw(), body.getPitch(), TeleportTarget.NO_OP);
                     revived.teleportTo(target);
                     revived.changeGameMode(GameMode.ADVENTURE);
