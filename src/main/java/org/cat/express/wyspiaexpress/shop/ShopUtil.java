@@ -60,11 +60,12 @@ public class ShopUtil {
         if(FUN_BOX_RARE_POOL.isEmpty() || FUN_BOX_NORMAL_POOL.isEmpty()){
             initFunBoxPool();
         }
-        if(player.getWorld().getRandom().nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.missChance()) {
+        var random = player.getRandom();
+        if(random.nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.missChance()) {
             PlayerShopComponent.KEY.get(player).addToBalance(WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.missCompensationCoin());
             return; // loss the gamble
         }
-        if( player.getWorld().getRandom().nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.goodPoolChance()){
+        if( random.nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.goodPoolChance()){
             PlayerInventory inv = player.getInventory();
             Set<Item> hotbarItems = new HashSet<>();
             // Collect unique items from hotbar (slots 0-8)
@@ -79,13 +80,12 @@ public class ShopUtil {
                     .filter(item -> !hotbarItems.contains(item))
                     .toList();
             if(!filtered.isEmpty()) {
-                int random = player.getWorld().getRandom().nextInt(filtered.size());
-                giveItem(player, filtered.get(random));
+                giveItem(player, filtered.get(random.nextInt(filtered.size())));
                 return;
             }
         }
         // bad pool
-        Item item = FUN_BOX_NORMAL_POOL.get(player.getWorld().getRandom().nextInt(FUN_BOX_NORMAL_POOL.size()));
+        Item item = FUN_BOX_NORMAL_POOL.get(random.nextInt(FUN_BOX_NORMAL_POOL.size()));
         giveItem(player, item);
     }
 
@@ -137,7 +137,7 @@ public class ShopUtil {
     }
     private static void giveItem(@NotNull PlayerEntity player, Item item){
         if(item.equals(WatheItems.NOTE)){
-            player.giveItemStack(new ItemStack(WatheItems.NOTE, 4));
+            player.giveItemStack(new ItemStack(WatheItems.NOTE, 2));
         } else if (item == WatheItems.BLACKOUT) {
             PlayerShopComponent.useBlackout(player);
         } else if (item == WatheItems.PSYCHO_MODE) {
