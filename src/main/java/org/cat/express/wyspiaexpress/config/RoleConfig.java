@@ -225,6 +225,9 @@ public class RoleConfig {
         @Comment("Config options for HACKER")
         @Nest public HackerConfig hackerConfig = new HackerConfig();
 
+        @Comment("Config options for DREAMER")
+        @Nest public DreamerConfig dreamerConfig = new DreamerConfig();
+
         public static class BodymakerConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
@@ -264,6 +267,10 @@ public class RoleConfig {
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
         public static class HackerConfig{
+            @Comment("Basic role configuration")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+        public static class DreamerConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
