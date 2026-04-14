@@ -203,10 +203,7 @@ public class WyspiaExpressRoles {
     public static void registerStartingItems(){
         ModdedRoleAssigned.EVENT.register((player, role)->{
             var basicConfig = ROLES_BASIC_CONFIG.get(role);
-            // if its licensed villain then remove lockpick
-            if(role.equals(LICENSED_VILLAIN) && player.getInventory().getStack(1).isOf(WatheItems.LOCKPICK)){
-                player.getInventory().setStack(2,ItemStack.EMPTY);
-            }
+
             if(basicConfig != null){
 
                 List<EnumShopEntry> startingItems = basicConfig.items();
@@ -267,6 +264,7 @@ public class WyspiaExpressRoles {
         registerRoleBasicConfig(TRAPPER, WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.trapperConfig.basic);
         registerRoleBasicConfig(MIMIC, WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.mimicConfig.basic);
         registerRoleBasicConfig(VULTURE, WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.vultureConfig.basic);
+        registerRoleBasicConfig(EXECUTIONER, WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.executionerConfig.basic);
         // Kin's wathe roles
         registerRoleBasicConfig(BODYMAKER, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.bodymakerConfig.basic);
         registerRoleBasicConfig(CLEANER, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.cleanerConfig.basic);

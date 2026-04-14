@@ -158,6 +158,9 @@ public class RoleConfig {
         @Comment("Config options for VULTURE")
         @Nest public VultureConfig vultureConfig = new VultureConfig();
 
+        @Comment("Config options for EXECUTIONER")
+        @Nest public ExecutionerConfig executionerConfig = new ExecutionerConfig();
+
         public static class MorphlingConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
@@ -202,6 +205,12 @@ public class RoleConfig {
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
+
+        public static class ExecutionerConfig{
+            @Comment("Basic role configuration")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+
     }
 
 
