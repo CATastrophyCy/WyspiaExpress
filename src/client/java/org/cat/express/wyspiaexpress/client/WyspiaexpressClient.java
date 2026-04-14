@@ -19,6 +19,7 @@ import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.client.items.ItemToolTip;
 import org.cat.express.wyspiaexpress.client.roles.LichUtil;
+import org.cat.express.wyspiaexpress.client.roles.NoTargetAbilityUtil;
 import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
 import org.lwjgl.glfw.GLFW;
 
@@ -48,6 +49,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
             ItemToolTip.addItemtip(WyspiaExpressItems.FAKE_REVOLVER, itemStack, list);
             ItemToolTip.addItemtip(WyspiaExpressItems.FUN_BOX, itemStack, list);
             ItemToolTip.addItemtip(WyspiaExpressItems.MEGAPHONE, itemStack, list);
+            ItemToolTip.addItemtip(WyspiaExpressItems.OUTLAW_REVOLVER, itemStack, list);
         }));
     }
     private static void registerAbilityKey(){
@@ -69,6 +71,9 @@ public class WyspiaexpressClient implements ClientModInitializer {
                 Role role = gameWorld.getRole(client.player);
                 if(role == WyspiaExpressRoles.LICH){
                     LichUtil.sendLichPacket(client);
+                }
+                if(NoTargetAbilityUtil.isValid(role)){
+                    NoTargetAbilityUtil.sendPacket(client);
                 }
             }
         });

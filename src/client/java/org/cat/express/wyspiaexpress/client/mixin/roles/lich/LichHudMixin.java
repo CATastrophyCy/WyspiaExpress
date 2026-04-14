@@ -27,8 +27,8 @@ public abstract class LichHudMixin {
     public void wyspiaexpress$lichHud(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         var player =  MinecraftClient.getInstance().player;
         if(player == null) return;
-        GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(player.getWorld());
-        AbilityCooldownComponent abilityPlayerComponent = (AbilityCooldownComponent) AbilityCooldownComponent.KEY.get(player);
+        GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
+        AbilityCooldownComponent abilityPlayerComponent = AbilityCooldownComponent.KEY.get(player);
         if (gameWorldComponent.isRole(player, WyspiaExpressRoles.LICH) &&
                 GameFunctions.isPlayerAliveAndSurvival(player)) {
             LichReviveComponent component = LichReviveComponent.KEY.get(player.getWorld());

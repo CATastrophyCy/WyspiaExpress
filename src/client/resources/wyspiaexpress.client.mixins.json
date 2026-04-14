@@ -27,6 +27,7 @@
   },
   "mixins": [
     "roles.lich.LichHudMixin",
-    "roles.lich.LichTargetHudMixin"
+    "roles.lich.LichTargetHudMixin",
+    "roles.outlaw.OutlawHudMixin"
   ]
 }

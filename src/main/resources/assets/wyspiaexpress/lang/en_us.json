@@ -10,14 +10,17 @@
   "tip.wyspiaexpress.ability.lich.no_revive": "There is no available revive",
   "tip.wyspiaexpress.ability.lich.revive": "%s available revives",
 
-  "tip.wyspiaexpress.items.megaphone": "A body has been reported",
-  "tip.wyspiaexpress.items.megaphone_spectator": "A body has been reported by %s",
+  "tip.wyspiaexpress.items.megaphone": "A body has been reported!",
+  "tip.wyspiaexpress.items.megaphone_spectator": "A body has been reported by %s!",
 
   "hud.wyspiaexpress.lich.revive": "Press %s to revive",
   "item.wyspiaexpress.tp_ready": "Teleport to Ready Area",
 
   "item.wyspiaexpress.fake_revolver": "Fake Revolver",
-  "item.wyspiaexpress.fake_revolver.tooltip": "It's just a fake gun, only makes loud noises when fired.",
+  "item.wyspiaexpress.fake_revolver.tooltip": "\"Wha... what do you mean its not a real gun, I'll prove it now!\"",
+
+  "item.wyspiaexpress.outlaw_revolver": "Outlaw Revolver",
+  "item.wyspiaexpress.outlaw_revolver.tooltip": "You feel no remorse when shooting innocents with this revolver.\n It has a longer cooldown than normal revolver.\n The cooldown is increased if you miss your shot",
 
   "item.wyspiaexpress.fun_box": "\"Fun Box\"",
   "item.wyspiaexpress.fun_box.tooltip": "You wanna know whats in the box? BUY IT!",
@@ -27,6 +30,9 @@
 
   "announcement.role.wyspiaexpress.note_taker": "Amazing Note Taker",
   "announcement.goals.wyspiaexpress.note_taker": "Observe, and take notes. You are amazing and not binglus anymore",
+
+  "announcement.role.wyspiaexpress.outlaw": "The Outlaw",
+  "announcement.goals.wyspiaexpress.outlaw": "Blend in as a Vigilante and eliminate the civilians",
 
   "announcement.role.wyspiaexpress.edge_lord": "The Edgelord Delusional Cursed Assassin of Darkness and Coffee Addiction",
   "announcement.goals.wyspiaexpress.edge_lord": "Assassinate everyone in the darkness you manifest, embrace your inner edgelord, but be careful to not cut yourself.",
@@ -50,6 +56,11 @@
     "guidebook.role.title.wyspiaexpress:note_taker": "NOTES",
     "guidebook.role.description.wyspiaexpress:note_taker": "Legends says that this civilian was once called 'Awesome Binglus'.\n\nYou are amazing and makes sure everyone knows that with your notes",
 
+  "guidebook.role.wyspiaexpress:outlaw": "The Outlaw",
+    "guidebook.role.title.wyspiaexpress:outlaw": "...",
+    "guidebook.role.description.wyspiaexpress:outlaw": "People often wonder what law did The Outlaw break to receive such a name. Rumours says that he just thinks its cool to be called \"The Outlaw\" so he gave himself that name, just like how his friend Michael named himself \"The Maverick\".\n\n They spawn and can purchase an Outlaw Revolver, which doesn't drop when shooting an innocent. They could also instantly recharge the Revolver with their ability",
+
+
   "guidebook.role.wyspiaexpress:edge_lord": "The Edgelord Delusional Cursed Assassin of Darkness and Coffee Addiction",
     "guidebook.role.title.wyspiaexpress:edge_lord": "Assassination, Shadows and Coffee",
     "guidebook.role.description.wyspiaexpress:edge_lord": "The Edgelord Delusional Cursed Assassin of Darkness and Coffee Addiction has keen vision even in the deepest shadows \",I was born in the dark\", this alongside the Assassin's reduced cost blackout allows them to truly be a master of shadows. Just dont forget a coffee break between lapses of your curse and its darker impulses. Lastly be careful not to cut yourself on your own edge.",
@@ -68,5 +79,5 @@
 
   "guidebook.role.wyspiaexpress:vent_crawler": "Professional Vent Crawler",
     "guidebook.role.title.wyspiaexpress:vent_crawler": "Sus ඞ",
-    "guidebook.role.description.wyspiaexpress:vent_crawler": "Why are you venting? GUYS RED IS SUS !!!\n\n Gain 50% increased speed when crawling"
+    "guidebook.role.description.wyspiaexpress:vent_crawler": "Why are you venting? \nGUYS RED IS SUS !!!\n\n Gain 50% increased speed when crawling"
 }

@@ -13,6 +13,8 @@ import org.cat.express.wyspiaexpress.config.WyspiaExpressModifiersConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressServerConfig;
 import org.cat.express.wyspiaexpress.packets.LichReviveC2SPacket;
+import org.cat.express.wyspiaexpress.packets.NoTargetAbilityC2SPacket;
+import org.cat.express.wyspiaexpress.packets.OutlawRevolverC2SPacket;
 import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,5 +82,7 @@ public class WyspiaExpress implements ModInitializer {
     }
     private void registerPackets(){
         LichReviveC2SPacket.register();
+        OutlawRevolverC2SPacket.register();
+        NoTargetAbilityC2SPacket.register();
     }
 }

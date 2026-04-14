@@ -12,6 +12,8 @@ public class RoleConfig {
     @Nest public BanditConfig banditConfig = new BanditConfig();
     @Comment("Config options for NOTE_TAKER")
     @Nest public NoteTakerConfig noteTakerConfig = new NoteTakerConfig();
+    @Comment("Config options for OUTLAW")
+    @Nest public OutlawConfig outlawConfig = new OutlawConfig();
     @Comment("Config options for EDGE_LORD")
     @Nest public EdgeLordConfig edgeLordConfig = new EdgeLordConfig();
     @Comment("Config options for GAMBLER")
@@ -35,6 +37,14 @@ public class RoleConfig {
     public static class NoteTakerConfig {
         @Comment("Basic role configuration")
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+    }
+    public static class OutlawConfig {
+        @Comment("Basic role configuration")
+        @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        @Comment("Ability cooldown, in seconds")
+        public int cooldown = 90;
+        @Comment("Ability cost, in coins")
+        public int cost = 75;
     }
     public static class EdgeLordConfig {
         @Comment("Basic role configuration")

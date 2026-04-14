@@ -67,7 +67,15 @@ public class WyspiaExpressRoles {
             -1,
             true
     ));
-
+    public static Role OUTLAW = registerRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "outlaw"),
+            0xa3671d,
+            false,
+            true,
+            Role.MoodType.FAKE,
+            -1,
+            true
+    ));
     public static Role NOTE_TAKER = registerRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "note_taker"),
             0x9BFFA8,
@@ -222,6 +230,7 @@ public class WyspiaExpressRoles {
     public static void registerRoleConfigs(){
         // mine
         registerRoleBasicConfig(BANDIT, WyspiaExpress.ROLES_CONFIG.roleConfig.banditConfig.basic);
+        registerRoleBasicConfig(OUTLAW, WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.basic);
         registerRoleBasicConfig(NOTE_TAKER, WyspiaExpress.ROLES_CONFIG.roleConfig.noteTakerConfig.basic);
         registerRoleBasicConfig(EDGE_LORD,WyspiaExpress.ROLES_CONFIG.roleConfig.edgeLordConfig.basic);
         registerRoleBasicConfig(GAMBLER, WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.basic);

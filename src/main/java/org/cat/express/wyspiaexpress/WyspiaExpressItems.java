@@ -75,6 +75,7 @@ public class WyspiaExpressItems {
         // registerItemGroups
         registerItemGroup(FAKE_REVOLVER, WatheItems.EQUIPMENT_GROUP);
         registerItemGroup(MEGAPHONE, WatheItems.EQUIPMENT_GROUP);
+        registerItemGroup(OUTLAW_REVOLVER, WatheItems.EQUIPMENT_GROUP);
     }
     public static Item registerItem(Item item, String id) {
         Identifier itemID = Identifier.of(WyspiaExpress.MOD_ID, id);

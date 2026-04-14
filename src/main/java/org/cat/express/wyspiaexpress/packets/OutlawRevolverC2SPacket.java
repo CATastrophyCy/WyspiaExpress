@@ -5,6 +5,7 @@ import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheSounds;
 import dev.doctor4t.wathe.util.ShootMuzzleS2CPayload;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,6 +38,10 @@ public record OutlawRevolverC2SPacket(int target) implements CustomPayload {
     static {
         CODEC = PacketCodec.of(OutlawRevolverC2SPacket::write, OutlawRevolverC2SPacket::read);
     }
+    public static void register(){
+        PayloadTypeRegistry.playC2S().register(ID, CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(ID, OutlawRevolverC2SPacket::handle);
+    }
     public static void handle(@NotNull OutlawRevolverC2SPacket payload, @NotNull ServerPlayNetworking.Context context) {
         ServerPlayerEntity player = context.player();
         context.server().execute(() -> {
@@ -57,7 +62,7 @@ public record OutlawRevolverC2SPacket(int target) implements CustomPayload {
 
         });
     }
-    private static void setCooldown(ServerPlayerEntity player, int cooldown) {
+    public static void setCooldown(ServerPlayerEntity player, int cooldown) {
         if (!player.isCreative())
             WyspiaExpressItems.setItemCooldown(player, WyspiaExpressItems.OUTLAW_REVOLVER, null, cooldown);
     }
