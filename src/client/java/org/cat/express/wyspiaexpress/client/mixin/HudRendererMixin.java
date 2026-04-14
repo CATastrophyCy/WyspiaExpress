@@ -34,7 +34,7 @@ public abstract class HudRendererMixin {
 
         if (depressedTick > 0 && WyspiaExpress.SERVER_CONFIG.depressionKilling()) {
             int depressedTimerTick = WyspiaExpress.SERVER_CONFIG.depressedTimer() * 20 * 2;
-            renderHeatBar(context, depressedTick, depressedTimerTick);
+            renderDepressionBar(context, depressedTick, depressedTimerTick);
         }
 
         if (freezeTick > 0 && WyspiaExpress.SERVER_CONFIG.freeze()) {
@@ -44,7 +44,7 @@ public abstract class HudRendererMixin {
     }
 
     @Unique
-    private void renderHeatBar(DrawContext context, float currentValue, float maxValue) {
+    private void renderDepressionBar(DrawContext context, float currentValue, float maxValue) {
         float percent = Math.clamp(currentValue / maxValue, 0, 1);
 
         if (percent <= 0) return;
@@ -54,17 +54,25 @@ public abstract class HudRendererMixin {
 
         // Bar dimensions and positioning (below MoodRenderer which is around y=20)
         int x = 26;
-        int y = 35;
+        int y = 32;
         int maxWidth = 100;
-        int height = 3;
+        int height = 5;
+
+        // Border and Background colors
+        int borderColor = 0xFF1A002A; // Solid deep dark purple
+        int bgColor = 0x990D0015;     // Semi-transparent dark purple track
+
+        context.fill(x - 1, y - 1, x + maxWidth + 1, y + height + 1, borderColor);
+
+        context.fill(x, y, x + maxWidth, y + height, bgColor);
 
         int fillWidth = (int) (maxWidth * visualPercent);
         if (fillWidth <= 0) return;
 
 
-        int red = 255;
-        int green = (int) (200 * (1f - percent));
-        int blue = (int) (200 * (1f - percent));
+        int red = (int) (255 * (1f - percent) + 75 * percent);
+        int green = (int) (255 * (1f - percent) + 0 * percent);
+        int blue = (int) (255 * (1f - percent) + 130 * percent);
         int barColor = 0xFF000000 | (red << 16) | (green << 8) | blue;
 
         context.fill(x, y, x + fillWidth, y + height, barColor);                  // Left to Right Fill
@@ -81,12 +89,20 @@ public abstract class HudRendererMixin {
 
         // Bar dimensions and positioning (Mid-Left)
         int x = 10;
-        int maxHeight = 80;
-        int width = 4;
+        int maxHeight = 120;
+        int width = 5;
 
         // Vertically centered on the left
         int yBottom = screenHeight / 2 + (maxHeight / 2);
         int yTopBound = yBottom - maxHeight;
+
+        // Border and Background colors
+        int borderColor = 0xFF000B1A; // Solid deep navy blue
+        int bgColor = 0x9900050D;     // Semi-transparent dark navy track
+
+        context.fill(x - 1, yTopBound - 1, x + width + 1, yBottom + 1, borderColor);
+
+        context.fill(x, yTopBound, x + width, yBottom, bgColor);
 
         int fillHeight = (int) (maxHeight * visualPercent);
         if (fillHeight <= 0) return;
@@ -94,10 +110,9 @@ public abstract class HudRendererMixin {
         // Bottom-to-up rendering calculation
         int fillTopY = yBottom - fillHeight;
 
-        // Gradient: Less blue (pale/cyan) to more and more freezing blue
-        int red = (int) (180 * (1f - percent));
-        int green = (int) (240 * (1f - percent) + 100 * percent); // Drops towards a deeper tint
-        int blue = 255;
+        int red = (int) (255 * (1f - percent) + 0 * percent);
+        int green = (int) (180 * (1f - percent) + 200 * percent);
+        int blue = (int) (50 * (1f - percent) + 255 * percent);
         int barColor = 0xFF000000 | (red << 16) | (green << 8) | blue;
 
         context.fill(x, fillTopY, x + width, yBottom, barColor);                    // Bottom to Top Fill
