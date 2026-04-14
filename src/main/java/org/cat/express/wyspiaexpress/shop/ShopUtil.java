@@ -281,6 +281,10 @@ public class ShopUtil {
                 break;
             case MEGAPHONE:
                 item = WyspiaExpressItems.MEGAPHONE;
+                break;
+            case OUTLAW_REVOLVER:
+                item = WyspiaExpressItems.OUTLAW_REVOLVER;
+                break;
             default:
         }
         return item;

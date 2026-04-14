@@ -19,6 +19,7 @@ import org.agmas.noellesroles.ModItems;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
 import org.cat.express.wyspiaexpress.items.FakeRevolverItem;
 import org.cat.express.wyspiaexpress.items.MegaphoneItem;
+import org.cat.express.wyspiaexpress.items.OutlawRevolverItem;
 import org.cat.express.wyspiaexpress.items.TpReadyItem;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
@@ -38,12 +39,12 @@ public class WyspiaExpressItems {
     public static final Item FUN_BOX = registerItem( new Item(new Item.Settings()), "fun_box");
     public static final Item TP_READY = registerItem(new TpReadyItem(new Item.Settings().maxCount(1)), "tp_ready");
     public static final Item MEGAPHONE = registerItem(new MegaphoneItem(new Item.Settings().maxCount(1)), "megaphone");
-
+    public static final Item OUTLAW_REVOLVER = registerItem(new OutlawRevolverItem(new Item.Settings().maxCount(1)), "outlaw_revolver");
     public static void registerItemConfig(){
         // custom items
         ITEMS_BASIC_CONFIG.put(FAKE_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.basic);
         ITEMS_BASIC_CONFIG.put(MEGAPHONE, WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.basic);
-
+        ITEMS_BASIC_CONFIG.put(OUTLAW_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.outlawRevolverConfig.basic);
         // wathe
         ITEMS_BASIC_CONFIG.put(WatheItems.REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.revolverConfig.basic);
         ITEMS_BASIC_CONFIG.put(WatheItems.KNIFE, WyspiaExpress.ITEMS_CONFIG.itemConfig.knifeConfig.basic);
@@ -86,7 +87,12 @@ public class WyspiaExpressItems {
             if (hand != null) player.getStackInHand(hand).decrement(1);
         }
     }
-
+    public static void setItemCooldown(@NotNull PlayerEntity player, @NotNull Item item, Hand hand, int seconds) {
+        if (GameFunctions.isPlayerAliveAndSurvival(player)) {
+            player.getItemCooldownManager().set(item, GameConstants.getInTicks(0,seconds));
+            if (hand != null) player.getStackInHand(hand).decrement(1);
+        }
+    }
     public static void registerItemCooldown(Item item, int minutes, int seconds) {
         GameConstants.ITEM_COOLDOWNS.put(item, GameConstants.getInTicks(minutes, seconds));
     }
@@ -120,7 +126,7 @@ public class WyspiaExpressItems {
         // mine
         registerItemCooldown(FAKE_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.cooldown());
         registerItemCooldown(MEGAPHONE, WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.cooldown());
-
+        registerItemCooldown(OUTLAW_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.outlawRevolverConfig.cooldown());
         // wathe
         registerItemCooldown(WatheItems.REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.revolverConfig.cooldown());
         registerItemCooldown(WatheItems.KNIFE, WyspiaExpress.ITEMS_CONFIG.itemConfig.knifeConfig.cooldown());

@@ -67,7 +67,6 @@ public abstract class HudRendererMixin {
         int blue = (int) (200 * (1f - percent));
         int barColor = 0xFF000000 | (red << 16) | (green << 8) | blue;
 
-        context.fill(x - 1, y - 1, x + maxWidth + 1, y + height + 1, 0x60000000); // Background outline
         context.fill(x, y, x + fillWidth, y + height, barColor);                  // Left to Right Fill
     }
 
@@ -101,7 +100,6 @@ public abstract class HudRendererMixin {
         int blue = 255;
         int barColor = 0xFF000000 | (red << 16) | (green << 8) | blue;
 
-        context.fill(x - 1, yTopBound - 1, x + width + 1, yBottom + 1, 0x60000000); // Background outline
         context.fill(x, fillTopY, x + width, yBottom, barColor);                    // Bottom to Top Fill
     }
 }

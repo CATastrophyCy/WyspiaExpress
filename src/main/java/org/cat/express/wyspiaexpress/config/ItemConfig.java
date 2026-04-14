@@ -19,6 +19,9 @@ public class ItemConfig {
     @Comment("Configuration for MEGAPHONE")
     @Nest public MegaphoneConfig megaphoneConfig = new MegaphoneConfig();
 
+    @Comment("Configuration for OUTLAW_REVOLVER")
+    @Nest public  OutlawRevolverConfig outlawRevolverConfig = new OutlawRevolverConfig();
+
     // wathe
     @Comment("Configuration for REVOLVER")
     @Nest public RevolverConfig revolverConfig = new RevolverConfig();
@@ -91,6 +94,14 @@ public class ItemConfig {
         public int duration = 60;
         @Comment("Reporting sound volume")
         public float volume = 1.0f;
+    }
+    public static class OutlawRevolverConfig{
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds, minimum 0")
+        public int cooldown = 60;
+        @Comment("Cooldown when hitting nothing, in seconds, minimum 0")
+        public int missCooldown = 90;
     }
     // wathe
     public static class RevolverConfig {

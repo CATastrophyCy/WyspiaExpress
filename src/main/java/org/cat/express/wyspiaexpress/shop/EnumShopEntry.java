@@ -43,6 +43,7 @@ public enum EnumShopEntry {
     ICON_POTION_EFFECT_REFRESH,
     // custom
     FUN_BOX,
-    MEGAPHONE
+    MEGAPHONE,
+    OUTLAW_REVOLVER,
 }
 
