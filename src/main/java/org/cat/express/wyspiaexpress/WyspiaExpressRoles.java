@@ -7,6 +7,7 @@ import java.util.List;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.MapVariablesWorldComponent;
+import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.wathe.index.WatheItems;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.component.DataComponentTypes;
@@ -32,6 +33,7 @@ import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 
+import static dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts.registerRoleAnnouncementText;
 import static org.BsXinQin.kinswathe.KinsWatheRoles.*;
 import static org.agmas.noellesroles.Noellesroles.*;
 import static org.aussiebox.starexpress.StarryExpressRoles.MUZZLER;
@@ -42,7 +44,7 @@ public class WyspiaExpressRoles {
 
     public static void init() {
         registerRoleConfigs();
-
+        registerAnnouncements();
         registerRoleAssigned();
         registerModifierAssigned();
         limitRoleSpawn();
@@ -112,7 +114,7 @@ public class WyspiaExpressRoles {
             -1,
             true
     ));
-    public static Role LICH_GHOUL = registerRole(new Role(
+    public static Role LICH_GHOUL = registerNonMurderRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "lich_ghoul"),
             0x5d3954,
             false,
@@ -121,6 +123,10 @@ public class WyspiaExpressRoles {
             600,
             true
     ));
+    // for non murder roles you need to manually add the announcement, I think
+    public static RoleAnnouncementTexts.RoleAnnouncementText LICH_GHOUL_ANNOUNCEMENT_TEXT = new RoleAnnouncementTexts.RoleAnnouncementText(
+            LICH_GHOUL.identifier().toTranslationKey(),
+            LICH_GHOUL.color());
 
     public static Modifier EMPLOYEE = registerModifier(new Modifier(
             Identifier.of(WyspiaExpress.MOD_ID, "employee"),
@@ -136,6 +142,9 @@ public class WyspiaExpressRoles {
 
     private static void registerRoleBasicConfig(Role role, WyspiaExpressRolesConfig.RoleBasicConfig config) {
         ROLES_BASIC_CONFIG.put(role, config);
+    }
+    private static void registerAnnouncements(){
+        registerRoleAnnouncementText(LICH_GHOUL_ANNOUNCEMENT_TEXT);
     }
     public static Role registerRole(Role role) {
         WatheRoles.registerRole(role);
@@ -194,7 +203,12 @@ public class WyspiaExpressRoles {
     public static void registerStartingItems(){
         ModdedRoleAssigned.EVENT.register((player, role)->{
             var basicConfig = ROLES_BASIC_CONFIG.get(role);
+            // if its licensed villain then remove lockpick
+            if(role.equals(LICENSED_VILLAIN) && player.getInventory().getStack(1).isOf(WatheItems.LOCKPICK)){
+                player.getInventory().setStack(2,ItemStack.EMPTY);
+            }
             if(basicConfig != null){
+
                 List<EnumShopEntry> startingItems = basicConfig.items();
                 List<Integer> startingItemAmount = basicConfig.itemAmount();
                 for(int i = 0; i < startingItems.size(); i++) {
