@@ -59,7 +59,6 @@ public record OutlawRevolverC2SPacket(int target) implements CustomPayload {
                 GameFunctions.killPlayer(target, true, player, GameConstants.DeathReasons.GUN);
                 setCooldown(player, WyspiaExpress.ITEMS_CONFIG.itemConfig.outlawRevolverConfig.cooldown());
             }
-            player.getWorld().playSound(null, player.getX(), player.getEyeY(), player.getZ(), WatheSounds.ITEM_REVOLVER_SHOOT, SoundCategory.PLAYERS, 5f, 1f + player.getRandom().nextFloat() * .1f - .05f);
 
             for (ServerPlayerEntity tracking : PlayerLookup.tracking(player))
                 ServerPlayNetworking.send(tracking, new ShootMuzzleS2CPayload(player.getUuidAsString()));
