@@ -50,6 +50,8 @@ public record OutlawRevolverC2SPacket(int target) implements CustomPayload {
             if (player.getItemCooldownManager().isCoolingDown(mainHandStack.getItem())) return;
 
             player.getWorld().playSound(null, player.getX(), player.getEyeY(), player.getZ(), WatheSounds.ITEM_REVOLVER_CLICK, SoundCategory.PLAYERS, 0.5f, 1f + player.getRandom().nextFloat() * .1f - .05f);
+            player.getWorld().playSound(null, player.getX(), player.getEyeY(), player.getZ(), WatheSounds.ITEM_REVOLVER_SHOOT, SoundCategory.PLAYERS, 5f, 1f + player.getRandom().nextFloat() * .1f - .05f);
+
             if (!(player.getServerWorld().getEntityById(payload.target()) instanceof @NotNull PlayerEntity target) || target.distanceTo(player) > 15.0F) {
                 setCooldown(player, WyspiaExpress.ITEMS_CONFIG.itemConfig.outlawRevolverConfig.missCooldown());;
             }
@@ -57,6 +59,8 @@ public record OutlawRevolverC2SPacket(int target) implements CustomPayload {
                 GameFunctions.killPlayer(target, true, player, GameConstants.DeathReasons.GUN);
                 setCooldown(player, WyspiaExpress.ITEMS_CONFIG.itemConfig.outlawRevolverConfig.cooldown());
             }
+            player.getWorld().playSound(null, player.getX(), player.getEyeY(), player.getZ(), WatheSounds.ITEM_REVOLVER_SHOOT, SoundCategory.PLAYERS, 5f, 1f + player.getRandom().nextFloat() * .1f - .05f);
+
             for (ServerPlayerEntity tracking : PlayerLookup.tracking(player))
                 ServerPlayNetworking.send(tracking, new ShootMuzzleS2CPayload(player.getUuidAsString()));
             ServerPlayNetworking.send(player, new ShootMuzzleS2CPayload(player.getUuidAsString()));
