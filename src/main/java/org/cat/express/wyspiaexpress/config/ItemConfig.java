@@ -106,7 +106,7 @@ public class ItemConfig {
         @Comment("Enable sound")
         public boolean enableSound = false;
         @Comment("Countdown, in ticks, before you can remove the tape")
-        public int removeCountdow = 100;
+        public int removeCountdown = 100;
     }
     public static class OutlawRevolverConfig{
         @Comment("Basic item configuration")

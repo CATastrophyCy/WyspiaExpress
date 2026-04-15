@@ -39,20 +39,21 @@ public class StarryExpressMixin {
             if (StarryExpress.CONFIG.muzzlerConfig.tapeTearCheckCount() == 0 || !player.getMainHandStack().isEmpty()) return ActionResult.PASS;
 
             SilenceComponent victimSilence = SilenceComponent.KEY.get(victim);
-            if (!victimSilence.isSilenced() || victimSilence.getSilencedTicks() <= WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.removeCountdow()
+            if (!victimSilence.isSilenced() || victimSilence.getSilencedTicks() <= WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.removeCountdown()
                     || SilenceComponent.KEY.get(player).isSilenced()) return ActionResult.PASS;
 
             victimSilence.setTearChecks(victimSilence.getTearChecks() + 1);
             victimSilence.sync();
             victim.playSound(ModSounds.ITEM_TAPE_APPLY, 1.0F, 2.0F);
 
-            if (victimSilence.getTearChecks() >= StarryExpress.CONFIG.muzzlerConfig.tapeTearCheckCount()) {
-                victimSilence.reset();
-            }
+
             PlayerMoodComponent victimMood = PlayerMoodComponent.KEY.get(victim);
             victimMood.setMood(victimMood.getMood() - StarryExpress.CONFIG.muzzlerConfig.tapeTearMoodChange());
             if (victimMood.isLowerThanDepressed() && StarryExpress.CONFIG.muzzlerConfig.killIfCheckedAtZero()) {
-                GameFunctions.killPlayer(victim, true, victim.getWorld().getPlayerByUuid(victimSilence.getSilencer()), StarryExpressConstants.SILENCED_TAPE_REMOVED_DEATH_REASON);
+                GameFunctions.killPlayer(victim, true, level.getPlayerByUuid(victimSilence.getSilencer()), StarryExpressConstants.SILENCED_TAPE_REMOVED_DEATH_REASON);
+            }
+            if (victimSilence.getTearChecks() >= StarryExpress.CONFIG.muzzlerConfig.tapeTearCheckCount()) {
+                victimSilence.reset();
             }
             return ActionResult.SUCCESS;
         });
