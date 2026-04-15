@@ -19,6 +19,9 @@ public class ItemConfig {
     @Comment("Configuration for MEGAPHONE")
     @Nest public MegaphoneConfig megaphoneConfig = new MegaphoneConfig();
 
+    @Comment("Configuration for TAPE")
+    @Nest public TapeConfig tapeConfig = new TapeConfig();
+
     @Comment("Configuration for OUTLAW_REVOLVER")
     @Nest public  OutlawRevolverConfig outlawRevolverConfig = new OutlawRevolverConfig();
 
@@ -94,6 +97,14 @@ public class ItemConfig {
         public int duration = 60;
         @Comment("Reporting sound volume")
         public float volume = 1.0f;
+    }
+    public static class TapeConfig{
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds, minimum 0")
+        public int cooldown = 30;
+        @Comment("Enable sound")
+        public boolean enableSound = false;
     }
     public static class OutlawRevolverConfig{
         @Comment("Basic item configuration")

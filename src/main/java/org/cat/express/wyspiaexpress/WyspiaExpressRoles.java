@@ -249,6 +249,7 @@ public class WyspiaExpressRoles {
         registerRoleBasicConfig(LICH_GHOUL, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.ghoulConfig.basic);
         // Starry Express roles
         registerRoleBasicConfig(MUZZLER, WyspiaExpress.ROLES_CONFIG.roleConfig.starryExpress.muzzlerConfig.basic);
+        registerRoleBasicConfig(STARSTRUCK, WyspiaExpress.ROLES_CONFIG.roleConfig.starryExpress.starstruckConfig.basic);
         // Stupid Express roles
         registerRoleBasicConfig(AVARICIOUS, WyspiaExpress.ROLES_CONFIG.roleConfig.stupidExpress.avariciousConfig.basic);
         registerRoleBasicConfig(NECROMANCER, WyspiaExpress.ROLES_CONFIG.roleConfig.stupidExpress.necromancerConfig.basic);

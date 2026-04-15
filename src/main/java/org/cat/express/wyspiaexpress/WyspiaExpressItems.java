@@ -17,10 +17,7 @@ import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.agmas.noellesroles.ModItems;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
-import org.cat.express.wyspiaexpress.items.FakeRevolverItem;
-import org.cat.express.wyspiaexpress.items.MegaphoneItem;
-import org.cat.express.wyspiaexpress.items.OutlawRevolverItem;
-import org.cat.express.wyspiaexpress.items.TpReadyItem;
+import org.cat.express.wyspiaexpress.items.*;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 
@@ -40,11 +37,14 @@ public class WyspiaExpressItems {
     public static final Item TP_READY = registerItem(new TpReadyItem(new Item.Settings().maxCount(1)), "tp_ready");
     public static final Item MEGAPHONE = registerItem(new MegaphoneItem(new Item.Settings().maxCount(1)), "megaphone");
     public static final Item OUTLAW_REVOLVER = registerItem(new OutlawRevolverItem(new Item.Settings().maxCount(1)), "outlaw_revolver");
+    public static final Item TAPE = registerItem(new TapeItem(new Item.Settings().maxCount(1)), "tape");
+
     public static void registerItemConfig(){
         // custom items
         ITEMS_BASIC_CONFIG.put(FAKE_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.basic);
         ITEMS_BASIC_CONFIG.put(MEGAPHONE, WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.basic);
         ITEMS_BASIC_CONFIG.put(OUTLAW_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.outlawRevolverConfig.basic);
+        ITEMS_BASIC_CONFIG.put(TAPE, WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.basic);
         // wathe
         ITEMS_BASIC_CONFIG.put(WatheItems.REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.revolverConfig.basic);
         ITEMS_BASIC_CONFIG.put(WatheItems.KNIFE, WyspiaExpress.ITEMS_CONFIG.itemConfig.knifeConfig.basic);
@@ -76,6 +76,7 @@ public class WyspiaExpressItems {
         registerItemGroup(FAKE_REVOLVER, WatheItems.EQUIPMENT_GROUP);
         registerItemGroup(MEGAPHONE, WatheItems.EQUIPMENT_GROUP);
         registerItemGroup(OUTLAW_REVOLVER, WatheItems.EQUIPMENT_GROUP);
+        registerItemGroup(TAPE, WatheItems.EQUIPMENT_GROUP);
     }
     public static Item registerItem(Item item, String id) {
         Identifier itemID = Identifier.of(WyspiaExpress.MOD_ID, id);
@@ -128,6 +129,7 @@ public class WyspiaExpressItems {
         registerItemCooldown(FAKE_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.cooldown());
         registerItemCooldown(MEGAPHONE, WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.cooldown());
         registerItemCooldown(OUTLAW_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.outlawRevolverConfig.cooldown());
+        registerItemCooldown(TAPE, WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.cooldown());
         // wathe
         registerItemCooldown(WatheItems.REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.revolverConfig.cooldown());
         registerItemCooldown(WatheItems.KNIFE, WyspiaExpress.ITEMS_CONFIG.itemConfig.knifeConfig.cooldown());

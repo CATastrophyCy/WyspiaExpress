@@ -24,7 +24,6 @@ import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.BsXinQin.kinswathe.roles.hacker.HackerComponent;
 import org.BsXinQin.kinswathe.roles.technician.TechnicianComponent;
 import org.agmas.noellesroles.ModItems;
-import org.aussiebox.starexpress.item.StarryExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.config.ShopConfig;
@@ -197,9 +196,8 @@ public class ShopUtil {
             case NOTE:
                 item = WatheItems.NOTE;
                 break;
-            // Starryexpress
             case TAPE:
-                item =  StarryExpressItems.TAPE;
+                item =  WyspiaExpressItems.TAPE;
                 break;
             // Noelle's Roles
             case FAKE_KNIFE:
