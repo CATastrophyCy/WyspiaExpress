@@ -39,7 +39,8 @@ public class StarryExpressMixin {
             if (StarryExpress.CONFIG.muzzlerConfig.tapeTearCheckCount() == 0 || !player.getMainHandStack().isEmpty()) return ActionResult.PASS;
 
             SilenceComponent victimSilence = SilenceComponent.KEY.get(victim);
-            if (!victimSilence.isSilenced() || victimSilence.getSilencedTicks() <= 20 || SilenceComponent.KEY.get(player).isSilenced()) return ActionResult.PASS;
+            if (!victimSilence.isSilenced() || victimSilence.getSilencedTicks() <= WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.removeCountdow()
+                    || SilenceComponent.KEY.get(player).isSilenced()) return ActionResult.PASS;
 
             victimSilence.setTearChecks(victimSilence.getTearChecks() + 1);
             victimSilence.sync();
