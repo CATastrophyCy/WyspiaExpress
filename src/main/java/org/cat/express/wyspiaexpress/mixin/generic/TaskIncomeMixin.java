@@ -1,4 +1,4 @@
-package org.cat.express.wyspiaexpress.mixin;
+package org.cat.express.wyspiaexpress.mixin.generic;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;

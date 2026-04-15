@@ -1,4 +1,4 @@
-package org.cat.express.wyspiaexpress.mixin;
+package org.cat.express.wyspiaexpress.mixin.generic;
 
 import dev.doctor4t.wathe.api.event.AllowPlayerDeath;
 import dev.doctor4t.wathe.game.GameFunctions;

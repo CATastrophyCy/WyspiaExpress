@@ -91,9 +91,22 @@ public class RoleConfig {
         @Comment("Config options for MUZZLER")
         @Nest public MuzzlerConfig muzzlerConfig = new MuzzlerConfig();
 
+        @Comment("Config options for STARSTRUCK")
+        @Nest public StarstruckConfig starstruckConfig = new StarstruckConfig();
+
         public static class MuzzlerConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+        public static class StarstruckConfig{
+            @Comment("Basic role configuration")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+            @Comment("Enable ability sound")
+            public boolean enableAbilitySound = false;
+            @Comment("Enable ability particle effects")
+            @Nest public boolean enableAbilityParticleEffects = false;
+            @Comment("Enable persistent particle effects during ability")
+            public boolean enablePersistentParticleEffects = false;
         }
     }
 

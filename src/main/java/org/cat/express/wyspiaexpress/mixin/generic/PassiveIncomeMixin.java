@@ -1,4 +1,5 @@
-package org.cat.express.wyspiaexpress.mixin;
+package org.cat.express.wyspiaexpress.mixin.generic;
+
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.doctor4t.wathe.api.Role;

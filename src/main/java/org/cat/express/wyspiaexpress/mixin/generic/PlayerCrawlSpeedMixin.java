@@ -1,4 +1,4 @@
-package org.cat.express.wyspiaexpress.mixin;
+package org.cat.express.wyspiaexpress.mixin.generic;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.entity.EntityType;
