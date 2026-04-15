@@ -31,7 +31,6 @@ public class OutlawRevolverItem extends Item {
         ItemStack stack = user.getStackInHand(hand);
         if (user.getItemCooldownManager().isCoolingDown(this)) return TypedActionResult.fail(stack);
 
-
         if (world.isClient) {
             HitResult hitResult = ProjectileUtil.getCollision(user, entity -> entity instanceof @NotNull PlayerEntity target && GameFunctions.isPlayerAliveAndSurvival(target), 15.0F);
 
