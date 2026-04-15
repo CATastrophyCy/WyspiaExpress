@@ -13,6 +13,7 @@
     "LoverCrashMixin",
     "ScreenAccessor",
     "ShopMixin",
+    "NoTargetAbilityHudMixin",
     "items.fakeRevolver.FakeRevolverHoldingMixin",
     "items.fakeRevolver.FakeRevolverMixin",
     "items.fakeRevolver.OutlawRevolverHoldingMixin",
@@ -27,7 +28,6 @@
   },
   "mixins": [
     "roles.lich.LichHudMixin",
-    "roles.lich.LichTargetHudMixin",
-    "roles.outlaw.OutlawHudMixin"
+    "roles.lich.LichTargetHudMixin"
   ]
 }
