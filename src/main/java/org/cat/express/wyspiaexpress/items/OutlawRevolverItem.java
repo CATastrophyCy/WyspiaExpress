@@ -31,22 +31,24 @@ public class OutlawRevolverItem extends Item {
         ItemStack stack = user.getStackInHand(hand);
         if (user.getItemCooldownManager().isCoolingDown(this)) return TypedActionResult.fail(stack);
 
-        user.playSound(WatheSounds.ITEM_REVOLVER_SHOOT,5f, 1f + user.getRandom().nextFloat() * .1f - .05f);
+
         if (world.isClient) {
             HitResult hitResult = ProjectileUtil.getCollision(user, entity -> entity instanceof @NotNull PlayerEntity target && GameFunctions.isPlayerAliveAndSurvival(target), 15.0F);
 
-            if (hitResult instanceof @NotNull EntityHitResult entityHitResult) {
-                Entity target = entityHitResult.getEntity();
-                try {
-                    Class<?> networkingClass = Class.forName("net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking");
-                    Method getMethod = networkingClass.getMethod("send", net.minecraft.network.packet.CustomPayload.class);
+            try {
+                Class<?> networkingClass = Class.forName("net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking");
+                Method getMethod = networkingClass.getMethod("send", net.minecraft.network.packet.CustomPayload.class);
+                if (hitResult instanceof @NotNull EntityHitResult entityHitResult) {
+                    Entity target = entityHitResult.getEntity();
                     getMethod.invoke(null, new OutlawRevolverC2SPacket(target.getId()));
-                } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | NoSuchMethodException reason) {
-                    WyspiaExpress.LOGGER.warn("Failed to send OutlawRevolverC2SPacket\t\n Reason {}", reason.getMessage());
                 }
-            } else {
-                WyspiaExpressItems.setItemCooldown(user, WyspiaExpressItems.OUTLAW_REVOLVER, null, WyspiaExpress.ITEMS_CONFIG.itemConfig.outlawRevolverConfig.missCooldown());
+                else{
+                    getMethod.invoke(null, new OutlawRevolverC2SPacket(-1));
+                }
+            } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | NoSuchMethodException reason) {
+                WyspiaExpress.LOGGER.warn("Failed to send OutlawRevolverC2SPacket\t\n Reason {}", reason.getMessage());
             }
+
             user.setPitch(user.getPitch() - 4);
             RevolverItem.spawnHandParticle();
         }
