@@ -13,6 +13,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.math.Vec3d;
+import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.agmas.noellesroles.client.NoellesrolesClient;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
@@ -22,6 +24,7 @@ import org.cat.express.wyspiaexpress.client.roles.LichUtil;
 import org.cat.express.wyspiaexpress.client.roles.NoTargetAbilityUtil;
 import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
 import org.lwjgl.glfw.GLFW;
+import wathe_blood.Weapons;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -70,6 +73,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
             if (abilityBind.isPressed()) {
                 GameWorldComponent gameWorld = GameWorldComponent.KEY.get(MinecraftClient.getInstance().player.getWorld());
                 Role role = gameWorld.getRole(client.player);
+                if(role == null) return;
                 if(role == WyspiaExpressRoles.LICH){
                     LichUtil.sendLichPacket(client);
                 }
@@ -78,5 +82,9 @@ public class WyspiaexpressClient implements ClientModInitializer {
                 }
             }
         });
+    }
+    private static void registerItemsBlood(){
+        wathe_blood.Weapons.addWeapon(WyspiaExpressItems.OUTLAW_REVOLVER, 0.3, 1, 5, 7, new Vec3d(0.5, 0.5, 0.5));
+        wathe_blood.Weapons.addWeapon(KinsWatheItems.HUNTING_KNIFE, 1.0F, 0.3, 7, 8, new Vec3d(0.3, 0.3, 0.3));
     }
 }

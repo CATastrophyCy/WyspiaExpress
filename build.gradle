@@ -75,7 +75,7 @@ dependencies {
     modApi "maven.modrinth:stupid-express:${project.stupid_express_version}"
     modApi "maven.modrinth:kinswathe:${project.kins_wathe_version}"
     modApi "maven.modrinth:starexpress:${project.starexpress_version}"
-
+    modApi "maven.modrinth:wathe-blood:${project.wathe_blood_version}"
     // dependency of harpymodloader
     modImplementation "dev.isxander:yet-another-config-lib:3.8.0+1.21.1-fabric"
 
