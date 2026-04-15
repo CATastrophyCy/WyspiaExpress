@@ -23,7 +23,6 @@ import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.TeleportTarget;
-import org.agmas.harpymodloader.Harpymodloader;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
@@ -61,7 +60,6 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
     public static void handle(@NotNull LichReviveC2SPacket payload, @NotNull ServerPlayNetworking.Context context) {
         ServerPlayerEntity player = context.player();
         context.server().execute(() -> {
-
             GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
             AbilityCooldownComponent abilityPlayerComponent = AbilityCooldownComponent.KEY.get(player);
             LichReviveComponent reviveComponent = LichReviveComponent.KEY.get(player.getWorld());

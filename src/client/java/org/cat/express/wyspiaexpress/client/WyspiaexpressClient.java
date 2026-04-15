@@ -34,6 +34,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         registerItemToolTips();
+        registerItemsBlood();
         registerAbilityKey();
         registerAbilityPacket();
         ClientLoginNetworking.registerGlobalReceiver(
@@ -84,7 +85,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
         });
     }
     private static void registerItemsBlood(){
-        wathe_blood.Weapons.addWeapon(WyspiaExpressItems.OUTLAW_REVOLVER, 0.3, 1, 5, 7, new Vec3d(0.5, 0.5, 0.5));
+        wathe_blood.Weapons.addWeapon(WyspiaExpressItems.OUTLAW_REVOLVER, 3.0F, 1.0F, 9, 12, new Vec3d(0.5F, 0.5F, 0.5F));
         wathe_blood.Weapons.addWeapon(KinsWatheItems.HUNTING_KNIFE, 1.0F, 0.3, 7, 8, new Vec3d(0.3, 0.3, 0.3));
     }
 }
