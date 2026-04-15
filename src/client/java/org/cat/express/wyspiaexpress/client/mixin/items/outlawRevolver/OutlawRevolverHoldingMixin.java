@@ -1,4 +1,4 @@
-package org.cat.express.wyspiaexpress.client.mixin.items.fakeRevolver;
+package org.cat.express.wyspiaexpress.client.mixin.items.outlawRevolver;
 
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
 import net.minecraft.client.MinecraftClient;

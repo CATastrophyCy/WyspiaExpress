@@ -1,11 +1,7 @@
 package org.cat.express.wyspiaexpress.items;
 
-import dev.doctor4t.wathe.Wathe;
-import dev.doctor4t.wathe.client.WatheClient;
-import dev.doctor4t.wathe.client.particle.HandParticle;
-import dev.doctor4t.wathe.client.render.WatheRenderLayers;
 import dev.doctor4t.wathe.game.GameFunctions;
-import dev.doctor4t.wathe.index.WatheItems;
+import dev.doctor4t.wathe.index.WatheSounds;
 import dev.doctor4t.wathe.item.RevolverItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -35,15 +31,19 @@ public class OutlawRevolverItem extends Item {
         ItemStack stack = user.getStackInHand(hand);
         if (user.getItemCooldownManager().isCoolingDown(this)) return TypedActionResult.fail(stack);
 
+        user.playSound(WatheSounds.ITEM_REVOLVER_SHOOT,5f, 1f + user.getRandom().nextFloat() * .1f - .05f);
         if (world.isClient) {
             HitResult hitResult = ProjectileUtil.getCollision(user, entity -> entity instanceof @NotNull PlayerEntity target && GameFunctions.isPlayerAliveAndSurvival(target), 15.0F);
+
             if (hitResult instanceof @NotNull EntityHitResult entityHitResult) {
                 Entity target = entityHitResult.getEntity();
                 try {
                     Class<?> networkingClass = Class.forName("net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking");
                     Method getMethod = networkingClass.getMethod("send", net.minecraft.network.packet.CustomPayload.class);
-                    getMethod.invoke(null, new OutlawRevolverC2SPacket(entityHitResult.getEntity().getId()));
-                } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | NoSuchMethodException ignored) {}
+                    getMethod.invoke(null, new OutlawRevolverC2SPacket(target.getId()));
+                } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | NoSuchMethodException reason) {
+                    WyspiaExpress.LOGGER.warn("Failed to send OutlawRevolverC2SPacket\t\n Reason {}", reason.getMessage());
+                }
             } else {
                 WyspiaExpressItems.setItemCooldown(user, WyspiaExpressItems.OUTLAW_REVOLVER, null, WyspiaExpress.ITEMS_CONFIG.itemConfig.outlawRevolverConfig.missCooldown());
             }

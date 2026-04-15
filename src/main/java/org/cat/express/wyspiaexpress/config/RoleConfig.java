@@ -104,7 +104,7 @@ public class RoleConfig {
             @Comment("Enable ability sound")
             public boolean enableAbilitySound = false;
             @Comment("Enable ability particle effects")
-            @Nest public boolean enableAbilityParticleEffects = false;
+            public boolean enableAbilityParticleEffects = false;
             @Comment("Enable persistent particle effects during ability")
             public boolean enablePersistentParticleEffects = false;
         }
