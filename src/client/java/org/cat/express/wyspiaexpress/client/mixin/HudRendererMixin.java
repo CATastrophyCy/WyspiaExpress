@@ -55,8 +55,8 @@ public abstract class HudRendererMixin {
         // Bar dimensions and positioning (below MoodRenderer which is around y=20)
         int x = 26;
         int y = 32;
-        int maxWidth = 100;
-        int height = 5;
+        int maxWidth = 135;
+        int height = 4;
 
         // Border and Background colors
         int borderColor = 0xFF1A002A; // Solid deep dark purple
@@ -89,8 +89,8 @@ public abstract class HudRendererMixin {
 
         // Bar dimensions and positioning (Mid-Left)
         int x = 10;
-        int maxHeight = 120;
-        int width = 5;
+        int maxHeight = 135;
+        int width = 4;
 
         // Vertically centered on the left
         int yBottom = screenHeight / 2 + (maxHeight / 2);
