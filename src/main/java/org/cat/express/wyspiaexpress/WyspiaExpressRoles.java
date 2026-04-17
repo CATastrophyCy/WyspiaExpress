@@ -7,7 +7,6 @@ import java.util.List;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.MapVariablesWorldComponent;
-import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.wathe.index.WatheItems;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.component.DataComponentTypes;
@@ -33,7 +32,6 @@ import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 
-import static dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts.registerRoleAnnouncementText;
 import static org.BsXinQin.kinswathe.KinsWatheRoles.*;
 import static org.agmas.noellesroles.Noellesroles.*;
 import static org.aussiebox.starexpress.StarryExpressRoles.MUZZLER;
@@ -114,7 +112,7 @@ public class WyspiaExpressRoles {
             -1,
             true
     ));
-    public static Role LICH_GHOUL = registerNonMurderRole(new Role(
+    public static Role LICH_GHOUL = registerRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "lich_ghoul"),
             0x5d3954,
             false,
@@ -123,10 +121,7 @@ public class WyspiaExpressRoles {
             600,
             true
     ));
-    // for non murder roles you need to manually add the announcement, I think
-    public static RoleAnnouncementTexts.RoleAnnouncementText LICH_GHOUL_ANNOUNCEMENT_TEXT = new RoleAnnouncementTexts.RoleAnnouncementText(
-            LICH_GHOUL.identifier().toTranslationKey(),
-            LICH_GHOUL.color());
+
 
     public static Modifier EMPLOYEE = registerModifier(new Modifier(
             Identifier.of(WyspiaExpress.MOD_ID, "employee"),
@@ -144,7 +139,7 @@ public class WyspiaExpressRoles {
         ROLES_BASIC_CONFIG.put(role, config);
     }
     private static void registerAnnouncements(){
-        registerRoleAnnouncementText(LICH_GHOUL_ANNOUNCEMENT_TEXT);
+
     }
     public static Role registerRole(Role role) {
         WatheRoles.registerRole(role);
