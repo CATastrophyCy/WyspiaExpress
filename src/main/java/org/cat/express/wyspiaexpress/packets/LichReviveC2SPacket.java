@@ -92,7 +92,7 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
                         ItemStack stack = inv.getStack(i);
                         // remove any item thats not key
                         if (!stack.isOf(WatheItems.KEY)) {
-                            player.getInventory().setStack(i, ItemStack.EMPTY);
+                            revived.getInventory().setStack(i, ItemStack.EMPTY);
                         }
                     }
                     TeleportTarget target = new TeleportTarget(player.getServerWorld(),player.getPos(), Vec3d.ZERO, body.getYaw(), body.getPitch(), TeleportTarget.NO_OP);
