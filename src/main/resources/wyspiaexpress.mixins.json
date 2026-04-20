@@ -7,19 +7,21 @@
   "mixins": [
     "HMLGameInitializeMixin",
     "HMLModifierMixin",
+    "TrainMapEffectMixin",
+    "WatheMixin",
+    "WeightsResetMixin",
     "generic.PassiveIncomeMixin",
     "generic.PlayerCrawlSpeedMixin",
     "generic.PlayerDeathMixin",
     "generic.PlayerShieldMixin",
     "generic.ShopMixin",
-    "starryexpress.StarryExpressMixin",
-    "starryexpress.StarstruckComponentMixin",
     "generic.TaskIncomeMixin",
-    "TrainMapEffectMixin",
-    "WatheMixin",
-    "WeightsResetMixin",
     "items.grenade.GrenadeCooldownMixin",
-    "roles.ThiefItemRuleMixin"
+    "noellesroles.ExecutionerRoleMixin",
+    "noellesroles.VultureRoleMixin",
+    "roles.ThiefItemRuleMixin",
+    "starryexpress.StarryExpressMixin",
+    "starryexpress.StarstruckComponentMixin"
   ],
   "injectors": {
     "defaultRequire": 1

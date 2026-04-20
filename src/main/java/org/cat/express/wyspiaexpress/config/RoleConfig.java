@@ -222,6 +222,8 @@ public class RoleConfig {
         public static class ExecutionerConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+            @Comment("Executioner coin reward after their target dies from revolver by non killer")
+            public int reward = 150;
         }
 
     }
