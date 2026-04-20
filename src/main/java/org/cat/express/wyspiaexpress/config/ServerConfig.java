@@ -16,8 +16,6 @@ public class ServerConfig {
     public double crawlSpeedMultiplier = 2.0;
     @Comment("Player stun tick after blocking damage")
     public int blockStunTicks = 40;
-    @Comment("Wheter killer role will always have guesser added. With this enabled it is recommended to have guesser disabled")
-    public boolean killerAlwaysGuesser = false;
     @Comment("Enable freezing")
     public boolean freeze = false;
     @Comment("The time, in seconds, it takes for a player to die when staying outside for too long")
@@ -26,11 +24,8 @@ public class ServerConfig {
     public boolean depressionKilling = false;
     @Comment("The time, in seconds, it takes for a player to die when staying depressed for too long")
     public int depressedTimer = 90;
-    @Comment("Maximum amount of guessers when killerAlwaysGuesser is enabled")
-    public int maximumGuessers = 1;
     @Comment("Whether to enable item bound checking, this will make out of bound item tp to closest dead body")
     public boolean enableItemBoundChecking = true;
-
     @Comment("Whether to enable random start tp")
     public boolean enableRandomStartTp = true;
     @Comment("The starting positions to tp player to, must be inside the ready area")

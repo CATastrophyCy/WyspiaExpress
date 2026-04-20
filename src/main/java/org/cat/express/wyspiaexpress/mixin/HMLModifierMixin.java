@@ -113,14 +113,14 @@ public abstract class HMLModifierMixin {
             }
         }
         // Give killer guesser
-        if(WyspiaExpress.SERVER_CONFIG.killerAlwaysGuesser()) {
+        if(WyspiaExpress.MODIFIERS_CONFIG.guesserConfig.killerAlwaysGuesser()) {
             int count = 0;
             for (ServerPlayerEntity player : shuffledPlayers) {
                 if (!worldModifierComponent.isModifier(player, Noellesroles.GUESSER) && gameWorldComponent.canUseKillerFeatures(player)) {
                     worldModifierComponent.addModifier(player.getUuid(), Noellesroles.GUESSER);
                     count++;
                 }
-                if( count >= WyspiaExpress.SERVER_CONFIG.maximumGuessers())
+                if( count >= WyspiaExpress.MODIFIERS_CONFIG.guesserConfig.maximumGuessers())
                     break;
 
             }
