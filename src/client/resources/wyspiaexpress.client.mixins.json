@@ -13,6 +13,7 @@
     "LoverCrashMixin",
     "MinecraftClientMixin",
     "NoTargetAbilityHudMixin",
+    "PlayerBodyNullCheckMixin",
     "ScreenAccessor",
     "ShopMixin",
     "items.fakeRevolver.FakeRevolverHoldingMixin",
