@@ -46,7 +46,10 @@ public abstract class HMLGameInitializeMixin {
         if (desiredRoleCount <= 0) {
             return 0;
         }
-        return world.getRandom().nextInt(desiredRoleCount ) + 1;
+        if(desiredRoleCount == 1){
+            return 1;
+        }
+        return world.getRandom().nextInt(desiredRoleCount + 1) ;
     }
 
 }
