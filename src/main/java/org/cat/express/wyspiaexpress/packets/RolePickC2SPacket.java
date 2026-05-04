@@ -1,0 +1,67 @@
+package org.cat.express.wyspiaexpress.packets;
+
+import dev.doctor4t.wathe.api.Role;
+import dev.doctor4t.wathe.api.WatheRoles;
+import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.game.GameFunctions;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
+import org.agmas.harpymodloader.events.ModdedRoleAssigned;
+import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.jetbrains.annotations.NotNull;
+import pro.fazeclan.river.stupid_express.constants.SERoles;
+
+public record RolePickC2SPacket(String role) implements CustomPayload {
+
+    public static final Identifier ROLE_PICK_PAYLOAD_ID = Identifier.of(WyspiaExpress.MOD_ID, "role_pick");
+    public static final Id<RolePickC2SPacket> ID = new Id<>(ROLE_PICK_PAYLOAD_ID);
+    public static final PacketCodec<RegistryByteBuf, RolePickC2SPacket> CODEC;
+
+    public @NotNull Id<? extends @NotNull CustomPayload> getId() {
+        return ID;
+    }
+
+    public void write(PacketByteBuf buf) {
+        buf.writeString(this.role);
+    }
+
+    public static RolePickC2SPacket read(PacketByteBuf buf) {
+        return new RolePickC2SPacket(buf.readString());
+    }
+
+    public String role() {
+        return this.role;
+    }
+
+    static {
+        CODEC = PacketCodec.of(RolePickC2SPacket::write, RolePickC2SPacket::read);
+    }
+
+    public static void register() {
+        PayloadTypeRegistry.playC2S().register(ID, CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(ID, RolePickC2SPacket::handle);
+    }
+
+    public static void handle(@NotNull RolePickC2SPacket payload, @NotNull ServerPlayNetworking.Context context) {
+        ServerPlayerEntity player = context.player();
+        context.server().execute(() -> {
+            GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
+
+            if (gameWorldComponent.isRole(player, WyspiaExpressRoles.COPYCAT) && GameFunctions.isPlayerAliveAndSurvival(player))
+            {
+                String roleID = payload.role();
+                Role role = WyspiaExpressRoles.STRING_ROLES.get(roleID);
+                if (role == null) role = WatheRoles.KILLER;
+                gameWorldComponent.addRole(player, role);
+                ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, role);
+            }
+        });
+    }
+}

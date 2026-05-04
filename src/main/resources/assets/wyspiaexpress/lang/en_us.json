@@ -36,6 +36,9 @@
   "announcement.role.wyspiaexpress.note_taker": "Amazing Note Taker",
   "announcement.goals.wyspiaexpress.note_taker": "Observe, and take notes. You are amazing and not binglus anymore",
 
+  "announcement.role.wyspiaexpress.copycat": "Copycat",
+  "announcement.goals.wyspiaexpress.copycat": "Press E and choose what you want to become today",
+
   "announcement.role.wyspiaexpress.outlaw": "The Outlaw",
   "announcement.goals.wyspiaexpress.outlaw": "Blend in as a Vigilante and eliminate the civilians",
 
@@ -60,6 +63,10 @@
   "guidebook.role.wyspiaexpress:note_taker": "Amazing Note Taker",
     "guidebook.role.title.wyspiaexpress:note_taker": "NOTES",
     "guidebook.role.description.wyspiaexpress:note_taker": "Legends says that this civilian was once called 'Awesome Binglus'.\n\nYou are amazing and makes sure everyone knows that with your notes",
+
+  "guidebook.role.wyspiaexpress:copycat": "Copycat",
+    "guidebook.role.title.wyspiaexpress:copycat": "<:",
+    "guidebook.role.description.wyspiaexpress:copycat": "The copycat is gifted by the God of Train and WyspiaExpress. This gift allows them to freely adapt to any situation. \n\n Press E and you can choose a killer role from a selected options",
 
   "guidebook.role.wyspiaexpress:outlaw": "The Outlaw",
     "guidebook.role.title.wyspiaexpress:outlaw": "...",

@@ -8,8 +8,8 @@ import java.util.List;
 
 public class RoleConfig {
     // mine
-    @Comment("Config options for BANDIT")
-    @Nest public BanditConfig banditConfig = new BanditConfig();
+    @Comment("Config options for COPYCAT")
+    @Nest public CopycatConfig copycatConfig = new CopycatConfig();
     @Comment("Config options for NOTE_TAKER")
     @Nest public NoteTakerConfig noteTakerConfig = new NoteTakerConfig();
     @Comment("Config options for OUTLAW")
@@ -30,7 +30,7 @@ public class RoleConfig {
     @Nest public KinsWatheRoles kinsWatheRoles = new KinsWatheRoles();
 
     // Mine
-    public static class BanditConfig {
+    public static class CopycatConfig {
         @Comment("Basic role configuration")
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
     }

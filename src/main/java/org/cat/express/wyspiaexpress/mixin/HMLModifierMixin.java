@@ -2,6 +2,8 @@ package org.cat.express.wyspiaexpress.mixin;
 
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
@@ -12,6 +14,7 @@ import org.agmas.harpymodloader.modifiers.HMLModifiers;
 import org.agmas.harpymodloader.modifiers.Modifier;
 import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -36,6 +39,21 @@ public abstract class HMLModifierMixin {
             cancellable = true
     )
     public void wyspiaexpress$onAssignModifiers(int desiredRoleCount, ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players, CallbackInfo ci){
+
+        for (ServerPlayerEntity player : players) {
+            // before assigning modifiers, check if theres any civilians, give them amnesiac instead
+            if (gameWorldComponent.isRole(player, WatheRoles.CIVILIAN)) {
+                gameWorldComponent.addRole(player, SERoles.AMNESIAC);
+                ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, SERoles.AMNESIAC);
+            }
+            else if(gameWorldComponent.canUseKillerFeatures(player) && WyspiaExpress.ROLES_CONFIG.enableRolePicking()) {
+                for (int i = 1; i < PlayerInventory.getHotbarSize(); i++) {
+                    player.getInventory().setStack(i, ItemStack.EMPTY);
+                }
+                gameWorldComponent.addRole(player, WyspiaExpressRoles.COPYCAT);
+                ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, WyspiaExpressRoles.COPYCAT);
+            }
+        }
         WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(serverWorld);
         worldModifierComponent.getModifiers().clear();
 
@@ -139,13 +157,9 @@ public abstract class HMLModifierMixin {
             }
         }
 
-        // at the end, check if theres any civilians, give them amnesiac instead
-        for (ServerPlayerEntity player : players) {
-            if (gameWorldComponent.isRole(player, WatheRoles.CIVILIAN)) {
-                gameWorldComponent.addRole(player, SERoles.AMNESIAC);
-                ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, SERoles.AMNESIAC);
-            }
-        }
+
+
+
         ci.cancel();
     }
 

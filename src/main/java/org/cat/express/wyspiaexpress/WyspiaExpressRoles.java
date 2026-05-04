@@ -1,12 +1,16 @@
 package org.cat.express.wyspiaexpress;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
+import dev.doctor4t.wathe.api.event.CanSeePoison;
 import dev.doctor4t.wathe.cca.MapVariablesWorldComponent;
+import dev.doctor4t.wathe.game.GameConstants;
+import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheItems;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.component.DataComponentTypes;
@@ -20,6 +24,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
 import org.agmas.harpymodloader.Harpymodloader;
+import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.agmas.harpymodloader.events.ModifierAssigned;
 import org.agmas.harpymodloader.events.ResetPlayerEvent;
@@ -28,6 +33,7 @@ import org.agmas.harpymodloader.modifiers.Modifier;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
 import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
 import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
+import org.cat.express.wyspiaexpress.components.PlayerRolePickingComponent;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
@@ -45,28 +51,38 @@ public class WyspiaExpressRoles {
         registerAnnouncements();
         registerRoleAssigned();
         registerModifierAssigned();
+        registerStringRoleMap();
         limitRoleSpawn();
+        // allow spectator and creative mod to see poison
+        CanSeePoison.EVENT.register((player)->{
+            if (GameFunctions.isPlayerSpectatingOrCreative(player)) {
+                return true;
+            }
+            return false;
+        });
     }
 
     private static final HashMap<String, Role> ROLES = new HashMap<>();
     private static final HashMap<String, Role> NON_MURDER_ROLES = new HashMap<>();
     public static final HashMap<Role, WyspiaExpressRolesConfig.RoleBasicConfig> ROLES_BASIC_CONFIG = new HashMap<>();
-
+    private static final List<Role> COPYCAT_ROLES = new ArrayList<>();
+    public static final HashMap<String, Role> STRING_ROLES = new HashMap<>();// a map for role picking widget
 
     public static HashMap<String, Role> getRoles() {return ROLES;}
     private static final HashMap<String, Modifier> MODIFIERS = new HashMap<>();
     public static HashMap<String, Modifier> getModifiers() {return MODIFIERS;}
 
-    // This bandit is an attempt at making a custom Role, right now it seems to work
-    public static Role BANDIT = registerNonMurderRole(new Role(
-            Identifier.of(WyspiaExpress.MOD_ID, "bandit"),
-            0xCC0066,
+
+    public static Role COPYCAT = registerNonMurderRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "copycat"),
+            0x20B2AA,
             false,
             true,
             Role.MoodType.FAKE,
             -1,
             true
     ));
+
     public static Role OUTLAW = registerRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "outlaw"),
             0xa3671d,
@@ -141,23 +157,23 @@ public class WyspiaExpressRoles {
     private static void registerAnnouncements(){
 
     }
-    public static Role registerRole(Role role) {
+    private static Role registerRole(Role role) {
         WatheRoles.registerRole(role);
         ROLES.put(role.identifier().getPath(), role);
         return role;
     }
-    public static Role registerNonMurderRole(Role role){
+    private static Role registerNonMurderRole(Role role){
         Harpymodloader.NON_MURDER_ROLES.add(role);
         NON_MURDER_ROLES.put(role.identifier().getPath(), role);
         return role;
     }
-    public static Modifier registerModifier(Modifier modifier) {
+    private static Modifier registerModifier(Modifier modifier) {
         HMLModifiers.registerModifier(modifier);
         MODIFIERS.put(modifier.identifier().getPath(), modifier);
         return modifier;
     }
 
-    public static void limitRoleSpawn(){
+    private static void limitRoleSpawn(){
         ServerTickEvents.END_SERVER_TICK.register(((server) -> {
             // this only takes into account the overworld
             Box readyArea = MapVariablesWorldComponent.KEY.get(server.getOverworld()).getReadyArea();
@@ -181,11 +197,12 @@ public class WyspiaExpressRoles {
         }));
 
     }
-    public static void registerRoleAssigned(){
+    private static void registerRoleAssigned(){
         registerStartingItems();
         registerRoleEffect();
+        registerCopyCat();
     }
-    public static void registerModifierAssigned(){
+    private static void registerModifierAssigned(){
         ModifierAssigned.EVENT.register( (player, modifier) -> {
             if(modifier.equals(EMPLOYEE)){
                 ItemStack itemStack = new ItemStack(WatheItems.KEY);
@@ -195,7 +212,7 @@ public class WyspiaExpressRoles {
             }
         });
     }
-    public static void registerStartingItems(){
+    private static void registerStartingItems(){
         ModdedRoleAssigned.EVENT.register((player, role)->{
             var basicConfig = ROLES_BASIC_CONFIG.get(role);
 
@@ -217,12 +234,38 @@ public class WyspiaExpressRoles {
             }
         });
     }
-    public static void registerRoleEffect(){
+    private static void registerCopyCat(){
+        ModdedRoleAssigned.EVENT.register((player, role)->{
+            if(!role.equals(COPYCAT))return;
+            List<String> roleIDs = new ArrayList<>();
+            int count = 0;
+            while(count < WyspiaExpress.ROLES_CONFIG.pickRoles()){
+
+                String roleID = "";
+                if(COPYCAT_ROLES.isEmpty()){
+                    ArrayList<Role> killerRoles = new ArrayList<>(WatheRoles.ROLES);
+                    killerRoles.removeIf(r -> Harpymodloader.VANNILA_ROLES.contains(role) || !r.canUseKiller() || HarpyModLoaderConfig.HANDLER.instance().disabled.contains(role.identifier().toString())
+                    && ( Harpymodloader.ROLE_MAX.get(r.identifier()) > 0));
+
+                    if (killerRoles.isEmpty()) killerRoles.add(WatheRoles.KILLER);
+                    COPYCAT_ROLES.addAll(killerRoles);
+                    Collections.shuffle(COPYCAT_ROLES);
+                }
+                roleID = getRoleString(COPYCAT_ROLES.getFirst());
+                COPYCAT_ROLES.removeFirst();
+                roleIDs.add(roleID);
+            }
+            PlayerRolePickingComponent component = PlayerRolePickingComponent.KEY.get(player);
+            component.set(roleIDs, GameConstants.getInTicks(0,WyspiaExpress.ROLES_CONFIG.randomRoleTime()));
+        });
+    }
+    private static void registerRoleEffect(){
         ModdedRoleAssigned.EVENT.register((player, role)->{
             if(role.equals(EDGE_LORD)){
                 // give edge lord night vision
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, -1 , 0, true, false, false));
             }
+
         });
         ResetPlayerEvent.EVENT.register(((playerEntity) -> {
             // remove night_vision
@@ -230,12 +273,20 @@ public class WyspiaExpressRoles {
             PlayerDepressedComponent.KEY.get(playerEntity).reset();
             PlayerFreezeComponent.KEY.get(playerEntity).reset();
             AbilityCooldownComponent.KEY.get(playerEntity).reset();
+            PlayerRolePickingComponent.KEY.get(playerEntity).reset();
         }));
     }
-
-    public static void registerRoleConfigs(){
+    private static void registerStringRoleMap(){
+        WatheRoles.ROLES.forEach((r) -> {
+            STRING_ROLES.put(getRoleString(r), r);
+        });
+    }
+    public static String getRoleString(Role role){
+        return role.identifier().getPath().toLowerCase();
+    }
+    private static void registerRoleConfigs(){
         // mine
-        registerRoleBasicConfig(BANDIT, WyspiaExpress.ROLES_CONFIG.roleConfig.banditConfig.basic);
+        registerRoleBasicConfig(COPYCAT, WyspiaExpress.ROLES_CONFIG.roleConfig.copycatConfig.basic);
         registerRoleBasicConfig(OUTLAW, WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.basic);
         registerRoleBasicConfig(NOTE_TAKER, WyspiaExpress.ROLES_CONFIG.roleConfig.noteTakerConfig.basic);
         registerRoleBasicConfig(EDGE_LORD,WyspiaExpress.ROLES_CONFIG.roleConfig.edgeLordConfig.basic);

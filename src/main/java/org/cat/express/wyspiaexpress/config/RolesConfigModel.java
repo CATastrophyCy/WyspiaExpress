@@ -6,12 +6,18 @@ import io.wispforest.owo.config.annotation.Config;
 import io.wispforest.owo.config.annotation.Nest;
 import io.wispforest.owo.config.annotation.Sync;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Sync(Option.SyncMode.OVERRIDE_CLIENT)
 @Config(name = "wyspiaexpress/roles", wrapperName = "WyspiaExpressRolesConfig")
 public class RolesConfigModel {
+
+    @Comment("Enable role picking for killers")
+    public boolean enableRolePicking = true;
+    @Comment("Number of roles to pick")
+    public int pickRoles = 3;
+    @Comment("Amount of time, in seconds before a random role is assigned instead")
+    public int randomRoleTime = 60;
 
     @Comment("""
     === ROLE CONFIGURATION GUIDE ===
