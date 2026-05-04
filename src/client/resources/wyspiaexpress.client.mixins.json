@@ -14,6 +14,7 @@
     "MinecraftClientMixin",
     "NoTargetAbilityHudMixin",
     "PlayerBodyNullCheckMixin",
+    "RolePickerWidgetMixin",
     "ScreenAccessor",
     "ShopMixin",
     "items.fakeRevolver.FakeRevolverHoldingMixin",
@@ -28,6 +29,7 @@
     "requireAnnotations": true
   },
   "mixins": [
+    "InstinctMixin",
     "roles.lich.LichHudMixin",
     "roles.lich.LichTargetHudMixin"
   ]
