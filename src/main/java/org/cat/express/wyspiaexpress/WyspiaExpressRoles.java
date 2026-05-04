@@ -6,6 +6,7 @@ import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.api.event.CanSeePoison;
 import dev.doctor4t.wathe.cca.MapVariablesWorldComponent;
+import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheItems;
@@ -20,6 +21,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
+import org.BsXinQin.kinswathe.KinsWatheConfig;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
@@ -81,7 +83,6 @@ public class WyspiaExpressRoles {
             -1,
             true
     ));
-
     public static Role OUTLAW = registerRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "outlaw"),
             0xa3671d,
@@ -237,6 +238,11 @@ public class WyspiaExpressRoles {
         ModdedRoleAssigned.EVENT.register((player, role)->{
             if(!role.equals(COPYCAT))return;
 
+            player.removeStatusEffect(StatusEffects.NIGHT_VISION);
+            PlayerShopComponent playerShop = PlayerShopComponent.KEY.get(player);
+            if (KinsWatheConfig.HANDLER.instance().EnableWatheModify) {
+                playerShop.addToBalance(- (KinsWatheConfig.HANDLER.instance().InitialKillerIncome - 100));
+            }
             Set<String> roleIDs = new HashSet<>();
             while(roleIDs.size() < WyspiaExpress.ROLES_CONFIG.pickRoles()){
                 String roleID;
@@ -273,7 +279,6 @@ public class WyspiaExpressRoles {
                 // give edge lord night vision
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, -1 , 0, true, false, false));
             }
-
         });
         ResetPlayerEvent.EVENT.register(((playerEntity) -> {
             // remove night_vision
