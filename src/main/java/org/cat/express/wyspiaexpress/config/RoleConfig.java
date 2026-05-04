@@ -45,6 +45,8 @@ public class RoleConfig {
         public int cooldown = 90;
         @Comment("Ability cost, in coins")
         public int cost = 75;
+        @Comment("Ability self stun duration, in ticks")
+        public int selfStunDuration = 40;
     }
     public static class EdgeLordConfig {
         @Comment("Basic role configuration")

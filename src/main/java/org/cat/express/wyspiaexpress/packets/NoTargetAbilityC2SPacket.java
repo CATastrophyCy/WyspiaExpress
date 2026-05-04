@@ -2,16 +2,10 @@ package org.cat.express.wyspiaexpress.packets;
 
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerShopComponent;
-import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheItems;
-import dev.doctor4t.wathe.index.WatheSounds;
-import dev.doctor4t.wathe.util.ShootMuzzleS2CPayload;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -21,6 +15,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.KinsWathe;
+import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
@@ -58,7 +53,7 @@ public record NoTargetAbilityC2SPacket() implements CustomPayload {
         PlayerShopComponent playerShop = PlayerShopComponent.KEY.get(player);
         if (playerShop.balance < WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.cost()) return;
         playerShop.addToBalance(-WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.cost());
-
+        PlayerEffectComponent.KEY.get(player).setStunTicks(WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.selfStunDuration());
         player.getItemCooldownManager().set(WyspiaExpressItems.OUTLAW_REVOLVER, 0);
         player.getItemCooldownManager().set(WyspiaExpressItems.FAKE_REVOLVER, 0);
         player.getItemCooldownManager().set(WatheItems.REVOLVER, 0);
