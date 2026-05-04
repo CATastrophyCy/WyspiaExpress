@@ -1,9 +1,6 @@
 package org.cat.express.wyspiaexpress;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
@@ -37,6 +34,7 @@ import org.cat.express.wyspiaexpress.components.PlayerRolePickingComponent;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
+import org.jetbrains.annotations.NotNull;
 
 import static org.BsXinQin.kinswathe.KinsWatheRoles.*;
 import static org.agmas.noellesroles.Noellesroles.*;
@@ -65,6 +63,7 @@ public class WyspiaExpressRoles {
     private static final HashMap<String, Role> ROLES = new HashMap<>();
     private static final HashMap<String, Role> NON_MURDER_ROLES = new HashMap<>();
     public static final HashMap<Role, WyspiaExpressRolesConfig.RoleBasicConfig> ROLES_BASIC_CONFIG = new HashMap<>();
+
     private static final List<Role> COPYCAT_ROLES = new ArrayList<>();
     public static final HashMap<String, Role> STRING_ROLES = new HashMap<>();// a map for role picking widget
 
@@ -73,7 +72,7 @@ public class WyspiaExpressRoles {
     public static HashMap<String, Modifier> getModifiers() {return MODIFIERS;}
 
 
-    public static Role COPYCAT = registerNonMurderRole(new Role(
+    public static Role COPYCAT = registerRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "copycat"),
             0x20B2AA,
             false,
@@ -237,16 +236,12 @@ public class WyspiaExpressRoles {
     private static void registerCopyCat(){
         ModdedRoleAssigned.EVENT.register((player, role)->{
             if(!role.equals(COPYCAT))return;
-            List<String> roleIDs = new ArrayList<>();
-            int count = 0;
-            while(count < WyspiaExpress.ROLES_CONFIG.pickRoles()){
 
-                String roleID = "";
+            Set<String> roleIDs = new HashSet<>();
+            while(roleIDs.size() < WyspiaExpress.ROLES_CONFIG.pickRoles()){
+                String roleID;
                 if(COPYCAT_ROLES.isEmpty()){
-                    ArrayList<Role> killerRoles = new ArrayList<>(WatheRoles.ROLES);
-                    killerRoles.removeIf(r -> Harpymodloader.VANNILA_ROLES.contains(role) || !r.canUseKiller() || HarpyModLoaderConfig.HANDLER.instance().disabled.contains(role.identifier().toString())
-                    && ( Harpymodloader.ROLE_MAX.get(r.identifier()) > 0));
-
+                    ArrayList<Role> killerRoles = getKillerRoles();
                     if (killerRoles.isEmpty()) killerRoles.add(WatheRoles.KILLER);
                     COPYCAT_ROLES.addAll(killerRoles);
                     Collections.shuffle(COPYCAT_ROLES);
@@ -256,9 +251,22 @@ public class WyspiaExpressRoles {
                 roleIDs.add(roleID);
             }
             PlayerRolePickingComponent component = PlayerRolePickingComponent.KEY.get(player);
-            component.set(roleIDs, GameConstants.getInTicks(0,WyspiaExpress.ROLES_CONFIG.randomRoleTime()));
+            component.set(new ArrayList<>(roleIDs), GameConstants.getInTicks(0,WyspiaExpress.ROLES_CONFIG.randomRoleTime()));
         });
     }
+
+    private static @NotNull ArrayList<Role> getKillerRoles() {
+        ArrayList<Role> killerRoles = new ArrayList<>(WatheRoles.ROLES);
+        killerRoles.removeIf(r -> (
+                (
+                Harpymodloader.VANNILA_ROLES.contains(r) ||
+                    !r.canUseKiller() ||
+                    HarpyModLoaderConfig.HANDLER.instance().disabled.contains(r.identifier().toString())
+                )
+        ));
+        return killerRoles;
+    }
+
     private static void registerRoleEffect(){
         ModdedRoleAssigned.EVENT.register((player, role)->{
             if(role.equals(EDGE_LORD)){

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerRolePickingComponent implements AutoSyncedComponent, ServerTickingComponent {
-    public static final ComponentKey<PlayerRolePickingComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(WyspiaExpress.MOD_ID, "player_string_list_component"),
+    public static final ComponentKey<PlayerRolePickingComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(WyspiaExpress.MOD_ID, "player_role_pick_component"),
             PlayerRolePickingComponent.class);
 
     private final PlayerEntity player;

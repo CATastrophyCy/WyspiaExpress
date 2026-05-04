@@ -26,6 +26,7 @@
       "wyspiaexpress:player_depressed_component",
       "wyspiaexpress:player_freeze_component",
       "wyspiaexpress:lich_revive_component",
+      "wyspiaexpress:player_role_pick_component",
       "wyspiaexpress:player_body",
       "wyspiaexpress:world_component"
     ]
