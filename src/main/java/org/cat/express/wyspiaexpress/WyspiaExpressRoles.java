@@ -61,12 +61,12 @@ public class WyspiaExpressRoles {
             return false;
         });
     }
-
+    public static int PLAYER_COUNT = 0;
     private static final HashMap<String, Role> ROLES = new HashMap<>();
     private static final HashMap<String, Role> NON_MURDER_ROLES = new HashMap<>();
     public static final HashMap<Role, WyspiaExpressRolesConfig.RoleBasicConfig> ROLES_BASIC_CONFIG = new HashMap<>();
 
-    private static final List<Role> COPYCAT_ROLES = new ArrayList<>();
+    public static final List<Role> COPYCAT_ROLES = new ArrayList<>();
     public static final HashMap<String, Role> STRING_ROLES = new HashMap<>();// a map for role picking widget
 
     public static HashMap<String, Role> getRoles() {return ROLES;}
@@ -178,15 +178,18 @@ public class WyspiaExpressRoles {
             // this only takes into account the overworld
             Box readyArea = MapVariablesWorldComponent.KEY.get(server.getOverworld()).getReadyArea();
             Box playArea = MapVariablesWorldComponent.KEY.get(server.getOverworld()).getPlayArea();
-            int count = 0;
+            PLAYER_COUNT = 0;
             for(PlayerEntity player : server.getPlayerManager().getPlayerList()){
-                if(readyArea.contains(player.getPos()) || playArea.contains(player.getPos())){
-                    count++;
+                if(readyArea.contains(player.getPos()) || playArea.contains(player.getPos())
+                    && GameFunctions.isPlayerAliveAndSurvival(player)
+                )
+                {
+                    PLAYER_COUNT++;
                 }
             }
             for( Role role : ROLES_BASIC_CONFIG.keySet()){
                 WyspiaExpressRolesConfig.RoleBasicConfig config = ROLES_BASIC_CONFIG.get(role);
-                if (count >= config.minimumPlayerSpawn())
+                if (PLAYER_COUNT >= config.minimumPlayerSpawn())
                 {
                     Harpymodloader.setRoleMaximum(role,config.maximumSpawn());
                 }
@@ -263,9 +266,11 @@ public class WyspiaExpressRoles {
 
     private static @NotNull ArrayList<Role> getKillerRoles() {
         ArrayList<Role> killerRoles = new ArrayList<>(WatheRoles.ROLES);
+
         killerRoles.removeIf(r -> (
                 (
-                Harpymodloader.VANNILA_ROLES.contains(r) ||
+                    ((ROLES_BASIC_CONFIG.get(r) != null) && (ROLES_BASIC_CONFIG.get(r).minimumPlayerSpawn() > PLAYER_COUNT)) ||
+                    Harpymodloader.VANNILA_ROLES.contains(r) ||
                     !r.canUseKiller() ||
                     HarpyModLoaderConfig.HANDLER.instance().disabled.contains(r.identifier().toString())
                 )

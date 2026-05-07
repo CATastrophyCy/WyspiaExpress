@@ -4,6 +4,7 @@ import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
@@ -39,7 +40,7 @@ public abstract class HMLModifierMixin {
             cancellable = true
     )
     public void wyspiaexpress$onAssignModifiers(int desiredRoleCount, ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players, CallbackInfo ci){
-
+        WyspiaExpressRoles.COPYCAT_ROLES.clear();
         for (ServerPlayerEntity player : players) {
             // before assigning modifiers, check if theres any civilians, give them amnesiac instead
             if (gameWorldComponent.isRole(player, WatheRoles.CIVILIAN)) {
@@ -48,7 +49,8 @@ public abstract class HMLModifierMixin {
             }
             else if(gameWorldComponent.canUseKillerFeatures(player) && WyspiaExpress.ROLES_CONFIG.enableRolePicking()) {
                 for (int i = 1; i < PlayerInventory.getHotbarSize(); i++) {
-                    player.getInventory().setStack(i, ItemStack.EMPTY);
+                    if(!player.getInventory().getStack(i).isOf(KinsWatheItems.PHONE))
+                        player.getInventory().setStack(i, ItemStack.EMPTY);
                 }
                 gameWorldComponent.addRole(player, WyspiaExpressRoles.COPYCAT);
                 ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, WyspiaExpressRoles.COPYCAT);
