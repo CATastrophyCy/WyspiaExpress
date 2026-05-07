@@ -20,7 +20,7 @@ public abstract class NoellesRolesMixin {
                     target = "net/minecraft/entity/effect/StatusEffectInstance"
             )
     )
-    private static StatusEffectInstance noellesroles$phantomDuration(
+    private static StatusEffectInstance wyspiaexpress$phantomDuration(
             net.minecraft.registry.entry.RegistryEntry<net.minecraft.entity.effect.StatusEffect> effect,
             int duration,
             int amplifier,
@@ -49,7 +49,7 @@ public abstract class NoellesRolesMixin {
                     ordinal = 0
             )
     )
-    private static void noellesroles$phantomCooldown(AbilityPlayerComponent component, int value) {
+    private static void wyspiaexpress$phantomCooldown(AbilityPlayerComponent component, int value) {
         component.cooldown = GameConstants.getInTicks(0, WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.phantomConfig.cooldown());
     }
 }

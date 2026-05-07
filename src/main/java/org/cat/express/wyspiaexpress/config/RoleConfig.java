@@ -316,6 +316,12 @@ public class RoleConfig {
         public static class DreamerConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+            @Comment("Enable dream imprint tp to its applier")
+            public boolean enableDreamImprintTeleport = false;
+            @Comment("Minimum delusion requirement")
+            public int minimumRequirement = 2;
+            @Comment("Maximum delusion requirement")
+            public int maximumRequirement = 4;
         }
     }
 
