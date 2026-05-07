@@ -18,6 +18,7 @@
     "generic.TaskIncomeMixin",
     "items.grenade.GrenadeCooldownMixin",
     "noellesroles.ExecutionerRoleMixin",
+    "noellesroles.NoellesRolesMixin",
     "noellesroles.VultureRoleMixin",
     "roles.ThiefItemRuleMixin",
     "starryexpress.StarryExpressMixin",

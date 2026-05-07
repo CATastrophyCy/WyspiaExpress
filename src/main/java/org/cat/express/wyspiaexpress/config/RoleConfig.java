@@ -184,6 +184,13 @@ public class RoleConfig {
         public static class PhantomConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+            @Comment("Ability cooldown, in seconds")
+            public int cooldown = 150;
+            @Comment("Ability duration, in seconds")
+            public int duration = 30;
+            @Comment("Whether phantom would lose invisibility after killing (poison won't trigger)")
+            public boolean loseInvisibilityWhenKill = true;
+
         }
 
         public static class SwapperConfig{

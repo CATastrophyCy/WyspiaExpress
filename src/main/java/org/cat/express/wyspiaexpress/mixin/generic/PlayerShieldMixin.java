@@ -1,10 +1,14 @@
 package org.cat.express.wyspiaexpress.mixin.generic;
 
 import dev.doctor4t.wathe.api.event.AllowPlayerDeath;
+import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
+import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,6 +25,16 @@ public class PlayerShieldMixin {
             // right now hardcoded the slowness duration, need to change in the next version bump
             PlayerEffectComponent.KEY.get(victim).setStunTicks(WyspiaExpress.SERVER_CONFIG.blockStunTicks());
             ci.cancel();
+            return;
+        }
+        GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(killer.getWorld());
+        if(gameWorldComponent.isRole(killer, Noellesroles.PHANTOM) && WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.phantomConfig.loseInvisibilityWhenKill()){
+            if(deathReason != null) {
+                if( !deathReason.equals(GameConstants.DeathReasons.POISON)) {
+                    killer.removeStatusEffect(StatusEffects.INVISIBILITY);
+                }
+            }
+
         }
     }
 }
