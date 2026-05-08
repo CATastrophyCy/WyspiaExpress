@@ -3,7 +3,6 @@ package org.cat.express.wyspiaexpress.client.mixin;
 import dev.doctor4t.wathe.cca.PlayerPoisonComponent;
 import dev.doctor4t.wathe.client.WatheClient;
 import dev.doctor4t.wathe.game.GameFunctions;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.BsXinQin.kinswathe.KinsWatheRoles;
@@ -22,10 +21,9 @@ public abstract class InstinctMixin {
 
     @Inject(method = "getInstinctHighlight", at = @At("HEAD"), cancellable = true)
     private static void getInstinctHighlightColor(Entity target, CallbackInfoReturnable<Integer> cir) {
-        PlayerEntity player = MinecraftClient.getInstance().player;
-        if (player == null) return;
+
         if (target instanceof PlayerEntity targetPlayer) {
-            if(GameFunctions.isPlayerSpectatingOrCreative(player) && GameFunctions.isPlayerAliveAndSurvival(targetPlayer) && WatheClient.isInstinctEnabled() ) {
+            if(WatheClient.isPlayerSpectatingOrCreative() && GameFunctions.isPlayerAliveAndSurvival(targetPlayer) && WatheClient.isInstinctEnabled() ) {
                     PlayerPoisonComponent playerPoisonComponent = PlayerPoisonComponent.KEY.get(targetPlayer);
                     BartenderPlayerComponent bartenderPlayerComponent = BartenderPlayerComponent.KEY.get(targetPlayer);
                     PhysicianComponent physicianComponent = PhysicianComponent.KEY.get(targetPlayer);
