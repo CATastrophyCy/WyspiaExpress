@@ -1,0 +1,63 @@
+package org.cat.express.wyspiaexpress;
+
+
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.doctor4t.wathe.api.Role;
+import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.cca.PlayerShopComponent;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import org.BsXinQin.kinswathe.KinsWatheConfig;
+import org.agmas.harpymodloader.Harpymodloader;
+import org.agmas.harpymodloader.commands.argument.RoleArgumentType;
+import org.agmas.harpymodloader.events.ModdedRoleAssigned;
+
+public class WyspiaExpressCommands {
+    public static void init() {
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            WyspiaExpressCommands.registerSetRole(dispatcher);
+        });
+    }
+
+    private static void registerSetRole(CommandDispatcher<ServerCommandSource> dispatcher) {
+        dispatcher.register(CommandManager.literal("setRole")
+                .requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2))
+                .then(CommandManager.argument("player", EntityArgumentType.player())
+                        .then(CommandManager.argument("role", RoleArgumentType.skipVanilla())
+                                .executes(WyspiaExpressCommands::executeSetRole))));
+    }
+
+    private static int executeSetRole(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerPlayerEntity targetPlayer = EntityArgumentType.getPlayer(context, "player");
+        Role role = RoleArgumentType.getRole(context, "role");
+        GameWorldComponent gameWorld = GameWorldComponent.KEY.get(targetPlayer.getWorld());
+        final MutableText roleText = Harpymodloader.getRoleName(role).withColor(role.color()).styled(style ->
+                style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(role.identifier().toString()))));
+
+        if(!gameWorld.isRunning()) {
+            context.getSource().sendFeedback(() -> Text.translatable("commands.setrole.fail"), true);
+            return 0;
+        }
+
+        targetPlayer.removeStatusEffect(StatusEffects.NIGHT_VISION);
+        PlayerShopComponent playerShop = PlayerShopComponent.KEY.get(targetPlayer);
+
+        if (KinsWatheConfig.HANDLER.instance().EnableWatheModify && !role.equals(WyspiaExpressRoles.COPYCAT)) {
+            playerShop.addToBalance(- (KinsWatheConfig.HANDLER.instance().InitialKillerIncome - 100));
+        }
+        gameWorld.addRole(targetPlayer, role);
+        ModdedRoleAssigned.EVENT.invoker().assignModdedRole(targetPlayer, role);
+        context.getSource().sendFeedback(() -> Text.translatable("commands.setrole.success", targetPlayer.getDisplayName(), roleText), true);
+        return 1;
+    }
+
+}

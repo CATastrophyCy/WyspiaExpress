@@ -36,6 +36,7 @@ public class WyspiaExpress implements ModInitializer {
         WyspiaExpressItems.init();
         WyspiaExpressSounds.init();
         WyspiaExpressGameFunctions.init();
+        WyspiaExpressCommands.init();
         registerVersionCheck();
         registerPackets();
         LOGGER.info("WyspiaExpress finished initializing.");

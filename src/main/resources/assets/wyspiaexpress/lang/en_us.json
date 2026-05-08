@@ -1,4 +1,8 @@
 {
+
+  "commands.setrole.fail": "The game must be running to use this command!",
+  "commands.setrole.success": "Set player %s to role %s",
+
   "key.wyspiaexpress.ability": "Ability",
   "tip.wyspiaexpress.ability.cooldown": "Ability usable in %ss",
   "tip.wyspiaexpress.ability.can_use": "Use %s to activate ability",
