@@ -181,7 +181,7 @@ public class WyspiaExpressRoles {
             PLAYER_COUNT = 0;
             for(PlayerEntity player : server.getPlayerManager().getPlayerList()){
                 if(readyArea.contains(player.getPos()) || playArea.contains(player.getPos())
-                    && GameFunctions.isPlayerAliveAndSurvival(player)
+                    && !player.isSpectator()
                 )
                 {
                     PLAYER_COUNT++;
@@ -251,7 +251,10 @@ public class WyspiaExpressRoles {
                 String roleID;
                 if(COPYCAT_ROLES.isEmpty()){
                     ArrayList<Role> killerRoles = getKillerRoles();
-                    if (killerRoles.isEmpty()) killerRoles.add(WatheRoles.KILLER);
+                    if (killerRoles.isEmpty()) {
+                        roleIDs.add(getRoleString(WatheRoles.KILLER));
+                        break;
+                    }
                     COPYCAT_ROLES.addAll(killerRoles);
                     Collections.shuffle(COPYCAT_ROLES);
                 }
