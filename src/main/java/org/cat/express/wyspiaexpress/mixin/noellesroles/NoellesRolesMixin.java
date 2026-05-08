@@ -30,7 +30,7 @@ public abstract class NoellesRolesMixin {
     ) {
         return new StatusEffectInstance(
                 effect,
-                WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.phantomConfig.duration(),
+                GameConstants.getInTicks(0,WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.phantomConfig.duration()),
                 amplifier,
                 ambient,
                 showParticles,
