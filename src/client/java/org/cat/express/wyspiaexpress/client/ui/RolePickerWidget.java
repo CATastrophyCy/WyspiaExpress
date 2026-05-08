@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.client.ui;
 
+import dev.doctor4t.wathe.client.gui.screen.ingame.LimitedInventoryScreen;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -9,17 +10,21 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import org.cat.express.wyspiaexpress.components.PlayerRolePickingComponent;
 import org.cat.express.wyspiaexpress.packets.RolePickC2SPacket;
+import org.jetbrains.annotations.NotNull;
 
 public class RolePickerWidget extends ButtonWidget {
     private final String roleName;
     private final PlayerEntity player;
-
-    public RolePickerWidget(int x, int y, int width, int height, String roleName, PlayerEntity player) {
+    public final LimitedInventoryScreen screen;
+    public RolePickerWidget(@NotNull LimitedInventoryScreen screen, int x, int y, int width, int height, String roleName, PlayerEntity player) {
 
         super(x, y, width, height, Text.empty(), button -> {
+            if (MinecraftClient.getInstance().player == null) return;
             ClientPlayNetworking.send(new RolePickC2SPacket(roleName));
-        }, ButtonWidget.DEFAULT_NARRATION_SUPPLIER);
+            screen.close();
 
+        }, ButtonWidget.DEFAULT_NARRATION_SUPPLIER);
+        this.screen = screen;
         this.roleName = roleName;
         this.player = player;
     }

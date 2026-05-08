@@ -7,7 +7,6 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.text.Text;
-import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.noellesroles.client.ui.guesser.GuesserPlayerWidget;
 import org.agmas.noellesroles.client.ui.guesser.GuesserRoleWidget;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
@@ -34,7 +33,6 @@ public abstract class RolePickerWidgetMixin extends LimitedHandledScreen<PlayerS
     @Inject(method = "init", at = @At("HEAD"))
     void renderRolePicker(CallbackInfo ci) {
         GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
-        WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(player.getWorld());
         GuesserPlayerWidget.selectedPlayer = null;
         if (gameWorldComponent.isRole(player, WyspiaExpressRoles.COPYCAT)) {
             GuesserRoleWidget.stopClosing = false;
@@ -52,7 +50,7 @@ public abstract class RolePickerWidgetMixin extends LimitedHandledScreen<PlayerS
             for (int i = 0; i < entries.size(); ++i) {
                 String roleName = entries.get(i);
                 int currentX = startX + i * (buttonWidth + gap);
-                RolePickerWidget widget = new RolePickerWidget(currentX, y, buttonWidth, buttonHeight, roleName, player);
+                RolePickerWidget widget = new RolePickerWidget( ((LimitedInventoryScreen) (Object) this), currentX, y, buttonWidth, buttonHeight, roleName, player);
                 this.addDrawableChild(widget);
             }
 
