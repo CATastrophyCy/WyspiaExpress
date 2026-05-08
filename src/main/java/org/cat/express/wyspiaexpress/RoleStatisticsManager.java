@@ -62,11 +62,13 @@ public class RoleStatisticsManager {
                 new ArrayList<>(availableChoices)
         );
         eventLog.add(event);
-
+        /*
         LOGGER.info(
                 "[RolePick] UUID={} Name={} Selected={} Choices={}",
                 playerUuid, playerName, selectedRole, availableChoices
         );
+        */
+
     }
 
     private File getFile() {
