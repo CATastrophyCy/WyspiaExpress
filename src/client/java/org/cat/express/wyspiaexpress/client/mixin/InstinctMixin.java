@@ -25,21 +25,24 @@ public abstract class InstinctMixin {
         PlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) return;
         if (target instanceof PlayerEntity targetPlayer) {
-            if(GameFunctions.isPlayerSpectatingOrCreative((player)) && GameFunctions.isPlayerAliveAndSurvival(targetPlayer) && WatheClient.isInstinctEnabled()) {
+            if(GameFunctions.isPlayerSpectatingOrCreative(player) && GameFunctions.isPlayerAliveAndSurvival(targetPlayer) && WatheClient.isInstinctEnabled() ) {
                     PlayerPoisonComponent playerPoisonComponent = PlayerPoisonComponent.KEY.get(targetPlayer);
-                    BartenderPlayerComponent bartenderPlayerComponent = BartenderPlayerComponent.KEY.get(target);
-                    PhysicianComponent physicianComponent = PhysicianComponent.KEY.get(player);
-                    DreamerComponent dreamerComponent = DreamerComponent.KEY.get(target);
+                    BartenderPlayerComponent bartenderPlayerComponent = BartenderPlayerComponent.KEY.get(targetPlayer);
+                    PhysicianComponent physicianComponent = PhysicianComponent.KEY.get(targetPlayer);
+                    DreamerComponent dreamerComponent = DreamerComponent.KEY.get(targetPlayer);
                     if (playerPoisonComponent.poisonTicks > 0) {
                         cir.setReturnValue(Color.RED.getRGB());
+                        cir.cancel();
                         return;
                     }
                     if( bartenderPlayerComponent.armor > 0 || physicianComponent.physicianArmor > 0) {
                         cir.setReturnValue(Color.BLUE.getRGB());
+                        cir.cancel();
                         return;
                     }
                     if( dreamerComponent.dreamArmor > 0) {
                         cir.setReturnValue(KinsWatheRoles.DREAMER.color());
+                        cir.cancel();
                         return;
                     }
             }
