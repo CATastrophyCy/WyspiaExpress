@@ -27,6 +27,7 @@ public class PlayerShieldMixin {
             ci.cancel();
             return;
         }
+        if(killer== null) return;
         GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(killer.getWorld());
         if(gameWorldComponent.isRole(killer, Noellesroles.PHANTOM) && WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.phantomConfig.loseInvisibilityWhenKill()){
             if(deathReason != null) {
