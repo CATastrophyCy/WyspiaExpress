@@ -74,7 +74,7 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
                     // check if the selected body can be revived
                     PlayerBodyEntity body = playerBodyEntities.getFirst();
                     var revived = (ServerPlayerEntity) player.getServerWorld().getPlayerByUuid(body.getPlayerUuid());
-                    if(revived == null || gameWorldComponent.getRole(revived) == WyspiaExpressRoles.LICH_GHOUL) return;
+                    if(revived == null || gameWorldComponent.getRole(revived) == WyspiaExpressRoles.LICH_GHOUL || !GameFunctions.isPlayerSpectatingOrCreative(revived)) return;
 
                     // activate cooldown
                     abilityPlayerComponent.setAbilityCooldown( Math.max(0, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.cooldown()));
