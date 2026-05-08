@@ -41,11 +41,12 @@ public class PlayerRolePickingComponent implements AutoSyncedComponent, ServerTi
 
     @Override
     public void serverTick() {
+
         if (this.tick > 0) {
-            this.tick--;
-            if(this.tick == 0) {
-                GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
-                if (gameWorldComponent.isRole(player, WyspiaExpressRoles.COPYCAT) && GameFunctions.isPlayerAliveAndSurvival(player)) {
+            GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
+            if(gameWorldComponent.isRole(player, WyspiaExpressRoles.COPYCAT) && GameFunctions.isPlayerAliveAndSurvival(player)){
+                this.tick--;
+                if(this.tick == 0) {
                     String roleID = this.roles.get(this.player.getRandom().nextInt(this.roles.size()));
                     Role role = WyspiaExpressRoles.STRING_ROLES.get(roleID);
                     if (role == null) role = WatheRoles.KILLER;
@@ -59,11 +60,13 @@ public class PlayerRolePickingComponent implements AutoSyncedComponent, ServerTi
                                     0
                             )
                     );
+                    this.roles.clear();
                 }
-                this.tick = 0;
-                this.roles.clear();
+                this.sync();
             }
-            this.sync();
+            else{
+                reset();
+            }
         }
     }
     public int getTick() {
