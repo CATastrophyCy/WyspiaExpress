@@ -24,7 +24,6 @@ import org.cat.express.wyspiaexpress.client.roles.LichUtil;
 import org.cat.express.wyspiaexpress.client.roles.NoTargetAbilityUtil;
 import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
 import org.lwjgl.glfw.GLFW;
-import wathe_blood.Weapons;
 
 import java.util.concurrent.CompletableFuture;
 

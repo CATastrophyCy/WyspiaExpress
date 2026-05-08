@@ -19,7 +19,6 @@ import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.jetbrains.annotations.NotNull;
-import pro.fazeclan.river.stupid_express.constants.SERoles;
 
 public record RolePickC2SPacket(String role) implements CustomPayload {
 

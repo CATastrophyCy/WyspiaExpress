@@ -41,7 +41,6 @@ public class PlayerRolePickingComponent implements AutoSyncedComponent, ServerTi
 
     @Override
     public void serverTick() {
-
         if (this.tick > 0) {
             GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
             if(gameWorldComponent.isRole(player, WyspiaExpressRoles.COPYCAT) && GameFunctions.isPlayerAliveAndSurvival(player)){
@@ -64,7 +63,7 @@ public class PlayerRolePickingComponent implements AutoSyncedComponent, ServerTi
                 }
                 this.sync();
             }
-            else{
+            else if (!gameWorldComponent.isRole(player, WyspiaExpressRoles.COPYCAT)){
                 reset();
             }
         }

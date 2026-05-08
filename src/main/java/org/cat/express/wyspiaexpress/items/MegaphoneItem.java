@@ -19,8 +19,6 @@ import org.cat.express.wyspiaexpress.WyspiaExpressSounds;
 import org.cat.express.wyspiaexpress.components.PlayerBodyEntityComponent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 public class MegaphoneItem extends Item{
     public MegaphoneItem(@NotNull Item.Settings settings) {super(settings);}
 

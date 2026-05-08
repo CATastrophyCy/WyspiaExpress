@@ -1,7 +1,6 @@
 package org.cat.express.wyspiaexpress.items;
 
 import dev.doctor4t.wathe.game.GameFunctions;
-import dev.doctor4t.wathe.index.WatheSounds;
 import dev.doctor4t.wathe.item.RevolverItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,7 +13,6 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
-import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.packets.OutlawRevolverC2SPacket;
 import org.jetbrains.annotations.NotNull;
 

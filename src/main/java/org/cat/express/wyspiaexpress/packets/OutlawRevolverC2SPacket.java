@@ -20,7 +20,6 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 public record OutlawRevolverC2SPacket(int target) implements CustomPayload {
 
     public static final Identifier OUTLAW_REVOLVER_PLAYLOAD_ID = Identifier.of(WyspiaExpress.MOD_ID, "outlaw_revolver");

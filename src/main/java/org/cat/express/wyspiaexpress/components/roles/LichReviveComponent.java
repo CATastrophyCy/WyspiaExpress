@@ -2,9 +2,9 @@ package org.cat.express.wyspiaexpress.components.roles;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
