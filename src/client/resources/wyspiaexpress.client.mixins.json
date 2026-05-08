@@ -8,6 +8,7 @@
     "CoinMixin",
     "GraverobberCoronerHudMixin",
     "HudRendererMixin",
+    "InstinctKeyToggleMixin",
     "ItemArmPoseMixin",
     "ItemHandViewMixin",
     "LoverCrashMixin",
