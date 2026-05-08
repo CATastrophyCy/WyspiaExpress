@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress;
 
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
@@ -39,6 +40,9 @@ public class WyspiaExpress implements ModInitializer {
         WyspiaExpressCommands.init();
         registerVersionCheck();
         registerPackets();
+        ServerLifecycleEvents.SERVER_STARTING.register(RoleStatisticsManager::init);
+        ServerLifecycleEvents.SERVER_STOPPING.register(server -> RoleStatisticsManager.shutdown());
+
         LOGGER.info("WyspiaExpress finished initializing.");
     }
 

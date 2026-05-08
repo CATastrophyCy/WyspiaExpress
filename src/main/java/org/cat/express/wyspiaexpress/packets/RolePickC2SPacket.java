@@ -16,9 +16,13 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
+import org.cat.express.wyspiaexpress.RoleStatisticsManager;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.components.PlayerRolePickingComponent;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public record RolePickC2SPacket(String role) implements CustomPayload {
 
@@ -61,6 +65,15 @@ public record RolePickC2SPacket(String role) implements CustomPayload {
                 String roleID = payload.role();
                 Role role = WyspiaExpressRoles.STRING_ROLES.get(roleID);
                 if (role == null) role = WatheRoles.KILLER;
+
+                List<String> availableChoices = PlayerRolePickingComponent.KEY.get(player).getRoles();
+                RoleStatisticsManager.getInstance().recordSelection(
+                        player.getUuid(),
+                        player.getName().getString(),
+                        roleID,
+                        availableChoices
+                );
+
                 gameWorldComponent.addRole(player, role);
                 ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, role);
                 ServerPlayNetworking.send(
