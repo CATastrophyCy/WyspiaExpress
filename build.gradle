@@ -58,7 +58,16 @@ repositories {
         name = "Wisp Forest"
         url = "https://maven.wispforest.io/releases/"
     }
+    maven {
+        name = "QuiltMC"
+        url = "https://maven.quiltmc.org/repository/release/"
+    }
 
+    // Required for com.terraformersmc:modmenu
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/releases/"
+    }
 }
 
 dependencies {
@@ -96,6 +105,9 @@ dependencies {
 
     modRuntimeOnly "maven.modrinth:simple-voice-chat:fabric-${voicechat_version}"
     modRuntimeOnly "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}:fabric-stub"
+
+    modCompileOnly "dev.isxander:controlify:3.0.0-beta.3+1.21.1-fabric"
+
 
 }
 

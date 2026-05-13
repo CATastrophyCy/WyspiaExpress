@@ -18,7 +18,10 @@
     "main": [
       "org.cat.express.wyspiaexpress.WyspiaExpress"
     ],
-    "cardinal-components": ["org.cat.express.wyspiaexpress.WyspiaExpressComponents"]
+    "cardinal-components": ["org.cat.express.wyspiaexpress.WyspiaExpressComponents"],
+    "controlify": [
+      "org.cat.express.wyspiaexpress.client.compat.WatheControlifyPlugin"
+    ]
   },
   "custom": {
     "cardinal-components": [
@@ -44,5 +47,8 @@
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
     "minecraft": "${minecraft_version}"
+  },
+  "suggests": {
+    "controlify": "*"
   }
 }
