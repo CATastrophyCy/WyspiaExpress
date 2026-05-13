@@ -1,4 +1,4 @@
-package org.cat.express.wyspiaexpress.client.mixin;
+package org.cat.express.wyspiaexpress.client.mixin.ui;
 
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.client.WatheClient;

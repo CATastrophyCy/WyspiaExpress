@@ -1,4 +1,4 @@
-package org.cat.express.wyspiaexpress.client.mixin;
+package org.cat.express.wyspiaexpress.client.mixin.modifiers.graverobber;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;

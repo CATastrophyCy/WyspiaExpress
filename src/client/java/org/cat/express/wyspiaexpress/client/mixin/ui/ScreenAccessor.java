@@ -1,4 +1,4 @@
-package org.cat.express.wyspiaexpress.client.mixin;
+package org.cat.express.wyspiaexpress.client.mixin.ui;
 
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;

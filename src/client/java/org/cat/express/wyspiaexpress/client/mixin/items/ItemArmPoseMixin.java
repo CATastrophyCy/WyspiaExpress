@@ -1,4 +1,4 @@
-package org.cat.express.wyspiaexpress.client.mixin;
+package org.cat.express.wyspiaexpress.client.mixin.items;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
