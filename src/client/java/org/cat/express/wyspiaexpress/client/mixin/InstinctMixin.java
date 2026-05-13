@@ -63,7 +63,7 @@ public abstract class InstinctMixin {
                     return;
                 }
                 if (playerPoisonComponent.poisonTicks > 0) {
-                    if(playerPoisonComponent.poisoner.equals(DELUSION_MARKER)) {
+                    if(playerPoisonComponent.poisoner != null && playerPoisonComponent.poisoner.equals(DELUSION_MARKER)) {
                         cir.setReturnValue(0xB099FF);
                         cir.cancel();
                         return;
