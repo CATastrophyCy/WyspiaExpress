@@ -15,6 +15,7 @@ import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.bartender.BartenderPlayerComponent;
 import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
 import org.aussiebox.starexpress.StarryExpressRoles;
+import org.aussiebox.starexpress.cca.SilenceComponent;
 import org.aussiebox.starexpress.cca.StarstruckComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -45,6 +46,7 @@ public abstract class InstinctMixin {
                 StarstruckComponent starstruckComponent = StarstruckComponent.KEY.get(targetPlayer);
                 DreamerComponent dreamerComponent = DreamerComponent.KEY.get(targetPlayer);
                 MorphlingPlayerComponent morphlingPlayerComponent = MorphlingPlayerComponent.KEY.get(targetPlayer);
+                SilenceComponent silenceComponent = SilenceComponent.KEY.get(targetPlayer);
                 if( starstruckComponent.ticks > 0 && gameWorldComponent.isRole(targetPlayer, StarryExpressRoles.STARSTRUCK)) {
                     cir.setReturnValue(0x77C2F2);
                     cir.cancel();
@@ -67,6 +69,11 @@ public abstract class InstinctMixin {
                         return;
                     }
                     cir.setReturnValue(Color.RED.getRGB());
+                    cir.cancel();
+                    return;
+                }
+                if(silenceComponent.isSilenced()){
+                    cir.setReturnValue(0x4A3A54);
                     cir.cancel();
                     return;
                 }
