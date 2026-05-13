@@ -15,8 +15,9 @@ public class RoleBasicConfig {
     public int taskIncome = 0;
     public List<EnumShopEntry> items = new ArrayList<>();
     public List<Integer> itemAmount = new ArrayList<>();
-    @RangeConstraint(min = 1, max = 20)
-    public int minimumPlayerSpawn = 5;
+    public int minimumPlayerSpawn = 1;
+    public int maximumPlayerSpawn = 99;
+
     @RangeConstraint(min = 0, max = 20)
     public int maximumSpawn = 1;
 

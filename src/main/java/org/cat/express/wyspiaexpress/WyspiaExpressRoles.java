@@ -189,7 +189,7 @@ public class WyspiaExpressRoles {
             }
             for( Role role : ROLES_BASIC_CONFIG.keySet()){
                 WyspiaExpressRolesConfig.RoleBasicConfig config = ROLES_BASIC_CONFIG.get(role);
-                if (PLAYER_COUNT >= config.minimumPlayerSpawn())
+                if (PLAYER_COUNT >= config.minimumPlayerSpawn() && PLAYER_COUNT <= config.maximumPlayerSpawn())
                 {
                     Harpymodloader.setRoleMaximum(role,config.maximumSpawn());
                 }
@@ -272,7 +272,7 @@ public class WyspiaExpressRoles {
 
         killerRoles.removeIf(r -> (
                 (
-                    ((ROLES_BASIC_CONFIG.get(r) != null) && (ROLES_BASIC_CONFIG.get(r).minimumPlayerSpawn() > PLAYER_COUNT)) ||
+                    ((ROLES_BASIC_CONFIG.get(r) != null) && (( PLAYER_COUNT >= ROLES_BASIC_CONFIG.get(r).minimumPlayerSpawn() && PLAYER_COUNT <= ROLES_BASIC_CONFIG.get(r).maximumPlayerSpawn()))) ||
                     Harpymodloader.VANNILA_ROLES.contains(r) ||
                     !r.canUseKiller() ||
                     HarpyModLoaderConfig.HANDLER.instance().disabled.contains(r.identifier().toString())
