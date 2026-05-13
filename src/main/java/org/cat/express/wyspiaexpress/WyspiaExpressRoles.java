@@ -272,7 +272,7 @@ public class WyspiaExpressRoles {
 
         killerRoles.removeIf(r -> (
                 (
-                    ((ROLES_BASIC_CONFIG.get(r) != null) && (( PLAYER_COUNT >= ROLES_BASIC_CONFIG.get(r).minimumPlayerSpawn() && PLAYER_COUNT <= ROLES_BASIC_CONFIG.get(r).maximumPlayerSpawn()))) ||
+                    ((ROLES_BASIC_CONFIG.get(r) != null) && (( PLAYER_COUNT < ROLES_BASIC_CONFIG.get(r).minimumPlayerSpawn() || PLAYER_COUNT > ROLES_BASIC_CONFIG.get(r).maximumPlayerSpawn()))) ||
                     Harpymodloader.VANNILA_ROLES.contains(r) ||
                     !r.canUseKiller() ||
                     HarpyModLoaderConfig.HANDLER.instance().disabled.contains(r.identifier().toString())
