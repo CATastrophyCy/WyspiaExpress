@@ -340,6 +340,9 @@ public class WyspiaExpressRoles {
         registerRoleBasicConfig(KIDNAPPER, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.kidnapperConfig.basic);
         registerRoleBasicConfig(DRUGMAKER, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.drugmakerConfig.basic);
         registerRoleBasicConfig(DETECTIVE, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.detectiveConfig.basic);
+        registerRoleBasicConfig(JUDGE, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.judgeConfig.basic);
+        registerRoleBasicConfig(BELLRINGER, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.bellringerConfig.basic);
+        registerRoleBasicConfig(ROBOT, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.robotConfig.basic);
         registerRoleBasicConfig(PHYSICIAN, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.physicianConfig.basic);
         registerRoleBasicConfig(TECHNICIAN, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.technicianConfig.basic);
         registerRoleBasicConfig(HACKER, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.hackerConfig.basic);

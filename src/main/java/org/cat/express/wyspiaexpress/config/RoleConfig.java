@@ -259,6 +259,15 @@ public class RoleConfig {
         @Comment("Config options for DETECTIVE")
         @Nest public DetectiveConfig detectiveConfig = new DetectiveConfig();
 
+        @Comment("Config options for JUDGE")
+        @Nest public JudgeConfig judgeConfig = new JudgeConfig();
+
+        @Comment("Config options for BELLRINGER")
+        @Nest public BellringerConfig bellringerConfig = new BellringerConfig();
+
+        @Comment("Config options for ROBOT")
+        @Nest public RobotConfig robotConfig = new RobotConfig();
+
         @Comment("Config options for PHYSICIAN")
         @Nest public PhysicianConfig physicianConfig = new PhysicianConfig();
 
@@ -300,19 +309,36 @@ public class RoleConfig {
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
+        public static class JudgeConfig{
+            @Comment("Basic role configuration")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+
+        public static class BellringerConfig{
+            @Comment("Basic role configuration")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+
+        public static class RobotConfig{
+            @Comment("Basic role configuration")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
 
         public static class PhysicianConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
+
         public static class TechnicianConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
+
         public static class HackerConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
+
         public static class DreamerConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
@@ -323,6 +349,7 @@ public class RoleConfig {
             @Comment("Maximum delusion requirement")
             public int maximumRequirement = 4;
         }
+
     }
 
 }
