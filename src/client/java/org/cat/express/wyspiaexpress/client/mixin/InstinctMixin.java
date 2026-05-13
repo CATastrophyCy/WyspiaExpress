@@ -35,8 +35,10 @@ public abstract class InstinctMixin {
         PlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) return;
         if (target instanceof PlayerEntity targetPlayer) {
-            if(GameFunctions.isPlayerSpectatingOrCreative(player) && GameFunctions.isPlayerAliveAndSurvival(targetPlayer) && WatheClient.isInstinctEnabled() ) {
-                GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(targetPlayer);
+            if(GameFunctions.isPlayerSpectatingOrCreative(player)
+                    && (GameFunctions.isPlayerAliveAndSurvival(targetPlayer)  || targetPlayer.equals(player))
+                    && WatheClient.isInstinctEnabled() ) {
+                GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(targetPlayer.getWorld());
                 PlayerPoisonComponent playerPoisonComponent = PlayerPoisonComponent.KEY.get(targetPlayer);
                 BartenderPlayerComponent bartenderPlayerComponent = BartenderPlayerComponent.KEY.get(targetPlayer);
                 PhysicianComponent physicianComponent = PhysicianComponent.KEY.get(targetPlayer);
