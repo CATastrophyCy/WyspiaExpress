@@ -62,6 +62,7 @@
   "announcement.modifier.wyspiaexpress.employee": "Employee",
   "announcement.modifier.wyspiaexpress.vent_crawler": "Professional Vent Crawler",
   "announcement.modifier.wyspiaexpress.elusive": "Elusive",
+  "announcement.modifier.wyspiaexpress.bomber": "Bomber",
 
   "guidebook.namespace.wyspiaexpress": "Mod: WyspiaExpress",
 
@@ -101,5 +102,9 @@
   "guidebook.role.wyspiaexpress:elusive": "Elusive",
     "guidebook.role.title.wyspiaexpress:elusive": "Stealth 100",
     "guidebook.role.description.wyspiaexpress:elusive": "Master of hide and seek. \n\n Player with elusive will be hidden from most active instinct. But passive instinct like Starstruck will still see you",
+
+  "guidebook.role.wyspiaexpress:bomber": "Bomber",
+  "guidebook.role.title.wyspiaexpress:bomber": "BOOOOM!",
+  "guidebook.role.description.wyspiaexpress:bomber": "I have some funny bombs, wanna test it?",
   "credits.wathe.thank_you": ""
 }

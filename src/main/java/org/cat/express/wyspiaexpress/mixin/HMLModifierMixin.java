@@ -153,6 +153,7 @@ public abstract class HMLModifierMixin {
                 List<ServerPlayerEntity> civilians = shuffledPlayers.stream().filter(gameWorldComponent::isInnocent).toList();
                 int i = serverWorld.random.nextInt(civilians.size());
                 if(civilians.size() > i) {
+                    WyspiaExpress.LOGGER.info("[BOMBER] Player {} received BOMBER!", civilians.get(i).getName().getString());
                     worldModifierComponent.addModifier(civilians.get(i).getUuid(), WyspiaExpressRoles.BOMBER);
                     ModifierAssigned.EVENT.invoker().assignModifier(civilians.get(i), WyspiaExpressRoles.BOMBER);
                 }
