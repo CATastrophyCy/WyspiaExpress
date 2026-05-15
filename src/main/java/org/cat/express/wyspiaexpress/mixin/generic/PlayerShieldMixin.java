@@ -2,10 +2,13 @@ package org.cat.express.wyspiaexpress.mixin.generic;
 
 import dev.doctor4t.wathe.api.event.AllowPlayerDeath;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.cca.PlayerPsychoComponent;
 import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
+import dev.doctor4t.wathe.index.WatheSounds;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.agmas.noellesroles.Noellesroles;
@@ -27,8 +30,24 @@ public class PlayerShieldMixin {
             ci.cancel();
             return;
         }
+        // check psycho shield, as that doesn't get checked on AllowPlayerDeath
+        PlayerPsychoComponent component = PlayerPsychoComponent.KEY.get(victim);
+        if (component.getPsychoTicks() > 0) {
+            // they still have psycho protection
+            if (component.getArmour() > 0) {
+                PlayerEffectComponent.KEY.get(victim).setStunTicks(WyspiaExpress.SERVER_CONFIG.blockStunTicks());
+                component.setArmour(component.getArmour() - 1);
+                component.sync();
+                victim.playSoundToPlayer(WatheSounds.ITEM_PSYCHO_ARMOUR, SoundCategory.MASTER, 5F, 1F);
+                ci.cancel();
+                return;
+            }
+        }
+
+        // all other AllowDeath event failed, so the player is destined to die
         if(killer== null) return;
         GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(killer.getWorld());
+        // remove phantom invisibility depending on the config
         if(gameWorldComponent.isRole(killer, Noellesroles.PHANTOM) && WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.phantomConfig.loseInvisibilityWhenKill()){
             if(deathReason != null) {
                 if( !deathReason.equals(GameConstants.DeathReasons.POISON)) {
