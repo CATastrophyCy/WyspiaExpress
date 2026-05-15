@@ -168,6 +168,8 @@ public abstract class HMLModifierMixin {
     private boolean isEligible(ServerPlayerEntity player, Modifier mod, GameWorldComponent gwc) {
         if (mod.canOnlyBeAppliedTo != null && gwc.getRole(player) != null && !mod.canOnlyBeAppliedTo.contains(gwc.getRole(player))) return false;
         if (mod.cannotBeAppliedTo != null && gwc.getRole(player) != null && mod.cannotBeAppliedTo.contains(gwc.getRole(player))) return false;
+
+        if(mod.killerOnly && mod.civilianOnly) return gwc.canUseKillerFeatures(player) || gwc.isInnocent(player);
         if (mod.killerOnly && !gwc.canUseKillerFeatures(player)) return false;
         if (mod.civilianOnly && !gwc.isInnocent(player)) return false;
         return true;

@@ -61,6 +61,7 @@
 
   "announcement.modifier.wyspiaexpress.employee": "Employee",
   "announcement.modifier.wyspiaexpress.vent_crawler": "Professional Vent Crawler",
+  "announcement.modifier.wyspiaexpress.elusive": "Elusive",
 
   "guidebook.namespace.wyspiaexpress": "Mod: WyspiaExpress",
 
@@ -95,5 +96,10 @@
 
   "guidebook.role.wyspiaexpress:vent_crawler": "Professional Vent Crawler",
     "guidebook.role.title.wyspiaexpress:vent_crawler": "Sus ඞ",
-    "guidebook.role.description.wyspiaexpress:vent_crawler": "Why are you venting? \nGUYS RED IS SUS !!!\n\n Gain 50% increased speed when crawling"
+    "guidebook.role.description.wyspiaexpress:vent_crawler": "Why are you venting? \nGUYS RED IS SUS !!!\n\n Gain 50% increased speed when crawling",
+
+  "guidebook.role.wyspiaexpress:elusive": "Elusive",
+    "guidebook.role.title.wyspiaexpress:elusive": "Stealth 100",
+    "guidebook.role.description.wyspiaexpress:elusive": "Master of hide and seek. \n\n Player with elusive will be hidden from most active instinct. But passive instinct like Starstruck will still see you",
+  "credits.wathe.thank_you": ""
 }

@@ -15,6 +15,7 @@ import org.BsXinQin.kinswathe.component.ConfigWorldComponent;
 import org.BsXinQin.kinswathe.roles.dreamer.DreamerComponent;
 import org.BsXinQin.kinswathe.roles.hacker.HackerComponent;
 import org.BsXinQin.kinswathe.roles.physician.PhysicianComponent;
+import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.bartender.BartenderPlayerComponent;
 import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
@@ -22,6 +23,7 @@ import org.aussiebox.starexpress.StarryExpressRoles;
 import org.aussiebox.starexpress.cca.SilenceComponent;
 import org.aussiebox.starexpress.cca.StarstruckComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -41,6 +43,7 @@ public abstract class InstinctMixin {
         PlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) return;
         GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(target.getWorld());
+        WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(target.getWorld());
         if (target instanceof PlayerEntity targetPlayer) {
             // handle spectator instinct
             if (GameFunctions.isPlayerSpectatingOrCreative(player)
@@ -54,12 +57,24 @@ public abstract class InstinctMixin {
                     return;
                 }
             }
+
+            // target has to be alive
+            if(!GameFunctions.isPlayerAliveAndSurvival(targetPlayer)) return;
+
             // handle alive player instinct with instinct pressed, doesn't handle passive instinct
-            if (GameFunctions.isPlayerAliveAndSurvival(targetPlayer) && WatheClient.isInstinctEnabled()) {
+            if (GameFunctions.isPlayerAliveAndSurvival(player)  && WatheClient.isInstinctEnabled()) {
+
+                // if the player is elusive then hide them from all active instinct, won't work with starstruck or other passive instinct
+                if(worldModifierComponent.isModifier(targetPlayer, WyspiaExpressRoles.ELUSIVE)){
+                    cir.setReturnValue(-1);
+                    cir.cancel();
+                    return;
+                }
+
                 Role role = gameWorldComponent.getRole(targetPlayer);
                 if (role != null) {
-                    // If the player is killer and the player is alive
-                    if (WatheClient.isKiller() && WatheClient.isPlayerAliveAndInSurvival()) {
+                    // If the current player is killer and is alive
+                    if (WatheClient.isKiller()) {
                         if (KinsWatheRoles.NEUTRAL_ROLES.contains(role)) {
                             cir.setReturnValue(0x4EDD35);
                             cir.cancel();

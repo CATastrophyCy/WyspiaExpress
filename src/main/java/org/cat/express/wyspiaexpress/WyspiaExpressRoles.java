@@ -142,13 +142,19 @@ public class WyspiaExpressRoles {
     public static Modifier EMPLOYEE = registerModifier(new Modifier(
             Identifier.of(WyspiaExpress.MOD_ID, "employee"),
             0x0D3B66,
-            new ArrayList<>(List.of(CONDUCTOR)),null,
+            new ArrayList<>(List.of(CONDUCTOR, LICENSED_VILLAIN)),null,
             false,false));
 
     public static Modifier VENT_CRAWLER = registerModifier(new Modifier(
             Identifier.of(WyspiaExpress.MOD_ID, "vent_crawler"),
             0x5A6B7A,
-            new ArrayList<>(List.of(STARSTRUCK)),null,
+            new ArrayList<>(List.of(STARSTRUCK, HUNTER)),null,
+            false,false));
+
+    public static Modifier ELUSIVE = registerModifier(new Modifier(
+            Identifier.of(WyspiaExpress.MOD_ID, "elusive"),
+            0x96FFA9,
+            new ArrayList<>(List.of(THIEF,NOISEMAKER, LICENSED_VILLAIN)),null,
             false,false));
 
     private static void registerRoleBasicConfig(Role role, WyspiaExpressRolesConfig.RoleBasicConfig config) {
