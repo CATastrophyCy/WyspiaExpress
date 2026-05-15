@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress.mixin;
 
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -60,6 +61,7 @@ public abstract class HMLModifierMixin {
 
         // Pre-calculate the maximum allowed distribution for each modifier
         Map<Modifier, Integer> maxAllowedPerMod = new HashMap<>();
+
         Map<Modifier, Integer> currentlyAssigned = new HashMap<>();
         int killerMods = (int) HMLModifiers.MODIFIERS.stream().filter(m -> m.killerOnly).count();
         for (Modifier mod : HMLModifiers.MODIFIERS) {
@@ -74,7 +76,7 @@ public abstract class HMLModifierMixin {
             }
             maxAllowedPerMod.put(mod, target);
         }
-
+        maxAllowedPerMod.put(WyspiaExpressRoles.BOMBER, 0);
         // Handle forced modifiers
         if (!Harpymodloader.FORCED_MODDED_MODIFIER.isEmpty()) {
             for (Modifier mod : HMLModifiers.MODIFIERS) {
@@ -137,11 +139,23 @@ public abstract class HMLModifierMixin {
             for (ServerPlayerEntity player : shuffledPlayers) {
                 if (!worldModifierComponent.isModifier(player, Noellesroles.GUESSER) && gameWorldComponent.canUseKillerFeatures(player)) {
                     worldModifierComponent.addModifier(player.getUuid(), Noellesroles.GUESSER);
+                    ModifierAssigned.EVENT.invoker().assignModifier(player, Noellesroles.GUESSER);
                     count++;
                 }
                 if( count >= WyspiaExpress.MODIFIERS_CONFIG.guesserConfig.maximumGuessers())
                     break;
 
+            }
+        }
+        // Give a random civilian bomber
+        if(WyspiaExpress.MODIFIERS_CONFIG.bomberConfig.enabled()) {
+            if(serverWorld.random.nextInt( WyspiaExpress.MODIFIERS_CONFIG.bomberConfig.chance()) == 0 ){
+                List<ServerPlayerEntity> civilians = shuffledPlayers.stream().filter(gameWorldComponent::isInnocent).toList();
+                int i = serverWorld.random.nextInt(civilians.size());
+                if(civilians.size() > i) {
+                    worldModifierComponent.addModifier(civilians.get(i).getUuid(), WyspiaExpressRoles.BOMBER);
+                    ModifierAssigned.EVENT.invoker().assignModifier(civilians.get(i), WyspiaExpressRoles.BOMBER);
+                }
             }
         }
         // Announcements

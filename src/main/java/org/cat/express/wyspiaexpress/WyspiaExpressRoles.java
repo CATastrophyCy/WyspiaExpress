@@ -156,7 +156,11 @@ public class WyspiaExpressRoles {
             0x96FFA9,
             new ArrayList<>(List.of(THIEF,NOISEMAKER, LICENSED_VILLAIN)),null,
             false,false));
-
+    public static Modifier BOMBER = registerModifier(new Modifier(
+            Identifier.of(WyspiaExpress.MOD_ID, "bomber"),
+            0xB51010,
+            null,null,
+            false,true));
     private static void registerRoleBasicConfig(Role role, WyspiaExpressRolesConfig.RoleBasicConfig config) {
         ROLES_BASIC_CONFIG.put(role, config);
     }
@@ -218,6 +222,11 @@ public class WyspiaExpressRoles {
                 itemStack.apply(DataComponentTypes.LORE, LoreComponent.DEFAULT, component ->
                         new LoreComponent(Text.literal("Employee Key").getWithStyle(Style.EMPTY.withItalic(false).withColor(0xFF8C00))));
                 player.giveItemStack(itemStack);
+            }
+            if(modifier.equals(BOMBER)){
+                for(int i = 0 ; i < WyspiaExpress.MODIFIERS_CONFIG.bomberConfig.grenadeAmount(); i++){
+                    player.giveItemStack(WatheItems.GRENADE.getDefaultStack());
+                }
             }
         });
     }
