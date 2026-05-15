@@ -337,6 +337,8 @@ public class RoleConfig {
         public static class HackerConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+            @Comment("Enable instinct")
+            public boolean enableInstinct = false;
         }
 
         public static class DreamerConfig{
@@ -348,6 +350,8 @@ public class RoleConfig {
             public int minimumRequirement = 2;
             @Comment("Maximum delusion requirement")
             public int maximumRequirement = 4;
+            @Comment("Enable instinct")
+            public boolean enableInstinct = false;
         }
 
     }
