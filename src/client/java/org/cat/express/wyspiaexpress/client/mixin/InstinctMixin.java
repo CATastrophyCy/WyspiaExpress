@@ -79,7 +79,7 @@ public abstract class InstinctMixin {
                             cir.setReturnValue(0x4EDD35);
                             cir.cancel();
                             return;
-                        } else if (KinsWatheRoles.KILLER_NEUTRAL_ROLES.contains(role)) {
+                        } else if (KinsWatheRoles.KILLER_NEUTRAL_ROLES.contains(role) || Noellesroles.KILLER_SIDED_NEUTRALS.contains(role)) {
                             if (WyspiaExpress.SERVER_CONFIG.killerSpecialInstinct()) {
                                 // role specific color instinct
                                 cir.setReturnValue(role.color());
@@ -115,7 +115,7 @@ public abstract class InstinctMixin {
             if(WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.hackerConfig.enableInstinct()) {
                 if (gameWorldComponent.canUseKillerFeatures(targetPlayer) || gameWorldComponent.isRole(targetPlayer, Noellesroles.MIMIC)) {
                     return MathHelper.hsvToRgb(0.0F, 1.0F, 0.6F);
-                } else if (KinsWatheRoles.KILLER_NEUTRAL_ROLES.contains(role)) {
+                } else if (KinsWatheRoles.KILLER_NEUTRAL_ROLES.contains(role) || Noellesroles.KILLER_SIDED_NEUTRALS.contains(role)) {
                     if (WyspiaExpress.SERVER_CONFIG.killerSpecialInstinct()) {
                         return role.color();
                     }
