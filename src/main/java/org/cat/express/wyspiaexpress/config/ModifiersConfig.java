@@ -4,6 +4,7 @@ import blue.endless.jankson.Comment;
 import io.wispforest.owo.config.Option;
 import io.wispforest.owo.config.annotation.Config;
 import io.wispforest.owo.config.annotation.Nest;
+import io.wispforest.owo.config.annotation.RangeConstraint;
 import io.wispforest.owo.config.annotation.Sync;
 
 @Sync(Option.SyncMode.OVERRIDE_CLIENT)
@@ -18,6 +19,9 @@ public class ModifiersConfig {
 
     @Comment("Config options for BOMBER")
     @Nest public BomberConfig bomberConfig = new BomberConfig();
+
+    @Comment("Config options for ELUSIVE")
+    @Nest public ElusiveConfig elusiveConfig = new ElusiveConfig();
 
     public static class GuesserConfig{
         @Comment("Wheter killer role will always have guesser added. With this enabled it is recommended to have guesser disabled")
@@ -39,5 +43,11 @@ public class ModifiersConfig {
         public int chance = 1000;
         @Comment("Amount of grenade to give to player")
         public int grenadeAmount = 5;
+    }
+
+    public static class ElusiveConfig{
+        @Comment("Minimum distance to hide from instinct")
+        @RangeConstraint(min = 0, max = 500)
+        public int minimumDistance = 25;
     }
 }

@@ -83,7 +83,8 @@ public abstract class InstinctMixin {
             if (GameFunctions.isPlayerAliveAndSurvival(player)  && WatheClient.isInstinctEnabled()) {
 
                 // if the player is elusive then hide them from all active instinct, won't work with starstruck or other passive instinct
-                if(worldModifierComponent.isModifier(targetPlayer, WyspiaExpressRoles.ELUSIVE)){
+                if(worldModifierComponent.isModifier(targetPlayer, WyspiaExpressRoles.ELUSIVE)
+                        && player.squaredDistanceTo(targetPlayer) <= WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.minimumDistance() * WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.minimumDistance()) {
                     cir.setReturnValue(-1);
                     cir.cancel();
                     return;
