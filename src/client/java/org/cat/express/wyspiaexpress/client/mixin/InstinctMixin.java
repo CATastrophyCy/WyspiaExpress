@@ -42,6 +42,8 @@ public abstract class InstinctMixin {
         if (MinecraftClient.getInstance().player == null) return;
         GameWorldComponent gameWorld = GameWorldComponent.KEY.get(MinecraftClient.getInstance().player.getWorld());
 
+        if(WatheClient.isPlayerSpectatingOrCreative()) return;
+
         if (gameWorld.isRole(MinecraftClient.getInstance().player, KinsWatheRoles.DREAMER)
                 && !WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.dreamerConfig.enableInstinct()) {
             cir.setReturnValue(false);
