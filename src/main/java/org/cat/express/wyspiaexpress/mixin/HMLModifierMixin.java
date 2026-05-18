@@ -1,8 +1,8 @@
 package org.cat.express.wyspiaexpress.mixin;
 
 import dev.doctor4t.wathe.api.WatheRoles;
+import dev.doctor4t.wathe.cca.GameTimeComponent;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -174,8 +174,8 @@ public abstract class HMLModifierMixin {
         }
 
 
-
-
+        GameTimeComponent gameTimeComponent = GameTimeComponent.KEY.get(serverWorld);
+        WyspiaExpressRoles.GAME_START_TIME = gameTimeComponent.time;
         ci.cancel();
     }
 

@@ -35,6 +35,7 @@ import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
+import pro.fazeclan.river.stupid_express.role.avaricious.AvariciousGoldHandler;
 
 import java.util.*;
 
@@ -61,6 +62,7 @@ public class WyspiaExpressRoles {
             return false;
         });
     }
+    public static int GAME_START_TIME = -1;
     public static int PLAYER_COUNT = 0;
     private static final HashMap<String, Role> ROLES = new HashMap<>();
     private static final HashMap<String, Role> NON_MURDER_ROLES = new HashMap<>();
@@ -301,6 +303,9 @@ public class WyspiaExpressRoles {
             if(role.equals(EDGE_LORD)){
                 // give edge lord night vision
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, -1 , 0, true, false, false));
+            }
+            if (role.equals(AVARICIOUS)) {
+                AvariciousGoldHandler.gameStartTime = GAME_START_TIME;
             }
         });
         ResetPlayerEvent.EVENT.register(((playerEntity) -> {
