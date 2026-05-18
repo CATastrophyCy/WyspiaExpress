@@ -11,9 +11,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import org.BsXinQin.kinswathe.KinsWatheRoles;
-import org.BsXinQin.kinswathe.component.ConfigWorldComponent;
 import org.BsXinQin.kinswathe.roles.dreamer.DreamerComponent;
-import org.BsXinQin.kinswathe.roles.hacker.HackerComponent;
 import org.BsXinQin.kinswathe.roles.physician.PhysicianComponent;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.noellesroles.Noellesroles;
@@ -24,6 +22,7 @@ import org.aussiebox.starexpress.cca.SilenceComponent;
 import org.aussiebox.starexpress.cca.StarstruckComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,6 +36,25 @@ import java.util.UUID;
 public abstract class InstinctMixin {
     // apparently they replaced fake poison's poisoner to this uuid, and in PlayerPoisonComponent they used a mixin to guarantee that delusion_maker won't kill
     @Unique private static final UUID DELUSION_MARKER = UUID.fromString("00000000-0000-0000-dead-c0de00000000"); // unique string used by Kinswathe
+
+    @Inject(method = "isInstinctEnabled", at = @At("HEAD"), cancellable = true)
+    private static void isInstinctEnabled(@NotNull CallbackInfoReturnable<Boolean> cir) {
+        if (MinecraftClient.getInstance().player == null) return;
+        GameWorldComponent gameWorld = GameWorldComponent.KEY.get(MinecraftClient.getInstance().player.getWorld());
+
+        if (gameWorld.isRole(MinecraftClient.getInstance().player, KinsWatheRoles.DREAMER)
+                && !WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.dreamerConfig.enableInstinct()) {
+            cir.setReturnValue(false);
+            cir.cancel();
+            return;
+        }
+        if (gameWorld.isRole(MinecraftClient.getInstance().player, KinsWatheRoles.HACKER)
+                && !WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.hackerConfig.enableInstinct()) {
+            cir.setReturnValue(false);
+            cir.cancel();
+            return;
+        }
+    }
 
     @Inject(method = "getInstinctHighlight", at = @At("HEAD"), cancellable = true)
     private static void getInstinctHighlightColor(Entity target, CallbackInfoReturnable<Integer> cir) {
@@ -92,52 +110,10 @@ public abstract class InstinctMixin {
                             return;
                         }
                     }
-                    // if the current player is a dreamer
-                    if (gameWorldComponent.isRole(player, KinsWatheRoles.DREAMER)) {
-                        cir.setReturnValue(handleDreamerInstinct(targetPlayer, gameWorldComponent));
-                        cir.cancel();
-                        return;
-                    }
-                    // if the current player is a hacker
-                    if (gameWorldComponent.isRole(player, KinsWatheRoles.HACKER)) {
-                        cir.setReturnValue(handleHackerInstinct(targetPlayer, gameWorldComponent, role));
-                        cir.cancel();
-                        return;
-                    }
-                }
-            }
-        }
-    }
 
-    @Unique
-    private static int handleHackerInstinct(PlayerEntity targetPlayer, GameWorldComponent gameWorldComponent, Role role) {
-            HackerComponent targetHack = HackerComponent.KEY.get(targetPlayer);
-            if(WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.hackerConfig.enableInstinct()) {
-                if (gameWorldComponent.canUseKillerFeatures(targetPlayer) || gameWorldComponent.isRole(targetPlayer, Noellesroles.MIMIC)) {
-                    return MathHelper.hsvToRgb(0.0F, 1.0F, 0.6F);
-                } else if (KinsWatheRoles.KILLER_NEUTRAL_ROLES.contains(role) || Noellesroles.KILLER_SIDED_NEUTRALS.contains(role)) {
-                    if (WyspiaExpress.SERVER_CONFIG.killerSpecialInstinct()) {
-                        return role.color();
-                    }
-                    return MathHelper.hsvToRgb(0.0F, 1.0F, 0.6F);
-                } else {
-                    return KinsWatheRoles.HACKER.color();
                 }
             }
-            else if (targetHack.hackingTime >= ConfigWorldComponent.KEY.get(MinecraftClient.getInstance().player.getWorld()).HackerHackingTime * 20) {
-                return Color.GREEN.getRGB();
-            }
-            // disable instinct
-            return -1;
-    }
-    @Unique
-    private static int handleDreamerInstinct(PlayerEntity targetPlayer, GameWorldComponent gameWorldComponent) {
-        DreamerComponent targetDream = DreamerComponent.KEY.get(targetPlayer);
-        // if the target player is protected by this dreamer or that the instinct is enabled
-        if (WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.dreamerConfig.enableInstinct() || targetDream.dreamerUUID != null) {
-            return KinsWatheRoles.DREAMER.color();
         }
-        return -1;
     }
     @Unique
     private static int handleSpectatorInstinct(PlayerEntity targetPlayer, GameWorldComponent gameWorldComponent) {
