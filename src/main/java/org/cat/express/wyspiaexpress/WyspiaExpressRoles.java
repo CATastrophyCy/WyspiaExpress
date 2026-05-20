@@ -3,6 +3,7 @@ package org.cat.express.wyspiaexpress;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.api.event.CanSeePoison;
+import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.MapVariablesWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import dev.doctor4t.wathe.game.GameConstants;
@@ -59,7 +60,11 @@ public class WyspiaExpressRoles {
             if (GameFunctions.isPlayerSpectatingOrCreative(player)) {
                 return true;
             }
-            return false;
+            GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
+
+            Role role = gameWorldComponent.getRole(player);
+            if(role == null) return false;
+            return WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role).seePoison();
         });
     }
     public static int GAME_START_TIME = -1;

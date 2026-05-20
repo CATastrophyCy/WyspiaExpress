@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.config;
 
+import blue.endless.jankson.Comment;
 import io.wispforest.owo.config.annotation.RangeConstraint;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 
@@ -20,5 +21,7 @@ public class RoleBasicConfig {
 
     @RangeConstraint(min = 0, max = 20)
     public int maximumSpawn = 1;
+
+    public boolean seePoison = false;
 
 }
