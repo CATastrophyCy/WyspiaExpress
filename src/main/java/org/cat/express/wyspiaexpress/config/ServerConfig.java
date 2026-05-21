@@ -4,6 +4,7 @@ import blue.endless.jankson.Comment;
 import io.wispforest.owo.config.Option;
 import io.wispforest.owo.config.annotation.Config;
 import io.wispforest.owo.config.annotation.Nest;
+import io.wispforest.owo.config.annotation.RangeConstraint;
 import io.wispforest.owo.config.annotation.Sync;
 
 import java.util.ArrayList;
@@ -12,6 +13,9 @@ import java.util.List;
 @Sync(Option.SyncMode.OVERRIDE_CLIENT)
 @Config(name = "wyspiaexpress/general", wrapperName = "WyspiaExpressServerConfig")
 public class ServerConfig {
+    @Comment("Number of extra spectator voicechats")
+    @RangeConstraint(min = 0, max = 10)
+    public int extraSpectatorsVoicechat = 5;
     @Comment("Enable spectator special instinct showing more information")
     public boolean spectatorSpecialInstinct = true;
     @Comment("Enable killer having role color instinct on killer-aligned neutrals")
