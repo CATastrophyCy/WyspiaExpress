@@ -107,6 +107,10 @@ public class ItemConfig {
         public boolean enableSound = false;
         @Comment("Countdown, in ticks, before you can remove the tape")
         public int removeCountdown = 100;
+        @Comment("Enable passive mood lost")
+        public boolean enableMoodLost = false;
+        @Comment("Mood lost amount")
+        public float moodLostAmount = 0.05f;
     }
     public static class OutlawRevolverConfig{
         @Comment("Basic item configuration")
