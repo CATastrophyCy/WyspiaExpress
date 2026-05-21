@@ -46,8 +46,11 @@ public class ModifiersConfig {
     }
 
     public static class ElusiveConfig{
-        @Comment("Minimum distance to hide from instinct")
+        @Comment("Minimum distance to start hiding from instinct")
         @RangeConstraint(min = 0, max = 500)
-        public int minimumDistance = 25;
+        public int minimumDistance = 10;
+        @Comment("Maximum distance to hide from instinct")
+        @RangeConstraint(min = 0, max = 500)
+        public int maximumDistance = 50;
     }
 }
