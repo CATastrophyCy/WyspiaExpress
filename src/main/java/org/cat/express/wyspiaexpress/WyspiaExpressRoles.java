@@ -61,10 +61,11 @@ public class WyspiaExpressRoles {
                 return true;
             }
             GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
-
             Role role = gameWorldComponent.getRole(player);
             if(role == null) return false;
-            return WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role).seePoison();
+            var config = ROLES_BASIC_CONFIG.get(role);
+            if(config == null) return false;
+            return config.seePoison();
         });
     }
     public static int GAME_START_TIME = -1;
