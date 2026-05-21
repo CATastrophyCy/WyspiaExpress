@@ -340,6 +340,8 @@ public class WyspiaExpressRoles {
         registerRoleBasicConfig(GAMBLER, WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.basic);
         registerRoleBasicConfig(LICH, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.basic);
         registerRoleBasicConfig(LICH_GHOUL, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.ghoulConfig.basic);
+        // wathe
+        registerRoleBasicConfig(WatheRoles.VIGILANTE, WyspiaExpress.ROLES_CONFIG.roleConfig.vigilanteConfig.basic);
         // Starry Express roles
         registerRoleBasicConfig(MUZZLER, WyspiaExpress.ROLES_CONFIG.roleConfig.starryExpress.muzzlerConfig.basic);
         registerRoleBasicConfig(STARSTRUCK, WyspiaExpress.ROLES_CONFIG.roleConfig.starryExpress.starstruckConfig.basic);
@@ -348,6 +350,7 @@ public class WyspiaExpressRoles {
         registerRoleBasicConfig(NECROMANCER, WyspiaExpress.ROLES_CONFIG.roleConfig.stupidExpress.necromancerConfig.basic);
         registerRoleBasicConfig(AMNESIAC, WyspiaExpress.ROLES_CONFIG.roleConfig.stupidExpress.amnesiacConfig.basic);
         registerRoleBasicConfig(THIEF, WyspiaExpress.ROLES_CONFIG.roleConfig.stupidExpress.thiefConfig.basic);
+        registerRoleBasicConfig(ARSONIST, WyspiaExpress.ROLES_CONFIG.roleConfig.stupidExpress.arsonistConfig.basic);
         // Noelles role
         registerRoleBasicConfig(MORPHLING, WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.morphlingConfig.basic);
         registerRoleBasicConfig(PHANTOM, WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.phantomConfig.basic);
@@ -371,6 +374,7 @@ public class WyspiaExpressRoles {
         registerRoleBasicConfig(ROBOT, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.robotConfig.basic);
         registerRoleBasicConfig(PHYSICIAN, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.physicianConfig.basic);
         registerRoleBasicConfig(TECHNICIAN, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.technicianConfig.basic);
+        registerRoleBasicConfig(COOK,WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.cookConfig.basic);
         registerRoleBasicConfig(HACKER, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.hackerConfig.basic);
         registerRoleBasicConfig(DREAMER, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.dreamerConfig.basic);
 

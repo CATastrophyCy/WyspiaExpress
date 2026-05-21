@@ -20,6 +20,10 @@ public class RoleConfig {
     @Nest public GamblerConfig  gamblerConfig = new GamblerConfig();
     @Comment("Config options for LICH")
     @Nest public LichConfig lichConfig = new LichConfig();
+    // wathe
+    @Comment("Config options for VIGILANTE")
+    @Nest public VigilanteConfig vigilanteConfig = new VigilanteConfig();
+
     // Starry Express
     @Nest public StarryExpressRoles starryExpress = new StarryExpressRoles();
     // Stupid Express
@@ -88,6 +92,14 @@ public class RoleConfig {
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
     }
+
+    // wathe
+
+    public static class VigilanteConfig {
+        @Comment("Basic role configuration")
+        @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+    }
+
     // Starry Express
     public static class StarryExpressRoles{
         @Comment("Config options for MUZZLER")
@@ -130,6 +142,9 @@ public class RoleConfig {
         @Comment("Config options for THIEF")
         @Nest public ThiefConfig thiefConfig = new ThiefConfig();
 
+        @Comment("Config options for ARSONIST")
+        @Nest public ArsonistConfig arsonistConfig = new ArsonistConfig();
+
         public static class NecromancerConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
@@ -146,7 +161,10 @@ public class RoleConfig {
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
-
+        public static class ArsonistConfig{
+            @Comment("Basic role configuration")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
     }
     // Noelle's role
     public static class NoellesRoles{
@@ -278,6 +296,9 @@ public class RoleConfig {
         @Comment("Config options for TECHNICIAN")
         @Nest public TechnicianConfig technicianConfig = new TechnicianConfig();
 
+        @Comment("Config options for COOK")
+        @Nest public CookConfig cookConfig = new CookConfig();
+
         @Comment("Config options for HACKER")
         @Nest public HackerConfig hackerConfig = new HackerConfig();
 
@@ -334,6 +355,11 @@ public class RoleConfig {
         }
 
         public static class TechnicianConfig{
+            @Comment("Basic role configuration")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+
+        public static class CookConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }

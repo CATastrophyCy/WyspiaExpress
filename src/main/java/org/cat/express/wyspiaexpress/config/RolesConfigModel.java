@@ -28,6 +28,7 @@ public class RolesConfigModel {
     - items & itemAmount: Starting items and their quantities
     - minimumPlayerSpawn (1-20): Min players required to spawn this role
     - maximumSpawn (0-20): Max number of this role allowed
+    - seePoison: Whether this role can see poison, only affects roles that coulnd't see it by default
    \s
     Valid shop entries:
         Format: ITEM_NAME;PRICE;PURCHASE_LIMIT;TYPE
