@@ -6,6 +6,7 @@ import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
 import dev.doctor4t.wathe.cca.PlayerShopComponent;
+import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.game.gamemode.MurderGameMode;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,8 +38,22 @@ public abstract class PassiveIncomeMixin {
         gameWorldComponent = gameWorld;
         player_role = role;
         income_player = player;
-        var config = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role);
 
+        if(GameFunctions.isPlayerAliveAndSurvival(player)){
+            // every 10 seconds
+            boolean interval = (player.getWorld().getTime() % GameConstants.getInTicks(0,10)) == 0;
+            if (interval) {
+                // tape drain mood
+                if (WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.enableMoodLost()
+                        && role.getMoodType() == Role.MoodType.REAL
+                        && SilenceComponent.KEY.get(player).isSilenced()) {
+                    PlayerMoodComponent mood = PlayerMoodComponent.KEY.get(player);
+                    mood.setMood(mood.getMood() - WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.moodLostAmount());
+                }
+            }
+        }
+
+        var config = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role);
         if (config != null && config.passiveIncome()) return true;
         return original.call(gameWorld,player);
     }
@@ -64,13 +79,7 @@ public abstract class PassiveIncomeMixin {
                     }
                 }
             }
-            // tape drain mood
-            if( WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.enableMoodLost()
-                    && player_role.getMoodType() == Role.MoodType.REAL
-                    && SilenceComponent.KEY.get(income_player).isSilenced()) {
-                PlayerMoodComponent mood = PlayerMoodComponent.KEY.get(income_player);
-                mood.setMood(mood.getMood() - WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.moodLostAmount());
-            }
+
         }
          original.call(instance,amount + income);
     }
