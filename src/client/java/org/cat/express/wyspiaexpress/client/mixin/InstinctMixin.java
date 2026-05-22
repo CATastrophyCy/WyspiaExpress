@@ -102,7 +102,7 @@ public abstract class InstinctMixin {
                 Role role = gameWorldComponent.getRole(targetPlayer);
                 if (role != null) {
                     // If the current player is killer and is alive
-                    if (WatheClient.isKiller()) {
+                    if (WatheClient.isKiller() || role.equals(KinsWatheRoles.HACKER)) {
                         if (KinsWatheRoles.NEUTRAL_ROLES.contains(role)) {
                             cir.setReturnValue(0x4EDD35);
                             cir.cancel();
