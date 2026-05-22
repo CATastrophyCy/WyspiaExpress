@@ -34,6 +34,7 @@ public class WyspiaExpressItems {
 
     public static final Item FAKE_REVOLVER = registerItem(new FakeRevolverItem(new Item.Settings().maxCount(1)), "fake_revolver");
     public static final Item FUN_BOX = registerItem( new Item(new Item.Settings()), "fun_box");
+    public static final Item SENSE_DEAD = registerItem( new Item(new Item.Settings()), "sense_dead");
     public static final Item TP_READY = registerItem(new TpReadyItem(new Item.Settings().maxCount(1)), "tp_ready");
     public static final Item MEGAPHONE = registerItem(new MegaphoneItem(new Item.Settings().maxCount(4)), "megaphone");
     public static final Item OUTLAW_REVOLVER = registerItem(new OutlawRevolverItem(new Item.Settings().maxCount(1)), "outlaw_revolver");
@@ -130,6 +131,7 @@ public class WyspiaExpressItems {
         registerItemCooldown(MEGAPHONE, WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.cooldown());
         registerItemCooldown(OUTLAW_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.outlawRevolverConfig.cooldown());
         registerItemCooldown(TAPE, WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.cooldown());
+        registerItemCooldown(SENSE_DEAD, WyspiaExpress.ITEMS_CONFIG.itemConfig.senseDeadConfig.cooldown());
         // wathe
         registerItemCooldown(WatheItems.REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.revolverConfig.cooldown());
         registerItemCooldown(WatheItems.KNIFE, WyspiaExpress.ITEMS_CONFIG.itemConfig.knifeConfig.cooldown());

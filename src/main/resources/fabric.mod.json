@@ -31,6 +31,7 @@
       "wyspiaexpress:lich_revive_component",
       "wyspiaexpress:player_role_pick_component",
       "wyspiaexpress:player_body",
+      "wyspiaexpress:sense_dead",
       "wyspiaexpress:world_component"
     ]
   },

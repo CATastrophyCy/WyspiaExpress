@@ -26,6 +26,7 @@ import org.BsXinQin.kinswathe.roles.technician.TechnicianComponent;
 import org.agmas.noellesroles.ModItems;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
+import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.cat.express.wyspiaexpress.config.ShopConfig;
 import org.jetbrains.annotations.NotNull;
 
@@ -153,6 +154,10 @@ public class ShopUtil {
             TechnicianComponent.stopBlackout(player);
         } else if (item == WyspiaExpressItems.FUN_BOX) {
             openFunBox(player);
+        } else if (item == WyspiaExpressItems.SENSE_DEAD) {
+            PlayerSenseDeadComponent senseDeadComponent = PlayerSenseDeadComponent.KEY.get(player);
+            senseDeadComponent.addDuration(GameConstants.getInTicks(0,WyspiaExpress.ITEMS_CONFIG.itemConfig.senseDeadConfig.duration()));
+            WyspiaExpressItems.setItemCooldown(player, item, null);
         } else {
             player.giveItemStack(item.getDefaultStack());
         }
@@ -285,6 +290,8 @@ public class ShopUtil {
             case OUTLAW_REVOLVER:
                 item = WyspiaExpressItems.OUTLAW_REVOLVER;
                 break;
+            case SENSE_DEAD:
+                item = WyspiaExpressItems.SENSE_DEAD;
             default:
         }
         return item;

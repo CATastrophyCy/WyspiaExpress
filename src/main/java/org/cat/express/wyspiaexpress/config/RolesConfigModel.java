@@ -22,13 +22,14 @@ public class RolesConfigModel {
     @Comment("""
     === ROLE CONFIGURATION GUIDE ===
     Inside each role's 'basic' config, you can configure:
-    - enableShop: Whether this role has access to the shop
+    - enableShop: Whether this role has access to the shop, as well as rendering the money hud
     - passiveIncome: Whether they generate passive income. Has no effect on other mod's role that has passive income
     - taskIncome: Amount of income from tasks. Know that civilian and some roles have default 50 income, and this adds on top of that
     - items & itemAmount: Starting items and their quantities
-    - minimumPlayerSpawn (1-20): Min players required to spawn this role
+    - minimumPlayerSpawn : Min players required to spawn this role
+    - maximumPlayerSpawn : Max players that allows this role to spawn
     - maximumSpawn (0-20): Max number of this role allowed
-    - seePoison: Whether this role can see poison, only affects roles that coulnd't see it by default
+    - seePoison: Whether this role can see poison, only affects roles that couldn't see it by default
    \s
     Valid shop entries:
         Format: ITEM_NAME;PRICE;PURCHASE_LIMIT;TYPE
@@ -43,7 +44,7 @@ public class RolesConfigModel {
         COOKED_BEEF, PILL, MEDICAL_KIT, ACID_BARREL, HUNTING_KNIFE, KNOCKOUT_DRUG,\s
         DREAM_IMPRINT, BLOWGUN, POISON_INJECTOR, WRENCH, CAPTURE_DEVICE,\s
         ICON_POWER_RESTORATION, ICON_WEAPON_COOLDOWN_REFRESH, ICON_ABILITY_COOLDOWN_REFRESH, ICON_POTION_EFFECT_REFRESH,
-        FUN_BOX, MEGAPHONE, OUTLAW_REVOLVER
+        FUN_BOX, MEGAPHONE, OUTLAW_REVOLVER, SENSE_DEAD
    \s""")
     @Nest public RoleConfig roleConfig = new RoleConfig();
 }

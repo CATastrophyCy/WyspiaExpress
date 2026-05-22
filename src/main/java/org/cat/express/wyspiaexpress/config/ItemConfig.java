@@ -25,6 +25,9 @@ public class ItemConfig {
     @Comment("Configuration for OUTLAW_REVOLVER")
     @Nest public  OutlawRevolverConfig outlawRevolverConfig = new OutlawRevolverConfig();
 
+    @Comment("Configuration for SENSE_DEAD")
+    @Nest public SenseDeadConfig senseDeadConfig = new SenseDeadConfig();
+
     // wathe
     @Comment("Configuration for REVOLVER")
     @Nest public RevolverConfig revolverConfig = new RevolverConfig();
@@ -119,6 +122,12 @@ public class ItemConfig {
         public int cooldown = 60;
         @Comment("Cooldown when hitting nothing, in seconds, minimum 0")
         public int missCooldown = 90;
+    }
+    public static class SenseDeadConfig{
+        @Comment("Cooldown, in seconds, minimum 0")
+        public int cooldown = 45;
+        @Comment("Duration, in seconds, of seeing dead bodies")
+        public int duration = 20;
     }
     // wathe
     public static class RevolverConfig {

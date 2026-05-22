@@ -4,6 +4,7 @@ import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerPoisonComponent;
 import dev.doctor4t.wathe.client.WatheClient;
+import dev.doctor4t.wathe.entity.PlayerBodyEntity;
 import dev.doctor4t.wathe.game.GameFunctions;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -22,6 +23,7 @@ import org.aussiebox.starexpress.cca.SilenceComponent;
 import org.aussiebox.starexpress.cca.StarstruckComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -64,6 +66,8 @@ public abstract class InstinctMixin {
         if (player == null) return;
         GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(target.getWorld());
         WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(target.getWorld());
+
+        // instinct to players
         if (target instanceof PlayerEntity targetPlayer) {
             // handle spectator instinct
             if (GameFunctions.isPlayerSpectatingOrCreative(player)
@@ -118,6 +122,18 @@ public abstract class InstinctMixin {
                     }
 
                 }
+            }
+        }
+        // instinct to player bodies
+        if(target instanceof PlayerBodyEntity targetBody){
+            PlayerSenseDeadComponent senseDeadComponent = PlayerSenseDeadComponent.KEY.get(player);
+            // only reveal if the body isn't already glowing
+            if(GameFunctions.isPlayerAliveAndSurvival(player)
+                    && senseDeadComponent.isActive()
+                && !targetBody.hasStatusEffect(StatusEffects.GLOWING)){
+                cir.setReturnValue(0x606060);
+                cir.cancel();
+                return;
             }
         }
     }

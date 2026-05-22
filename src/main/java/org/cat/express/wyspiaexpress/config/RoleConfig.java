@@ -160,6 +160,14 @@ public class RoleConfig {
         public static class ThiefConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+            @Comment("Cooldown, in seconds, when failing a steal (target has no stealable item)")
+            public int failCooldown = 30;
+            @Comment("Cooldown, in seconds, when stealing an item")
+            public int cooldown = 45;
+            @Comment("Distance, for client, to start rendering thief crosshair")
+            public double clientDistance = 1.5;
+            @Comment("Distance, for server, to validate a steal")
+            public double serverDistance = 1.8;
         }
         public static class ArsonistConfig{
             @Comment("Basic role configuration")
