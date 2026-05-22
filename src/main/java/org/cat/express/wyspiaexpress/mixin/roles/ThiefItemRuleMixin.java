@@ -3,7 +3,6 @@ package org.cat.express.wyspiaexpress.mixin.roles;
 import dev.doctor4t.wathe.Wathe;
 import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.KinsWathe;
-import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

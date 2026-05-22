@@ -23,6 +23,7 @@
     "noellesroles.NoellesRolesMixin",
     "noellesroles.VultureRoleMixin",
     "roles.ThiefItemRuleMixin",
+    "roles.ThiefPacketC2SMixin",
     "starryexpress.StarryExpressMixin",
     "starryexpress.StarstruckComponentMixin"
   ],
