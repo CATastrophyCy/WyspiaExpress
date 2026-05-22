@@ -115,16 +115,9 @@ public class RoleCategoryStatisticsManager {
 
         JsonObject summary = new JsonObject();
         summary.addProperty("totalPlayers", playerStats.size());
-        int totalRounds = exported.stream().mapToInt(PlayerAggregateStats::roundsPlayed).sum();
+        int totalRounds = exported.stream().mapToInt(PlayerAggregateStats::roundsPlayed).max().orElse(0);
         summary.addProperty("totalRounds", totalRounds);
 
-        JsonObject roleTotals = new JsonObject();
-        roleTotals.addProperty("vigilante", exported.stream().mapToInt(PlayerAggregateStats::vigilanteCount).sum());
-        roleTotals.addProperty("killer", exported.stream().mapToInt(PlayerAggregateStats::killerCount).sum());
-        roleTotals.addProperty("civilian", exported.stream().mapToInt(PlayerAggregateStats::civilianCount).sum());
-        roleTotals.addProperty("neutral", exported.stream().mapToInt(PlayerAggregateStats::neutralCount).sum());
-
-        summary.add("roleTotals", roleTotals);
         root.add("summary", summary);
 
         try (Writer writer = new FileWriter(file)) {
