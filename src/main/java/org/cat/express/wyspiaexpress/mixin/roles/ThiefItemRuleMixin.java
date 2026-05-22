@@ -27,13 +27,14 @@ public abstract class ThiefItemRuleMixin {
         list.add(Identifier.of(KinsWathe.MOD_ID, "poison_injector"));
         list.add(Identifier.of(KinsWathe.MOD_ID, "blowgun"));
         list.add(Identifier.of(KinsWathe.MOD_ID, "pill"));
-        list.add(Identifier.of(KinsWathe.MOD_ID, "capture_device"));
         list.add(Identifier.of(KinsWathe.MOD_ID, "hunting_knife"));
         list.add(Identifier.of(KinsWathe.MOD_ID, "sulfuric_acid_barrel"));
         list.add(Identifier.of(KinsWathe.MOD_ID, "wrench"));
-        list.add(Identifier.of(WyspiaExpress.MOD_ID, "fake_revolver"));
 
         list.remove(Identifier.of(Wathe.MOD_ID, "note"));
         list.remove(Identifier.of(Wathe.MOD_ID, "firecracker"));
+        list.remove(Identifier.of(Wathe.MOD_ID, "body_bag"));
+        list.remove(Identifier.of(Wathe.MOD_ID, "poison_vial"));
+        list.remove(Identifier.of(Wathe.MOD_ID, "scorpion"));
     }
 }
