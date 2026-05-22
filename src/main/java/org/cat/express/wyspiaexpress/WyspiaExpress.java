@@ -41,7 +41,9 @@ public class WyspiaExpress implements ModInitializer {
         registerVersionCheck();
         registerPackets();
         ServerLifecycleEvents.SERVER_STARTING.register(RoleStatisticsManager::init);
+        ServerLifecycleEvents.SERVER_STARTING.register(RoleCategoryStatisticsManager::init);
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> RoleStatisticsManager.shutdown());
+        ServerLifecycleEvents.SERVER_STOPPING.register(server -> RoleCategoryStatisticsManager.shutdown());
 
         LOGGER.info("WyspiaExpress finished initializing.");
     }

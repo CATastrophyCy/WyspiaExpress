@@ -1,12 +1,14 @@
 package org.cat.express.wyspiaexpress.mixin;
 
 import dev.doctor4t.wathe.api.Role;
+import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
 import org.agmas.harpymodloader.modded_murder.ModdedMurderGameMode;
+import org.cat.express.wyspiaexpress.RoleCategoryStatisticsManager;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
@@ -29,6 +31,22 @@ public abstract class HMLGameInitializeMixin {
             for(ServerPlayerEntity serverPlayerEntity : players){
                 if(gameWorldComponent.canUseKillerFeatures(serverPlayerEntity)){
                     maximumLichRevive++;
+                    RoleCategoryStatisticsManager.getInstance()
+                            .recordRoleCategory(serverPlayerEntity.getUuid(), serverPlayerEntity.getName().getString(), "killer");
+                }
+                else if(gameWorldComponent.isInnocent(serverPlayerEntity)){
+                    if(gameWorldComponent.isRole(serverPlayerEntity, WatheRoles.VIGILANTE)){
+                        RoleCategoryStatisticsManager.getInstance()
+                                .recordRoleCategory(serverPlayerEntity.getUuid(), serverPlayerEntity.getName().getString(), "vigilante");
+                    }
+                    else{
+                        RoleCategoryStatisticsManager.getInstance()
+                                .recordRoleCategory(serverPlayerEntity.getUuid(), serverPlayerEntity.getName().getString(), "civilian");
+                    }
+                }
+                else{
+                    RoleCategoryStatisticsManager.getInstance()
+                            .recordRoleCategory(serverPlayerEntity.getUuid(), serverPlayerEntity.getName().getString(), "neutral");
                 }
             }
             component.setMaxRevives(maximumLichRevive);
