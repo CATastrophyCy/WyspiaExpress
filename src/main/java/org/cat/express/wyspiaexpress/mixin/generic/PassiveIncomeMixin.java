@@ -38,18 +38,17 @@ public abstract class PassiveIncomeMixin {
         gameWorldComponent = gameWorld;
         player_role = role;
         income_player = player;
+        if(!GameFunctions.isPlayerAliveAndSurvival(player)) return false;
 
-        if(GameFunctions.isPlayerAliveAndSurvival(player)){
-            // every 10 seconds
-            boolean interval = (player.getWorld().getTime() % GameConstants.getInTicks(0,10)) == 0;
-            if (interval) {
-                // tape drain mood
-                if (WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.enableMoodLost()
-                        && role.getMoodType() == Role.MoodType.REAL
-                        && SilenceComponent.KEY.get(player).isSilenced()) {
-                    PlayerMoodComponent mood = PlayerMoodComponent.KEY.get(player);
-                    mood.setMood(mood.getMood() - WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.moodLostAmount());
-                }
+        // every 10 seconds
+        boolean interval = (player.getWorld().getTime() % GameConstants.getInTicks(0,10)) == 0;
+        if (interval) {
+            // tape drain mood
+            if (WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.enableMoodLost()
+                    && role.getMoodType() == Role.MoodType.REAL
+                    && SilenceComponent.KEY.get(player).isSilenced()) {
+                PlayerMoodComponent mood = PlayerMoodComponent.KEY.get(player);
+                mood.setMood(mood.getMood() - WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.moodLostAmount());
             }
         }
 

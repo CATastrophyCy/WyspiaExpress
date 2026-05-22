@@ -28,6 +28,9 @@
   "item.wyspiaexpress.tape": "Tape",
   "item.wyspiaexpress.tape.tooltip": "Use on another player to silence their pathetic cries.\nSilenced players will suffocate if left outside for too long.\nInvisible in hand.",
 
+  "item.wyspiaexpress.sense_dead": "Sense dead",
+  "item.wyspiaexpress.sense_dead.tooltip": "Sense the location of dead bodies scattered across the train for a short duration.\nActivate on purchase",
+
   "item.wyspiaexpress.outlaw_revolver": "Outlaw Revolver",
   "item.wyspiaexpress.outlaw_revolver.tooltip": "You feel no remorse when shooting innocents with this revolver.\n It has a longer cooldown than normal revolver.\n The cooldown is increased if you miss your shot",
 

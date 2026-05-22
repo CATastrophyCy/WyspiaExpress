@@ -54,6 +54,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
             ItemToolTip.addItemtip(WyspiaExpressItems.MEGAPHONE, itemStack, list);
             ItemToolTip.addItemtip(WyspiaExpressItems.OUTLAW_REVOLVER, itemStack, list);
             ItemToolTip.addItemtip(WyspiaExpressItems.TAPE, itemStack, list);
+            ItemToolTip.addItemtip(WyspiaExpressItems.SENSE_DEAD, itemStack, list);
         }));
     }
     private static void registerAbilityKey(){
