@@ -377,6 +377,6 @@ public class WyspiaExpressRoles {
         registerRoleBasicConfig(COOK,WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.cookConfig.basic);
         registerRoleBasicConfig(HACKER, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.hackerConfig.basic);
         registerRoleBasicConfig(DREAMER, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.dreamerConfig.basic);
-
+        registerRoleBasicConfig(LICENSED_VILLAIN, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.licensedVillainConfig.basic);
     }
 }

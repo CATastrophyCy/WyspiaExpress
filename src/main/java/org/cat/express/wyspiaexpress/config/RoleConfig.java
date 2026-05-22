@@ -305,6 +305,9 @@ public class RoleConfig {
         @Comment("Config options for DREAMER")
         @Nest public DreamerConfig dreamerConfig = new DreamerConfig();
 
+        @Comment("Config options for LICENSED_VILLAIN")
+        @Nest public LicensedVillainConfig licensedVillainConfig = new LicensedVillainConfig();
+
         public static class BodymakerConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
@@ -383,7 +386,10 @@ public class RoleConfig {
             @Comment("Enable instinct")
             public boolean enableInstinct = false;
         }
-
+        public static class LicensedVillainConfig{
+            @Comment("Basic role configuration")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
     }
 
 }
