@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 public class RoleCategoryStatisticsManager {
@@ -18,10 +20,12 @@ public class RoleCategoryStatisticsManager {
 
     private final Path statsDir;
     private final Map<UUID, MutablePlayerStats> playerStats = new HashMap<>();
+    private LocalDate currentDate;
 
     private RoleCategoryStatisticsManager(MinecraftServer server) {
         Path worldRoot = server.getSavePath(WorldSavePath.ROOT);
         this.statsDir = worldRoot.resolve("wyspia_player_stats");
+        this.currentDate = LocalDate.now(ZoneId.systemDefault());
 
         try {
             java.nio.file.Files.createDirectories(statsDir);
@@ -50,7 +54,7 @@ public class RoleCategoryStatisticsManager {
 
     /**
      * Direct way to register a role-category assignment by UUID.
-     * Accepted categories: vigilante, killer, civilian
+     * Accepted categories: vigilante, killer, civilian, neutral
      */
     public void recordRoleCategory(UUID playerUuid, String playerName, String roleCategory) {
         if (playerUuid == null || playerName == null || roleCategory == null) {
@@ -58,7 +62,10 @@ public class RoleCategoryStatisticsManager {
         }
 
         String normalized = roleCategory.trim().toLowerCase(Locale.ROOT);
-        if (!normalized.equals("vigilante") && !normalized.equals("killer") && !normalized.equals("civilian") && !normalized.equals("neutral")) {
+        if (!normalized.equals("vigilante")
+                && !normalized.equals("killer")
+                && !normalized.equals("civilian")
+                && !normalized.equals("neutral")) {
             LOGGER.warn("Ignoring unknown role category '{}' for player {} ({})", roleCategory, playerName, playerUuid);
             return;
         }
@@ -88,14 +95,15 @@ public class RoleCategoryStatisticsManager {
     }
 
     private File getFile() {
-        return statsDir.resolve("player_role_category_stats.json").toFile();
+        String fileName = String.format("player_role_category_stats_%s.json", currentDate.toString());
+        return statsDir.resolve(fileName).toFile();
     }
 
     public void save() {
         File file = getFile();
 
         JsonObject root = new JsonObject();
-        root.addProperty("totalPlayers", playerStats.size());
+        root.addProperty("date", currentDate.toString());
 
         List<PlayerAggregateStats> exported = playerStats.values().stream()
                 .map(MutablePlayerStats::toImmutable)
@@ -103,7 +111,21 @@ public class RoleCategoryStatisticsManager {
                         .thenComparing(PlayerAggregateStats::lastKnownName, String.CASE_INSENSITIVE_ORDER))
                 .toList();
 
-        root.add("players", new GsonBuilder().setPrettyPrinting().create().toJsonTree(exported));
+        root.add("players", new Gson().toJsonTree(exported));
+
+        JsonObject summary = new JsonObject();
+        summary.addProperty("totalPlayers", playerStats.size());
+        int totalRounds = exported.stream().mapToInt(PlayerAggregateStats::roundsPlayed).sum();
+        summary.addProperty("totalRounds", totalRounds);
+
+        JsonObject roleTotals = new JsonObject();
+        roleTotals.addProperty("vigilante", exported.stream().mapToInt(PlayerAggregateStats::vigilanteCount).sum());
+        roleTotals.addProperty("killer", exported.stream().mapToInt(PlayerAggregateStats::killerCount).sum());
+        roleTotals.addProperty("civilian", exported.stream().mapToInt(PlayerAggregateStats::civilianCount).sum());
+        roleTotals.addProperty("neutral", exported.stream().mapToInt(PlayerAggregateStats::neutralCount).sum());
+
+        summary.add("roleTotals", roleTotals);
+        root.add("summary", summary);
 
         try (Writer writer = new FileWriter(file)) {
             new GsonBuilder().setPrettyPrinting().create().toJson(root, writer);
@@ -115,7 +137,7 @@ public class RoleCategoryStatisticsManager {
     public void load() {
         File file = getFile();
         if (!file.exists()) {
-            LOGGER.info("No prior player role category stats found. Starting fresh.");
+            LOGGER.info("No prior stats for {}. Starting fresh.", currentDate);
             return;
         }
 
@@ -141,7 +163,7 @@ public class RoleCategoryStatisticsManager {
                 }
             }
 
-            LOGGER.info("Loaded role category stats for {} players.", playerStats.size());
+            LOGGER.info("Loaded stats for {} players for {}.", playerStats.size(), currentDate);
         } catch (Exception e) {
             LOGGER.error("Failed to load player role category statistics", e);
         }
@@ -170,7 +192,7 @@ public class RoleCategoryStatisticsManager {
             return new PlayerAggregateStats(
                     playerUuid,
                     lastKnownName,
-                    namesUsed,
+                    new ArrayList<>(namesUsed),
                     total,
                     vigilanteCount,
                     killerCount,
