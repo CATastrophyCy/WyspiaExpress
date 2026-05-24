@@ -152,7 +152,7 @@ public class WyspiaExpressRoles {
             false,
             false,
             Role.MoodType.FAKE,
-            200,
+            600,
             true
     ));
 
@@ -207,6 +207,7 @@ public class WyspiaExpressRoles {
         TRUE_NEUTRALS.add(THIEF);
         //TRUE_NEUTRALS.add(INITIATE);
 
+        KILLER_SIDED_NEUTRALS.add(JESTER);
         KILLER_SIDED_NEUTRALS.add(VULTURE);
         KILLER_SIDED_NEUTRALS.add(EXECUTIONER);
         KILLER_SIDED_NEUTRALS.add(DREAMER);
