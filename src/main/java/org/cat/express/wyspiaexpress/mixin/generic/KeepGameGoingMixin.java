@@ -43,10 +43,9 @@ public abstract class KeepGameGoingMixin {
             customWinner.sync();
             GameRoundEndComponent gameRoundEnd = GameRoundEndComponent.KEY.get(world);
             gameRoundEnd.setRoundEndData(players, GameFunctions.WinStatus.KILLERS);
-            shouldCancel = true;
             GameFunctions.stopGame(world);
         }
-        if (shouldCancel) {
+        if (eddieAlive  && (winStatus == GameFunctions.WinStatus.KILLERS || winStatus == GameFunctions.WinStatus.PASSENGERS)) {
             ci.cancel();
         }
 

@@ -52,6 +52,7 @@ public class WyspiaExpressRoles {
         registerModifierAssigned();
         registerStringRoleMap();
         limitRoleSpawn();
+        initNeutralList();
         // allow spectator and creative mod to see poison
         CanSeePoison.EVENT.register((player)->{
             if (GameFunctions.isPlayerSpectatingOrCreative(player)) {

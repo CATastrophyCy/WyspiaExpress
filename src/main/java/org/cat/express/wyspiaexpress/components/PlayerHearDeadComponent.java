@@ -19,8 +19,13 @@ public class PlayerHearDeadComponent implements AutoSyncedComponent {
         this.player = player;
     }
 
-    public void setActive(boolean active) { this.active = active; }
-    public void toggle(){ active = !active; }
+    public void setActive(boolean active) {
+        this.active = active;
+        sync(); }
+    public void toggle(){
+        active = !active;
+        sync();
+    }
     public boolean isActive(){
         return this.active;
     }
