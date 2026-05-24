@@ -64,6 +64,7 @@ public abstract class InstinctMixin {
     @Inject(method = "getInstinctHighlight", at = @At("HEAD"), cancellable = true)
     private static void getInstinctHighlightColor(Entity target, CallbackInfoReturnable<Integer> cir) {
         PlayerEntity player = MinecraftClient.getInstance().player;
+
         if (player == null) return;
         GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(target.getWorld());
         WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(target.getWorld());
@@ -104,11 +105,11 @@ public abstract class InstinctMixin {
                 if (role != null) {
                     // If the current player is killer and is alive
                     if (WatheClient.isKiller() || role.equals(KinsWatheRoles.HACKER)) {
-                        if (KinsWatheRoles.NEUTRAL_ROLES.contains(role)) {
+                        if (WyspiaExpressRoles.TRUE_NEUTRALS.contains(role)) {
                             cir.setReturnValue(0x4EDD35);
                             cir.cancel();
                             return;
-                        } else if (KinsWatheRoles.KILLER_NEUTRAL_ROLES.contains(role) || Noellesroles.KILLER_SIDED_NEUTRALS.contains(role)) {
+                        } else if (WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)) {
                             if (WyspiaExpress.SERVER_CONFIG.killerSpecialInstinct()) {
                                 // role specific color instinct
                                 cir.setReturnValue(role.color());

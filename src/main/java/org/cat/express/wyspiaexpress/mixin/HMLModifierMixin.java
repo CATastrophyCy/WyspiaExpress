@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.mixin;
 
+import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameTimeComponent;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
@@ -12,6 +13,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.Texts;
 import net.minecraft.util.Formatting;
 import org.BsXinQin.kinswathe.KinsWatheItems;
+import org.BsXinQin.kinswathe.KinsWatheRoles;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
@@ -41,9 +43,13 @@ public abstract class HMLModifierMixin {
     )
     public void wyspiaexpress$onAssignModifiers(int desiredRoleCount, ServerWorld serverWorld, GameWorldComponent gameWorldComponent, List<ServerPlayerEntity> players, CallbackInfo ci){
         WyspiaExpressRoles.COPYCAT_ROLES.clear();
+        List<ServerPlayerEntity> true_neutrals = new ArrayList<>();
+        List<ServerPlayerEntity> killer_sided_neutrals = new ArrayList<>();
+        int killer_count = 0;
         for (ServerPlayerEntity player : players) {
             // before assigning modifiers, check if theres any civilians, give them amnesiac instead
-            if (gameWorldComponent.isRole(player, WatheRoles.CIVILIAN)) {
+            Role role = gameWorldComponent.getRole(player);
+            if (role.equals(WatheRoles.CIVILIAN)) {
                 gameWorldComponent.addRole(player, SERoles.AMNESIAC);
                 ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, SERoles.AMNESIAC);
             }
@@ -54,6 +60,28 @@ public abstract class HMLModifierMixin {
                 }
                 gameWorldComponent.addRole(player, WyspiaExpressRoles.COPYCAT);
                 ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, WyspiaExpressRoles.COPYCAT);
+                killer_count++;
+            }
+            else if(WyspiaExpressRoles.TRUE_NEUTRALS.contains(role)) {
+                true_neutrals.add(player);
+            }
+            else if(WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)) {
+                killer_sided_neutrals.add(player);
+            }
+        }
+
+        if(WyspiaExpress.SERVER_CONFIG.enableRestrictKillerSidedNeutrals()) {
+            while (killer_sided_neutrals.size() > killer_count / 2) {
+                ServerPlayerEntity p = killer_sided_neutrals.getFirst();
+                if (!gameWorldComponent.isRole(p, KinsWatheRoles.HACKER)) {
+                    gameWorldComponent.addRole(p, SERoles.AMNESIAC);
+                    ModdedRoleAssigned.EVENT.invoker().assignModdedRole(p, SERoles.AMNESIAC);
+                    killer_sided_neutrals.removeFirst();
+                    true_neutrals.add(p);
+                } else {
+                    killer_sided_neutrals.removeFirst();
+                    killer_sided_neutrals.add(p);
+                }
             }
         }
         WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(serverWorld);

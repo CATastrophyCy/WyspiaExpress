@@ -18,9 +18,12 @@ public class ServerConfig {
     public int extraSpectatorsVoicechat = 5;
     @Comment("Enable spectator special instinct showing more information")
     public boolean spectatorSpecialInstinct = true;
+    @Comment("Enable spectator special hud showing more information")
+    public boolean spectatorSpecialHud = true;
     @Comment("Enable killer having role color instinct on killer-aligned neutrals")
     public boolean killerSpecialInstinct = false;
-
+    @Comment("Enable killer sided neutral amount restriction to never go pass 1/2 of killer")
+    public boolean enableRestrictKillerSidedNeutrals = true;
     @Comment("Multiply to crawling speed. i.e. 1.5 means crawling is 50% faster")
     public double crawlSpeedMultiplier = 2.0;
     @Comment("Player stun tick after blocking damage")
