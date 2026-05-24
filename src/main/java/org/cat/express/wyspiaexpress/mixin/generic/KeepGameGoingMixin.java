@@ -1,0 +1,54 @@
+package org.cat.express.wyspiaexpress.mixin.generic;
+
+import com.llamalad7.mixinextras.sugar.Local;
+import dev.doctor4t.wathe.cca.GameRoundEndComponent;
+import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.game.GameFunctions;
+import dev.doctor4t.wathe.game.gamemode.MurderGameMode;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import org.BsXinQin.kinswathe.component.CustomWinnerComponent;
+import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.jetbrains.annotations.NotNull;
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.List;
+
+@Mixin(MurderGameMode.class)
+public abstract class KeepGameGoingMixin {
+    @Inject(method = "tickServerGameLoop", at = @At(value = "FIELD", target = "Ldev/doctor4t/wathe/game/GameFunctions$WinStatus;NONE:Ldev/doctor4t/wathe/game/GameFunctions$WinStatus;", ordinal = 3, opcode = Opcodes.GETSTATIC), cancellable = true)
+    private void keepLicensedvillainGame(@NotNull ServerWorld world, @NotNull GameWorldComponent gameWorld, @NotNull CallbackInfo ci, @Local(name = "winStatus") @NotNull GameFunctions.@NotNull WinStatus winStatus) {
+        List<ServerPlayerEntity> players = world.getPlayers();
+        List<ServerPlayerEntity> alivePlayers = players.stream().filter(GameFunctions::isPlayerAliveAndSurvival).toList();
+        boolean eddieAlive = false;
+        boolean shouldCancel = false;
+        for (ServerPlayerEntity player : alivePlayers) {
+            if (gameWorld.isRole(player, WyspiaExpressRoles.EDDIE_WAFFLES)) {
+                eddieAlive = true;
+                break;
+            }
+        }
+
+        if (alivePlayers.size() == 1 && eddieAlive) {
+            CustomWinnerComponent customWinner = CustomWinnerComponent.KEY.get(world);
+            customWinner.setWinningTextId("eddie_waffles");
+            if (!alivePlayers.isEmpty()) {
+                customWinner.setWinners(alivePlayers);
+            }
+            customWinner.setColor(WyspiaExpressRoles.EDDIE_WAFFLES.color());
+            customWinner.sync();
+            GameRoundEndComponent gameRoundEnd = GameRoundEndComponent.KEY.get(world);
+            gameRoundEnd.setRoundEndData(players, GameFunctions.WinStatus.KILLERS);
+            shouldCancel = true;
+            GameFunctions.stopGame(world);
+        }
+        if (shouldCancel) {
+            ci.cancel();
+        }
+
+    }
+}

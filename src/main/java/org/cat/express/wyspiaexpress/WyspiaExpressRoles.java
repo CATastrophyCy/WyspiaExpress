@@ -142,7 +142,15 @@ public class WyspiaExpressRoles {
             600,
             true
     ));
-
+    public static Role EDDIE_WAFFLES = registerRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "eddie_waffles"),
+            0x8A2727,
+            false,
+            false,
+            Role.MoodType.FAKE,
+            200,
+            true
+    ));
 
     public static Modifier EMPLOYEE = registerModifier(new Modifier(
             Identifier.of(WyspiaExpress.MOD_ID, "employee"),
@@ -339,6 +347,7 @@ public class WyspiaExpressRoles {
         registerRoleBasicConfig(GAMBLER, WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.basic);
         registerRoleBasicConfig(LICH, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.basic);
         registerRoleBasicConfig(LICH_GHOUL, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.ghoulConfig.basic);
+        registerRoleBasicConfig(EDDIE_WAFFLES, WyspiaExpress.ROLES_CONFIG.roleConfig.eddieWafflesConfig.basic);
         // wathe
         registerRoleBasicConfig(WatheRoles.VIGILANTE, WyspiaExpress.ROLES_CONFIG.roleConfig.vigilanteConfig.basic);
         // Starry Express roles

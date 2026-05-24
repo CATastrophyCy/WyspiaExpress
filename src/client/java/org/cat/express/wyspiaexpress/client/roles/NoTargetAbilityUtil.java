@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class NoTargetAbilityUtil{
 
-    private static final Set<Role> VALID = Set.of(WyspiaExpressRoles.OUTLAW);
+    private static final Set<Role> VALID = Set.of(WyspiaExpressRoles.OUTLAW, WyspiaExpressRoles.EDDIE_WAFFLES);
     public static boolean isValid(Role role){
         return VALID.contains(role);
     }

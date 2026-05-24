@@ -32,6 +32,7 @@
       "wyspiaexpress:player_role_pick_component",
       "wyspiaexpress:player_body",
       "wyspiaexpress:sense_dead",
+      "wyspiaexpress:hear_dead",
       "wyspiaexpress:world_component"
     ]
   },

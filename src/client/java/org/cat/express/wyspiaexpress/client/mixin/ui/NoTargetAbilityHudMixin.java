@@ -15,6 +15,7 @@ import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.client.WyspiaexpressClient;
 import org.cat.express.wyspiaexpress.client.roles.NoTargetAbilityUtil;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
+import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -38,6 +39,8 @@ public abstract class NoTargetAbilityHudMixin {
             PlayerShopComponent playerShop = PlayerShopComponent.KEY.get(MinecraftClient.getInstance().player);
             if(role == WyspiaExpressRoles.OUTLAW)
                 drawOutlawHud(context, ability, playerShop);
+            if(role == WyspiaExpressRoles.EDDIE_WAFFLES)
+                drawEddieWafflesHud(context, ability);
         }
     }
     @Unique
@@ -53,5 +56,29 @@ public abstract class NoTargetAbilityHudMixin {
         }
         drawY -= getTextRenderer().getWrappedLinesHeight(line, 999999);
         context.drawTextWithShadow(getTextRenderer(), line, context.getScaledWindowWidth() - getTextRenderer().getWidth(line), drawY, WyspiaExpressRoles.OUTLAW.color());
+    }
+    @Unique
+    private  void drawEddieWafflesHud(@NotNull DrawContext context, AbilityCooldownComponent abilityCooldownComponent ){
+        int drawY = context.getScaledWindowHeight();
+        Text line;
+        PlayerHearDeadComponent component = PlayerHearDeadComponent.KEY.get(MinecraftClient.getInstance().player);
+        if(component.isActive()){
+            if(abilityCooldownComponent.isCooldown()){
+                line = Text.translatable("tip.wyspiaexpress.ability.eddie_waffles.active_cooldown",abilityCooldownComponent.cooldown / 20);
+            }
+            else{
+                line = Text.translatable("tip.wyspiaexpress.ability.eddie_waffles.active", WyspiaexpressClient.abilityBind.getBoundKeyLocalizedText());
+            }
+        }
+        else{
+            if(abilityCooldownComponent.isCooldown()){
+                line = Text.translatable("tip.wyspiaexpress.ability.eddie_waffles.cooldown", abilityCooldownComponent.cooldown / 20);
+            }
+            else{
+                line = Text.translatable("tip.wyspiaexpress.ability.eddie_waffles.no_cooldown",WyspiaexpressClient.abilityBind.getBoundKeyLocalizedText());
+            }
+        }
+        drawY -= getTextRenderer().getWrappedLinesHeight(line, 999999);
+        context.drawTextWithShadow(getTextRenderer(), line, context.getScaledWindowWidth() - getTextRenderer().getWidth(line), drawY, WyspiaExpressRoles.EDDIE_WAFFLES.color());
     }
 }

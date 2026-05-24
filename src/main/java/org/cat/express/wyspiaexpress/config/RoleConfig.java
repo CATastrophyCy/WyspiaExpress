@@ -20,6 +20,8 @@ public class RoleConfig {
     @Nest public GamblerConfig  gamblerConfig = new GamblerConfig();
     @Comment("Config options for LICH")
     @Nest public LichConfig lichConfig = new LichConfig();
+    @Comment("Config options for EDDIE_WAFFLES")
+    @Nest public EddieWafflesConfig eddieWafflesConfig = new EddieWafflesConfig();
     // wathe
     @Comment("Config options for VIGILANTE")
     @Nest public VigilanteConfig vigilanteConfig = new VigilanteConfig();
@@ -92,7 +94,12 @@ public class RoleConfig {
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }
     }
-
+    public static class EddieWafflesConfig {
+        @Comment("Basic role configuration")
+        @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        @Comment("Cooldown for the ability, in seconds")
+        public int cooldown = 5;
+    }
     // wathe
 
     public static class VigilanteConfig {

@@ -23,6 +23,7 @@ import org.aussiebox.starexpress.cca.SilenceComponent;
 import org.aussiebox.starexpress.cca.StarstruckComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
 import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
@@ -120,7 +121,6 @@ public abstract class InstinctMixin {
                             return;
                         }
                     }
-
                 }
             }
         }
@@ -145,6 +145,7 @@ public abstract class InstinctMixin {
         StarstruckComponent starstruckComponent = StarstruckComponent.KEY.get(targetPlayer);
         DreamerComponent dreamerComponent = DreamerComponent.KEY.get(targetPlayer);
         MorphlingPlayerComponent morphlingPlayerComponent = MorphlingPlayerComponent.KEY.get(targetPlayer);
+        PlayerHearDeadComponent playerHearDeadComponent = PlayerHearDeadComponent.KEY.get(targetPlayer);
         SilenceComponent silenceComponent = SilenceComponent.KEY.get(targetPlayer);
         if( starstruckComponent.ticks > 0 && gameWorldComponent.isRole(targetPlayer, StarryExpressRoles.STARSTRUCK)) {
             return 0x77C2F2;
@@ -152,12 +153,15 @@ public abstract class InstinctMixin {
         if( gameWorldComponent.isRole(targetPlayer, KinsWatheRoles.ROBOT) && targetPlayer.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
             return 0x0D0B0B;
         }
+        if(playerHearDeadComponent.isActive()){
+            return 0x0D0A0A;
+        }
         if( gameWorldComponent.isRole(targetPlayer, Noellesroles.MORPHLING) && morphlingPlayerComponent.morphTicks > 0 ) {
             return 0x2E0000;
         }
         if (playerPoisonComponent.poisonTicks > 0) {
             if(playerPoisonComponent.poisoner != null && playerPoisonComponent.poisoner.equals(DELUSION_MARKER)) {
-                return 0xB099FF;
+                return 0x9300FF;
             }
             return Color.RED.getRGB();
         }

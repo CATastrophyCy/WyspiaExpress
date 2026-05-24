@@ -14,6 +14,11 @@
   "tip.wyspiaexpress.ability.lich.no_revive": "There is no available revive",
   "tip.wyspiaexpress.ability.lich.revive": "%s available revives",
 
+  "tip.wyspiaexpress.ability.eddie_waffles.active_cooldown": "Listening to the dead. Can toggle in %ss",
+  "tip.wyspiaexpress.ability.eddie_waffles.active": "Listening to the dead. Use %s to toggle",
+  "tip.wyspiaexpress.ability.eddie_waffles.cooldown": "Can toggle in %ss",
+  "tip.wyspiaexpress.ability.eddie_waffles.no_cooldown": "Use %s to listen to dead",
+
   "tip.wyspiaexpress.items.megaphone": "A body has been reported!",
   "tip.wyspiaexpress.items.megaphone_spectator": "A body has been reported by %s!",
 
@@ -61,6 +66,11 @@
   "announcement.role.wyspiaexpress.lich_ghoul": "Fragile Ghoul",
   "announcement.goals.wyspiaexpress.lich_ghoul": "You have been reanimated from death, serve your master.",
 
+  "announcement.role.wyspiaexpress.eddie_waffles": "The Insane Damned Paranoid Civilian Of Just Waffles",
+  "announcement.goals.wyspiaexpress.eddie_waffles": "waffles? waffles... WAFFLES! Be the only waffle remaining",
+  "announcement.win.kinswathe.eddie_waffles": "The Insane Damned Paranoid Civilian Of Just Waffles WINS!",
+  "game.win.kinswathe.eddie_waffles": "Eddie Waffles turned every other waffle into dead WAFFLES!",
+
 
   "announcement.modifier.wyspiaexpress.employee": "Employee",
   "announcement.modifier.wyspiaexpress.vent_crawler": "Professional Vent Crawler",
@@ -94,6 +104,11 @@
     "guidebook.role.title.wyspiaexpress:lich": "Master of Necromancy",
     "guidebook.role.description.wyspiaexpress:lich": "The Lich has been practicing the dark arts for years both in life and in death. They have gained the ability to bring the dead back and manipulate them to do their bidding.\\n\\nOnce every few minutes, the Lich can interact with a body to bring them back to life as a Fragile Ghoul, a much weaker killer ( you cannot revive a Fragile Ghoul again). \nThe Lich themself cannot directly kill any player, so they must rely on their ghouls doing their job.",
 
+  "guidebook.role.wyspiaexpress:eddie_waffles": "The Insane Damned Paranoid Civilian Of Just Waffles",
+  "guidebook.role.title.wyspiaexpress:eddie_waffles": "Killer of Waffles",
+  "guidebook.role.description.wyspiaexpress:eddie_waffles": "Kill Waffles. Be the only Waffle remaining. Listen to dead Waffles!\n\n They are a true neutral that have to eliminate every other passenger on the train. They can listen to dead players by activating their ability, which is a toggle on a 5 second cooldown.",
+
+
   "guidebook.role.wyspiaexpress:employee": "Employee",
     "guidebook.role.title.wyspiaexpress:employee": "Average worker at Wyspia Express",
     "guidebook.role.description.wyspiaexpress:employee": "You get no benefit other than a key called \"Employee Key\". This key can open some doors",
@@ -108,6 +123,5 @@
 
   "guidebook.role.wyspiaexpress:bomber": "Bomber",
   "guidebook.role.title.wyspiaexpress:bomber": "BOOOOM!",
-  "guidebook.role.description.wyspiaexpress:bomber": "I have some funny bombs, wanna test it?",
-  "credits.wathe.thank_you": ""
+  "guidebook.role.description.wyspiaexpress:bomber": "I have some funny bombs, wanna test it?"
 }

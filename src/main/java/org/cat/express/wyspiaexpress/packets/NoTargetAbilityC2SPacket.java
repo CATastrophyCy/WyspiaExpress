@@ -20,6 +20,7 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
+import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
 import org.jetbrains.annotations.NotNull;
 
 public record NoTargetAbilityC2SPacket() implements CustomPayload {
@@ -46,6 +47,8 @@ public record NoTargetAbilityC2SPacket() implements CustomPayload {
 
                 if(gameWorldComponent.isRole(player, WyspiaExpressRoles.OUTLAW))
                     handleOutlaw(player, gameWorldComponent, abilityPlayerComponent);
+                if(gameWorldComponent.isRole(player, WyspiaExpressRoles.EDDIE_WAFFLES))
+                    handleEddieWaffles(player, gameWorldComponent, abilityPlayerComponent);
             }
         });
     }
@@ -61,5 +64,10 @@ public record NoTargetAbilityC2SPacket() implements CustomPayload {
         player.playSoundToPlayer(SoundEvents.BLOCK_GRINDSTONE_USE, SoundCategory.PLAYERS, 1.0f, 1.0f);
         abilityPlayerComponent.setAbilityCooldown(WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.cooldown());
 
+    }
+    public static void handleEddieWaffles(@NotNull ServerPlayerEntity player, GameWorldComponent gameWorldComponent, AbilityCooldownComponent abilityPlayerComponent){
+        PlayerHearDeadComponent component = PlayerHearDeadComponent.KEY.get(player);
+        component.toggle();
+        abilityPlayerComponent.setAbilityCooldown(WyspiaExpress.ROLES_CONFIG.roleConfig.eddieWafflesConfig.cooldown());
     }
 }
