@@ -69,6 +69,9 @@ public class WyspiaExpressRoles {
     public static int PLAYER_COUNT = 0;
     private static final HashMap<String, Role> ROLES = new HashMap<>();
     private static final HashMap<String, Role> NON_MURDER_ROLES = new HashMap<>();
+
+    public static Set<Role> TRUE_NEUTRALS = new HashSet<>();
+    public static Set<Role> KILLER_SIDED_NEUTRALS = new HashSet<>();
     public static final HashMap<Role, WyspiaExpressRolesConfig.RoleBasicConfig> ROLES_BASIC_CONFIG = new HashMap<>();
 
     public static final List<Role> COPYCAT_ROLES = new ArrayList<>();
@@ -195,7 +198,19 @@ public class WyspiaExpressRoles {
         MODIFIERS.put(modifier.identifier().getPath(), modifier);
         return modifier;
     }
+    private static void initNeutralList(){
+        TRUE_NEUTRALS.add(EDDIE_WAFFLES);
+        TRUE_NEUTRALS.add(AMNESIAC);
+        TRUE_NEUTRALS.add(ARSONIST);
+        TRUE_NEUTRALS.add(LICENSED_VILLAIN);
+        TRUE_NEUTRALS.add(THIEF);
+        //TRUE_NEUTRALS.add(INITIATE);
 
+        KILLER_SIDED_NEUTRALS.add(VULTURE);
+        KILLER_SIDED_NEUTRALS.add(EXECUTIONER);
+        KILLER_SIDED_NEUTRALS.add(DREAMER);
+        KILLER_SIDED_NEUTRALS.add(HACKER);
+    }
     private static void limitRoleSpawn(){
         ServerTickEvents.END_SERVER_TICK.register(((server) -> {
             // this only takes into account the overworld
