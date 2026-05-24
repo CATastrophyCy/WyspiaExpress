@@ -155,7 +155,24 @@ public class WyspiaExpressRoles {
             600,
             true
     ));
-
+    public static Role CULT_LEADER = registerRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "cult_leader"),
+            0x9E75FF,
+            false,
+            false,
+            Role.MoodType.FAKE,
+            600,
+            true
+    ));
+    public static Role CULTIST = registerRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "cultist"),
+            0xD5A3FF,
+            false,
+            false,
+            Role.MoodType.FAKE,
+            600,
+            true
+    ));
     public static Modifier EMPLOYEE = registerModifier(new Modifier(
             Identifier.of(WyspiaExpress.MOD_ID, "employee"),
             0x0D3B66,

@@ -71,6 +71,13 @@
   "announcement.win.kinswathe.eddie_waffles": "The Insane Damned Paranoid Civilian Of Just Waffles WINS!",
   "game.win.kinswathe.eddie_waffles": "Eddie Waffles turned every other waffle into dead WAFFLES!",
 
+  "announcement.role.wyspiaexpress.cult_leader": "The nightshade cult leader",
+  "announcement.goals.wyspiaexpress.cult_leader": "Convert them all by all means",
+  "announcement.win.kinswathe.cult": "The nightshade cult WINS!",
+  "game.win.kinswathe.cult": "The nightshade cult has taken over the entire train, no unbelievers remaining",
+
+  "announcement.role.wyspiaexpress.cultist": "Nightshade cultist",
+  "announcement.goals.wyspiaexpress.cultist": "Help the cult leader",
 
   "announcement.modifier.wyspiaexpress.employee": "Employee",
   "announcement.modifier.wyspiaexpress.vent_crawler": "Professional Vent Crawler",
@@ -105,8 +112,16 @@
     "guidebook.role.description.wyspiaexpress:lich": "The Lich has been practicing the dark arts for years both in life and in death. They have gained the ability to bring the dead back and manipulate them to do their bidding.\\n\\nOnce every few minutes, the Lich can interact with a body to bring them back to life as a Fragile Ghoul, a much weaker killer ( you cannot revive a Fragile Ghoul again). \nThe Lich themself cannot directly kill any player, so they must rely on their ghouls doing their job.",
 
   "guidebook.role.wyspiaexpress:eddie_waffles": "The Insane Damned Paranoid Civilian Of Just Waffles",
-  "guidebook.role.title.wyspiaexpress:eddie_waffles": "Killer of Waffles",
-  "guidebook.role.description.wyspiaexpress:eddie_waffles": "Kill Waffles. Be the only Waffle remaining. Listen to dead Waffles!\n\nThey are a true neutral that have to eliminate every other passenger on the train. They can listen to dead players by activating their ability, which is a toggle on a 5 second cooldown.",
+    "guidebook.role.title.wyspiaexpress:eddie_waffles": "Killer of Waffles",
+    "guidebook.role.description.wyspiaexpress:eddie_waffles": "Kill Waffles. Be the only Waffle remaining. Listen to dead Waffles!\n\nThey are a true neutral that have to eliminate every other passenger on the train. They can listen to dead players by activating their ability, which is a toggle on a 5 second cooldown.",
+
+  "guidebook.role.wyspiaexpress:cult_leader": "The Insane Damned Paranoid Civilian Of Just Waffles",
+    "guidebook.role.title.wyspiaexpress:cult_leader": "The nightshade cult leader",
+    "guidebook.role.description.wyspiaexpress:cult_leader": "The nightshade's cult is a weird cult praying for the idea that life and dead can be played with\n\"Their leader says that he can hear his \"great behond\", is it true ? Is it not ? whatever the case, anyone sacrificed using his dagger will see himself\ncoming back to life with a new goal in mind, serving the said cult who took pity on them",
+
+  "guidebook.role.wyspiaexpress:cultist": "Nightshade cultist",
+    "guidebook.role.title.wyspiaexpress:cultist": "Cultist",
+    "guidebook.role.description.wyspiaexpress:cultist": "The nightshade's cult is a weird cult praying for the idea that life and dead can be played with\n\"Their leader says that he can hear his \"great behond\", is it true ? Is it not ? whatever the case, anyone sacrificed using his dagger will see himself\ncoming back to life with a new goal in mind, serving the said cult who took pity on them\"\n\"Luckily for you, you are one of them, be proud to be one with the cult and embrace your new destiny !",
 
 
   "guidebook.role.wyspiaexpress:employee": "Employee",
