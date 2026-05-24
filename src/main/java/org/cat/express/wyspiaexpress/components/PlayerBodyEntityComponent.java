@@ -12,7 +12,7 @@ import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
 import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
 
-public class PlayerBodyEntityComponent implements AutoSyncedComponent, ServerTickingComponent, ClientTickingComponent {
+public class PlayerBodyEntityComponent implements AutoSyncedComponent {
     public static final ComponentKey<PlayerBodyEntityComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(WyspiaExpress.MOD_ID, "player_body"),
             PlayerBodyEntityComponent.class);
     private final PlayerBodyEntity playerBody;
@@ -21,11 +21,6 @@ public class PlayerBodyEntityComponent implements AutoSyncedComponent, ServerTic
     public PlayerBodyEntityComponent(@NotNull PlayerBodyEntity playerBody) {
         this.playerBody = playerBody;
     }
-    @Override
-    public void serverTick() {}
-
-    @Override
-    public void clientTick() {}
 
     public void sync() {
         KEY.sync(this.playerBody);
