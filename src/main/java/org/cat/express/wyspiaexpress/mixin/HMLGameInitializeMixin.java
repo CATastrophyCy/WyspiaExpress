@@ -277,7 +277,7 @@ public abstract class HMLGameInitializeMixin {
         wyspiaexpress$assignRoleGroupToPlayers(world, gwc, neutralPlayers, trueNeutralRoles, trueNeutralCount, desiredRoleCount);
 
         List<ServerPlayerEntity> playersForKillerNeutral = new ArrayList<>(neutralPlayers);
-        playersForKillerNeutral.removeIf(player -> !gwc.isRole(player, SERoles.AMNESIAC));
+        playersForKillerNeutral.removeIf(player -> !Harpymodloader.OVERWRITE_ROLES.contains(gwc.getRole(player)));
         wyspiaexpress$assignRoleGroupToPlayers(world, gwc, playersForKillerNeutral, killerSidedNeutralRoles, killerSidedNeutralCount, desiredRoleCount);
 
         for (ServerPlayerEntity player : neutralPlayers) {
@@ -406,6 +406,7 @@ public abstract class HMLGameInitializeMixin {
                 else
                     continue;
             }
+
             int justAssigned = wyspiaexpress$findAndAssignPlayers(
                     roleSpecificDesiredCount, role, assigning, gwc, world
             );
