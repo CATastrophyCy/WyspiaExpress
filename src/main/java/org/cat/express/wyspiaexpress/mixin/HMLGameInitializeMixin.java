@@ -166,7 +166,7 @@ public abstract class HMLGameInitializeMixin {
                             players.size() - roleCount
                     )
             );
-            WyspiaExpress.LOGGER.info("Announcement sent!, player {}, role {}", player.getName().getString(), role.identifier().toString());
+            //WyspiaExpress.LOGGER.info("Announcement sent!, player {}, role {}", player.getName().getString(), role.identifier().toString());
         }
         // clean up
         Harpymodloader.FORCED_MODDED_ROLE.clear();
