@@ -6,7 +6,6 @@
   "priority": 500,
   "mixins": [
     "HMLGameInitializeMixin",
-    "HMLModifierMixin",
     "TrainMapEffectMixin",
     "WatheMixin",
     "WeightsResetMixin",
