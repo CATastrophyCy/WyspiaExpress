@@ -273,14 +273,17 @@ public abstract class HMLGameInitializeMixin {
         List<ServerPlayerEntity> neutralPlayers = wyspiaexpress$pickPlayersForNeutral(
                 world, gwc, civilians, trueNeutralRoles, killerSidedNeutralRoles, neutralCount
         );
-        for (ServerPlayerEntity player : neutralPlayers) {
-            gwc.addRole(player, SERoles.AMNESIAC);
-        }
+
         wyspiaexpress$assignRoleGroupToPlayers(world, gwc, neutralPlayers, trueNeutralRoles, trueNeutralCount, desiredRoleCount);
 
         List<ServerPlayerEntity> playersForKillerNeutral = new ArrayList<>(neutralPlayers);
         playersForKillerNeutral.removeIf(player -> !gwc.isRole(player, SERoles.AMNESIAC));
         wyspiaexpress$assignRoleGroupToPlayers(world, gwc, playersForKillerNeutral, killerSidedNeutralRoles, killerSidedNeutralCount, desiredRoleCount);
+
+        for (ServerPlayerEntity player : neutralPlayers) {
+            if(gwc.isRole(player, WatheRoles.CIVILIAN))
+                gwc.addRole(player, SERoles.AMNESIAC);
+        }
         // civilians
         List<ServerPlayerEntity> playersForCivilians = new ArrayList<>(civilians);
         playersForCivilians.removeIf(player -> !gwc.getRole(player).isInnocent());
