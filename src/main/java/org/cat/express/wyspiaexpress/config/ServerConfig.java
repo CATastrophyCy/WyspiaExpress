@@ -13,6 +13,9 @@ import java.util.List;
 @Sync(Option.SyncMode.OVERRIDE_CLIENT)
 @Config(name = "wyspiaexpress/general", wrapperName = "WyspiaExpressServerConfig")
 public class ServerConfig {
+    @Comment("Neutral role dividend")
+    @RangeConstraint(min = 3, max = 99)
+    public int neutralDividend = 6;
     @Comment("Number of extra spectator voicechats")
     @RangeConstraint(min = 0, max = 10)
     public int extraSpectatorsVoicechat = 5;
@@ -22,8 +25,6 @@ public class ServerConfig {
     public boolean spectatorSpecialHud = true;
     @Comment("Enable killer having role color instinct on killer-aligned neutrals")
     public boolean killerSpecialInstinct = false;
-    @Comment("Enable killer sided neutral amount restriction to never go pass 1/2 of killer")
-    public boolean enableRestrictKillerSidedNeutrals = true;
     @Comment("Multiply to crawling speed. i.e. 1.5 means crawling is 50% faster")
     public double crawlSpeedMultiplier = 2.0;
     @Comment("Player stun tick after blocking damage")

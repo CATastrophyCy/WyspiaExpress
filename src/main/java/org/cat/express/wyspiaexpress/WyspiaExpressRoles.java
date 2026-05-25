@@ -305,11 +305,13 @@ public class WyspiaExpressRoles {
         ModdedRoleAssigned.EVENT.register((player, role)->{
             if(!role.equals(COPYCAT))return;
 
+
             player.removeStatusEffect(StatusEffects.NIGHT_VISION);
             PlayerShopComponent playerShop = PlayerShopComponent.KEY.get(player);
             if (KinsWatheConfig.HANDLER.instance().EnableWatheModify) {
-                playerShop.addToBalance(- (KinsWatheConfig.HANDLER.instance().InitialKillerIncome - 100) * 2);
+                playerShop.addToBalance(- (KinsWatheConfig.HANDLER.instance().InitialKillerIncome - 100) );
             }
+
             Set<String> roleIDs = new HashSet<>();
             while(roleIDs.size() < WyspiaExpress.ROLES_CONFIG.pickRoles()){
                 String roleID;
