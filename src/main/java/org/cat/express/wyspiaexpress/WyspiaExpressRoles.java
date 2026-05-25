@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
+import dev.doctor4t.wathe.api.event.AllowPlayerDeath;
 import dev.doctor4t.wathe.api.event.CanSeePoison;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.MapVariablesWorldComponent;
@@ -65,6 +66,17 @@ public class WyspiaExpressRoles {
             if(config == null) return false;
             return config.seePoison();
         });
+        AllowPlayerDeath.EVENT.register(((victim, killer,identifier) -> {
+            GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(victim.getWorld());
+
+            if(identifier.equals(GameConstants.DeathReasons.FELL_OUT_OF_TRAIN)) return true;
+
+            // disallow follower from killing their leader
+            if(gameWorldComponent.isRole(victim, LICH) && gameWorldComponent.isRole(killer, LICH_GHOUL)) return false;
+            if(gameWorldComponent.isRole(victim, CULT_LEADER) && gameWorldComponent.isRole(killer, CULTIST)) return false;
+
+            return true;
+        }));
     }
     public static int GAME_START_TIME = -1;
     public static int PLAYER_COUNT = 0;
@@ -366,6 +378,7 @@ public class WyspiaExpressRoles {
             AbilityCooldownComponent.KEY.get(playerEntity).reset();
             PlayerRolePickingComponent.KEY.get(playerEntity).reset();
             PlayerSenseDeadComponent.KEY.get(playerEntity).reset();
+            PlayerHearDeadComponent.KEY.get(playerEntity).reset();
         }));
     }
     private static void registerStringRoleMap(){

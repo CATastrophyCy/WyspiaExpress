@@ -15,6 +15,8 @@ import org.BsXinQin.kinswathe.KinsWatheConfig;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
+import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -67,6 +69,7 @@ public class PlayerShieldMixin {
             PlayerShopComponent playerShop = PlayerShopComponent.KEY.get(killer);
             playerShop.addToBalance(- (KinsWatheConfig.HANDLER.instance().IncreaseMoneyWhenKill - 100));
         }
-
+        PlayerHearDeadComponent.KEY.get(victim).reset();
+        PlayerSenseDeadComponent.KEY.get(victim).reset();
     }
 }
