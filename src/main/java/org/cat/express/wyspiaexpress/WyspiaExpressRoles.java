@@ -222,7 +222,9 @@ public class WyspiaExpressRoles {
         TRUE_NEUTRALS.add(ARSONIST);
         TRUE_NEUTRALS.add(LICENSED_VILLAIN);
         TRUE_NEUTRALS.add(THIEF);
-        //TRUE_NEUTRALS.add(INITIATE);
+        TRUE_NEUTRALS.add(INITIATE);
+        TRUE_NEUTRALS.add(CULT_LEADER);
+        TRUE_NEUTRALS.add(CULTIST);
 
         KILLER_SIDED_NEUTRALS.add(JESTER);
         KILLER_SIDED_NEUTRALS.add(VULTURE);
