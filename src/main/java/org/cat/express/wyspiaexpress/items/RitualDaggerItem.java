@@ -1,6 +1,5 @@
 package org.cat.express.wyspiaexpress.items;
 
-import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheSounds;
 import net.minecraft.entity.LivingEntity;
@@ -14,8 +13,6 @@ import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
-import org.BsXinQin.kinswathe.packet.items.HuntingKnifeC2SPacket;
-import org.BsXinQin.kinswathe.roles.hunter.HunterComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.packets.RitualDaggerC2SPacket;
 import org.jetbrains.annotations.NotNull;

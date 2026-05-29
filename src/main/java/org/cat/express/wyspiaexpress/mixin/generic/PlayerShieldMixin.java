@@ -1,22 +1,14 @@
 package org.cat.express.wyspiaexpress.mixin.generic;
 
 import dev.doctor4t.wathe.api.event.AllowPlayerDeath;
-import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerPsychoComponent;
-import dev.doctor4t.wathe.cca.PlayerShopComponent;
-import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheSounds;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
-import org.BsXinQin.kinswathe.KinsWatheConfig;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
-import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
-import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
-import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

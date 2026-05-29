@@ -1,6 +1,5 @@
 package org.cat.express.wyspiaexpress.config;
 
-import blue.endless.jankson.Comment;
 import io.wispforest.owo.config.annotation.RangeConstraint;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 

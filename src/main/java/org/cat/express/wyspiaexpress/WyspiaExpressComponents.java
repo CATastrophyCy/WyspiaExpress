@@ -1,7 +1,7 @@
 package org.cat.express.wyspiaexpress;
+
 import dev.doctor4t.wathe.entity.PlayerBodyEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
 import org.cat.express.wyspiaexpress.components.*;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;

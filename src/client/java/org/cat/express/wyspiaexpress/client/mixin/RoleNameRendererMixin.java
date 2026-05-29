@@ -1,8 +1,6 @@
 package org.cat.express.wyspiaexpress.client.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import de.maxhenkel.voicechat.api.Player;
-import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
 import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import dev.doctor4t.wathe.client.WatheClient;
@@ -14,9 +12,8 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.text.Style;
-import org.agmas.harpymodloader.component.WorldModifierComponent;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
