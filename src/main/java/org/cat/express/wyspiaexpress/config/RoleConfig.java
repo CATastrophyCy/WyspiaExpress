@@ -49,6 +49,10 @@ public class RoleConfig {
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         @Comment("Ability cooldown, in seconds")
         public int cooldown = 90;
+        @Comment("Enable ability sound effect. If disabled, only the Outlaw can hear it")
+        public boolean enableAbilitySound = true;
+        @Comment("Ability sound effect volumen")
+        public float volume = 1.0f;
         @Comment("Ability cost, in coins")
         public int cost = 75;
         @Comment("Ability self stun duration, in ticks")

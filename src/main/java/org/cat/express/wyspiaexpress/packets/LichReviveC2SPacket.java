@@ -105,7 +105,7 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
                     revived.changeGameMode(GameMode.ADVENTURE);
                     body.remove(Entity.RemovalReason.DISCARDED); // like it never existed
 
-                    revived.playSoundToPlayer(SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.PLAYERS, 0.6f, 1.0f);
+                    revived.playSoundToPlayer(SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.PLAYERS, 0.7f, 1.0f);
 
                     var world_component = WorldComponent.KEY.get(player.getWorld());
                     world_component.removePlayerDead(revived.getUuid());
