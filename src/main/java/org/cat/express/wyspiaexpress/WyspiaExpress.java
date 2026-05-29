@@ -3,6 +3,7 @@ package org.cat.express.wyspiaexpress;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
@@ -26,6 +27,7 @@ public class WyspiaExpress implements ModInitializer {
     public static final WyspiaExpressModifiersConfig MODIFIERS_CONFIG = WyspiaExpressModifiersConfig.createAndLoad();
     public static final WyspiaExpressItemsConfig ITEMS_CONFIG = WyspiaExpressItemsConfig.createAndLoad();
     public static final WyspiaExpressServerConfig SERVER_CONFIG = WyspiaExpressServerConfig.createAndLoad();
+    public static int TICK = 0;
     @Override
     public void onInitialize() {
         LOGGER.info("WyspiaExpress is initializing...");
@@ -44,7 +46,13 @@ public class WyspiaExpress implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTING.register(RoleCategoryStatisticsManager::init);
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> RoleStatisticsManager.shutdown());
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> RoleCategoryStatisticsManager.shutdown());
-
+        ServerTickEvents.START_SERVER_TICK.register(server -> {
+            if(TICK >= 1200)
+                TICK = 0;
+            else{
+                TICK++;
+            }
+        });
         LOGGER.info("WyspiaExpress finished initializing.");
     }
 

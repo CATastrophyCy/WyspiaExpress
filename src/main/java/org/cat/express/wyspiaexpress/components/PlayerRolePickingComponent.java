@@ -60,8 +60,9 @@ public class PlayerRolePickingComponent implements AutoSyncedComponent, ServerTi
                             )
                     );
                     this.roles.clear();
+                    this.forceSync();
                 }
-                this.sync();
+                else this.sync();
             }
             else if (!gameWorldComponent.isRole(player, WyspiaExpressRoles.COPYCAT)){
                 reset();
@@ -74,19 +75,25 @@ public class PlayerRolePickingComponent implements AutoSyncedComponent, ServerTi
     public List<String> getRoles() {
         return this.roles;
     }
+
     public void set(List<String> roles, int tick){
         this.roles.addAll(roles);
         this.tick = tick;
-        this.sync();
+        this.forceSync();
     }
     public void sync() {
+        // sync only takes effect every second or if its 0
+        if(WyspiaExpress.TICK % 20 == 0) {
+            KEY.sync(this.player);
+        }
+    }
+    public void forceSync() {
         KEY.sync(this.player);
     }
-
     public void reset() {
         this.tick = 0;
         this.roles.clear();
-        this.sync();
+        this.forceSync();
     }
 
     @Override

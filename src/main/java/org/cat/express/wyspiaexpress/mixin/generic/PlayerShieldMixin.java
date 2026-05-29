@@ -48,28 +48,5 @@ public class PlayerShieldMixin {
             }
         }
 
-        // all other AllowDeath event failed, so the player is destined to die
-        if(killer== null) return;
-        GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(killer.getWorld());
-        // remove phantom invisibility depending on the config
-        if(gameWorldComponent.isRole(killer, Noellesroles.PHANTOM) && WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.phantomConfig.loseInvisibilityWhenKill()){
-            if(deathReason != null) {
-                if( !deathReason.equals(GameConstants.DeathReasons.POISON)) {
-                    killer.removeStatusEffect(StatusEffects.INVISIBILITY);
-                }
-            }
-
-        }
-        GameWorldComponent gameWorld = GameWorldComponent.KEY.get(victim.getWorld());
-        /*
-        FIX: fix neutral roles get punished for killing players with KinsWathe, this happens because kinswathe only checks if the player is not innocent to give them coin
-            , but with IncreaseMoneyWhenKill <= 100 it ends up punishing them. Either way the code doesn't give them correct reward
-         */
-        if (!gameWorld.isInnocent(killer) && !gameWorld.canUseKillerFeatures(killer)) {
-            PlayerShopComponent playerShop = PlayerShopComponent.KEY.get(killer);
-            playerShop.addToBalance(- (KinsWatheConfig.HANDLER.instance().IncreaseMoneyWhenKill - 100));
-        }
-        PlayerHearDeadComponent.KEY.get(victim).reset();
-        PlayerSenseDeadComponent.KEY.get(victim).reset();
     }
 }

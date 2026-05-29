@@ -33,10 +33,12 @@ public class PlayerDepressedComponent implements AutoSyncedComponent, ServerTick
                 this.sync();
                 if (depressionTick >= 2 * GameConstants.getInTicks(0, WyspiaExpress.SERVER_CONFIG.depressedTimer()) ) {
                     GameFunctions.killPlayer(this.player,true,null, Identifier.of(WyspiaExpress.MOD_ID, "player_depressed"));
+                    forceSync();
                 }
             } else if (depressionTick > 0) {
                 depressionTick--;
-                this.sync();
+                if(depressionTick == 0) forceSync();
+                else this.sync();
             }
         }
     }
@@ -44,12 +46,17 @@ public class PlayerDepressedComponent implements AutoSyncedComponent, ServerTick
         return this.depressionTick;
     }
     public void sync() {
+        // sync only takes effect every second or if its 0
+        if(WyspiaExpress.TICK % 20 == 0) {
+            KEY.sync(this.player);
+        }
+    }
+    public void forceSync() {
         KEY.sync(this.player);
     }
-
     public void reset() {
         this.depressionTick = 0;
-        this.sync();
+        this.forceSync();
     }
 
     @Override

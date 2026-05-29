@@ -23,12 +23,13 @@ public class PlayerSenseDeadComponent implements AutoSyncedComponent, ServerTick
     public void serverTick() {
         if (this.duration > 0) {
             -- this.duration;
-            this.sync();
+            if(this.duration == 0) this.forceSync();
+            else this.sync();
         }
     }
     public void setDuration(int seconds) {
         this.duration = seconds * 20;
-        this.sync();
+        this.forceSync();
     }
     public boolean isActive(){
         return this.duration > 0;
@@ -38,15 +39,20 @@ public class PlayerSenseDeadComponent implements AutoSyncedComponent, ServerTick
         if (this.duration < 0) {
             this.duration = 0;
         }
-        this.sync();
+        this.forceSync();
     }
     public void sync() {
+        // sync only takes effect every second or if its 0
+        if(WyspiaExpress.TICK % 20 == 0) {
+            KEY.sync(this.player);
+        }
+    }
+    public void forceSync() {
         KEY.sync(this.player);
     }
-
     public void reset() {
         this.duration = 0;
-        this.sync();
+        this.forceSync();
     }
 
     @Override

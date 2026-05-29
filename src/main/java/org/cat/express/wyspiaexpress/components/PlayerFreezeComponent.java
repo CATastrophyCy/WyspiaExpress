@@ -33,10 +33,12 @@ public class PlayerFreezeComponent implements AutoSyncedComponent, ServerTicking
                 this.sync();
                 if (freezeTick >= 2 * GameConstants.getInTicks(0, WyspiaExpress.SERVER_CONFIG.freezeTimer())) {
                     GameFunctions.killPlayer(this.player,true,null, Identifier.of(WyspiaExpress.MOD_ID, "player_freeze"));
+                    forceSync();
                 }
             } else if (freezeTick > 0) {
                 freezeTick--;
-                this.sync();
+                if(freezeTick == 0) forceSync();
+                else sync();
             }
         }
     }
@@ -44,12 +46,17 @@ public class PlayerFreezeComponent implements AutoSyncedComponent, ServerTicking
         return freezeTick;
     }
     public void sync() {
+        // sync only takes effect every second or if its 0
+        if(WyspiaExpress.TICK % 20 == 0) {
+            KEY.sync(this.player);
+        }
+    }
+    public void forceSync() {
         KEY.sync(this.player);
     }
-
     public void reset() {
         this.freezeTick = 0;
-        this.sync();
+        this.forceSync();
     }
 
     @Override
