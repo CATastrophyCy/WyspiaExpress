@@ -18,14 +18,19 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.TeleportTarget;
+import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.WyspiaExpressSounds;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
@@ -90,8 +95,8 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
                     PlayerInventory inv = revived.getInventory();
                     for (int i = 0; i < PlayerInventory.getHotbarSize(); i++) {
                         ItemStack stack = inv.getStack(i);
-                        // remove any item thats not key
-                        if (!stack.isOf(WatheItems.KEY)) {
+                        // remove any item thats not key nor phone
+                        if (!stack.isOf(WatheItems.KEY) && !stack.isOf(KinsWatheItems.PHONE)) {
                             revived.getInventory().setStack(i, ItemStack.EMPTY);
                         }
                     }
@@ -99,6 +104,8 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
                     revived.teleportTo(target);
                     revived.changeGameMode(GameMode.ADVENTURE);
                     body.remove(Entity.RemovalReason.DISCARDED); // like it never existed
+
+                    revived.playSoundToPlayer(SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.PLAYERS, 0.6f, 1.0f);
 
                     var world_component = WorldComponent.KEY.get(player.getWorld());
                     world_component.removePlayerDead(revived.getUuid());
