@@ -1,6 +1,7 @@
 package org.cat.express.wyspiaexpress.packets;
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.cca.PlayerMoodComponent;
 import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.wathe.compat.TrainVoicePlugin;
@@ -19,7 +20,6 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypeFilter;
@@ -28,12 +28,15 @@ import net.minecraft.world.GameMode;
 import net.minecraft.world.TeleportTarget;
 import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.agmas.harpymodloader.Harpymodloader;
+import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
-import org.cat.express.wyspiaexpress.WyspiaExpressSounds;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
+import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
+import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
+import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -79,7 +82,11 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
                     // check if the selected body can be revived
                     PlayerBodyEntity body = playerBodyEntities.getFirst();
                     var revived = (ServerPlayerEntity) player.getServerWorld().getPlayerByUuid(body.getPlayerUuid());
-                    if(revived == null || gameWorldComponent.getRole(revived) == WyspiaExpressRoles.LICH_GHOUL || !GameFunctions.isPlayerSpectatingOrCreative(revived)) return;
+                    var world_component = WorldComponent.KEY.get(player.getWorld());
+                    if(revived == null
+                            || gameWorldComponent.getRole(revived) == WyspiaExpressRoles.LICH_GHOUL
+                            || !GameFunctions.isPlayerSpectatingOrCreative(revived)
+                            || !world_component.isPlayerDead(revived.getUuid())) return;
 
                     // activate cooldown
                     abilityPlayerComponent.setAbilityCooldown( Math.max(0, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.cooldown()));
@@ -88,9 +95,8 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
                     var roles = new ArrayList<>(List.of(WyspiaExpressRoles.LICH_GHOUL));
                     if (roles.isEmpty()) roles.add(WatheRoles.KILLER);
                     Collections.shuffle(roles);
-
-                    // revive player and give them the role
                     var selectedRole = roles.getFirst();
+
                     // clear their hotbar of items thats not Key
                     PlayerInventory inv = revived.getInventory();
                     for (int i = 0; i < PlayerInventory.getHotbarSize(); i++) {
@@ -100,20 +106,24 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
                             revived.getInventory().setStack(i, ItemStack.EMPTY);
                         }
                     }
+                    // teleport revived player to body and discard the body
                     TeleportTarget target = new TeleportTarget(player.getServerWorld(),player.getPos(), Vec3d.ZERO, body.getYaw(), body.getPitch(), TeleportTarget.NO_OP);
                     revived.teleportTo(target);
                     revived.changeGameMode(GameMode.ADVENTURE);
-                    body.remove(Entity.RemovalReason.DISCARDED); // like it never existed
-
-                    revived.playSoundToPlayer(SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.PLAYERS, 0.7f, 1.0f);
-
-                    var world_component = WorldComponent.KEY.get(player.getWorld());
                     world_component.removePlayerDead(revived.getUuid());
-
+                    body.remove(Entity.RemovalReason.DISCARDED); // like it never existed
+                    // sound effect to revived player
+                    revived.playSoundToPlayer(SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.PLAYERS, 0.7f, 1.0f);
+                    // reset components
+                    PlayerCultistComponent.KEY.get(revived).reset();
+                    PlayerFreezeComponent.KEY.get(revived).reset();
+                    PlayerMoodComponent.KEY.get(revived).reset();
+                    PlayerDepressedComponent.KEY.get(revived).reset();
+                    // initialize ghoul role
                     gameWorldComponent.addRole(revived, selectedRole);
                     PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(revived);
                     playerShopComponent.setBalance(WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.startingCoin());
-
+                    ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, selectedRole);
                     ServerPlayNetworking.send(
                             revived,
                             new AnnounceWelcomePayload(
