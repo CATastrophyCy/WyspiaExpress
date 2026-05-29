@@ -20,6 +20,8 @@ public class RoleConfig {
     @Nest public GamblerConfig  gamblerConfig = new GamblerConfig();
     @Comment("Config options for LICH")
     @Nest public LichConfig lichConfig = new LichConfig();
+    @Comment("Config options for CULT_LEADER")
+    @Nest public CultLeaderConfig cultLeaderConfig = new CultLeaderConfig();
     @Comment("Config options for EDDIE_WAFFLES")
     @Nest public EddieWafflesConfig eddieWafflesConfig = new EddieWafflesConfig();
     // wathe
@@ -94,6 +96,30 @@ public class RoleConfig {
 
         // Lich revived roles
         public static class LichGhoulConfig {
+            @Comment("Basic role configuration")
+            @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+    }
+    public static class CultLeaderConfig {
+        @Comment("Basic role configuration")
+        @Nest public RoleBasicConfig basic = new RoleBasicConfig();
+        @Comment("Enable conversion by staying close at players")
+        public boolean enableConversion = true;
+        @Comment("Cooldown for the revive ability, in seconds")
+        public int cooldown = 120;
+        @Comment("Range to activate revive ability")
+        public double range = 3.0;
+        @Comment("Amount of cumulative time, in ticks, it takes to convert a player")
+        public int conversionTime = 600;
+        @Comment("Conversion range, in blocks")
+        public double conversionRange = 3.0;
+        @Comment("The amount of coin converted player starts with")
+        public int convertCoin = 150;
+        @Comment("Configuration for their CULTIST")
+        @Nest public CultistConfig cultistConfig = new CultistConfig();
+
+        // Lich revived roles
+        public static class CultistConfig {
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         }

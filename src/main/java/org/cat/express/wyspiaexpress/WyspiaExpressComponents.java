@@ -1,8 +1,10 @@
 package org.cat.express.wyspiaexpress;
 import dev.doctor4t.wathe.entity.PlayerBodyEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.cat.express.wyspiaexpress.components.*;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
+import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import org.ladysnake.cca.api.v3.entity.EntityComponentInitializer;
@@ -19,6 +21,7 @@ public class WyspiaExpressComponents implements EntityComponentInitializer, Worl
         registry.beginRegistration(PlayerEntity.class, PlayerRolePickingComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerRolePickingComponent::new);
         registry.beginRegistration(PlayerEntity.class, PlayerSenseDeadComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerSenseDeadComponent::new);
         registry.beginRegistration(PlayerEntity.class, PlayerHearDeadComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerHearDeadComponent::new);
+        registry.beginRegistration(PlayerEntity.class, PlayerCultistComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerCultistComponent::new);
         registry.beginRegistration(PlayerBodyEntity.class, PlayerBodyEntityComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerBodyEntityComponent::new);
     }
     @Override

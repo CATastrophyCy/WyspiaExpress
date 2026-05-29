@@ -9,15 +9,13 @@ import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
-import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
-import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
 
 public class PlayerBodyEntityComponent implements AutoSyncedComponent {
     public static final ComponentKey<PlayerBodyEntityComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(WyspiaExpress.MOD_ID, "player_body"),
             PlayerBodyEntityComponent.class);
     private final PlayerBodyEntity playerBody;
     private boolean isReported = false;
-
+    private boolean convertable = false;
     public PlayerBodyEntityComponent(@NotNull PlayerBodyEntity playerBody) {
         this.playerBody = playerBody;
     }
@@ -34,15 +32,24 @@ public class PlayerBodyEntityComponent implements AutoSyncedComponent {
         isReported = reported;
         this.sync();
     }
+    public void setConvertable(boolean convertable) {
+        this.convertable = convertable;
+        this.sync();
+    }
+    public boolean isConvertable() {
+        return convertable;
+    }
     public boolean isReported() {
         return isReported;
     }
     @Override
     public void writeToNbt(@NotNull NbtCompound tag, RegistryWrapper.@NotNull WrapperLookup registryLookup) {
         tag.putBoolean("reported", this.isReported);
+        tag.putBoolean("convertable", this.convertable);
     }
     @Override
     public void readFromNbt(@NotNull NbtCompound tag, RegistryWrapper.@NotNull WrapperLookup registryLookup) {
         this.isReported = tag.contains("reported") && tag.getBoolean("reported");
+        this.convertable = tag.getBoolean("convertable");
     }
 }

@@ -30,6 +30,7 @@ import org.agmas.harpymodloader.events.ResetPlayerEvent;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
 import org.agmas.harpymodloader.modifiers.Modifier;
 import org.cat.express.wyspiaexpress.components.*;
+import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
@@ -379,6 +380,7 @@ public class WyspiaExpressRoles {
             PlayerRolePickingComponent.KEY.get(playerEntity).reset();
             PlayerSenseDeadComponent.KEY.get(playerEntity).reset();
             PlayerHearDeadComponent.KEY.get(playerEntity).reset();
+            PlayerCultistComponent.KEY.get(playerEntity).reset();
         }));
     }
     private static void registerStringRoleMap(){
@@ -398,6 +400,8 @@ public class WyspiaExpressRoles {
         registerRoleBasicConfig(GAMBLER, WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.basic);
         registerRoleBasicConfig(LICH, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.basic);
         registerRoleBasicConfig(LICH_GHOUL, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.ghoulConfig.basic);
+        registerRoleBasicConfig(CULT_LEADER, WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.basic);
+        registerRoleBasicConfig(CULTIST, WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.cultistConfig.basic);
         registerRoleBasicConfig(EDDIE_WAFFLES, WyspiaExpress.ROLES_CONFIG.roleConfig.eddieWafflesConfig.basic);
         // wathe
         registerRoleBasicConfig(WatheRoles.VIGILANTE, WyspiaExpress.ROLES_CONFIG.roleConfig.vigilanteConfig.basic);
