@@ -53,6 +53,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
             ItemToolTip.addItemtip(WyspiaExpressItems.FUN_BOX, itemStack, list);
             ItemToolTip.addItemtip(WyspiaExpressItems.MEGAPHONE, itemStack, list);
             ItemToolTip.addItemtip(WyspiaExpressItems.OUTLAW_REVOLVER, itemStack, list);
+            ItemToolTip.addItemtip(WyspiaExpressItems.RITUAL_DAGGER, itemStack, list);
             ItemToolTip.addItemtip(WyspiaExpressItems.TAPE, itemStack, list);
             ItemToolTip.addItemtip(WyspiaExpressItems.SENSE_DEAD, itemStack, list);
         }));

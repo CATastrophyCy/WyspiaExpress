@@ -39,6 +39,10 @@
   "item.wyspiaexpress.outlaw_revolver": "Outlaw Revolver",
   "item.wyspiaexpress.outlaw_revolver.tooltip": "You feel no remorse when shooting innocents with this revolver.\n It has a longer cooldown than normal revolver.\n The cooldown is increased if you miss your shot",
 
+  "item.wyspiaexpress.ritual_dagger": "Ritual Dagger",
+  "item.wyspiaexpress.ritual_dagger.tooltip": "Sometimes force is needed to make them believe!\n Players stabbed with this will instead get stunned and converted to a Cultist",
+
+
   "item.wyspiaexpress.fun_box": "\"Fun Box\"",
   "item.wyspiaexpress.fun_box.tooltip": "You wanna know whats in the box? BUY IT!",
 

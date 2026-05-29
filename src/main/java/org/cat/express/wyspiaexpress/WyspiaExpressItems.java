@@ -38,6 +38,7 @@ public class WyspiaExpressItems {
     public static final Item TP_READY = registerItem(new TpReadyItem(new Item.Settings().maxCount(1)), "tp_ready");
     public static final Item MEGAPHONE = registerItem(new MegaphoneItem(new Item.Settings().maxCount(4)), "megaphone");
     public static final Item OUTLAW_REVOLVER = registerItem(new OutlawRevolverItem(new Item.Settings().maxCount(1)), "outlaw_revolver");
+    public static final Item RITUAL_DAGGER = registerItem(new RitualDaggerItem(new Item.Settings().maxCount(1)), "ritual_dagger");
     public static final Item TAPE = registerItem(new TapeItem(new Item.Settings().maxCount(4)), "tape");
 
     public static void registerItemConfig(){
@@ -46,6 +47,7 @@ public class WyspiaExpressItems {
         ITEMS_BASIC_CONFIG.put(MEGAPHONE, WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.basic);
         ITEMS_BASIC_CONFIG.put(OUTLAW_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.outlawRevolverConfig.basic);
         ITEMS_BASIC_CONFIG.put(TAPE, WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.basic);
+        ITEMS_BASIC_CONFIG.put(RITUAL_DAGGER, WyspiaExpress.ITEMS_CONFIG.itemConfig.ritualDaggerConfig.basic);
         // wathe
         ITEMS_BASIC_CONFIG.put(WatheItems.REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.revolverConfig.basic);
         ITEMS_BASIC_CONFIG.put(WatheItems.KNIFE, WyspiaExpress.ITEMS_CONFIG.itemConfig.knifeConfig.basic);

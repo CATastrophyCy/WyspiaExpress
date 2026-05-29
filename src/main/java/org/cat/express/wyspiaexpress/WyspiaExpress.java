@@ -89,5 +89,6 @@ public class WyspiaExpress implements ModInitializer {
         OutlawRevolverC2SPacket.register();
         NoTargetAbilityC2SPacket.register();
         RolePickC2SPacket.register();
+        RitualDaggerC2SPacket.register();
     }
 }

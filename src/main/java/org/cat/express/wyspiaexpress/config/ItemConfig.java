@@ -23,7 +23,10 @@ public class ItemConfig {
     @Nest public TapeConfig tapeConfig = new TapeConfig();
 
     @Comment("Configuration for OUTLAW_REVOLVER")
-    @Nest public  OutlawRevolverConfig outlawRevolverConfig = new OutlawRevolverConfig();
+    @Nest public OutlawRevolverConfig outlawRevolverConfig = new OutlawRevolverConfig();
+
+    @Comment("Configuration for RITUAL_DAGGER")
+    @Nest public RitualDaggerConfig ritualDaggerConfig = new RitualDaggerConfig();
 
     @Comment("Configuration for SENSE_DEAD")
     @Nest public SenseDeadConfig senseDeadConfig = new SenseDeadConfig();
@@ -122,6 +125,14 @@ public class ItemConfig {
         public int cooldown = 60;
         @Comment("Cooldown when hitting nothing, in seconds, minimum 0")
         public int missCooldown = 90;
+    }
+    public static class RitualDaggerConfig{
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds, minimum 0")
+        public int cooldown = 60;
+        @Comment("Duration of the stun, in ticks")
+        public int duration = 50;
     }
     public static class SenseDeadConfig{
         @Comment("Cooldown, in seconds, minimum 0")
