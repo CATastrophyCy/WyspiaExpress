@@ -16,10 +16,11 @@
     "modifiers.graverobber.GraverobberCoronerHudMixin",
     "modifiers.guesser.GuesserScreenMixin",
     "modifiers.lover.LoverCrashMixin",
+    "roles.NoTargetAbilityHudMixin",
+    "roles.cult.CultLeaderAbilityHudMixin",
     "roles.phantom.PhantomPsychosisMixin",
     "ui.CoinMixin",
     "ui.HudRendererMixin",
-    "ui.NoTargetAbilityHudMixin",
     "ui.RolePickerWidgetMixin",
     "ui.ScreenAccessor",
     "ui.ShopMixin"
@@ -31,8 +32,10 @@
     "requireAnnotations": true
   },
   "mixins": [
+    "GetTargetMixin",
     "InstinctMixin",
     "RoleNameRendererMixin",
+    "roles.cult.CultLeaderTargetHudMixin",
     "roles.lich.LichHudMixin",
     "roles.lich.LichTargetHudMixin"
   ]

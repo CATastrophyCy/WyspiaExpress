@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress.client;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.entity.PlayerBodyEntity;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
@@ -12,6 +13,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.Vec3d;
 import org.BsXinQin.kinswathe.KinsWatheItems;
@@ -20,8 +22,8 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.client.items.ItemToolTip;
-import org.cat.express.wyspiaexpress.client.roles.LichUtil;
 import org.cat.express.wyspiaexpress.client.roles.NoTargetAbilityUtil;
+import org.cat.express.wyspiaexpress.client.roles.TargetAbilityUtil;
 import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
 import org.lwjgl.glfw.GLFW;
 
@@ -30,6 +32,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class WyspiaexpressClient implements ClientModInitializer {
     public static KeyBinding abilityBind;
+    public static PlayerBodyEntity TARGET_BODY = null;
+    public static PlayerEntity TARGET_PLAYER = null;
     @Override
     public void onInitializeClient() {
         registerItemToolTips();
@@ -77,7 +81,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
                 Role role = gameWorld.getRole(client.player);
                 if(role == null) return;
                 if(role == WyspiaExpressRoles.LICH){
-                    LichUtil.sendLichPacket(client);
+                    TargetAbilityUtil.sendLichPacket(client);
                 }
                 if(NoTargetAbilityUtil.isValid(role)){
                     NoTargetAbilityUtil.sendPacket(client);

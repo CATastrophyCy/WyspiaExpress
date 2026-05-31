@@ -1,4 +1,4 @@
-package org.cat.express.wyspiaexpress.client.mixin.ui;
+package org.cat.express.wyspiaexpress.client.mixin.roles;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;

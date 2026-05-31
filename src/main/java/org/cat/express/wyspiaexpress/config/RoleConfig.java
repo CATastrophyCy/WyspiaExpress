@@ -107,8 +107,6 @@ public class RoleConfig {
         public boolean enableConversion = true;
         @Comment("Cooldown for the revive ability, in seconds")
         public int cooldown = 120;
-        @Comment("Range to activate revive ability")
-        public double range = 3.0;
         @Comment("Amount of cumulative time, in ticks, it takes to convert a player")
         public int conversionTime = 600;
         @Comment("Conversion range, in blocks")
