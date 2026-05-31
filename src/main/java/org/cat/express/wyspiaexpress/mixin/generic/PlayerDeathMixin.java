@@ -49,16 +49,17 @@ public abstract class PlayerDeathMixin {
                 }
 
             }
-         /*
-            FIX: fix neutral roles get punished for killing players with KinsWathe, this happens because kinswathe only checks if the player is not innocent to give them coin
-                , but with IncreaseMoneyWhenKill <= 100 it ends up punishing them. Either way the code doesn't give them correct reward
-         */
+             /*
+                FIX: fix neutral roles get punished for killing players with KinsWathe, this happens because kinswathe only checks if the player is not innocent to give them coin
+                    , but with IncreaseMoneyWhenKill <= 100 it ends up punishing them. Either way the code doesn't give them correct reward
+             */
             if (!component.isInnocent(killer) && !component.canUseKillerFeatures(killer)) {
                 PlayerShopComponent playerShop = PlayerShopComponent.KEY.get(killer);
                 playerShop.addToBalance(- (KinsWatheConfig.HANDLER.instance().IncreaseMoneyWhenKill - 100));
             }
             PlayerHearDeadComponent.KEY.get(victim).reset();
             PlayerSenseDeadComponent.KEY.get(victim).reset();
+
         }
 
         @Inject(

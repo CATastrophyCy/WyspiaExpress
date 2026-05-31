@@ -130,7 +130,7 @@ public class ItemConfig {
         @Comment("Basic item configuration")
         @Nest public ItemBasicConfig basic = new ItemBasicConfig();
         @Comment("Cooldown, in seconds, minimum 0")
-        public int cooldown = 60;
+        public int cooldown = 120;
         @Comment("Duration of the stun, in ticks")
         public int duration = 50;
     }

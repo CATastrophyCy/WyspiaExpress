@@ -79,6 +79,7 @@ public class WyspiaExpressItems {
         registerItemGroup(FAKE_REVOLVER, WatheItems.EQUIPMENT_GROUP);
         registerItemGroup(MEGAPHONE, WatheItems.EQUIPMENT_GROUP);
         registerItemGroup(OUTLAW_REVOLVER, WatheItems.EQUIPMENT_GROUP);
+        registerItemGroup(RITUAL_DAGGER, WatheItems.EQUIPMENT_GROUP);
         registerItemGroup(TAPE, WatheItems.EQUIPMENT_GROUP);
     }
     public static Item registerItem(Item item, String id) {

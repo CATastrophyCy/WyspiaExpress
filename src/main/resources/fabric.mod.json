@@ -30,6 +30,7 @@
       "wyspiaexpress:player_freeze_component",
       "wyspiaexpress:lich_revive_component",
       "wyspiaexpress:player_role_pick_component",
+      "wyspiaexpress:player_cultist_component",
       "wyspiaexpress:player_body",
       "wyspiaexpress:sense_dead",
       "wyspiaexpress:hear_dead",

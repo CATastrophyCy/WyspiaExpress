@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "wathe:item/knife"
+    "layer0": "wyspiaexpress:item/ritual_dagger"
   },
   "display": {
     "thirdperson_righthand": {
