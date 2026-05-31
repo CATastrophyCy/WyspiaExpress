@@ -23,12 +23,13 @@ public class AbilityCooldownComponent implements AutoSyncedComponent, ServerTick
     public void serverTick() {
         if (this.cooldown > 0) {
             -- this.cooldown;
-            this.sync();
+            if(this.cooldown <= 0) this.forceSync();
+            else this.sync();
         }
     }
     public void setAbilityCooldown(int ticks) {
         this.cooldown = ticks * 20;
-        this.sync();
+        this.forceSync();
     }
     public boolean isCooldown(){
         return this.cooldown > 0;
@@ -38,15 +39,20 @@ public class AbilityCooldownComponent implements AutoSyncedComponent, ServerTick
         if (this.cooldown < 0) {
             this.cooldown = 0;
         }
-        this.sync();
+        this.forceSync();
     }
     public void sync() {
+        // sync only takes effect every second or if its 0
+        if(WyspiaExpress.TICK % 20 == 0) {
+            KEY.sync(this.player);
+        }
+    }
+    public void forceSync() {
         KEY.sync(this.player);
     }
-
     public void reset() {
         this.cooldown = 0;
-        this.sync();
+        this.forceSync();
     }
 
     @Override
