@@ -94,6 +94,7 @@ public class WyspiaExpress implements ModInitializer {
     }
     private void registerPackets(){
         LichReviveC2SPacket.register();
+        CultLeaderReviveC2SPacket.register();
         OutlawRevolverC2SPacket.register();
         NoTargetAbilityC2SPacket.register();
         RolePickC2SPacket.register();

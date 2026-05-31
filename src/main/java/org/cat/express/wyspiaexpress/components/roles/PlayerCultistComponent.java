@@ -45,7 +45,7 @@ public class PlayerCultistComponent implements AutoSyncedComponent, ServerTickin
                 if (other == player) continue;
 
                 PlayerCultistComponent otherPlayer = PlayerCultistComponent.KEY.get(other);
-                if(!otherPlayer.isConverted()) {
+                if(!otherPlayer.isConverted() && !gameWorldComponent.isRole(other, WyspiaExpressRoles.CULTIST)) {
                     otherPlayer.conversionTick++;
                     if(otherPlayer.isConverted()) otherPlayer.forceSync();
                     else otherPlayer.sync();

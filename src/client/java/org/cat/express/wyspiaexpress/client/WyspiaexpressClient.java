@@ -83,6 +83,9 @@ public class WyspiaexpressClient implements ClientModInitializer {
                 if(role == WyspiaExpressRoles.LICH){
                     TargetAbilityUtil.sendLichPacket(client);
                 }
+                if(role == WyspiaExpressRoles.CULT_LEADER){
+                    TargetAbilityUtil.sendCultLeaderPacket(client);
+                }
                 if(NoTargetAbilityUtil.isValid(role)){
                     NoTargetAbilityUtil.sendPacket(client);
                 }
