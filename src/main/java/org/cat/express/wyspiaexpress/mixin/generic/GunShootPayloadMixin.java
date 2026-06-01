@@ -57,13 +57,12 @@ public abstract class GunShootPayloadMixin {
                     backfire = true;
                     GameFunctions.killPlayer(player, true, player, GameConstants.DeathReasons.GUN);
                 }
-
                 // no backfire
                 if(!backfire ) {
                     GameFunctions.killPlayer(target, true, player, GameConstants.DeathReasons.GUN);
 
                     // target is innocent and dead (this makes it so shooting someone protected will not drop the gun nor remove mood)
-                    if(game.isInnocent(target) && GameFunctions.isPlayerSpectatingOrCreative(target) ) {
+                    if(game.isInnocent(target) && GameFunctions.isPlayerSpectatingOrCreative(target) && GameFunctions.isPlayerAliveAndSurvival(player) ) {
                         Scheduler.schedule(() -> {
                             if (!context.player().getInventory().contains((s) -> s.isIn(WatheItemTags.GUNS))) return;
                             player.getInventory().remove((s) -> s.isOf(revolver), 1, player.getInventory());

@@ -30,10 +30,7 @@ import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
-import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
-import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
-import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
-import org.cat.express.wyspiaexpress.components.WorldComponent;
+import org.cat.express.wyspiaexpress.components.*;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
@@ -77,6 +74,8 @@ public record CultLeaderReviveC2SPacket(UUID playerBody) implements CustomPayloa
                 if (!playerBodyEntities.isEmpty()) {
                     // check if the selected body can be revived
                     PlayerBodyEntity body = playerBodyEntities.getFirst();
+                    if(!PlayerBodyEntityComponent.KEY.get(body).isConverted())return;
+
                     var revived = (ServerPlayerEntity) player.getServerWorld().getPlayerByUuid(body.getPlayerUuid());
                     var world_component = WorldComponent.KEY.get(player.getWorld());
                     if(revived == null

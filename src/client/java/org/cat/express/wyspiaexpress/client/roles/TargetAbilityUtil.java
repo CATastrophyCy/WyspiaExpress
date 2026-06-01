@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import org.cat.express.wyspiaexpress.client.WyspiaexpressClient;
+import org.cat.express.wyspiaexpress.components.PlayerBodyEntityComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.cat.express.wyspiaexpress.packets.CultLeaderReviveC2SPacket;
 import org.cat.express.wyspiaexpress.packets.LichReviveC2SPacket;
@@ -26,13 +27,11 @@ public class TargetAbilityUtil {
         });
     }
 
-    public static boolean isBodyConverted(@NotNull World world, @NotNull PlayerBodyEntity body) {
-        PlayerEntity other = world.getPlayerByUuid(body.getPlayerUuid());
-        if(other == null) return false;
-        return isPlayerConverted(other);
+    public static boolean isBodyConverted(@NotNull PlayerBodyEntity body) {
+        return PlayerBodyEntityComponent.KEY.get(body).isConverted();
     }
     public static boolean isPlayerConverted(@NotNull PlayerEntity player) {
         PlayerCultistComponent playerCultistComponent = PlayerCultistComponent.KEY.get(player);
-        return GameFunctions.isPlayerSpectatingOrCreative(player) && playerCultistComponent.isConverted();
+        return playerCultistComponent.isConverted();
     }
 }

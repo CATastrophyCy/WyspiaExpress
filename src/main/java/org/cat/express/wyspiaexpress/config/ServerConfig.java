@@ -16,8 +16,8 @@ public class ServerConfig {
     @Comment("Neutral role dividend")
     @RangeConstraint(min = 3, max = 99)
     public int neutralDividend = 6;
-    @Comment("Number of extra spectator voicechats")
-    @RangeConstraint(min = 0, max = 10)
+    @Comment("Number of extra spectator voicechats, minimum 5")
+    @RangeConstraint(min = 5, max = 30)
     public int extraSpectatorsVoicechat = 5;
     @Comment("Enable spectator special instinct showing more information")
     public boolean spectatorSpecialInstinct = true;

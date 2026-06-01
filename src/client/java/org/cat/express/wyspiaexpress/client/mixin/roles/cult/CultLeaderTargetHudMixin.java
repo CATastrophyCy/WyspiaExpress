@@ -34,18 +34,18 @@ public abstract class CultLeaderTargetHudMixin {
         if (MinecraftClient.getInstance().player == null) return;
         if (WyspiaexpressClient.TARGET_PLAYER == null) return;
         GameWorldComponent gameWorld = GameWorldComponent.KEY.get(player.getWorld());
-        if (gameWorld.isRole(player, WyspiaExpressRoles.CULT_LEADER) && WatheClient.isPlayerAliveAndInSurvival()) {
+        if (gameWorld.isRole(player, WyspiaExpressRoles.CULT_LEADER) && WatheClient.isPlayerAliveAndInSurvival() && !gameWorld.isRole(WyspiaexpressClient.TARGET_PLAYER, WyspiaExpressRoles.CULTIST)) {
             context.getMatrices().push();
             context.getMatrices().translate((float) context.getScaledWindowWidth() / 2.0F, (float) context.getScaledWindowHeight() / 2.0F + 6.0F, 0.0F);
             context.getMatrices().scale(0.6F, 0.6F, 1.0F);
             Text targetInfo;
             PlayerCultistComponent targetCultistComponent = PlayerCultistComponent.KEY.get(WyspiaexpressClient.TARGET_PLAYER);
-            if (targetCultistComponent.isConverted()) {
+            if (!targetCultistComponent.isConverted()) {
                 targetInfo = Text.translatable("hud.wyspiaexpress.cult_leader.target").styled(
                         style -> style.withColor(WyspiaExpressRoles.CULT_LEADER.color()))
                         .append(Text.literal(" [ " +
                                         (int) (((float) targetCultistComponent.getConversionTick() /
-                                                (WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.conversionTime() * 20)) * 100) + "% ]")
+                                                (WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.conversionTime())) * 100) + "% ]")
                                 .styled(style -> style.withColor(Color.GREEN.getRGB())));
             } else {
                 targetInfo = Text.translatable("hud.wyspiaexpress.cult_leader.target_converted").styled(style -> style.withColor(Color.GREEN.getRGB()));
@@ -57,14 +57,17 @@ public abstract class CultLeaderTargetHudMixin {
 
     @Inject(method = "renderHud", at = @At("TAIL"))
     private static void wyspiaexpress$getTargetBodyHud(TextRenderer renderer, ClientPlayerEntity player, DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
-        if (WyspiaexpressClient.TARGET_BODY == null || !GameFunctions.isPlayerAliveAndSurvival(player)) return;
+        if (MinecraftClient.getInstance().player == null) return;
+        if (WyspiaexpressClient.TARGET_BODY == null) return;
         GameWorldComponent gameWorld = GameWorldComponent.KEY.get(player.getWorld());
         AbilityCooldownComponent ability = AbilityCooldownComponent.KEY.get(player);
-        if (gameWorld.isRole(player, WyspiaExpressRoles.CULT_LEADER) && WatheClient.isPlayerAliveAndInSurvival()) {
-            if (ability.cooldown > 0
-                    || gameWorld.getRole(WyspiaexpressClient.TARGET_BODY.getPlayerUuid()) == WyspiaExpressRoles.CULTIST)
+        if (gameWorld.isRole(player, WyspiaExpressRoles.CULT_LEADER)  && WatheClient.isPlayerAliveAndInSurvival()) {
+
+            if (ability.isCooldown()
+                    || gameWorld.isRole(WyspiaexpressClient.TARGET_BODY.getPlayerUuid(), WyspiaExpressRoles.CULTIST))
                 return;
-            if(!TargetAbilityUtil.isBodyConverted(player.getWorld(), WyspiaexpressClient.TARGET_BODY))return;
+
+            if(!TargetAbilityUtil.isBodyConverted( WyspiaexpressClient.TARGET_BODY))return;
             context.getMatrices().push();
             context.getMatrices().translate((float) context.getScaledWindowWidth() / 2.0F, (float) context.getScaledWindowHeight() / 2.0F + 6.0F, 0.0F);
             context.getMatrices().scale(0.6F, 0.6F, 1.0F);

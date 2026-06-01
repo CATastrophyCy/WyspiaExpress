@@ -45,7 +45,7 @@ public class PlayerCultistComponent implements AutoSyncedComponent, ServerTickin
                     PlayerLookup.around(player.getServerWorld(), player.getPos(), 5.0);
 
             for (ServerPlayerEntity other : nearby) {
-                if (other == player) continue;
+                if (other == player || GameFunctions.isPlayerSpectatingOrCreative(other)) continue;
 
                 PlayerCultistComponent otherPlayer = PlayerCultistComponent.KEY.get(other);
                 if(!otherPlayer.isConverted() && !gameWorldComponent.isRole(other, WyspiaExpressRoles.CULTIST)) {

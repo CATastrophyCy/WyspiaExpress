@@ -15,6 +15,7 @@ public class PlayerBodyEntityComponent implements AutoSyncedComponent {
             PlayerBodyEntityComponent.class);
     private final PlayerBodyEntity playerBody;
     private boolean isReported = false;
+    private boolean isConverted = false;
     public PlayerBodyEntityComponent(@NotNull PlayerBodyEntity playerBody) {
         this.playerBody = playerBody;
     }
@@ -31,15 +32,22 @@ public class PlayerBodyEntityComponent implements AutoSyncedComponent {
         isReported = reported;
         this.sync();
     }
+    public void setConverted(boolean converted) {
+        isConverted = converted;
+        this.sync();
+    }
+    public boolean isConverted() { return isConverted; }
     public boolean isReported() {
         return isReported;
     }
     @Override
     public void writeToNbt(@NotNull NbtCompound tag, RegistryWrapper.@NotNull WrapperLookup registryLookup) {
         tag.putBoolean("reported", this.isReported);
+        tag.putBoolean("converted", this.isConverted);
     }
     @Override
     public void readFromNbt(@NotNull NbtCompound tag, RegistryWrapper.@NotNull WrapperLookup registryLookup) {
         this.isReported = tag.contains("reported") && tag.getBoolean("reported");
+        this.isConverted = tag.contains("converted") && tag.getBoolean("converted");
     }
 }

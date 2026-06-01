@@ -24,8 +24,6 @@ import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
 import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-
 public record NoTargetAbilityC2SPacket() implements CustomPayload {
 
     public static boolean TOGGLE = false; // only for spectator voiechat
@@ -67,10 +65,10 @@ public record NoTargetAbilityC2SPacket() implements CustomPayload {
         player.getItemCooldownManager().set(WatheItems.REVOLVER, 0);
         player.getItemCooldownManager().set(WatheItems.DERRINGER, 0);
         if( WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.enableAbilitySound()) {
-            player.playSound(WyspiaExpressSounds.ABILITY_OUTLAW, WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.volume(), 1.0f);
+            player.playSound(WyspiaExpressSounds.ITEM_ABILITY_OUTLAW, WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.volume(), 1.0f);
         }
         else{
-            player.playSoundToPlayer(WyspiaExpressSounds.ABILITY_OUTLAW, SoundCategory.PLAYERS, WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.volume(), 1.0f);
+            player.playSoundToPlayer(WyspiaExpressSounds.ITEM_ABILITY_OUTLAW, SoundCategory.PLAYERS, WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.volume(), 1.0f);
         }
         abilityPlayerComponent.setAbilityCooldown(WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.cooldown());
 
@@ -78,6 +76,8 @@ public record NoTargetAbilityC2SPacket() implements CustomPayload {
     public static void handleEddieWaffles(@NotNull ServerPlayerEntity player, GameWorldComponent gameWorldComponent, AbilityCooldownComponent abilityPlayerComponent){
 
         if(WyspiaExpress.ROLES_CONFIG.roleConfig.eddieWafflesConfig.useSpectatorVoicechat()){
+
+            abilityPlayerComponent.setAbilityCooldown(WyspiaExpress.ROLES_CONFIG.roleConfig.eddieWafflesConfig.cooldown());
             VoicechatServerApi api = TrainVoicePlugin.SERVER_API;
             if(api == null) return;
             VoicechatConnection connection = api.getConnectionOf(player.getUuid());
@@ -88,7 +88,7 @@ public record NoTargetAbilityC2SPacket() implements CustomPayload {
             }
             else{
                 TOGGLE = true;
-                Group targetGroup = WyspiaExpressCommands.getOrCreateGroup(Collections.max(WyspiaExpressCommands.GROUPS.keySet()));
+                Group targetGroup = WyspiaExpressCommands.getOrCreateGroup(5);
                 if (targetGroup == null) return;
                 connection.setGroup(targetGroup);
             }

@@ -34,7 +34,7 @@ public abstract class CultLeaderAbilityHudMixin {
             int drawY = context.getScaledWindowHeight();
             Text line = getText(abilityPlayerComponent);
             drawY -= getTextRenderer().getWrappedLinesHeight(line, 999999);
-            context.drawTextWithShadow(getTextRenderer(), line, context.getScaledWindowWidth() - getTextRenderer().getWidth(line), drawY, WyspiaExpressRoles.LICH.color());
+            context.drawTextWithShadow(getTextRenderer(), line, context.getScaledWindowWidth() - getTextRenderer().getWidth(line), drawY, WyspiaExpressRoles.CULT_LEADER.color());
         }
     }
     @Unique

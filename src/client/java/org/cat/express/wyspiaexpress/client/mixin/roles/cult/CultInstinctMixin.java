@@ -47,7 +47,7 @@ public abstract class CultInstinctMixin {
         // instinct to player bodies
         if(target instanceof PlayerBodyEntity targetBody){
             // only reveal if the body isn't already glowing
-            if(!targetBody.hasStatusEffect(StatusEffects.GLOWING) && TargetAbilityUtil.isBodyConverted(player.getWorld(),targetBody)){
+            if(!targetBody.hasStatusEffect(StatusEffects.GLOWING) && TargetAbilityUtil.isBodyConverted(targetBody)){
                 cir.setReturnValue(0xb59eb5);
                 cir.cancel();
                 return;

@@ -133,6 +133,7 @@ public class WyspiaExpressItems {
         registerItemCooldown(FAKE_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.cooldown());
         registerItemCooldown(MEGAPHONE, WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.cooldown());
         registerItemCooldown(OUTLAW_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.outlawRevolverConfig.cooldown());
+        registerItemCooldown(RITUAL_DAGGER, WyspiaExpress.ITEMS_CONFIG.itemConfig.ritualDaggerConfig.cooldown());
         registerItemCooldown(TAPE, WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.cooldown());
         registerItemCooldown(SENSE_DEAD, WyspiaExpress.ITEMS_CONFIG.itemConfig.senseDeadConfig.cooldown());
         // wathe
