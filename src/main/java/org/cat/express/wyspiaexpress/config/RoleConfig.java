@@ -129,6 +129,8 @@ public class RoleConfig {
         @Nest public RoleBasicConfig basic = new RoleBasicConfig();
         @Comment("Cooldown for the ability, in seconds")
         public int cooldown = 5;
+        @Comment("Whether spectator last voicechat group for their ability. Setting this to false will keep the default behaviour of just hearing nearby spectators")
+        public boolean useSpectatorVoicechat = true;
     }
     // wathe
 

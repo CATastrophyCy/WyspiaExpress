@@ -1,7 +1,11 @@
 package org.cat.express.wyspiaexpress.packets;
 
+import de.maxhenkel.voicechat.api.Group;
+import de.maxhenkel.voicechat.api.VoicechatConnection;
+import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerShopComponent;
+import dev.doctor4t.wathe.compat.TrainVoicePlugin;
 import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheItems;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -15,15 +19,16 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.KinsWathe;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
-import org.cat.express.wyspiaexpress.WyspiaExpress;
-import org.cat.express.wyspiaexpress.WyspiaExpressItems;
-import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
-import org.cat.express.wyspiaexpress.WyspiaExpressSounds;
+import org.cat.express.wyspiaexpress.*;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
 import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
+
 public record NoTargetAbilityC2SPacket() implements CustomPayload {
+
+    public static boolean TOGGLE = false; // only for spectator voiechat
 
     public static final Identifier ABILITY_PAYLOAD_ID = Identifier.of(KinsWathe.MOD_ID, "ability_no_target");
     public static final Id<NoTargetAbilityC2SPacket> ID = new Id<>(ABILITY_PAYLOAD_ID);
@@ -71,8 +76,27 @@ public record NoTargetAbilityC2SPacket() implements CustomPayload {
 
     }
     public static void handleEddieWaffles(@NotNull ServerPlayerEntity player, GameWorldComponent gameWorldComponent, AbilityCooldownComponent abilityPlayerComponent){
-        PlayerHearDeadComponent component = PlayerHearDeadComponent.KEY.get(player);
-        component.toggle();
-        abilityPlayerComponent.setAbilityCooldown(WyspiaExpress.ROLES_CONFIG.roleConfig.eddieWafflesConfig.cooldown());
+
+        if(WyspiaExpress.ROLES_CONFIG.roleConfig.eddieWafflesConfig.useSpectatorVoicechat()){
+            VoicechatServerApi api = TrainVoicePlugin.SERVER_API;
+            if(api == null) return;
+            VoicechatConnection connection = api.getConnectionOf(player.getUuid());
+            if (connection == null) return;
+            if(TOGGLE) {
+                TOGGLE = false;
+                connection.setGroup(null);
+            }
+            else{
+                TOGGLE = true;
+                Group targetGroup = WyspiaExpressCommands.getOrCreateGroup(Collections.max(WyspiaExpressCommands.GROUPS.keySet()));
+                if (targetGroup == null) return;
+                connection.setGroup(targetGroup);
+            }
+        }
+        else {
+            PlayerHearDeadComponent component = PlayerHearDeadComponent.KEY.get(player);
+            component.toggle();
+            abilityPlayerComponent.setAbilityCooldown(WyspiaExpress.ROLES_CONFIG.roleConfig.eddieWafflesConfig.cooldown());
+        }
     }
 }

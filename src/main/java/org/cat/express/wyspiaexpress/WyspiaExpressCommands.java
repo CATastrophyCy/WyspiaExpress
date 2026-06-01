@@ -89,7 +89,7 @@ public class WyspiaExpressCommands {
         return 1;
     }
 
-    private static int executeSvLeave(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    public static int executeSvLeave(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
 
         VoicechatServerApi api = TrainVoicePlugin.SERVER_API;
@@ -109,7 +109,7 @@ public class WyspiaExpressCommands {
     }
 
     @Nullable
-    private static Group getOrCreateGroup(int index) {
+    public static Group getOrCreateGroup(int index) {
         VoicechatServerApi api = TrainVoicePlugin.SERVER_API;
         if (api == null) {
             return null;
