@@ -16,6 +16,7 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.KinsWathe;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
@@ -65,11 +66,10 @@ public record NoTargetAbilityC2SPacket() implements CustomPayload {
         player.getItemCooldownManager().set(WatheItems.REVOLVER, 0);
         player.getItemCooldownManager().set(WatheItems.DERRINGER, 0);
         if( WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.enableAbilitySound()) {
-            player.playSound(WyspiaExpressSounds.ITEM_ABILITY_OUTLAW, WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.volume(), 1.0f);
+            player.getWorld().playSound(player, player.getX(), player.getY(), player.getZ(), WyspiaExpressSounds.ITEM_ABILITY_OUTLAW, SoundCategory.PLAYERS,
+                    WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.volume(), 1.0F);
         }
-        else{
-            player.playSoundToPlayer(WyspiaExpressSounds.ITEM_ABILITY_OUTLAW, SoundCategory.PLAYERS, WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.volume(), 1.0f);
-        }
+        player.playSoundToPlayer(WyspiaExpressSounds.ITEM_ABILITY_OUTLAW, SoundCategory.PLAYERS, WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.volume(), 1.0f);
         abilityPlayerComponent.setAbilityCooldown(WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.cooldown());
 
     }

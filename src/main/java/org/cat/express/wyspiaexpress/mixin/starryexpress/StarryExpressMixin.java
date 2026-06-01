@@ -44,8 +44,7 @@ public class StarryExpressMixin {
 
             victimSilence.setTearChecks(victimSilence.getTearChecks() + 1);
             victimSilence.sync();
-            victim.playSound(ModSounds.ITEM_TAPE_APPLY, 1.0F, 2.0F);
-
+            victim.getWorld().playSound(victim, victim.getX(), victim.getY(), victim.getZ(), ModSounds.ITEM_TAPE_APPLY, SoundCategory.PLAYERS, 1.0F, 2.0F);
 
             PlayerMoodComponent victimMood = PlayerMoodComponent.KEY.get(victim);
             victimMood.setMood(victimMood.getMood() - StarryExpress.CONFIG.muzzlerConfig.tapeTearMoodChange());
@@ -77,7 +76,7 @@ public class StarryExpressMixin {
                 abilityComponent.setCooldown(StarryExpress.CONFIG.starstruckConfig.abilityCooldown() * 20);
                 StarstruckComponent.KEY.get(context.player()).setTicks(StarryExpress.CONFIG.starstruckConfig.abilityDuration() * 20);
                 if(WyspiaExpress.ROLES_CONFIG.roleConfig.starryExpress.starstruckConfig.enableAbilitySound()){
-                    player.playSound(SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, 1.0F, 1.0F);
+                    player.getWorld().playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.PLAYERS, 1.0F, 1.0F);
                 }
                 else{
                     player.playSoundToPlayer(SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.PLAYERS, 1.0F, 1.0F);
