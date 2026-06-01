@@ -16,14 +16,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = WatheClient.class)
-public abstract class CultLeaderInstinctMixin {
+public abstract class CultInstinctMixin {
     @Inject(method = "getInstinctHighlight", at = @At("HEAD"), cancellable = true)
     private static void getInstinctHighlightColor(Entity target, CallbackInfoReturnable<Integer> cir) {
         PlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) return;
 
         GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(target.getWorld());
-        if(!gameWorldComponent.isRole(player, WyspiaExpressRoles.CULT_LEADER) || !GameFunctions.isPlayerAliveAndSurvival(player)) return;
+        if(!(gameWorldComponent.isRole(player, WyspiaExpressRoles.CULT_LEADER) || gameWorldComponent.isRole(player, WyspiaExpressRoles.CULTIST))
+                || !GameFunctions.isPlayerAliveAndSurvival(player)) return;
         // instinct to players
         if (target instanceof PlayerEntity targetPlayer
                 && GameFunctions.isPlayerAliveAndSurvival(targetPlayer)) {
@@ -32,8 +33,13 @@ public abstract class CultLeaderInstinctMixin {
                 cir.cancel();
                 return;
             }
-            if(TargetAbilityUtil.isPlayerConverted(targetPlayer)) {
+            if(gameWorldComponent.isRole(targetPlayer, WyspiaExpressRoles.CULT_LEADER)) {
                 cir.setReturnValue(WyspiaExpressRoles.CULT_LEADER.color());
+                cir.cancel();
+                return;
+            }
+            if(TargetAbilityUtil.isPlayerConverted(targetPlayer)) {
+                cir.setReturnValue(0xb59eb5);
                 cir.cancel();
                 return;
             }
@@ -42,7 +48,7 @@ public abstract class CultLeaderInstinctMixin {
         if(target instanceof PlayerBodyEntity targetBody){
             // only reveal if the body isn't already glowing
             if(!targetBody.hasStatusEffect(StatusEffects.GLOWING) && TargetAbilityUtil.isBodyConverted(player.getWorld(),targetBody)){
-                cir.setReturnValue(WyspiaExpressRoles.CULT_LEADER.color());
+                cir.setReturnValue(0xb59eb5);
                 cir.cancel();
                 return;
             }
