@@ -111,8 +111,10 @@ public class RoleConfig {
         public int conversionTime = 600;
         @Comment("Conversion range, in blocks")
         public double conversionRange = 3.0;
+        @Comment("The amount of coin rewarded when you convert a player")
+        public int convertionReward = 50;
         @Comment("The amount of coin converted player starts with")
-        public int convertCoin = 150;
+        public int startingCoin = 150;
         @Comment("Configuration for their CULTIST")
         @Nest public CultistConfig cultistConfig = new CultistConfig();
 

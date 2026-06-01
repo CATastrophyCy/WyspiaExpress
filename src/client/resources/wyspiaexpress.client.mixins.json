@@ -35,6 +35,8 @@
     "GetTargetMixin",
     "InstinctMixin",
     "RoleNameRendererMixin",
+    "roles.cult.CultistInstinctMixin",
+    "roles.cult.CultLeaderInstinctMixin",
     "roles.cult.CultLeaderTargetHudMixin",
     "roles.lich.LichHudMixin",
     "roles.lich.LichTargetHudMixin"

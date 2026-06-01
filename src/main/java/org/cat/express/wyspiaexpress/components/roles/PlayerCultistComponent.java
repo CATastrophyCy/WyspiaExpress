@@ -7,9 +7,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
@@ -47,7 +50,11 @@ public class PlayerCultistComponent implements AutoSyncedComponent, ServerTickin
                 PlayerCultistComponent otherPlayer = PlayerCultistComponent.KEY.get(other);
                 if(!otherPlayer.isConverted() && !gameWorldComponent.isRole(other, WyspiaExpressRoles.CULTIST)) {
                     otherPlayer.conversionTick++;
-                    if(otherPlayer.isConverted()) otherPlayer.forceSync();
+                    if(otherPlayer.isConverted()) {
+                        otherPlayer.forceSync();
+                        player.playSoundToPlayer(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.7f, 1.0f);
+                        ShopUtil.addCoin(player,WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.convertionReward());
+                    }
                     else otherPlayer.sync();
                 }
 

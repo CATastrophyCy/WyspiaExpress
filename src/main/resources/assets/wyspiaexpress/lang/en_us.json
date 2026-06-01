@@ -14,6 +14,8 @@
   "tip.wyspiaexpress.ability.lich.no_revive": "There is no available revive",
   "tip.wyspiaexpress.ability.lich.revive": "%s available revives",
 
+  "tip.wyspiaexpress.ability.cult_leader.revive": "Press G on a converted body to revive",
+
   "tip.wyspiaexpress.ability.eddie_waffles.active_cooldown": "Listening to the dead. Can toggle in %ss",
   "tip.wyspiaexpress.ability.eddie_waffles.active": "Listening to the dead. Use %s to toggle",
   "tip.wyspiaexpress.ability.eddie_waffles.cooldown": "Can toggle in %ss",
@@ -22,8 +24,9 @@
   "tip.wyspiaexpress.items.megaphone": "A body has been reported!",
   "tip.wyspiaexpress.items.megaphone_spectator": "A body has been reported by %s!",
 
-
-
+  "hud.wyspiaexpress.cult_leader.target": "Convertion progression",
+  "hud.wyspiaexpress.cult_leader.target_converted": "Converted",
+  "hud.wyspiaexpress.cult_leader.revive": "Press %s to revive",
   "hud.wyspiaexpress.lich.revive": "Press %s to revive",
   "item.wyspiaexpress.tp_ready": "Teleport to Ready Area",
 
