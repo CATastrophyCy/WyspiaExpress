@@ -87,7 +87,6 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
                     var world_component = WorldComponent.KEY.get(player.getWorld());
                     if(revived == null
                             || gameWorldComponent.getRole(revived) == WyspiaExpressRoles.LICH_GHOUL
-                            || gameWorldComponent.getRole(revived) == WyspiaExpressRoles.CULTIST
                             || !GameFunctions.isPlayerSpectatingOrCreative(revived)
                             || !world_component.isPlayerDead(revived.getUuid())) return;
 

@@ -62,7 +62,6 @@ public abstract class CultLeaderTargetHudMixin {
         AbilityCooldownComponent ability = AbilityCooldownComponent.KEY.get(player);
         if (gameWorld.isRole(player, WyspiaExpressRoles.CULT_LEADER) && WatheClient.isPlayerAliveAndInSurvival()) {
             if (ability.cooldown > 0
-                    || gameWorld.getRole(WyspiaexpressClient.TARGET_BODY.getPlayerUuid()) == WyspiaExpressRoles.LICH_GHOUL
                     || gameWorld.getRole(WyspiaexpressClient.TARGET_BODY.getPlayerUuid()) == WyspiaExpressRoles.CULTIST)
                 return;
             if(!TargetAbilityUtil.isBodyConverted(player.getWorld(), WyspiaexpressClient.TARGET_BODY))return;

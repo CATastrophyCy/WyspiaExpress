@@ -30,8 +30,7 @@ public abstract class LichTargetHudMixin {
         if (gameWorld.isRole(player, WyspiaExpressRoles.LICH) && WatheClient.isPlayerAliveAndInSurvival()) {
             if (ability.cooldown > 0
                 || component.getAvailableRevives() <= 0
-                || gameWorld.getRole(WyspiaexpressClient.TARGET_BODY.getPlayerUuid()) == WyspiaExpressRoles.LICH_GHOUL
-                    || gameWorld.getRole(WyspiaexpressClient.TARGET_BODY.getPlayerUuid()) == WyspiaExpressRoles.CULTIST)
+                || gameWorld.getRole(WyspiaexpressClient.TARGET_BODY.getPlayerUuid()) == WyspiaExpressRoles.LICH_GHOUL)
                 return;
             context.getMatrices().push();
             context.getMatrices().translate((float) context.getScaledWindowWidth() / 2.0F, (float) context.getScaledWindowHeight() / 2.0F + 6.0F, 0.0F);
