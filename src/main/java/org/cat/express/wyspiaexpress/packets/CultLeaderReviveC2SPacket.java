@@ -2,7 +2,6 @@ package org.cat.express.wyspiaexpress.packets;
 
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
-import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.wathe.compat.TrainVoicePlugin;
 import dev.doctor4t.wathe.entity.PlayerBodyEntity;
@@ -36,6 +35,7 @@ import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
 import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
+import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -115,8 +115,7 @@ public record CultLeaderReviveC2SPacket(UUID playerBody) implements CustomPayloa
                     PlayerDepressedComponent.KEY.get(revived).reset();
 
                     gameWorldComponent.addRole(revived, WyspiaExpressRoles.CULTIST);
-                    PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(revived);
-                    playerShopComponent.setBalance(WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.convertCoin());
+                    ShopUtil.setCoin(revived, WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.startingCoin());
                     ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, WyspiaExpressRoles.CULTIST);
                     ServerPlayNetworking.send(
                             revived,

@@ -3,9 +3,9 @@ package org.cat.express.wyspiaexpress.mixin.generic;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
-import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,7 +21,7 @@ public abstract class TaskIncomeMixin {
 
     @Inject(method = "setMood", at = @At("HEAD"))
     void wyspiaexpress$giveCoinsForMood(float mood, CallbackInfo ci) {
-        GameWorldComponent gameWorldComponent = (GameWorldComponent)GameWorldComponent.KEY.get(player.getWorld());
+        GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
 
         /**
          *  role with FAKE MOOD just have setmood to always set the mood to 1, making so it never decreases
@@ -34,8 +34,8 @@ public abstract class TaskIncomeMixin {
             if (role != null) {
                 var config = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role);
                 if (config != null) {
-                    PlayerShopComponent shopComponent = PlayerShopComponent.KEY.get(player);
-                    shopComponent.addToBalance(config.taskIncome());
+                    ShopUtil.addCoin(player, config.taskIncome());
+
                 }
             }
         }

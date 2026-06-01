@@ -6,7 +6,6 @@ import dev.doctor4t.wathe.api.event.AllowPlayerDeath;
 import dev.doctor4t.wathe.api.event.CanSeePoison;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.MapVariablesWorldComponent;
-import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheItems;
@@ -320,9 +319,8 @@ public class WyspiaExpressRoles {
 
 
             player.removeStatusEffect(StatusEffects.NIGHT_VISION);
-            PlayerShopComponent playerShop = PlayerShopComponent.KEY.get(player);
             if (KinsWatheConfig.HANDLER.instance().EnableWatheModify) {
-                playerShop.addToBalance(- (KinsWatheConfig.HANDLER.instance().InitialKillerIncome - 100) );
+                ShopUtil.addCoin(player, - (KinsWatheConfig.HANDLER.instance().InitialKillerIncome - 100));
             }
 
             Set<String> roleIDs = new HashSet<>();

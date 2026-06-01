@@ -1,8 +1,8 @@
 package org.cat.express.wyspiaexpress.packets;
+
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
-import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.wathe.compat.TrainVoicePlugin;
 import dev.doctor4t.wathe.entity.PlayerBodyEntity;
@@ -37,12 +37,14 @@ import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
+import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+
 public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
 
     public static final Identifier REVIVE_PAYLOAD_ID = Identifier.of(WyspiaExpress.MOD_ID, "lich_revive");
@@ -122,8 +124,8 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
                     PlayerDepressedComponent.KEY.get(revived).reset();
                     // initialize ghoul role
                     gameWorldComponent.addRole(revived, selectedRole);
-                    PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(revived);
-                    playerShopComponent.setBalance(WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.startingCoin());
+                    ShopUtil.setCoin(revived, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.startingCoin());
+
                     ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, selectedRole);
                     ServerPlayNetworking.send(
                             revived,

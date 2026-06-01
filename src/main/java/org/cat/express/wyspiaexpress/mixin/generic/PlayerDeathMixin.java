@@ -1,7 +1,6 @@
 package org.cat.express.wyspiaexpress.mixin.generic;
 
 import dev.doctor4t.wathe.cca.GameWorldComponent;
-import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
 import net.minecraft.entity.effect.StatusEffects;
@@ -15,6 +14,7 @@ import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
 import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
+import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -53,9 +53,8 @@ public abstract class PlayerDeathMixin {
                 FIX: fix neutral roles get punished for killing players with KinsWathe, this happens because kinswathe only checks if the player is not innocent to give them coin
                     , but with IncreaseMoneyWhenKill <= 100 it ends up punishing them. Either way the code doesn't give them correct reward
              */
-            if (!component.isInnocent(killer) && !component.canUseKillerFeatures(killer)) {
-                PlayerShopComponent playerShop = PlayerShopComponent.KEY.get(killer);
-                playerShop.addToBalance(- (KinsWatheConfig.HANDLER.instance().IncreaseMoneyWhenKill - 100));
+            if (!component.isInnocent(killer) && !component.canUseKillerFeatures(killer) && KinsWatheConfig.HANDLER.instance().EnableWatheModify) {
+                ShopUtil.addCoin(killer, - (KinsWatheConfig.HANDLER.instance().IncreaseMoneyWhenKill - 100));
             }
             PlayerHearDeadComponent.KEY.get(victim).reset();
             PlayerSenseDeadComponent.KEY.get(victim).reset();

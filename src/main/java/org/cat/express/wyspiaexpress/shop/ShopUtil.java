@@ -40,6 +40,14 @@ public class ShopUtil {
     public static final List<Item> FUN_BOX_RARE_POOL = new ArrayList<>();
     public static final List<Item> FUN_BOX_NORMAL_POOL = new ArrayList<>();
 
+    public static void addCoin(@NotNull PlayerEntity player, int amount) {
+        PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(player);
+        playerShopComponent.addToBalance(amount);
+    }
+    public static void setCoin(@NotNull PlayerEntity player, int amount) {
+        PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(player);
+        playerShopComponent.setBalance(amount);
+    }
     public static boolean handlePurchase(@NotNull PlayerEntity player, int balance, @NotNull Item item, int price) {
         if (balance >= price && !player.getItemCooldownManager().isCoolingDown(item)) {
             giveItem(player, item);

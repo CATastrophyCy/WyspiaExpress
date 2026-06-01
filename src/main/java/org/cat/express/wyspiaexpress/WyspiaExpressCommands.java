@@ -175,11 +175,6 @@ public class WyspiaExpressCommands {
         }
 
         targetPlayer.removeStatusEffect(net.minecraft.entity.effect.StatusEffects.NIGHT_VISION);
-        dev.doctor4t.wathe.cca.PlayerShopComponent playerShop = dev.doctor4t.wathe.cca.PlayerShopComponent.KEY.get(targetPlayer);
-
-        if (org.BsXinQin.kinswathe.KinsWatheConfig.HANDLER.instance().EnableWatheModify && !role.equals(org.cat.express.wyspiaexpress.WyspiaExpressRoles.COPYCAT)) {
-            playerShop.addToBalance(-(org.BsXinQin.kinswathe.KinsWatheConfig.HANDLER.instance().InitialKillerIncome - 100));
-        }
 
         gameWorld.addRole(targetPlayer, role);
         org.agmas.harpymodloader.events.ModdedRoleAssigned.EVENT.invoker().assignModdedRole(targetPlayer, role);
