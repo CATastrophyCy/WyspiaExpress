@@ -45,6 +45,7 @@ public enum EnumShopEntry {
     FUN_BOX,
     MEGAPHONE,
     OUTLAW_REVOLVER,
+    RITUAL_DAGGER,
     SENSE_DEAD,
 }
 

@@ -298,6 +298,9 @@ public class ShopUtil {
             case OUTLAW_REVOLVER:
                 item = WyspiaExpressItems.OUTLAW_REVOLVER;
                 break;
+            case RITUAL_DAGGER:
+                item = WyspiaExpressItems.RITUAL_DAGGER;
+                break;
             case SENSE_DEAD:
                 item = WyspiaExpressItems.SENSE_DEAD;
             default:
