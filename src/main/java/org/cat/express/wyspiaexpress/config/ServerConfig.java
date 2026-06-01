@@ -27,6 +27,8 @@ public class ServerConfig {
     public boolean killerSpecialInstinct = false;
     @Comment("Multiply to crawling speed. i.e. 1.5 means crawling is 50% faster")
     public double crawlSpeedMultiplier = 2.0;
+    @Comment("By setting this to true shooting a protected player won't drop your revolver regardless if they are innocent or not")
+    public boolean disableProtectionGunDrop = true;
     @Comment("Player stun tick after blocking damage")
     public int blockStunTicks = 40;
     @Comment("Enable freezing")

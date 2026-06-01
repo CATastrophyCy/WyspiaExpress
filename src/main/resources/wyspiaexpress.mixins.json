@@ -9,6 +9,7 @@
     "TrainMapEffectMixin",
     "WatheMixin",
     "WeightsResetMixin",
+    "generic.GunShootPayloadMixin",
     "generic.KeepGameGoingMixin",
     "generic.PassiveIncomeMixin",
     "generic.PlayerCrawlSpeedMixin",
