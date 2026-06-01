@@ -164,7 +164,7 @@ public class WyspiaExpressRoles {
             false,
             false,
             Role.MoodType.FAKE,
-            600,
+            -1,
             true
     ));
     public static Role CULT_LEADER = registerRole(new Role(
@@ -173,7 +173,7 @@ public class WyspiaExpressRoles {
             false,
             false,
             Role.MoodType.FAKE,
-            600,
+            WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2,
             true
     ));
     public static Role CULTIST = registerRole(new Role(
@@ -182,7 +182,7 @@ public class WyspiaExpressRoles {
             false,
             false,
             Role.MoodType.FAKE,
-            600,
+            WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2,
             true
     ));
     public static Modifier EMPLOYEE = registerModifier(new Modifier(

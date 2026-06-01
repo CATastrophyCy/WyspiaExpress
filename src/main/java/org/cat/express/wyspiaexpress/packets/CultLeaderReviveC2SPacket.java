@@ -43,7 +43,7 @@ import java.util.UUID;
 
 public record CultLeaderReviveC2SPacket(UUID playerBody) implements CustomPayload {
 
-    public static final Identifier REVIVE_PAYLOAD_ID = Identifier.of(WyspiaExpress.MOD_ID, "lich_revive");
+    public static final Identifier REVIVE_PAYLOAD_ID = Identifier.of(WyspiaExpress.MOD_ID, "cult_revive");
     public static final Id<CultLeaderReviveC2SPacket> ID = new Id<>(REVIVE_PAYLOAD_ID);
     public static final PacketCodec<RegistryByteBuf, CultLeaderReviveC2SPacket> CODEC;
 
