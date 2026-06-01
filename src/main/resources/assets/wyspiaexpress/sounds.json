@@ -1,7 +1,8 @@
 {
   "item.megaphone.report": {
     "sounds": [
-      "wyspiaexpress:item/megaphone_report"
+      "wyspiaexpress:item/megaphone_report",
+      "wyspiaexpress:item/ability_outlaw"
     ]
   }
 }
