@@ -23,6 +23,7 @@ import org.aussiebox.starexpress.cca.SilenceComponent;
 import org.aussiebox.starexpress.cca.StarstruckComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.client.roles.TargetAbilityUtil;
 import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
 import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.jetbrains.annotations.NotNull;
@@ -133,6 +134,12 @@ public abstract class InstinctMixin {
                     && senseDeadComponent.isActive()
                 && !targetBody.hasStatusEffect(StatusEffects.GLOWING)){
                 cir.setReturnValue(0x606060);
+                cir.cancel();
+                return;
+            }
+            // spectators see converted bodies
+            if(GameFunctions.isPlayerSpectatingOrCreative(player) && WatheClient.isInstinctEnabled() && TargetAbilityUtil.isBodyConverted(targetBody)){
+                cir.setReturnValue(0xADAAAA);
                 cir.cancel();
                 return;
             }

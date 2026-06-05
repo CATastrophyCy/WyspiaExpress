@@ -39,7 +39,7 @@ public abstract class CultInstinctMixin {
                 return;
             }
             if(TargetAbilityUtil.isPlayerConverted(targetPlayer)) {
-                cir.setReturnValue(0xb59eb5);
+                cir.setReturnValue(0xADAAAA);
                 cir.cancel();
                 return;
             }
@@ -48,7 +48,7 @@ public abstract class CultInstinctMixin {
         if(target instanceof PlayerBodyEntity targetBody){
             // only reveal if the body isn't already glowing
             if(!targetBody.hasStatusEffect(StatusEffects.GLOWING) && TargetAbilityUtil.isBodyConverted(targetBody)){
-                cir.setReturnValue(0xb59eb5);
+                cir.setReturnValue(0xADAAAA);
                 cir.cancel();
                 return;
             }
