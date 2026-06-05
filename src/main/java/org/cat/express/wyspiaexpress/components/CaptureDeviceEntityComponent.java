@@ -41,6 +41,6 @@ public class CaptureDeviceEntityComponent implements AutoSyncedComponent {
     }
     @Override
     public void readFromNbt(@NotNull NbtCompound tag, RegistryWrapper.@NotNull WrapperLookup registryLookup) {
-        this.owner = tag.contains("owner")? tag.getUuid("reported") : null;
+        this.owner = tag.contains("owner")? tag.getUuid("owner") : null;
     }
 }
