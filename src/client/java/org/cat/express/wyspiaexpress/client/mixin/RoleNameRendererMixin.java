@@ -1,6 +1,7 @@
 package org.cat.express.wyspiaexpress.client.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
 import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import dev.doctor4t.wathe.client.WatheClient;
@@ -44,8 +45,9 @@ public abstract class RoleNameRendererMixin {
     @Unique private static PlayerEntity targetPlayer;
     @Inject(method = "renderHud", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I", ordinal = 0))
     private static void b(TextRenderer renderer, ClientPlayerEntity player, DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
+        GameWorldComponent worldComponent = GameWorldComponent.KEY.get(player.getWorld());
 
-        if (WatheClient.isPlayerSpectatingOrCreative() && GameFunctions.isPlayerAliveAndSurvival(targetPlayer)) {
+        if (worldComponent.isRunning() && WatheClient.isPlayerSpectatingOrCreative() && GameFunctions.isPlayerAliveAndSurvival(targetPlayer)) {
             PlayerMoodComponent mood = PlayerMoodComponent.KEY.get(targetPlayer);
             PlayerShopComponent shop = PlayerShopComponent.KEY.get(targetPlayer);
             PlayerFreezeComponent freeze = PlayerFreezeComponent.KEY.get(targetPlayer);
