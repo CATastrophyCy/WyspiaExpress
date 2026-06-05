@@ -32,6 +32,7 @@
       "wyspiaexpress:player_role_pick_component",
       "wyspiaexpress:player_cultist_component",
       "wyspiaexpress:player_body",
+      "wyspiaexpress:capture_device_component",
       "wyspiaexpress:sense_dead",
       "wyspiaexpress:hear_dead",
       "wyspiaexpress:world_component"

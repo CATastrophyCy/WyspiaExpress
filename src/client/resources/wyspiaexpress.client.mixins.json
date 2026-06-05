@@ -7,6 +7,7 @@
   "client": [
     "InstinctKeyToggleMixin",
     "PlayerBodyNullCheckMixin",
+    "items.CaptureDeviceEntityMixin",
     "items.ItemArmPoseMixin",
     "items.ItemHandViewMixin",
     "items.MinecraftClientMixin",

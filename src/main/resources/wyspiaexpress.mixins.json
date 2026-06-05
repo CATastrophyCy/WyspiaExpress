@@ -23,6 +23,7 @@
     "noellesroles.ExecutionerRoleMixin",
     "noellesroles.NoellesRolesMixin",
     "noellesroles.VultureRoleMixin",
+    "roles.CaptureDeviceEntityMixin",
     "roles.ConvertedDeadBodyMixin",
     "roles.EddieHearDeadPeopleMixin",
     "roles.ThiefItemRuleMixin",

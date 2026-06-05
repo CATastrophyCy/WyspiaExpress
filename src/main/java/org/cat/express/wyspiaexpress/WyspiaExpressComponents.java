@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress;
 
 import dev.doctor4t.wathe.entity.PlayerBodyEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import org.BsXinQin.kinswathe.entities.CaptureDeviceEntity;
 import org.cat.express.wyspiaexpress.components.*;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
@@ -22,6 +23,8 @@ public class WyspiaExpressComponents implements EntityComponentInitializer, Worl
         registry.beginRegistration(PlayerEntity.class, PlayerSenseDeadComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerSenseDeadComponent::new);
         registry.beginRegistration(PlayerEntity.class, PlayerHearDeadComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerHearDeadComponent::new);
         registry.beginRegistration(PlayerEntity.class, PlayerCultistComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerCultistComponent::new);
+
+        registry.beginRegistration(CaptureDeviceEntity.class, CaptureDeviceEntityComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(CaptureDeviceEntityComponent::new);
         registry.beginRegistration(PlayerBodyEntity.class, PlayerBodyEntityComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerBodyEntityComponent::new);
     }
     @Override
