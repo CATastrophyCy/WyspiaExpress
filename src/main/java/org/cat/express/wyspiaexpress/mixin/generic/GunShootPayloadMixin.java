@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import org.BsXinQin.kinswathe.KinsWatheRoles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -63,17 +64,19 @@ public abstract class GunShootPayloadMixin {
 
                     // target is innocent and dead (this makes it so shooting someone protected will not drop the gun nor remove mood)
                     if(game.isInnocent(target) && GameFunctions.isPlayerSpectatingOrCreative(target) && GameFunctions.isPlayerAliveAndSurvival(player) ) {
-                        Scheduler.schedule(() -> {
-                            if (!context.player().getInventory().contains((s) -> s.isIn(WatheItemTags.GUNS))) return;
-                            player.getInventory().remove((s) -> s.isOf(revolver), 1, player.getInventory());
-                            ItemEntity item = player.dropItem(revolver.getDefaultStack(), false, false);
-                            if (item != null) {
-                                item.setPickupDelay(10);
-                                item.setThrower(player);
-                            }
-                            ServerPlayNetworking.send(player, new GunDropPayload());
-                            PlayerMoodComponent.KEY.get(player).setMood(0);
-                        }, 4);
+                        // only send the payload if the player is not a licensed villain
+                        if(!game.isRole(player, KinsWatheRoles.LICENSED_VILLAIN))
+                            Scheduler.schedule(() -> {
+                                if (!context.player().getInventory().contains((s) -> s.isIn(WatheItemTags.GUNS))) return;
+                                player.getInventory().remove((s) -> s.isOf(revolver), 1, player.getInventory());
+                                ItemEntity item = player.dropItem(revolver.getDefaultStack(), false, false);
+                                if (item != null) {
+                                    item.setPickupDelay(10);
+                                    item.setThrower(player);
+                                }
+                                ServerPlayNetworking.send(player, new GunDropPayload());
+                                PlayerMoodComponent.KEY.get(player).setMood(0);
+                            }, 4);
                     }
                 }
             }
