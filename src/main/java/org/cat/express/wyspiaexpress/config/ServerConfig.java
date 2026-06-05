@@ -30,7 +30,9 @@ public class ServerConfig {
     @Comment("By setting this to true shooting a protected player won't drop your revolver regardless if they are innocent or not")
     public boolean disableProtectionGunDrop = true;
     @Comment("Player stun tick after blocking damage")
-    public int blockStunTicks = 40;
+    public int blockStunTicks = 60;
+    @Comment("Player stun tick after blocking damage with psycho mode")
+    public int psychoStunTicks = 20;
     @Comment("Enable freezing")
     public boolean freeze = false;
     @Comment("The time, in seconds, it takes for a player to die when staying outside for too long")

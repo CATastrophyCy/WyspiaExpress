@@ -31,7 +31,7 @@ public class PlayerShieldMixin {
         if (component.getPsychoTicks() > 0) {
             // they still have psycho protection
             if (component.getArmour() > 0) {
-                PlayerEffectComponent.KEY.get(victim).setStunTicks(WyspiaExpress.SERVER_CONFIG.blockStunTicks());
+                PlayerEffectComponent.KEY.get(victim).setStunTicks(WyspiaExpress.SERVER_CONFIG.psychoStunTicks()); // use a different stun duration
                 component.setArmour(component.getArmour() - 1);
                 component.sync();
                 victim.playSoundToPlayer(WatheSounds.ITEM_PSYCHO_ARMOUR, SoundCategory.MASTER, 5F, 1F);
