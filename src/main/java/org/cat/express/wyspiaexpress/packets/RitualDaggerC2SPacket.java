@@ -5,6 +5,7 @@ import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.wathe.compat.TrainVoicePlugin;
 import dev.doctor4t.wathe.game.GameConstants;
+import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheSounds;
 import dev.doctor4t.wathe.util.AnnounceWelcomePayload;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -23,6 +24,7 @@ import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.jetbrains.annotations.NotNull;
 
 public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
@@ -78,6 +80,14 @@ public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
                 // add time if a civilian is converted
                 if (gameWorldComponent.isInnocent(target)) {
                     GameTimeComponent.KEY.get(target.getWorld()).addTime(GameConstants.TIME_ON_CIVILIAN_KILL);
+                }
+                // add counts revive to lich in case its a killer
+                if (gameWorldComponent.canUseKillerFeatures(target)) {
+                    var reviveComponent = LichReviveComponent.KEY.get(target.getWorld());
+                    // count killers that are still alive
+                    if(target.getWorld().getPlayers().stream().filter(gameWorldComponent::canUseKillerFeatures).filter(GameFunctions::isPlayerAliveAndSurvival).count()
+                            + reviveComponent.getAvailableRevives() < reviveComponent.getMaxRevives())
+                        reviveComponent.incrementAvailableRevives();
                 }
                 TrainVoicePlugin.resetPlayer(target.getUuid());
             }
