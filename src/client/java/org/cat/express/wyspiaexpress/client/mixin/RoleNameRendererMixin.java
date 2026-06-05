@@ -75,7 +75,7 @@ public abstract class RoleNameRendererMixin {
 
             int y = renderer.fontHeight / 2 + 1 + OFF_SET;
             context.drawTextWithShadow(renderer, hudText, -renderer.getWidth(hudText) / 2, y, white);
-            y+= renderer.fontHeight / 2 + 1;
+            y+= renderer.fontHeight  + 1;
 
             PlayerCultistComponent  cultist = PlayerCultistComponent.KEY.get(targetPlayer);
             HackerComponent hacker = HackerComponent.KEY.get(targetPlayer);
