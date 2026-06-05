@@ -89,6 +89,8 @@ public class RoleConfig {
         public int cooldown = 180;
         @Comment("Range to activate ability")
         public double range = 3.0;
+        @Comment("Revive stun duration, in ticks")
+        public int stun = 100;
         @Comment("The amount of coin revived player starts with")
         public int startingCoin = 75;
         @Comment("Configuration for their GHOUL")
@@ -111,6 +113,8 @@ public class RoleConfig {
         public int conversionTime = 600;
         @Comment("Conversion range, in blocks")
         public double conversionRange = 3.0;
+        @Comment("Revive stun duration, in ticks")
+        public int stun = 100;
         @Comment("The amount of coin rewarded when you convert a player")
         public int convertionReward = 50;
         @Comment("The amount of coin converted player starts with")

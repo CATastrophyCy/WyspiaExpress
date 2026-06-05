@@ -26,6 +26,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.TeleportTarget;
 import org.BsXinQin.kinswathe.KinsWatheItems;
+import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
@@ -106,6 +107,8 @@ public record CultLeaderReviveC2SPacket(UUID playerBody) implements CustomPayloa
                     body.remove(Entity.RemovalReason.DISCARDED); // like it never existed
                     // sound effect to revived player
                     revived.playSoundToPlayer(SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.PLAYERS, 0.7f, 1.0f);
+                    // stun the revived player
+                    PlayerEffectComponent.KEY.get(revived).setStunTicks(WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.stun());
                     // reset components
                     PlayerCultistComponent.KEY.get(revived).reset();
                     PlayerFreezeComponent.KEY.get(revived).reset();

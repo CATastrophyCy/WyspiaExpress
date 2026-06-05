@@ -6,6 +6,7 @@ import dev.doctor4t.wathe.cca.PlayerMoodComponent;
 import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.wathe.compat.TrainVoicePlugin;
 import dev.doctor4t.wathe.entity.PlayerBodyEntity;
+import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheItems;
 import dev.doctor4t.wathe.util.AnnounceWelcomePayload;
@@ -27,6 +28,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.TeleportTarget;
 import org.BsXinQin.kinswathe.KinsWatheItems;
+import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
@@ -116,6 +118,8 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
                     body.remove(Entity.RemovalReason.DISCARDED); // like it never existed
                     // sound effect to revived player
                     revived.playSoundToPlayer(SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.PLAYERS, 0.7f, 1.0f);
+                    // stun the revived player
+                    PlayerEffectComponent.KEY.get(revived).setStunTicks(WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.stun());
                     // reset components
                     PlayerCultistComponent.KEY.get(revived).reset();
                     PlayerFreezeComponent.KEY.get(revived).reset();
