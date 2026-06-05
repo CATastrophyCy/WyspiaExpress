@@ -43,7 +43,7 @@
   "item.wyspiaexpress.outlaw_revolver.tooltip": "You feel no remorse when shooting innocents with this revolver.\n It has a longer cooldown than normal revolver.\n The cooldown is increased if you miss your shot",
 
   "item.wyspiaexpress.ritual_dagger": "Ritual Dagger",
-  "item.wyspiaexpress.ritual_dagger.tooltip": "Sometimes force is needed to make them believe!\n Players stabbed with this will instead get stunned and converted to a Cultist",
+  "item.wyspiaexpress.ritual_dagger.tooltip": "Sometimes force is needed to make them believe!\nPlayers stabbed with this will instead get stunned and converted to a Cultist",
 
 
   "item.wyspiaexpress.fun_box": "\"Fun Box\"",
@@ -124,7 +124,7 @@
 
   "guidebook.role.wyspiaexpress:cult_leader": "The nightshade cult leader",
     "guidebook.role.title.wyspiaexpress:cult_leader": "Cult leader",
-    "guidebook.role.description.wyspiaexpress:cult_leader": "The nightshade's cult is a weird cult praying for the idea that life and dead can be played with\n\"Their leader says that he can hear his \"great behond\", is it true ? Is it not ? whatever the case, anyone sacrificed using his dagger will see himself\ncoming back to life with a new goal in mind, serving the said cult who took pity on them",
+    "guidebook.role.description.wyspiaexpress:cult_leader": "The nightshade's cult is a weird cult praying for the idea that life and dead can be played with\n\"Their leader says that he can hear his \"great behond\", is it true ? Is it not ? whatever the case, anyone sacrificed using his dagger will see himself\ncoming back to life with a new goal in mind, serving the said cult who took pity on them\n\nCan purchase a ritual dagger that forcefully turn another player into Cultist. Cult Leader can slowly convert players around them. Converted players are highlited to cult members and when they die, they can be revived by the Cult Leader into Cultist.",
 
   "guidebook.role.wyspiaexpress:cultist": "Nightshade cultist",
     "guidebook.role.title.wyspiaexpress:cultist": "Cultist",
