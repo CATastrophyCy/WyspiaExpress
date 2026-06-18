@@ -10,7 +10,8 @@ Voyage of the Harpy Express.
 - Stupid Express 0.7.1
 - Kin's Wathe 1.6.3
 - Starry Express 1.3.2 
-- Wathe Blood 1.1.4. Of course
+- Wathe Blood 1.1.4.
+- Wathe 1.3.2
 
 You need to have those mod installed both on the server and on the client with this mod.
 
