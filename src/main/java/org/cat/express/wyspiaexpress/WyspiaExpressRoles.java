@@ -69,11 +69,14 @@ public class WyspiaExpressRoles {
         AllowPlayerDeath.EVENT.register(((victim, killer,identifier) -> {
             GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(victim.getWorld());
 
-            if(identifier.equals(GameConstants.DeathReasons.FELL_OUT_OF_TRAIN)) return true;
 
             // disallow follower from killing their leader
-            if(gameWorldComponent.isRole(victim, LICH) && gameWorldComponent.isRole(killer, LICH_GHOUL)) return false;
-            if(gameWorldComponent.isRole(victim, CULT_LEADER) && gameWorldComponent.isRole(killer, CULTIST)) return false;
+            if (killer != null) {
+                if (gameWorldComponent.isRole(victim, LICH) && gameWorldComponent.isRole(killer, LICH_GHOUL))
+                    return false;
+                if (gameWorldComponent.isRole(victim, CULT_LEADER) && gameWorldComponent.isRole(killer, CULTIST))
+                    return false;
+            }
 
             return true;
         }));
