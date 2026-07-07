@@ -156,9 +156,9 @@ public class RoleConfig {
         public static class MuzzlerConfig{
             @Comment("Basic role configuration")
             @Nest public RoleBasicConfig basic = new RoleBasicConfig();
-            @Comment("Enable payout per muzzled players")
+            @Comment("Enable payout per muzzled players. Morphling share this config value")
             public boolean enablePayout = false;
-            @Comment("Amount of coin Muzzled player add to Muzler every 10 seconds")
+            @Comment("Amount of coin Muzzled player add to Muzler every 10 seconds. Morphlinh share this config value")
             public int muzzledPayout = 5;
         }
         public static class StarstruckConfig{

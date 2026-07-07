@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
+import org.agmas.noellesroles.Noellesroles;
 import org.aussiebox.starexpress.StarryExpressRoles;
 import org.aussiebox.starexpress.cca.SilenceComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
@@ -63,8 +64,9 @@ public abstract class PassiveIncomeMixin {
 
         // this basically runs once every 10 seconds
         if(GameFunctions.isPlayerAliveAndSurvival(income_player)) {
-            // muzzler income
-            if (player_role.equals(StarryExpressRoles.MUZZLER) && WyspiaExpress.ROLES_CONFIG.roleConfig.starryExpress.muzzlerConfig.enablePayout()) {
+            // muzzler/morphling income
+            if ( (player_role.equals(StarryExpressRoles.MUZZLER) || player_role.equals(Noellesroles.MORPHLING) )
+                    && WyspiaExpress.ROLES_CONFIG.roleConfig.starryExpress.muzzlerConfig.enablePayout()) {
                 MinecraftServer server = income_player.getServer();
                 if (server != null) {
                     PlayerManager playerManager = server.getPlayerManager();
