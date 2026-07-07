@@ -37,6 +37,7 @@ public class StarryExpressMixin {
             if (! (entity instanceof PlayerEntity victim)) return ActionResult.PASS;
 
             if (StarryExpress.CONFIG.muzzlerConfig.tapeTearCheckCount() == 0 || !player.getMainHandStack().isEmpty()) return ActionResult.PASS;
+            if(player.isSpectator()) return ActionResult.PASS;
 
             SilenceComponent victimSilence = SilenceComponent.KEY.get(victim);
             if (!victimSilence.isSilenced() || victimSilence.getSilencedTicks() <= WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.removeCountdown()
