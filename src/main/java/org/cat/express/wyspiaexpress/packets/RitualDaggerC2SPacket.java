@@ -20,7 +20,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.agmas.harpymodloader.Harpymodloader;
+import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
+import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
@@ -89,6 +91,7 @@ public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
                             + reviveComponent.getAvailableRevives() < reviveComponent.getMaxRevives())
                         reviveComponent.incrementAvailableRevives();
                 }
+                WorldModifierComponent.KEY.get(player.getWorld()).getModifiers(player).remove(Noellesroles.GUESSER);
                 TrainVoicePlugin.resetPlayer(target.getUuid());
             }
 

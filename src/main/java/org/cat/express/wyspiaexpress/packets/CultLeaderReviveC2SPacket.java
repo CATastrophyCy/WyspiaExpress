@@ -28,7 +28,9 @@ import net.minecraft.world.TeleportTarget;
 import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.agmas.harpymodloader.Harpymodloader;
+import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
+import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.*;
@@ -114,7 +116,7 @@ public record CultLeaderReviveC2SPacket(UUID playerBody) implements CustomPayloa
                     PlayerFreezeComponent.KEY.get(revived).reset();
                     PlayerMoodComponent.KEY.get(revived).reset();
                     PlayerDepressedComponent.KEY.get(revived).reset();
-
+                    WorldModifierComponent.KEY.get(revived.getWorld()).getModifiers(revived).remove(Noellesroles.GUESSER);
                     gameWorldComponent.addRole(revived, WyspiaExpressRoles.CULTIST);
                     ShopUtil.setCoin(revived, WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.startingCoin());
                     ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, WyspiaExpressRoles.CULTIST);
