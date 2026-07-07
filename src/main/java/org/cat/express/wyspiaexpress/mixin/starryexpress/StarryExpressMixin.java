@@ -66,16 +66,17 @@ public class StarryExpressMixin {
     @Overwrite
     public void registerPackets() {
         ServerPlayNetworking.registerGlobalReceiver(AbilityC2SPacket.TYPE, (payload, context) -> {
-            AbilityComponent abilityComponent = AbilityComponent.KEY.get(context.player());
-            GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(context.player().getWorld());
             PlayerEntity player = context.player();
+            AbilityComponent abilityComponent = AbilityComponent.KEY.get(player);
+            GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
+
 
             if (GameFunctions.isPlayerAliveAndSurvival(player)
                 && gameWorldComponent.isRole(context.player(), StarryExpressRoles.STARSTRUCK)
                 && abilityComponent.cooldown <= 0
             ) {
                 abilityComponent.setCooldown(StarryExpress.CONFIG.starstruckConfig.abilityCooldown() * 20);
-                StarstruckComponent.KEY.get(context.player()).setTicks(StarryExpress.CONFIG.starstruckConfig.abilityDuration() * 20);
+                StarstruckComponent.KEY.get(player).setTicks(StarryExpress.CONFIG.starstruckConfig.abilityDuration() * 20);
                 if(WyspiaExpress.ROLES_CONFIG.roleConfig.starryExpress.starstruckConfig.enableAbilitySound()){
                     player.getWorld().playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.PLAYERS, 1.0F, 1.0F);
                 }
@@ -83,7 +84,7 @@ public class StarryExpressMixin {
                     player.playSoundToPlayer(SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.PLAYERS, 1.0F, 1.0F);
                 }
 
-                if(WyspiaExpress.ROLES_CONFIG.roleConfig.starryExpress.starstruckConfig.enableAbilitySound()){
+                if(WyspiaExpress.ROLES_CONFIG.roleConfig.starryExpress.starstruckConfig.enableAbilityParticleEffects()){
                     ServerWorld level = context.player().getServerWorld();
                     level.spawnParticles(STARSTRUCK_SPARKLE, player.getX(), player.getY(), player.getZ(),
                             75, 0.5F, 1.5F, 0.5F, 0.0F);
