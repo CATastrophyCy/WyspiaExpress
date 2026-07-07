@@ -20,12 +20,14 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import org.BsXinQin.kinswathe.KinsWatheItems;
+import org.BsXinQin.kinswathe.component.AbilityPlayerComponent;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.BsXinQin.kinswathe.roles.hacker.HackerComponent;
 import org.BsXinQin.kinswathe.roles.technician.TechnicianComponent;
 import org.agmas.noellesroles.ModItems;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
+import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
 import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.cat.express.wyspiaexpress.config.ShopConfig;
 import org.jetbrains.annotations.NotNull;
@@ -135,6 +137,45 @@ public class ShopUtil {
             }
         }
     }
+    public static void refreshWeaponCooldown(@NotNull PlayerEntity player) {
+        player.getItemCooldownManager().set(KinsWatheItems.ICON_WEAPON_COOLDOWN_REFRESH, GameConstants.ITEM_COOLDOWNS.get(KinsWatheItems.ICON_WEAPON_COOLDOWN_REFRESH));
+        GameWorldComponent gameWorld = GameWorldComponent.KEY.get(player.getWorld());
+
+        for(ServerPlayerEntity serverPlayer : player.getServer().getPlayerManager().getPlayerList()) {
+            if (serverPlayer != null && gameWorld.canUseKillerFeatures(serverPlayer)) {
+                serverPlayer.sendMessage(Text.translatable("tip.kinswathe.hacker.weapon_cooldown_refresh").withColor(Color.RED.getRGB()), true);
+                serverPlayer.playSoundToPlayer(SoundEvents.BLOCK_GRINDSTONE_USE, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                serverPlayer.getItemCooldownManager().set(KinsWatheItems.BLOWGUN, GameConstants.getInTicks(0, 0));
+                serverPlayer.getItemCooldownManager().set(KinsWatheItems.HUNTING_KNIFE, GameConstants.getInTicks(0, 0));
+                serverPlayer.getItemCooldownManager().set(KinsWatheItems.POISON_INJECTOR, GameConstants.getInTicks(0, 0));
+                serverPlayer.getItemCooldownManager().set(WatheItems.KNIFE, GameConstants.getInTicks(0, 0));
+                serverPlayer.getItemCooldownManager().set(WatheItems.REVOLVER, GameConstants.getInTicks(0, 0));
+                serverPlayer.getItemCooldownManager().set(WatheItems.GRENADE, GameConstants.getInTicks(0, 0));
+                serverPlayer.getItemCooldownManager().set(WyspiaExpressItems.OUTLAW_REVOLVER, GameConstants.getInTicks(0, 0));
+                serverPlayer.getItemCooldownManager().set(WyspiaExpressItems.FAKE_REVOLVER, GameConstants.getInTicks(0, 0));
+                serverPlayer.getItemCooldownManager().set(WyspiaExpressItems.TAPE, GameConstants.getInTicks(0, 0));
+            }
+        }
+
+    }
+
+    public static void refreshAbilityCooldown(@NotNull PlayerEntity player) {
+        player.getItemCooldownManager().set(KinsWatheItems.ICON_ABILITY_COOLDOWN_REFRESH, GameConstants.ITEM_COOLDOWNS.get(KinsWatheItems.ICON_ABILITY_COOLDOWN_REFRESH));
+        GameWorldComponent gameWorld = GameWorldComponent.KEY.get(player.getWorld());
+
+        for(ServerPlayerEntity serverPlayer : player.getServer().getPlayerManager().getPlayerList()) {
+            if (serverPlayer != null && gameWorld.canUseKillerFeatures(serverPlayer)) {
+                AbilityPlayerComponent kinswatheAbility = AbilityPlayerComponent.KEY.get(serverPlayer);
+                AbilityCooldownComponent abilityCooldown = AbilityCooldownComponent.KEY.get(serverPlayer);
+                serverPlayer.sendMessage(Text.translatable("tip.kinswathe.hacker.ability_cooldown_refresh").withColor(Color.GREEN.getRGB()), true);
+                serverPlayer.playSoundToPlayer(SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                serverPlayer.getItemCooldownManager().set(WatheItems.PSYCHO_MODE, 0);
+                kinswatheAbility.setAbilityCooldown(0);
+                abilityCooldown.setAbilityCooldown(0);
+            }
+        }
+
+    }
     public static List<ShopEntry> fromShopEntryConfigs(List<ShopConfig.ShopEntryConfig> shopConfigs ) {
         List<ShopEntry> shopEntries = new ArrayList<>();
         for( ShopConfig.ShopEntryConfig shopConfig : shopConfigs ) {
@@ -153,9 +194,9 @@ public class ShopUtil {
         } else if (item == WatheItems.PSYCHO_MODE) {
             PlayerShopComponent.usePsychoMode(player);
         } else if (item == KinsWatheItems.ICON_WEAPON_COOLDOWN_REFRESH) {
-            HackerComponent.refreshWeaponCooldown(player);
+            refreshWeaponCooldown(player);
         } else if (item == KinsWatheItems.ICON_ABILITY_COOLDOWN_REFRESH) {
-            HackerComponent.refreshAbilityCooldown(player);
+            refreshAbilityCooldown(player);
         } else if (item == KinsWatheItems.ICON_POTION_EFFECT_REFRESH) {
             handlePotionRefresh(player);
         } else if (item == KinsWatheItems.ICON_POWER_RESTORATION) {
