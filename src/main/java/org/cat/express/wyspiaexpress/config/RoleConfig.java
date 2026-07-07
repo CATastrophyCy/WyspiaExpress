@@ -86,7 +86,9 @@ public class RoleConfig {
         @Comment("Additional revive. Note the LICH can't revive when the number of alive killers is greater or equal to {Starting killer amount + this number}")
         public int additionalRevive = 1;
         @Comment("Cooldown for the ability, in seconds")
-        public int cooldown = 180;
+        public int cooldown = 90;
+        @Comment("Cooldown for the ability at game start, in seconds")
+        public int startingCooldown = 90;
         @Comment("Range to activate ability")
         public double range = 3.0;
         @Comment("Revive stun duration, in ticks")
