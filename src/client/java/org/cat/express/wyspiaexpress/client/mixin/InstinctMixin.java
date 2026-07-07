@@ -91,6 +91,19 @@ public abstract class InstinctMixin {
             // handle alive player instinct with instinct pressed, doesn't handle passive instinct
             if (GameFunctions.isPlayerAliveAndSurvival(player)  && WatheClient.isInstinctEnabled()) {
 
+                // handle invisible players
+                if(targetPlayer.hasStatusEffect(StatusEffects.INVISIBILITY)) {
+                    // Phantom special case, allow killer buddies to see them
+                    if(gameWorldComponent.isRole(targetPlayer, Noellesroles.PHANTOM) &&
+                            WatheClient.isKiller()) {
+                        cir.setReturnValue(MathHelper.hsvToRgb(0.0F, 1.0F, 0.6F));
+                        cir.cancel();
+                        return;
+                    }
+                    cir.setReturnValue(-1);
+                    cir.cancel();
+                    return;
+                }
                 // if the player is elusive then hide them from all active instinct, including starstruck (but not other passive instinct)
                 if(worldModifierComponent.isModifier(targetPlayer, WyspiaExpressRoles.ELUSIVE)) {
                     double distance = player.squaredDistanceTo(targetPlayer);
