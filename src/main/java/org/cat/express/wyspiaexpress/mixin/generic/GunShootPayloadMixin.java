@@ -20,9 +20,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import org.BsXinQin.kinswathe.KinsWatheRoles;
+import org.agmas.noellesroles.Noellesroles;
+import org.agmas.noellesroles.config.NoellesRolesConfig;
+import org.agmas.noellesroles.executioner.ExecutionerPlayerComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+
+import java.util.UUID;
 
 @Mixin(GunShootPayload.Receiver.class)
 public abstract class GunShootPayloadMixin {
@@ -49,12 +55,10 @@ public abstract class GunShootPayloadMixin {
         if (WyspiaExpress.SERVER_CONFIG.disableProtectionGunDrop()) {
             if (targetEntity instanceof PlayerEntity target && target.distanceTo(player) < 65.0) {
                 GameWorldComponent game = GameWorldComponent.KEY.get(player.getWorld());
-                Item revolver = WatheItems.REVOLVER;
                 boolean backfire = false;
 
                 // backfire: if you kill an innocent you have a chance of shooting yourself instead
-                if (game.isInnocent(target) && game.isInnocent(player) && GameFunctions.isPlayerAliveAndSurvival(player) && mainHandStack.isOf(revolver)
-                    && player.getRandom().nextFloat() <= game.getBackfireChance()) {
+                if (shouldBackFire(game,player, target, mainHandStack)) {
                     backfire = true;
                     GameFunctions.killPlayer(player, true, player, GameConstants.DeathReasons.GUN);
                 }
@@ -62,14 +66,11 @@ public abstract class GunShootPayloadMixin {
                 if(!backfire ) {
                     GameFunctions.killPlayer(target, true, player, GameConstants.DeathReasons.GUN);
 
-                    // target is innocent and dead (this makes it so shooting someone protected will not drop the gun nor remove mood)
-                    if(game.isInnocent(target) && GameFunctions.isPlayerSpectatingOrCreative(target) && GameFunctions.isPlayerAliveAndSurvival(player) ) {
-                        // only send the payload if the player is not a licensed villain
-                        if(!game.isRole(player, KinsWatheRoles.LICENSED_VILLAIN))
+                    if(shouldDropGun(game,player,target)) {
                             Scheduler.schedule(() -> {
                                 if (!context.player().getInventory().contains((s) -> s.isIn(WatheItemTags.GUNS))) return;
-                                player.getInventory().remove((s) -> s.isOf(revolver), 1, player.getInventory());
-                                ItemEntity item = player.dropItem(revolver.getDefaultStack(), false, false);
+                                player.getInventory().remove((s) -> s.isOf(WatheItems.REVOLVER), 1, player.getInventory());
+                                ItemEntity item = player.dropItem(WatheItems.REVOLVER.getDefaultStack(), false, false);
                                 if (item != null) {
                                     item.setPickupDelay(10);
                                     item.setThrower(player);
@@ -83,5 +84,39 @@ public abstract class GunShootPayloadMixin {
             return null;
         }
         return targetEntity;
+    }
+    @Unique
+    private static boolean shouldBackFire(GameWorldComponent game, PlayerEntity killer, PlayerEntity victim, ItemStack mainHandStack) {
+        // first check if the victim is executioner target
+        if(isExecutionerTarget(game,victim)) return false;
+        // now check if the victim is a voodoo and the voodoo config is enabled
+        if (game.isRole(victim, Noellesroles.VOODOO) && NoellesRolesConfig.HANDLER.instance().voodooShotLikeEvil) {
+            return false;
+        }
+        return game.isInnocent(victim) && game.isInnocent(killer) && GameFunctions.isPlayerAliveAndSurvival(killer) && mainHandStack.isOf(WatheItems.REVOLVER)
+                && killer.getRandom().nextFloat() <= game.getBackfireChance();
+    }
+    @Unique
+    private static boolean shouldDropGun(GameWorldComponent game, PlayerEntity killer, PlayerEntity victim){
+
+        if(game.isInnocent(victim) && GameFunctions.isPlayerSpectatingOrCreative(victim) && GameFunctions.isPlayerAliveAndSurvival(killer) ){
+            if(game.isRole(killer, KinsWatheRoles.LICENSED_VILLAIN )) return false;
+            if(isExecutionerTarget(game,victim)) return false;
+
+            return true;
+        }
+        return false;
+    }
+    @Unique
+    private static boolean isExecutionerTarget(GameWorldComponent game, PlayerEntity player){
+        for (UUID uuid : game.getAllWithRole(Noellesroles.EXECUTIONER)) {
+            PlayerEntity executioner = player.getWorld().getPlayerByUuid(uuid);
+            if (executioner == null) continue;
+            ExecutionerPlayerComponent executionerPlayerComponent = ExecutionerPlayerComponent.KEY.get(executioner);
+            if (executionerPlayerComponent.target.equals(player.getUuid())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
