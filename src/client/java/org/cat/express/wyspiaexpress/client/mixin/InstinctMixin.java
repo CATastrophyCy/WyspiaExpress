@@ -161,13 +161,8 @@ public abstract class InstinctMixin {
     @Unique
     private static int handleSpectatorInstinct(PlayerEntity targetPlayer, GameWorldComponent gameWorldComponent) {
         PlayerPoisonComponent playerPoisonComponent = PlayerPoisonComponent.KEY.get(targetPlayer);
-        BartenderPlayerComponent bartenderPlayerComponent = BartenderPlayerComponent.KEY.get(targetPlayer);
-        PhysicianComponent physicianComponent = PhysicianComponent.KEY.get(targetPlayer);
         StarstruckComponent starstruckComponent = StarstruckComponent.KEY.get(targetPlayer);
-        DreamerComponent dreamerComponent = DreamerComponent.KEY.get(targetPlayer);
-        MorphlingPlayerComponent morphlingPlayerComponent = MorphlingPlayerComponent.KEY.get(targetPlayer);
         PlayerHearDeadComponent playerHearDeadComponent = PlayerHearDeadComponent.KEY.get(targetPlayer);
-        SilenceComponent silenceComponent = SilenceComponent.KEY.get(targetPlayer);
         if( starstruckComponent.ticks > 0 && gameWorldComponent.isRole(targetPlayer, StarryExpressRoles.STARSTRUCK)) {
             return 0x77C2F2;
         }
@@ -177,23 +172,8 @@ public abstract class InstinctMixin {
         if(playerHearDeadComponent.isActive()){
             return 0x0D0A0A;
         }
-        if( gameWorldComponent.isRole(targetPlayer, Noellesroles.MORPHLING) && morphlingPlayerComponent.morphTicks > 0 ) {
-            return 0x2E0000;
-        }
         if (playerPoisonComponent.poisonTicks > 0) {
-            if(playerPoisonComponent.poisoner != null && playerPoisonComponent.poisoner.equals(DELUSION_MARKER)) {
-                return 0x9300FF;
-            }
             return Color.RED.getRGB();
-        }
-        if(silenceComponent.isSilenced()){
-            return 0x4A3A54;
-        }
-        if( bartenderPlayerComponent.armor > 0 || physicianComponent.physicianArmor > 0) {
-            return Color.BLUE.getRGB();
-        }
-        if( dreamerComponent.dreamArmor > 0) {
-            return 0xFF6BFA;
         }
         return -1;
     }

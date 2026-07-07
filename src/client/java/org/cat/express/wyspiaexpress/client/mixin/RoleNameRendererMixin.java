@@ -3,6 +3,7 @@ package org.cat.express.wyspiaexpress.client.mixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
+import dev.doctor4t.wathe.cca.PlayerPoisonComponent;
 import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import dev.doctor4t.wathe.client.WatheClient;
 import dev.doctor4t.wathe.client.gui.RoleNameRenderer;
@@ -18,7 +19,13 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import org.BsXinQin.kinswathe.KinsWatheConfig;
 import org.BsXinQin.kinswathe.KinsWatheRoles;
+import org.BsXinQin.kinswathe.roles.dreamer.DreamerComponent;
 import org.BsXinQin.kinswathe.roles.hacker.HackerComponent;
+import org.BsXinQin.kinswathe.roles.physician.PhysicianComponent;
+import org.agmas.noellesroles.Noellesroles;
+import org.agmas.noellesroles.bartender.BartenderPlayerComponent;
+import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
+import org.aussiebox.starexpress.cca.SilenceComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
@@ -33,12 +40,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pro.fazeclan.river.stupid_express.constants.SERoles;
 import pro.fazeclan.river.stupid_express.role.arsonist.cca.DousedPlayerComponent;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Mixin(RoleNameRenderer.class)
 public abstract class RoleNameRendererMixin {
     @Shadow private static float nametagAlpha;
+    @Unique private static final UUID DELUSION_MARKER = UUID.fromString("00000000-0000-0000-dead-c0de00000000"); // unique string used by Kinswathe
 
     @Unique
     private static int OFF_SET = 41;
@@ -77,19 +87,54 @@ public abstract class RoleNameRendererMixin {
             context.drawTextWithShadow(renderer, hudText, -renderer.getWidth(hudText) / 2, y, white);
             y+= renderer.fontHeight  + 1;
 
-            PlayerCultistComponent  cultist = PlayerCultistComponent.KEY.get(targetPlayer);
-            HackerComponent hacker = HackerComponent.KEY.get(targetPlayer);
-            DousedPlayerComponent doused = DousedPlayerComponent.KEY.get(targetPlayer);
+
             List<Text> texts = new ArrayList<>();
+            PlayerPoisonComponent playerPoisonComponent = PlayerPoisonComponent.KEY.get(targetPlayer);
+
+            if (playerPoisonComponent.poisonTicks > 0) {
+                if(playerPoisonComponent.poisoner != null && playerPoisonComponent.poisoner.equals(DELUSION_MARKER)) {
+                    texts.add(Text.literal("Deluded").setStyle(Style.EMPTY.withColor( (alpha << 24) | 0x9300FF))); ;
+                }
+                else{
+                    texts.add(Text.literal("Poisoned").setStyle(Style.EMPTY.withColor( (alpha << 24) | Color.RED.getRGB()))); ;
+                }
+            }
+
+            PlayerCultistComponent  cultist = PlayerCultistComponent.KEY.get(targetPlayer);
             if(cultist.isConverted()){
                 texts.add(Text.literal("Converted").setStyle(Style.EMPTY.withColor( (alpha << 24) | WyspiaExpressRoles.CULT_LEADER.color())));
             }
+
+            HackerComponent hacker = HackerComponent.KEY.get(targetPlayer);
             if(hacker.hackingTime >= KinsWatheConfig.HANDLER.instance().HackerHackingTime * 20){
                 texts.add(Text.literal("Hacked").setStyle(Style.EMPTY.withColor( (alpha << 24) | KinsWatheRoles.HACKER.color())));
             }
+
+            MorphlingPlayerComponent morphlingPlayerComponent = MorphlingPlayerComponent.KEY.get(targetPlayer);
+            if( worldComponent.isRole(targetPlayer, Noellesroles.MORPHLING) && morphlingPlayerComponent.morphTicks > 0 ) {
+                texts.add(Text.literal("Transformed").setStyle(Style.EMPTY.withColor( (alpha << 24) | Noellesroles.MORPHLING.color())));
+            }
+
+            DousedPlayerComponent doused = DousedPlayerComponent.KEY.get(targetPlayer);
             if(doused.isDoused()){
                 texts.add(Text.literal("Doused").setStyle(Style.EMPTY.withColor( (alpha << 24) | SERoles.ARSONIST.color())));
             }
+
+            SilenceComponent silenceComponent = SilenceComponent.KEY.get(targetPlayer);
+            if(silenceComponent.isSilenced()){
+                texts.add(Text.literal("Muzzled").setStyle(Style.EMPTY.withColor( (alpha << 24) |  0x4A3A54)));
+            }
+
+            BartenderPlayerComponent bartenderPlayerComponent = BartenderPlayerComponent.KEY.get(targetPlayer);
+            PhysicianComponent physicianComponent = PhysicianComponent.KEY.get(targetPlayer);
+            DreamerComponent dreamerComponent = DreamerComponent.KEY.get(targetPlayer);
+            if( bartenderPlayerComponent.armor > 0 || physicianComponent.physicianArmor > 0) {
+                texts.add(Text.literal("Protected").setStyle(Style.EMPTY.withColor( (alpha << 24) |  Color.BLUE.getRGB())));
+            }
+            if( dreamerComponent.dreamArmor > 0) {
+                texts.add(Text.literal("Dreamed").setStyle(Style.EMPTY.withColor( (alpha << 24) |  0xFF6BFA)));
+            }
+
             if(!texts.isEmpty()){
                 MutableText finalText = (MutableText)texts.getFirst();
                 texts.removeFirst();
