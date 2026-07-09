@@ -13,6 +13,8 @@ import java.util.List;
 @Sync(Option.SyncMode.OVERRIDE_CLIENT)
 @Config(name = "wyspiaexpress/general", wrapperName = "WyspiaExpressServerConfig")
 public class ServerConfig {
+    @Comment("Use custom weighted assignment")
+    public boolean useCustomWeightedAssignment = true;
     @Comment("Neutral role dividend")
     @RangeConstraint(min = 3, max = 99)
     public int neutralDividend = 6;

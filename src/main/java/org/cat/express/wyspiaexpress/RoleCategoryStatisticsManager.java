@@ -4,6 +4,8 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.WorldSavePath;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +23,11 @@ public class RoleCategoryStatisticsManager {
     private final Path statsDir;
     private final Map<UUID, MutablePlayerStats> playerStats = new HashMap<>();
     private LocalDate currentDate;
+    private final double BASE_WEIGHT = 0.01;
+
+    public enum RoleCategory {
+        KILLER, VIGILANTE, NEUTRAL, CIVILIAN
+    }
 
     private RoleCategoryStatisticsManager(MinecraftServer server) {
         Path worldRoot = server.getSavePath(WorldSavePath.ROOT);
@@ -54,46 +61,41 @@ public class RoleCategoryStatisticsManager {
 
     /**
      * Direct way to register a role-category assignment by UUID.
-     * Accepted categories: vigilante, killer, civilian, neutral
      */
-    public void recordRoleCategory(UUID playerUuid, String playerName, String roleCategory) {
-        if (playerUuid == null || playerName == null || roleCategory == null) {
-            return;
-        }
-
-        String normalized = roleCategory.trim().toLowerCase(Locale.ROOT);
-        if (!normalized.equals("vigilante")
-                && !normalized.equals("killer")
-                && !normalized.equals("civilian")
-                && !normalized.equals("neutral")) {
-            LOGGER.warn("Ignoring unknown role category '{}' for player {} ({})", roleCategory, playerName, playerUuid);
-            return;
-        }
+    public void recordRoleCategory(@NotNull UUID playerUuid,@NotNull String playerName,@NotNull RoleCategory roleCategory) {
 
         MutablePlayerStats stats = playerStats.computeIfAbsent(playerUuid, ignored -> new MutablePlayerStats(playerUuid));
 
         stats.lastKnownName = playerName;
-
         if (!stats.namesUsed.contains(playerName)) {
             stats.namesUsed.add(playerName);
         }
-
-        switch (normalized) {
-            case "vigilante" -> stats.vigilanteCount++;
-            case "killer" -> stats.killerCount++;
-            case "civilian" -> stats.civilianCount++;
-            case "neutral" -> {
-                stats.civilianCount++;
-                stats.neutralCount++;
-            }
+        switch (roleCategory) {
+            case VIGILANTE -> stats.vigilanteCount++;
+            case KILLER -> stats.killerCount++;
+            case CIVILIAN -> stats.civilianCount++;
+            case NEUTRAL -> stats.neutralCount++;
         }
     }
-
-    public PlayerAggregateStats getStats(UUID playerUuid) {
+    public PlayerAggregateStats getStats(@NotNull UUID playerUuid) {
         MutablePlayerStats stats = playerStats.get(playerUuid);
-        return stats == null ? null : stats.toImmutable();
+        return stats == null ? new PlayerAggregateStats(playerUuid, null, null,
+                0, 0, 0, 0, 0, 0, 0, 0, 0)
+                : stats.toImmutable();
     }
 
+    public double computeCategoryWeight(int dividend,@NotNull UUID playerUuid,@NotNull RoleCategory roleCategory) {
+        PlayerAggregateStats stats = getStats(playerUuid);
+        double target = 1.0 / dividend;
+        double percentage = switch (roleCategory){
+            case VIGILANTE -> stats.vigilantePercentage;
+            case KILLER -> stats.killerPercentage;
+            case NEUTRAL -> stats.neutralPercentage;
+            case CIVILIAN -> stats.civilianPercentage;
+        };
+        double deficit = Math.max(target - percentage, 0.0);
+        return BASE_WEIGHT + deficit;
+    }
     private File getFile() {
         String fileName = String.format("player_role_category_stats_%s.json", currentDate.toString());
         return statsDir.resolve(fileName).toFile();
@@ -176,12 +178,12 @@ public class RoleCategoryStatisticsManager {
         }
 
         private PlayerAggregateStats toImmutable() {
-            int total = vigilanteCount + killerCount + civilianCount;
+            int total = vigilanteCount + killerCount + civilianCount + neutralCount;
 
             double vigilantePct = total == 0 ? 0.0 : (vigilanteCount * 100.0) / total;
             double killerPct = total == 0 ? 0.0 : (killerCount * 100.0) / total;
             double civilianPct = total == 0 ? 0.0 : (civilianCount * 100.0) / total;
-
+            double neutralPct = total == 0 ? 0.0 : (neutralCount * 100.0) / total;
             return new PlayerAggregateStats(
                     playerUuid,
                     lastKnownName,
@@ -193,15 +195,16 @@ public class RoleCategoryStatisticsManager {
                     neutralCount,
                     vigilantePct,
                     killerPct,
+                    neutralPct,
                     civilianPct
             );
         }
     }
 
     public record PlayerAggregateStats(
-            UUID playerUuid,
-            String lastKnownName,
-            List<String> namesUsed,
+            @NotNull UUID playerUuid,
+            @Nullable String lastKnownName,
+            @Nullable List<String> namesUsed,
             int roundsPlayed,
             int vigilanteCount,
             int killerCount,
@@ -209,6 +212,7 @@ public class RoleCategoryStatisticsManager {
             int neutralCount,
             double vigilantePercentage,
             double killerPercentage,
+            double neutralPercentage,
             double civilianPercentage
     ) {
         public PlayerAggregateStats {
