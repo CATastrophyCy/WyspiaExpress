@@ -205,7 +205,7 @@ public abstract class HMLGameInitializeMixin {
             }
             return true;
         });
-        int total = 0;
+        int total;
         if(WyspiaExpress.SERVER_CONFIG.useCustomWeightedAssignment()){
             total = customKillerAssigment(serverWorld, roleSelector, gameWorld, playersForKiller, killerCount);
             playersForVigilante.removeIf(gameWorld::canUseKillerFeatures);
@@ -259,7 +259,7 @@ public abstract class HMLGameInitializeMixin {
                 PlayerShopComponent.KEY.get(killer).setBalance(GameConstants.MONEY_START);
             }
         }
-        return 0;
+        return killers.size();
     }
     @Unique
     private UUID weightedPick(Map<UUID, Double> weighMap, double random) {
