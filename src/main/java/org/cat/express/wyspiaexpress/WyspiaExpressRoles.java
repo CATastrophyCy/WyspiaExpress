@@ -371,7 +371,7 @@ public class WyspiaExpressRoles {
                 AvariciousGoldHandler.gameStartTime = GAME_START_TIME;
             }
             if(role.equals(LICH)){
-                AbilityCooldownComponent.KEY.get(player).setAbilityCooldown(GameConstants.getInTicks(0, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.startingCooldown()));
+                AbilityCooldownComponent.KEY.get(player).setAbilityCooldown(WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.startingCooldown());
             }
         });
         ResetPlayerEvent.EVENT.register(((playerEntity) -> {
