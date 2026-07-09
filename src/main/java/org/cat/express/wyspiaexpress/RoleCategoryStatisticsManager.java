@@ -23,7 +23,6 @@ public class RoleCategoryStatisticsManager {
     private final Path statsDir;
     private final Map<UUID, MutablePlayerStats> playerStats = new HashMap<>();
     private LocalDate currentDate;
-    private final double BASE_WEIGHT = 0.01;
 
     public enum RoleCategory {
         KILLER, VIGILANTE, NEUTRAL, CIVILIAN
@@ -94,7 +93,7 @@ public class RoleCategoryStatisticsManager {
             case CIVILIAN -> stats.civilianPercentage;
         };
         double deficit = Math.max(target - percentage, 0.0);
-        return BASE_WEIGHT + deficit;
+        return WyspiaExpress.SERVER_CONFIG.baseWeight() + deficit;
     }
     private File getFile() {
         String fileName = String.format("player_role_category_stats_%s.json", currentDate.toString());

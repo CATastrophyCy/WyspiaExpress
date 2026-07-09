@@ -15,6 +15,9 @@ import java.util.List;
 public class ServerConfig {
     @Comment("Use custom weighted assignment")
     public boolean useCustomWeightedAssignment = true;
+    @Comment("Base weight value used for customWeight assigment. The lower the value the more balanced the system is. High values add more variance (it is not recommended to go above 0.01!)." +
+            "Don't change this value unless you know what you are doing!")
+    public double baseWeight = 0.002;
     @Comment("Neutral role dividend")
     @RangeConstraint(min = 3, max = 99)
     public int neutralDividend = 6;
