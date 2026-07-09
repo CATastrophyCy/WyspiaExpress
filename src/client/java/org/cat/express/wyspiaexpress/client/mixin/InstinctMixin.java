@@ -92,7 +92,7 @@ public abstract class InstinctMixin {
             if (GameFunctions.isPlayerAliveAndSurvival(player)  && WatheClient.isInstinctEnabled()) {
 
                 // handle invisible players
-                if(targetPlayer.hasStatusEffect(StatusEffects.INVISIBILITY)) {
+                if(targetPlayer.isInvisible()) {
                     // Phantom special case, allow killer buddies to see them
                     if(gameWorldComponent.isRole(targetPlayer, Noellesroles.PHANTOM) &&
                             WatheClient.isKiller()) {
@@ -165,9 +165,6 @@ public abstract class InstinctMixin {
         PlayerHearDeadComponent playerHearDeadComponent = PlayerHearDeadComponent.KEY.get(targetPlayer);
         if( starstruckComponent.ticks > 0 && gameWorldComponent.isRole(targetPlayer, StarryExpressRoles.STARSTRUCK)) {
             return 0x77C2F2;
-        }
-        if( gameWorldComponent.isRole(targetPlayer, KinsWatheRoles.ROBOT) && targetPlayer.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
-            return 0x0D0B0B;
         }
         if(playerHearDeadComponent.isActive()){
             return 0x0D0A0A;
