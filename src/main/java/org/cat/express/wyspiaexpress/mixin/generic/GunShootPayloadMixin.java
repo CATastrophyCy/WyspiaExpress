@@ -64,9 +64,10 @@ public abstract class GunShootPayloadMixin {
                 }
                 // no backfire
                 if(!backfire ) {
+                    boolean isExecutionerTarget = isExecutionerTarget(game, target);
                     GameFunctions.killPlayer(target, true, player, GameConstants.DeathReasons.GUN);
 
-                    if(shouldDropGun(game,player,target)) {
+                    if( !isExecutionerTarget && shouldDropGun(game,player,target)) {
                             Scheduler.schedule(() -> {
                                 if (!context.player().getInventory().contains((s) -> s.isIn(WatheItemTags.GUNS))) return;
                                 player.getInventory().remove((s) -> s.isOf(WatheItems.REVOLVER), 1, player.getInventory());
@@ -101,7 +102,6 @@ public abstract class GunShootPayloadMixin {
 
         if(game.isInnocent(victim) && GameFunctions.isPlayerSpectatingOrCreative(victim) && GameFunctions.isPlayerAliveAndSurvival(killer) ){
             if(game.isRole(killer, KinsWatheRoles.LICENSED_VILLAIN )) return false;
-            if(isExecutionerTarget(game,victim)) return false;
 
             return true;
         }
@@ -111,7 +111,7 @@ public abstract class GunShootPayloadMixin {
     private static boolean isExecutionerTarget(GameWorldComponent game, PlayerEntity player){
         for (UUID uuid : game.getAllWithRole(Noellesroles.EXECUTIONER)) {
             PlayerEntity executioner = player.getWorld().getPlayerByUuid(uuid);
-            if (executioner == null) continue;
+            if (!GameFunctions.isPlayerAliveAndSurvival(executioner)) continue;
             ExecutionerPlayerComponent executionerPlayerComponent = ExecutionerPlayerComponent.KEY.get(executioner);
             if (executionerPlayerComponent.target.equals(player.getUuid())) {
                 return true;
