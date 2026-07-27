@@ -8,17 +8,21 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.entity.FlyingItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.Vec3d;
 import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.agmas.noellesroles.client.NoellesrolesClient;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressEntities;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.client.items.ItemToolTip;
@@ -40,6 +44,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
         registerItemsBlood();
         registerAbilityKey();
         registerAbilityPacket();
+        registerEntityRenderer();
         ClientLoginNetworking.registerGlobalReceiver(
                 VersionCheckNetwork.VERSION_QUERY_ID,
                 (client, handler, buf, listenerAdder) -> {
@@ -62,7 +67,10 @@ public class WyspiaexpressClient implements ClientModInitializer {
             );
         }
     }
+    private static void registerEntityRenderer(){
+            EntityRendererRegistry.register(WyspiaExpressEntities.GRENADE, FlyingItemEntityRenderer::new);
 
+    }
     private static void registerItemToolTips(){
         ItemTooltipCallback.EVENT.register(((itemStack, tooltipContext, tooltipType, list) -> {
             ItemToolTip.addItemtip(WyspiaExpressItems.FAKE_REVOLVER, itemStack, list);

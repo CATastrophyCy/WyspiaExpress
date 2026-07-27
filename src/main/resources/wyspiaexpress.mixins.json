@@ -17,7 +17,7 @@
     "generic.PlayerShieldMixin",
     "generic.ShopMixin",
     "generic.TaskIncomeMixin",
-    "items.grenade.GrenadeCooldownMixin",
+    "items.GrenadeMixin",
     "kinswathe.DreamerComponentMixin",
     "kinswathe.DreamerKillerComponentMixin",
     "noellesroles.ExecutionerRoleMixin",

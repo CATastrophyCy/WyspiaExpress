@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress.config;
 
 import blue.endless.jankson.Comment;
 import io.wispforest.owo.config.annotation.Nest;
+import io.wispforest.owo.config.annotation.RangeConstraint;
 
 public class ItemConfig {
 
@@ -170,6 +171,12 @@ public class ItemConfig {
         @Nest public ItemBasicConfig basic = new ItemBasicConfig();
         @Comment("Cooldown, in seconds, minimum 0")
         public int cooldown = 180;
+        @Comment("Radius of the grenade explosion")
+        @RangeConstraint(min = 0.0, max = 10.0)
+        public double radius = 3.0;
+        @Comment("Radius of the grenade explosion to the owner.")
+        @RangeConstraint(min = 0.0, max = 10.0)
+        public double ownerRadius = 1.8;
     }
     public static class DerringerConfig {
         @Comment("Basic item configuration")

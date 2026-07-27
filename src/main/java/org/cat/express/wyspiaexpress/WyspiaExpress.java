@@ -38,6 +38,7 @@ public class WyspiaExpress implements ModInitializer {
         WyspiaExpressRoles.init();
         WyspiaExpressItems.init();
         WyspiaExpressSounds.init();
+        WyspiaExpressEntities.init();
         WyspiaExpressGameFunctions.init();
         WyspiaExpressCommands.init();
         registerVersionCheck();
