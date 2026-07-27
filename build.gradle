@@ -78,26 +78,26 @@ dependencies {
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modApi "dev.doctor4t:wathe:${project.wathe_version}"
-    modApi "maven.modrinth:harpymodloader:${project.harpy_mod_loader_version}"
-    modApi "maven.modrinth:noelles-roles-tmm:${project.noelles_roles_version}"
-    modApi "maven.modrinth:stupid-express:${project.stupid_express_version}"
-    modApi "maven.modrinth:kinswathe:${project.kins_wathe_version}"
-    modApi "maven.modrinth:starexpress:${project.starexpress_version}"
-    modApi "maven.modrinth:wathe-blood:${project.wathe_blood_version}"
+    modCompileOnly "dev.doctor4t:wathe:${project.wathe_version}"
+    modCompileOnly "maven.modrinth:harpymodloader:${project.harpy_mod_loader_version}"
+    modCompileOnly "maven.modrinth:noelles-roles-tmm:${project.noelles_roles_version}"
+    modCompileOnly "maven.modrinth:stupid-express:${project.stupid_express_version}"
+    modCompileOnly "maven.modrinth:kinswathe:${project.kins_wathe_version}"
+    modCompileOnly "maven.modrinth:starexpress:${project.starexpress_version}"
+    modCompileOnly "maven.modrinth:wathe-blood:${project.wathe_blood_version}"
+    modCompileOnly "dev.doctor4t:ratatouille:${project.ratatouille_version}"
     // dependency of harpymodloader
-    modImplementation "dev.isxander:yet-another-config-lib:3.8.0+1.21.1-fabric"
+    modCompileOnly "dev.isxander:yet-another-config-lib:3.8.0+1.21.1-fabric"
 
 
     modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-base:${project.cca_version}"
     modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-entity:${project.cca_version}"
     modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-world:${project.cca_version}"
     modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-scoreboard:${project.cca_version}"
-    modImplementation "dev.doctor4t:ratatouille:${project.ratatouille_version}"
 
-    implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
 
-    annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
+    modCompileOnly "io.wispforest:owo-lib:${project.owo_version}"
+    annotationProcessor "io.wispforest:owo-lib:${project.owo_version}"
     include "io.wispforest:owo-sentinel:${project.owo_version}"
 
 
