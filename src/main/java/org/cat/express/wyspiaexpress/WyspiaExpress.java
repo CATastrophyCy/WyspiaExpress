@@ -62,7 +62,12 @@ public class WyspiaExpress implements ModInitializer {
                 .map(c -> c.getMetadata().getVersion().getFriendlyString())
                 .orElse("UNKNOWN");
     }
-
+    public static String getForceCrawlVersion() {
+        return FabricLoader.getInstance()
+                .getModContainer("forcecrawl")
+                .map(c -> c.getMetadata().getVersion().getFriendlyString())
+                .orElse("UNKNOWN");
+    }
     private void registerVersionCheck() {
         // 1) When login queries start, send server version to the client
         ServerLoginConnectionEvents.QUERY_START.register((handler, server, sender, synchronizer) -> {
@@ -70,6 +75,12 @@ public class WyspiaExpress implements ModInitializer {
             PacketByteBuf buf = PacketByteBufs.create();
             buf.writeString(serverVersion);
             sender.sendPacket(VersionCheckNetwork.VERSION_QUERY_ID, buf);
+        });
+        ServerLoginConnectionEvents.QUERY_START.register((handler, server, sender, synchronizer) -> {
+            String serverVersion = WyspiaExpress.getForceCrawlVersion();
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeString(serverVersion);
+            sender.sendPacket(VersionCheckNetwork.VERSION_QUERY_FORCE_CRAWL_ID, buf);
         });
 
         // 2) Handle client's response and kick if mismatch / no mod
@@ -87,6 +98,24 @@ public class WyspiaExpress implements ModInitializer {
                     if (!clientVersion.equals(serverVersion)) {
                         handler.disconnect(Text.literal(
                                 "Incompatible " + WyspiaExpress.MOD_ID + " version.\n" +
+                                        "Server: " + serverVersion + ", Client: " + clientVersion));
+                    }
+                }
+        );
+        ServerLoginNetworking.registerGlobalReceiver(
+                VersionCheckNetwork.VERSION_QUERY_FORCE_CRAWL_ID,
+                (server, handler, understood, buf, synchronizer, responseSender) -> {
+                    if (!understood) {
+                        handler.disconnect(Text.literal(
+                                "You must install " + "ForceCrawl"+ " version " + WyspiaExpress.getForceCrawlVersion() +  " to join this server."));
+                        return;
+                    }
+
+                    String clientVersion = buf.readString(64);
+                    String serverVersion = WyspiaExpress.getForceCrawlVersion();
+                    if (!clientVersion.equals(serverVersion)) {
+                        handler.disconnect(Text.literal(
+                                "Incompatible " + "ForceCrawl" + " version.\n" +
                                         "Server: " + serverVersion + ", Client: " + clientVersion));
                     }
                 }
