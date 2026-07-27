@@ -49,15 +49,18 @@ public class WyspiaexpressClient implements ClientModInitializer {
                     return CompletableFuture.completedFuture(reply);
                 }
         );
-        ClientLoginNetworking.registerGlobalReceiver(
-                VersionCheckNetwork.VERSION_QUERY_FORCE_CRAWL_ID,
-                (client, handler, buf, listenerAdder) -> {
-                    String clientVersion = WyspiaExpress.getForceCrawlVersion();
-                    PacketByteBuf reply = PacketByteBufs.create();
-                    reply.writeString(clientVersion);
-                    return CompletableFuture.completedFuture(reply);
-                }
-        );
+        String forceCrawlVersion = WyspiaExpress.getForceCrawlVersion();
+        if (!forceCrawlVersion.equals("UNKNOWN")) {
+            ClientLoginNetworking.registerGlobalReceiver(
+                    VersionCheckNetwork.VERSION_QUERY_FORCE_CRAWL_ID,
+                    (client, handler, buf, listenerAdder) -> {
+                        String clientVersion = WyspiaExpress.getForceCrawlVersion();
+                        PacketByteBuf reply = PacketByteBufs.create();
+                        reply.writeString(clientVersion);
+                        return CompletableFuture.completedFuture(reply);
+                    }
+            );
+        }
     }
 
     private static void registerItemToolTips(){
