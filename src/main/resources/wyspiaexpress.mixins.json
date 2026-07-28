@@ -20,6 +20,7 @@
     "items.GrenadeMixin",
     "kinswathe.DreamerComponentMixin",
     "kinswathe.DreamerKillerComponentMixin",
+    "noellesroles.DefenseVialEffectMixin",
     "noellesroles.ExecutionerRoleMixin",
     "noellesroles.NoellesRolesMixin",
     "noellesroles.VultureRoleMixin",

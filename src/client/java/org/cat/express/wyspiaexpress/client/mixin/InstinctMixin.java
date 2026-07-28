@@ -12,14 +12,10 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import org.BsXinQin.kinswathe.KinsWatheRoles;
-import org.BsXinQin.kinswathe.roles.dreamer.DreamerComponent;
-import org.BsXinQin.kinswathe.roles.physician.PhysicianComponent;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.bartender.BartenderPlayerComponent;
-import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
 import org.aussiebox.starexpress.StarryExpressRoles;
-import org.aussiebox.starexpress.cca.SilenceComponent;
 import org.aussiebox.starexpress.cca.StarstruckComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
@@ -108,7 +104,11 @@ public abstract class InstinctMixin {
                     return;
                 }
             }
-
+            if(gameWorldComponent.isRole(player, Noellesroles.BARTENDER)) {
+                cir.setReturnValue(handleBartender(player, targetPlayer));
+                cir.cancel();
+                return;
+            }
             // handle alive player instinct with instinct pressed, doesn't handle passive instinct
             if (GameFunctions.isPlayerAliveAndSurvival(player)  && WatheClient.isInstinctEnabled()) {
 
@@ -168,6 +168,21 @@ public abstract class InstinctMixin {
         }
         if (playerPoisonComponent.poisonTicks > 0) {
             return Color.RED.getRGB();
+        }
+        return -1;
+    }
+    @Unique
+    private static int handleBartender(PlayerEntity bartender, PlayerEntity targetPlayer) {
+        BartenderPlayerComponent bartenderPlayerComponent = BartenderPlayerComponent.KEY.get(targetPlayer);
+        PlayerPoisonComponent playerPoisonComponent =  PlayerPoisonComponent.KEY.get(targetPlayer);
+        if (bartenderPlayerComponent.glowTicks > 0) return Color.GREEN.getRGB();
+
+        if (bartenderPlayerComponent.armor > 0) {
+            if(targetPlayer == bartender)
+                return Color.BLUE.getRGB();
+        }
+        if (playerPoisonComponent.poisonTicks > 0) {
+           return Color.RED.getRGB();
         }
         return -1;
     }
