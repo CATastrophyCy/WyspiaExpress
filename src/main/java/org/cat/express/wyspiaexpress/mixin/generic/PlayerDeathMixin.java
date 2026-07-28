@@ -38,6 +38,8 @@ public abstract class PlayerDeathMixin {
         )
         private static void wyspiaexpress$addKillStat(PlayerEntity victim, boolean spawnBody, PlayerEntity killer, Identifier deathReason, CallbackInfo ci) {
             var world = victim.getWorld();
+
+
             if(world instanceof ServerWorld serverWorld) {
                 var component = GameWorldComponent.KEY.get(serverWorld);
                 if (component.canUseKillerFeatures(victim)) {
@@ -49,6 +51,8 @@ public abstract class PlayerDeathMixin {
                 }
                 var world_component = WorldComponent.KEY.get(serverWorld);
                 world_component.addPlayerDead(victim.getUuid());
+
+                WyspiaExpressGameFunctions.sendPlayerDeathMessage(serverWorld, component, victim, killer, deathReason);
 
                 if (killer == null) return;
                 // remove phantom invisibility depending on the config
@@ -70,7 +74,6 @@ public abstract class PlayerDeathMixin {
                 PlayerHearDeadComponent.KEY.get(victim).reset();
                 PlayerSenseDeadComponent.KEY.get(victim).reset();
 
-                WyspiaExpressGameFunctions.sendPlayerDeathMessage(serverWorld, component, victim, killer, deathReason);
 
             }
         }
