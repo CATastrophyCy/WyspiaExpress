@@ -84,53 +84,55 @@ public abstract class InstinctMixin {
             // target has to be alive
             if(!GameFunctions.isPlayerAliveAndSurvival(targetPlayer)) return;
 
-            // handle invisible players
+            if(GameFunctions.isPlayerAliveAndSurvival(player)) {
 
-            if(targetPlayer.isInvisible()) {
-                // Phantom allow killer buddies to see them
-                if(!gameWorldComponent.isRole(targetPlayer, Noellesroles.PHANTOM) || !WatheClient.isKiller()) {
-                    cir.setReturnValue(-1);
+                // handle invisible players
+                if (targetPlayer.isInvisible()) {
+                    // Phantom allow killer buddies to see them
+                    if (!gameWorldComponent.isRole(targetPlayer, Noellesroles.PHANTOM) || !WatheClient.isKiller()) {
+                        cir.setReturnValue(-1);
+                        cir.cancel();
+                        return;
+                    }
+                }
+                // if the player is elusive then hide them
+                if (worldModifierComponent.isModifier(targetPlayer, WyspiaExpressRoles.ELUSIVE)) {
+                    double distance = player.squaredDistanceTo(targetPlayer);
+                    if (distance >= WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.minimumDistance() * WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.minimumDistance()
+                            && distance <= WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.maximumDistance() * WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.maximumDistance()) {
+                        cir.setReturnValue(-1);
+                        cir.cancel();
+                        return;
+                    }
+                }
+                if (gameWorldComponent.isRole(player, Noellesroles.BARTENDER)) {
+                    cir.setReturnValue(handleBartender(player, targetPlayer));
                     cir.cancel();
                     return;
                 }
-            }
-            // if the player is elusive then hide them
-            if(worldModifierComponent.isModifier(targetPlayer, WyspiaExpressRoles.ELUSIVE)) {
-                double distance = player.squaredDistanceTo(targetPlayer);
-                if(distance >= WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.minimumDistance() * WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.minimumDistance()
-                        && distance <= WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.maximumDistance() * WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.maximumDistance() ) {
-                    cir.setReturnValue(-1);
-                    cir.cancel();
-                    return;
-                }
-            }
-            if(gameWorldComponent.isRole(player, Noellesroles.BARTENDER)) {
-                cir.setReturnValue(handleBartender(player, targetPlayer));
-                cir.cancel();
-                return;
-            }
-            // handle alive player instinct with instinct pressed, doesn't handle passive instinct
-            if (GameFunctions.isPlayerAliveAndSurvival(player)  && WatheClient.isInstinctEnabled()) {
+                // handle player instinct with instinct pressed, doesn't handle passive instinct
+                if (WatheClient.isInstinctEnabled()) {
 
-                Role role = gameWorldComponent.getRole(targetPlayer);
-                if (role != null) {
-                    // If the current player is killer and is alive
-                    if (WatheClient.isKiller() || gameWorldComponent.isRole(player, KinsWatheRoles.HACKER)) {
-                        if (WyspiaExpressRoles.TRUE_NEUTRALS.contains(role)) {
-                            cir.setReturnValue(0x4EDD35);
-                            cir.cancel();
-                            return;
-                        } else if (WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)) {
-                            if (WyspiaExpress.SERVER_CONFIG.killerSpecialInstinct()) {
-                                // role specific color instinct
-                                cir.setReturnValue(role.color());
+                    Role role = gameWorldComponent.getRole(targetPlayer);
+                    if (role != null) {
+                        // If the current player is killer and is alive
+                        if (WatheClient.isKiller() || gameWorldComponent.isRole(player, KinsWatheRoles.HACKER)) {
+                            if (WyspiaExpressRoles.TRUE_NEUTRALS.contains(role)) {
+                                cir.setReturnValue(0x4EDD35);
+                                cir.cancel();
+                                return;
+                            } else if (WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)) {
+                                if (WyspiaExpress.SERVER_CONFIG.killerSpecialInstinct()) {
+                                    // role specific color instinct
+                                    cir.setReturnValue(role.color());
+                                    cir.cancel();
+                                    return;
+                                }
+                                // generic killer red
+                                cir.setReturnValue(MathHelper.hsvToRgb(0.0F, 1.0F, 0.6F));
                                 cir.cancel();
                                 return;
                             }
-                            // generic killer red
-                            cir.setReturnValue(MathHelper.hsvToRgb(0.0F, 1.0F, 0.6F));
-                            cir.cancel();
-                            return;
                         }
                     }
                 }
