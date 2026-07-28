@@ -12,6 +12,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.config.RoleConfig;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
@@ -34,26 +35,28 @@ public class PlayerCultistComponent implements AutoSyncedComponent, ServerTickin
     @Override
     public void serverTick() {
 
+        var config = WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig;
         if(gameWorldComponent.isRole(this.player, WyspiaExpressRoles.CULT_LEADER)
                 && gameWorldComponent.isRunning()
                 && GameFunctions.isPlayerAliveAndSurvival(this.player)
-                && WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.enableConversion()
+                && config.enableConversion()
         ) {
             ServerPlayerEntity player = (ServerPlayerEntity) this.player;
 
             Collection<ServerPlayerEntity> nearby =
-                    PlayerLookup.around(player.getServerWorld(), player.getPos(), 5.0);
+                    PlayerLookup.around(player.getServerWorld(), player.getPos(), config.conversionRange());
 
             for (ServerPlayerEntity other : nearby) {
-                if (other == player || GameFunctions.isPlayerSpectatingOrCreative(other)) continue;
+                if (other == player || GameFunctions.isPlayerSpectatingOrCreative(other)
+                        || other.isInvisible() || gameWorldComponent.isRole(other, WyspiaExpressRoles.CULTIST) ) continue;
 
                 PlayerCultistComponent otherPlayer = PlayerCultistComponent.KEY.get(other);
-                if(!otherPlayer.isConverted() && !gameWorldComponent.isRole(other, WyspiaExpressRoles.CULTIST)) {
+                if(!otherPlayer.isConverted()) {
                     otherPlayer.conversionTick++;
                     if(otherPlayer.isConverted()) {
                         otherPlayer.forceSync();
                         player.playSoundToPlayer(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.7f, 1.0f);
-                        ShopUtil.addCoin(player,WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.convertionReward());
+                        ShopUtil.addCoin(player,config.convertionReward());
                     }
                     else otherPlayer.sync();
                 }
