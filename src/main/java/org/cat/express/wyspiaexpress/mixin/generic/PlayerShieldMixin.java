@@ -20,9 +20,11 @@ public class PlayerShieldMixin {
     // force to check if the player can die first, before running any logic that gets injected
     @Inject(method = "killPlayer(Lnet/minecraft/entity/player/PlayerEntity;ZLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)V", at = @At("HEAD"), cancellable = true)
     private static void wyspiaexpress$checkAllowPlayerDeath(PlayerEntity victim, boolean spawnBody, @Nullable PlayerEntity killer, Identifier deathReason, CallbackInfo ci) {
+        PlayerEffectComponent effectComponent = PlayerEffectComponent.KEY.get(victim);
         if (!AllowPlayerDeath.EVENT.invoker().allowDeath(victim, killer, deathReason)) {
-            // right now hardcoded the slowness duration, need to change in the next version bump
-            PlayerEffectComponent.KEY.get(victim).setStunTicks(WyspiaExpress.SERVER_CONFIG.blockStunTicks());
+
+            if(WyspiaExpress.SERVER_CONFIG.blockStunTicks() > effectComponent.stunTicks)
+                effectComponent.setStunTicks(WyspiaExpress.SERVER_CONFIG.blockStunTicks());
             ci.cancel();
             return;
         }
@@ -31,7 +33,9 @@ public class PlayerShieldMixin {
         if (component.getPsychoTicks() > 0) {
             // they still have psycho protection
             if (component.getArmour() > 0) {
-                PlayerEffectComponent.KEY.get(victim).setStunTicks(WyspiaExpress.SERVER_CONFIG.psychoStunTicks()); // use a different stun duration
+
+                if(WyspiaExpress.SERVER_CONFIG.psychoStunTicks()> effectComponent.stunTicks)
+                    effectComponent.setStunTicks(WyspiaExpress.SERVER_CONFIG.psychoStunTicks()); // use a different stun duration
                 component.setArmour(component.getArmour() - 1);
                 component.sync();
                 victim.playSoundToPlayer(WatheSounds.ITEM_PSYCHO_ARMOUR, SoundCategory.MASTER, 5F, 1F);
