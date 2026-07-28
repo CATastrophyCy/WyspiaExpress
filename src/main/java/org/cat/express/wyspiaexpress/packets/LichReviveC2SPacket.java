@@ -20,6 +20,7 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
@@ -34,6 +35,7 @@ import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
 import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
@@ -75,20 +77,22 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
     public static void handle(@NotNull LichReviveC2SPacket payload, @NotNull ServerPlayNetworking.Context context) {
         ServerPlayerEntity player = context.player();
         context.server().execute(() -> {
-            GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
+            ServerWorld world = player.getServerWorld();
+            if(world == null) return;
+            GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(world);
             AbilityCooldownComponent abilityPlayerComponent = AbilityCooldownComponent.KEY.get(player);
-            LichReviveComponent reviveComponent = LichReviveComponent.KEY.get(player.getWorld());
+            LichReviveComponent reviveComponent = LichReviveComponent.KEY.get(world);
             if (gameWorldComponent.isRole(player, WyspiaExpressRoles.LICH) && GameFunctions.isPlayerAliveAndSurvival(player)
                 && reviveComponent.getAvailableRevives() > 0 && !abilityPlayerComponent.isCooldown()) {
 
-                List<PlayerBodyEntity> playerBodyEntities = player.getWorld().getEntitiesByType(TypeFilter.equals(PlayerBodyEntity.class),
+                List<PlayerBodyEntity> playerBodyEntities = world.getEntitiesByType(TypeFilter.equals(PlayerBodyEntity.class),
                         player.getBoundingBox().expand(10), (playerBodyEntity -> playerBodyEntity.getUuid().equals(payload.playerBody())));
 
                 if (!playerBodyEntities.isEmpty()) {
                     // check if the selected body can be revived
                     PlayerBodyEntity body = playerBodyEntities.getFirst();
-                    var revived = (ServerPlayerEntity) player.getServerWorld().getPlayerByUuid(body.getPlayerUuid());
-                    var world_component = WorldComponent.KEY.get(player.getWorld());
+                    var revived = (ServerPlayerEntity) world.getPlayerByUuid(body.getPlayerUuid());
+                    var world_component = WorldComponent.KEY.get(world);
                     if(revived == null
                             || gameWorldComponent.getRole(revived) == WyspiaExpressRoles.LICH_GHOUL
                             || !GameFunctions.isPlayerSpectatingOrCreative(revived)
@@ -103,44 +107,16 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
                     Collections.shuffle(roles);
                     var selectedRole = roles.getFirst();
 
-                    // clear their hotbar of items thats not Key
-                    PlayerInventory inv = revived.getInventory();
-                    for (int i = 0; i < PlayerInventory.getHotbarSize(); i++) {
-                        ItemStack stack = inv.getStack(i);
-                        // remove any item thats not key nor phone
-                        if (!stack.isOf(WatheItems.KEY) && !stack.isOf(KinsWatheItems.PHONE)) {
-                            revived.getInventory().setStack(i, ItemStack.EMPTY);
-                        }
-                    }
-                    // teleport revived player to body and discard the body
-                    TeleportTarget target = new TeleportTarget(player.getServerWorld(),player.getPos(), Vec3d.ZERO, body.getYaw(), body.getPitch(), TeleportTarget.NO_OP);
+                    // teleport revived to player and discard the body
+                    TeleportTarget target = new TeleportTarget(world, player.getPos(), Vec3d.ZERO, body.getYaw(), body.getPitch(), TeleportTarget.NO_OP);
                     revived.teleportTo(target);
-                    revived.changeGameMode(GameMode.ADVENTURE);
-                    world_component.removePlayerDead(revived.getUuid());
-                    body.remove(Entity.RemovalReason.DISCARDED); // like it never existed
-                    // sound effect to revived player
-                    revived.playSoundToPlayer(SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.PLAYERS, 0.7f, 1.0f);
-                    // stun the revived player
-                    PlayerEffectComponent.KEY.get(revived).setStunTicks(WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.stun());
-                    // reset components
-                    PlayerCultistComponent.KEY.get(revived).reset();
-                    PlayerFreezeComponent.KEY.get(revived).reset();
-                    PlayerMoodComponent.KEY.get(revived).reset();
-                    PlayerDepressedComponent.KEY.get(revived).reset();
-                    WorldModifierComponent.KEY.get(revived.getWorld()).getModifiers(revived).remove(Noellesroles.GUESSER);
-                    // initialize ghoul role
-                    gameWorldComponent.addRole(revived, selectedRole);
+                    body.remove(Entity.RemovalReason.DISCARDED);
+
+                    WyspiaExpressGameFunctions.revivedPlayer(gameWorldComponent, world_component, revived, selectedRole,
+                            List.of(WatheItems.KEY, KinsWatheItems.PHONE));
                     ShopUtil.setCoin(revived, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.startingCoin());
-                    ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, selectedRole);
-                    ServerPlayNetworking.send(
-                            revived,
-                            new AnnounceWelcomePayload(
-                                    RoleAnnouncementTexts.ROLE_ANNOUNCEMENT_TEXTS.indexOf(Harpymodloader.autogeneratedAnnouncements.get(selectedRole)),
-                                    gameWorldComponent.getAllKillerTeamPlayers().size(),
-                                    0
-                            )
-                    );
-                    TrainVoicePlugin.resetPlayer(revived.getUuid());
+
+                    WyspiaExpressGameFunctions.sendRevivedMessage(world, gameWorldComponent, player, revived);
                 }
             }
         });

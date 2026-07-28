@@ -16,6 +16,7 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
@@ -24,6 +25,7 @@ import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
@@ -53,11 +55,13 @@ public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
     public static void handle(@NotNull RitualDaggerC2SPacket payload, @NotNull ServerPlayNetworking.Context context) {
         ServerPlayerEntity player = context.player();
         context.server().execute(() -> {
+            ServerWorld world = player.getServerWorld();
+            if(world == null) return;
 
             ItemStack mainHandStack = player.getMainHandStack();
             if (!mainHandStack.isOf(WyspiaExpressItems.RITUAL_DAGGER)) return;
             if (player.getItemCooldownManager().isCoolingDown(mainHandStack.getItem())) return;
-            if (!(player.getServerWorld().getEntityById(payload.target()) instanceof @NotNull ServerPlayerEntity target) || target.distanceTo(player) > 3.0F) return;
+            if (!(world.getEntityById(payload.target()) instanceof @NotNull ServerPlayerEntity target) || target.distanceTo(player) > 3.0F) return;
 
             GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(target.getWorld());
 
@@ -94,8 +98,9 @@ public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
                             + reviveComponent.getAvailableRevives() < reviveComponent.getMaxRevives())
                         reviveComponent.incrementAvailableRevives();
                 }
-                WorldModifierComponent.KEY.get(player.getWorld()).getModifiers(player).remove(Noellesroles.GUESSER);
+                WorldModifierComponent.KEY.get(world).getModifiers(player).remove(Noellesroles.GUESSER);
                 TrainVoicePlugin.resetPlayer(target.getUuid());
+                WyspiaExpressGameFunctions.sendConvertedMessage(world, gameWorldComponent, player, target);
             }
 
             player.swingHand(Hand.MAIN_HAND);
