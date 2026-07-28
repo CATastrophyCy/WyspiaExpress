@@ -83,6 +83,19 @@ public abstract class RoleNameRendererMixin {
                     .append(Text.literal(" || Depression: ").setStyle(Style.EMPTY.withColor(white)))
                     .append(Text.literal(depressionPercentage + "%").setStyle(Style.EMPTY.withColor( (alpha << 24 ) | 0xA712E0)));
 
+            PlayerCultistComponent  cultist = PlayerCultistComponent.KEY.get(targetPlayer);
+            if(cultist.getConversionTick() > 0 && !cultist.isConverted()){
+                hudText
+                    .append(Text.literal(" || Conversion: ").setStyle(Style.EMPTY.withColor(white)))
+                    .append(Text.literal(cultist.getConversionProgress() * 100 + "%").setStyle(Style.EMPTY.withColor( (alpha << 24) | WyspiaExpressRoles.CULT_LEADER.color())));
+            }
+            HackerComponent hacker = HackerComponent.KEY.get(targetPlayer);
+            if( hacker.hackingTime > 0 && hacker.hackingTime < KinsWatheConfig.HANDLER.instance().HackerHackingTime * 20){
+                hudText
+                        .append(Text.literal(" || Hacking: ").setStyle(Style.EMPTY.withColor(white)))
+                        .append(Text.literal(((double)hacker.hackingTime / (KinsWatheConfig.HANDLER.instance().HackerHackingTime * 20))
+                                * 100 + "%").setStyle(Style.EMPTY.withColor( (alpha << 24) | KinsWatheRoles.HACKER.color())));
+            }
             int y = renderer.fontHeight / 2 + 1 + OFF_SET;
             context.drawTextWithShadow(renderer, hudText, -renderer.getWidth(hudText) / 2, y, white);
             y+= renderer.fontHeight  + 1;
@@ -93,19 +106,18 @@ public abstract class RoleNameRendererMixin {
 
             if (playerPoisonComponent.poisonTicks > 0) {
                 if(playerPoisonComponent.poisoner != null && playerPoisonComponent.poisoner.equals(DELUSION_MARKER)) {
-                    texts.add(Text.literal("Deluded").setStyle(Style.EMPTY.withColor( (alpha << 24) | 0x9300FF))); ;
+                    texts.add(Text.literal("Deluded ").setStyle(Style.EMPTY.withColor( (alpha << 24) | 0x9300FF))); ;
                 }
                 else{
-                    texts.add(Text.literal("Poisoned").setStyle(Style.EMPTY.withColor( (alpha << 24) | Color.RED.getRGB()))); ;
+                    texts.add(Text.literal("Poisoned ").setStyle(Style.EMPTY.withColor( (alpha << 24) | Color.RED.getRGB())));
                 }
+                texts.add(Text.literal(playerPoisonComponent.poisonTicks / 20 + "s").setStyle(Style.EMPTY.withColor(white)));
             }
 
-            PlayerCultistComponent  cultist = PlayerCultistComponent.KEY.get(targetPlayer);
             if(cultist.isConverted()){
                 texts.add(Text.literal("Converted").setStyle(Style.EMPTY.withColor( (alpha << 24) | WyspiaExpressRoles.CULT_LEADER.color())));
             }
 
-            HackerComponent hacker = HackerComponent.KEY.get(targetPlayer);
             if(hacker.hackingTime >= KinsWatheConfig.HANDLER.instance().HackerHackingTime * 20){
                 texts.add(Text.literal("Hacked").setStyle(Style.EMPTY.withColor( (alpha << 24) | KinsWatheRoles.HACKER.color())));
             }

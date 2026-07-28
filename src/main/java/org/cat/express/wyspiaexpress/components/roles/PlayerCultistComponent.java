@@ -67,7 +67,9 @@ public class PlayerCultistComponent implements AutoSyncedComponent, ServerTickin
     public int getConversionTick() {
         return this.conversionTick;
     }
-
+    public double getConversionProgress(){
+        return (double) this.conversionTick / WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.conversionTime();
+    }
     public boolean isConverted(){
         return this.conversionTick > WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.conversionTime();
     }
