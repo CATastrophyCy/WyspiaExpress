@@ -8,21 +8,18 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.KinsWatheConfig;
 import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
-import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
 import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
-import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -87,6 +84,11 @@ public abstract class PlayerDeathMixin {
             component.reset();
             var world_component = WorldComponent.KEY.get(world);
             world_component.reset();
+
+            Text message = Text.literal("Round has ended!\n").setStyle(Style.EMPTY.withItalic(true).withColor(Formatting.DARK_GRAY));
+            for(ServerPlayerEntity player : world.getPlayers()) {
+                player.sendMessage(message, false);
+            }
         }
         @Unique
         private static boolean wyspiaexpress$hasRole(ServerWorld world, GameWorldComponent component, Role role) {

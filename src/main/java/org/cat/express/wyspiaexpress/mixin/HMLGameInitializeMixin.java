@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.Texts;
 import net.minecraft.util.Formatting;
@@ -176,6 +177,10 @@ public abstract class HMLGameInitializeMixin {
         // end initialization
         GameTimeComponent gameTimeComponent = GameTimeComponent.KEY.get(serverWorld);
         WyspiaExpressRoles.GAME_START_TIME = gameTimeComponent.time;
+        Text message = Text.literal("A new round has started!\n").setStyle(Style.EMPTY.withItalic(true).withColor(Formatting.BLUE));
+        for(ServerPlayerEntity player : serverWorld.getPlayers()) {
+            player.sendMessage(message, false);
+        }
         ci.cancel();
     }
 
