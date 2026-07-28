@@ -27,6 +27,7 @@ import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -98,13 +99,13 @@ public class WyspiaExpressGameFunctions {
 
         Text victimName = victim.getDisplayName();
         Text killerName = killer != null ? killer.getDisplayName() : null;
-        Text reason = deathReason != null ? Text.translatable(deathReason.toTranslationKey()) : Text.literal("Unknown reason");
+        Text reason = deathReason != null ? getDeathReason(deathReason) : Text.literal("Unknown reason");
         Text victimRole = Text.literal(WyspiaExpressRoles.getRoleString(gameWorldComponent.getRole(victim)));
         Text killerRole = killer != null ? Text.literal(WyspiaExpressRoles.getRoleString(gameWorldComponent.getRole(killer))) : null;
         MutableText message = Text.literal("You have fallen to ").append(reason);
         if(killerName != null)
             message.append(" by ").append(killerName).append("[").append(killerRole).append("]");
-        message.append("!\n");
+        message.setStyle(Style.EMPTY.withColor(Formatting.RED)).append("!\n").setStyle(Style.EMPTY.withColor(Formatting.RED));
 
         if (gameHasAliveRole(world, gameWorldComponent, WyspiaExpressRoles.EDDIE_WAFFLES)) {
             message.append(Text.literal("Eddie Waffles awaits your guidance")).
@@ -128,7 +129,7 @@ public class WyspiaExpressGameFunctions {
             .append(" [").append(victimRole).append("] has died to ").append(reason);
         if(killerName != null)
             deathMessage.append(" by ").append(killerName).append("[").append(killerRole).append("]");
-
+        deathMessage.setStyle(Style.EMPTY.withColor(Formatting.RED));
         sendMessageToDead(world, deathMessage, victim);
     }
     public static void sendRevivedMessage(@NotNull ServerWorld world, @NotNull GameWorldComponent gameWorldComponent,
@@ -158,6 +159,9 @@ public class WyspiaExpressGameFunctions {
                 return true;
         }
         return false;
+    }
+    public static MutableText getDeathReason(@NotNull Identifier reason){
+        return Text.translatable("death_reason." + reason.toTranslationKey());
     }
     public static boolean gameHasAliveRole(@NotNull ServerWorld world,@NotNull GameWorldComponent component, @NotNull List<Role> roles) {
         for(ServerPlayerEntity player : world.getPlayers()){

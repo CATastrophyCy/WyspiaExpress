@@ -10,6 +10,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +27,7 @@ public class PlayerShieldMixin {
 
             if(WyspiaExpress.SERVER_CONFIG.blockStunTicks() > effectComponent.stunTicks)
                 effectComponent.setStunTicks(WyspiaExpress.SERVER_CONFIG.blockStunTicks());
-            Text message = Text.literal("Your protection saved you from ").append( Text.translatable(deathReason.toTranslationKey())).append("!");
+            Text message = Text.literal("Your protection saved you from ").append(WyspiaExpressGameFunctions.getDeathReason(deathReason)).append("!");
             victim.sendMessage(message, true);
             ci.cancel();
             return;
@@ -42,7 +43,7 @@ public class PlayerShieldMixin {
                 component.setArmour(component.getArmour() - 1);
                 component.sync();
                 victim.playSoundToPlayer(WatheSounds.ITEM_PSYCHO_ARMOUR, SoundCategory.MASTER, 5F, 1F);
-                Text message = Text.literal("Your protection saved you from ").append( Text.translatable(deathReason.toTranslationKey())).append("!");;
+                Text message = Text.literal("Your protection saved you from ").append(WyspiaExpressGameFunctions.getDeathReason(deathReason)).append("!");;
                 victim.sendMessage(message, true);
                 ci.cancel();
                 return;
