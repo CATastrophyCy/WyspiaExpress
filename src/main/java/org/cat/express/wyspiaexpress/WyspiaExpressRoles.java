@@ -393,6 +393,7 @@ public class WyspiaExpressRoles {
         });
     }
     public static String getRoleString(Role role){
+        if(role == null) return "Unknown role";
         return role.identifier().getPath().toLowerCase();
     }
     private static void registerRoleConfigs(){
