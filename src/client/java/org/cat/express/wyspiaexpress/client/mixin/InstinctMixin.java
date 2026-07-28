@@ -88,32 +88,29 @@ public abstract class InstinctMixin {
             // target has to be alive
             if(!GameFunctions.isPlayerAliveAndSurvival(targetPlayer)) return;
 
-            // handle alive player instinct with instinct pressed, doesn't handle passive instinct
-            if (GameFunctions.isPlayerAliveAndSurvival(player)  && WatheClient.isInstinctEnabled()) {
+            // handle invisible players
 
-                // handle invisible players
-                if(targetPlayer.isInvisible()) {
-                    // Phantom special case, allow killer buddies to see them
-                    if(gameWorldComponent.isRole(targetPlayer, Noellesroles.PHANTOM) &&
-                            WatheClient.isKiller()) {
-                        cir.setReturnValue(MathHelper.hsvToRgb(0.0F, 1.0F, 0.6F));
-                        cir.cancel();
-                        return;
-                    }
+            if(targetPlayer.isInvisible()) {
+                // Phantom allow killer buddies to see them
+                if(!gameWorldComponent.isRole(targetPlayer, Noellesroles.PHANTOM) || !WatheClient.isKiller()) {
                     cir.setReturnValue(-1);
                     cir.cancel();
                     return;
                 }
-                // if the player is elusive then hide them from all active instinct, including starstruck (but not other passive instinct)
-                if(worldModifierComponent.isModifier(targetPlayer, WyspiaExpressRoles.ELUSIVE)) {
-                    double distance = player.squaredDistanceTo(targetPlayer);
-                    if(distance >= WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.minimumDistance() * WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.minimumDistance()
-                            && distance <= WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.maximumDistance() * WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.maximumDistance() ) {
-                        cir.setReturnValue(-1);
-                        cir.cancel();
-                        return;
-                    }
+            }
+            // if the player is elusive then hide them
+            if(worldModifierComponent.isModifier(targetPlayer, WyspiaExpressRoles.ELUSIVE)) {
+                double distance = player.squaredDistanceTo(targetPlayer);
+                if(distance >= WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.minimumDistance() * WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.minimumDistance()
+                        && distance <= WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.maximumDistance() * WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.maximumDistance() ) {
+                    cir.setReturnValue(-1);
+                    cir.cancel();
+                    return;
                 }
+            }
+
+            // handle alive player instinct with instinct pressed, doesn't handle passive instinct
+            if (GameFunctions.isPlayerAliveAndSurvival(player)  && WatheClient.isInstinctEnabled()) {
 
                 Role role = gameWorldComponent.getRole(targetPlayer);
                 if (role != null) {
