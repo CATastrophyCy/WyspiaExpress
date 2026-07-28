@@ -3,7 +3,6 @@ package org.cat.express.wyspiaexpress.client.mixin.roles.cult;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.client.WatheClient;
 import dev.doctor4t.wathe.client.gui.RoleNameRenderer;
-import dev.doctor4t.wathe.game.GameFunctions;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;

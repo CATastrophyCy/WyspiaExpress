@@ -1,16 +1,16 @@
 package org.cat.express.wyspiaexpress.mixin.roles;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.doctor4t.wathe.entity.PlayerBodyEntity;
 import dev.doctor4t.wathe.game.GameFunctions;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 import org.cat.express.wyspiaexpress.components.PlayerBodyEntityComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.spongepowered.asm.mixin.Mixin;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(GameFunctions.class)

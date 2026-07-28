@@ -1,7 +1,6 @@
 package org.cat.express.wyspiaexpress.mixin.noellesroles;
 
 import dev.doctor4t.wathe.game.GameConstants;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.server.network.ServerPlayerEntity;

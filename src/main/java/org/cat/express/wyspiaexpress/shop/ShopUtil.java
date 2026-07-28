@@ -22,7 +22,6 @@ import net.minecraft.text.Text;
 import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.BsXinQin.kinswathe.component.AbilityPlayerComponent;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
-import org.BsXinQin.kinswathe.roles.hacker.HackerComponent;
 import org.BsXinQin.kinswathe.roles.technician.TechnicianComponent;
 import org.agmas.noellesroles.ModItems;
 import org.cat.express.wyspiaexpress.WyspiaExpress;

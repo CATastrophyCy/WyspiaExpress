@@ -1,11 +1,9 @@
 package org.cat.express.wyspiaexpress.client.roles;
 
 import dev.doctor4t.wathe.entity.PlayerBodyEntity;
-import dev.doctor4t.wathe.game.GameFunctions;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
 import org.cat.express.wyspiaexpress.client.WyspiaexpressClient;
 import org.cat.express.wyspiaexpress.components.PlayerBodyEntityComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
