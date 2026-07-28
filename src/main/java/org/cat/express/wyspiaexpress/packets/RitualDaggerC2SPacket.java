@@ -27,6 +27,7 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
+import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.jetbrains.annotations.NotNull;
 
 public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
@@ -69,6 +70,8 @@ public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
             //  only convert if the game is actually running and they are not already cultist
             if (gameWorldComponent.isRunning() && !gameWorldComponent.isRole(target, WyspiaExpressRoles.CULTIST)) {
                 gameWorldComponent.addRole(target, WyspiaExpressRoles.CULTIST);
+                PlayerCultistComponent.KEY.get(target).reset();
+
                 ServerPlayNetworking.send(
                         target,
                         new AnnounceWelcomePayload(
