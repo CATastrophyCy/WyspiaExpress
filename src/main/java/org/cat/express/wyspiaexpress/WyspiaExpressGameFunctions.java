@@ -47,10 +47,7 @@ import org.cat.express.wyspiaexpress.config.ServerConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WyspiaExpressGameFunctions {
@@ -97,59 +94,60 @@ public class WyspiaExpressGameFunctions {
     public static void sendPlayerDeathMessage(@NotNull ServerWorld world, @NotNull GameWorldComponent gameWorldComponent,
                                               @NotNull PlayerEntity victim, @Nullable PlayerEntity killer, @Nullable Identifier deathReason) {
 
-        Text victimName = victim.getDisplayName();
-        Text killerName = killer != null ? killer.getDisplayName() : null;
-        Text reason = deathReason != null ? getDeathReason(deathReason) : Text.literal("Unknown reason");
-        Text victimRole = Text.literal(WyspiaExpressRoles.getRoleString(gameWorldComponent.getRole(victim)));
-        Text killerRole = killer != null ? Text.literal(WyspiaExpressRoles.getRoleString(gameWorldComponent.getRole(killer))) : null;
+        Text victimName = ((MutableText) Objects.requireNonNull(victim.getDisplayName())).setStyle(Style.EMPTY.withItalic(true));
+        Text killerName = killer != null ? ((MutableText) Objects.requireNonNull(killer.getDisplayName())).setStyle(Style.EMPTY.withItalic(true)) : null;
+        Text reason = deathReason != null ? getDeathReason(deathReason).setStyle(Style.EMPTY.withItalic(true)) : Text.literal("Unknown reason");
+        Text victimRole = Text.literal(WyspiaExpressRoles.getRoleString(gameWorldComponent.getRole(victim))).setStyle(Style.EMPTY.withItalic(true));
+        Text killerRole = killer != null ? Text.literal(WyspiaExpressRoles.getRoleString(gameWorldComponent.getRole(killer))).setStyle(Style.EMPTY.withItalic(true)) : null;
         MutableText message = Text.literal("You have fallen to ").append(reason);
         if(killerName != null)
-            message.append(" by ").append(killerName).append("[").append(killerRole).append("]");
-        message.setStyle(Style.EMPTY.withColor(Formatting.RED)).append("!\n").setStyle(Style.EMPTY.withColor(Formatting.RED));
+            message.append(" by ").append(killerName).append(" [").append(killerRole).append("]");
+        message.setStyle(Style.EMPTY.withColor(Formatting.RED)).append("\n");
 
         if (gameHasAliveRole(world, gameWorldComponent, WyspiaExpressRoles.EDDIE_WAFFLES)) {
-            message.append(Text.literal("Eddie Waffles awaits your guidance")).
+            message.append(Text.literal("Eddie Waffles awaits your guidance").setStyle(Style.EMPTY.withColor(Formatting.WHITE))).
                     append(
                             Text.literal("[click here to join him]\n")
                                     .setStyle(Style.EMPTY
-                                            .withColor(net.minecraft.util.Formatting.AQUA)
+                                            .withColor(Formatting.AQUA)
                                             .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sv join 5"))
+                                            .withItalic(true)
                                     )
                     );
         }
         if(gameHasAliveRole(world, gameWorldComponent, WyspiaExpressRoles.LICH)) {
-            message.append(Text.literal("There is still a Lich that could revive you!\n"));
+            message.append(Text.literal("There is still a Lich that could revive you\n").setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN)));
         }
         if(gameHasAliveRole(world, gameWorldComponent, WyspiaExpressRoles.CULT_LEADER) && PlayerCultistComponent.KEY.get(victim).isConverted()) {
-            message.append(Text.literal("You are fortunate enough to be converted by a Cult Leader!\n"));
+            message.append(Text.literal("You are fortunate enough to be converted by a Cult Leader\n").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
         }
         victim.sendMessage(message, false);
 
         MutableText deathMessage = Text.literal("").append(victimName)
             .append(" [").append(victimRole).append("] has died to ").append(reason);
         if(killerName != null)
-            deathMessage.append(" by ").append(killerName).append("[").append(killerRole).append("]");
-        deathMessage.setStyle(Style.EMPTY.withColor(Formatting.RED));
-        sendMessageToDead(world, deathMessage, victim);
+            deathMessage.append(" by ").append(killerName).append(" [").append(killerRole).append("]");
+        deathMessage.append("\n").setStyle(Style.EMPTY.withColor(Formatting.WHITE));
+        sendMessagePlayers(world, deathMessage, victim);
     }
     public static void sendRevivedMessage(@NotNull ServerWorld world, @NotNull GameWorldComponent gameWorldComponent,
                                           @NotNull PlayerEntity player, @NotNull PlayerEntity revived){
-        Text revivedName = revived.getDisplayName();
-        Text playerName = player.getName();
-        Text playerRole = Text.literal(WyspiaExpressRoles.getRoleString(gameWorldComponent.getRole(player)));
+        Text revivedName = ((MutableText) Objects.requireNonNull(revived.getDisplayName())).setStyle(Style.EMPTY.withItalic(true));
+        Text playerName = ((MutableText) Objects.requireNonNull(player.getDisplayName())).setStyle(Style.EMPTY.withItalic(true));
+        Text playerRole = Text.literal(WyspiaExpressRoles.getRoleString(gameWorldComponent.getRole(player))).setStyle(Style.EMPTY.withItalic(true));
 
         Text revivedMessage = Text.literal("").append(revivedName).append(" has been revived by ")
-                .append(playerName).append("[").append(playerRole).append("]!");
-        sendMessageToDead(world, revivedMessage);
+                .append(playerName).append(" [").append(playerRole).append("]");
+        sendMessagePlayers(world, revivedMessage);
     }
     public static void sendConvertedMessage(@NotNull ServerWorld world, @NotNull GameWorldComponent gameWorldComponent,
                                      @NotNull PlayerEntity player, @NotNull PlayerEntity converted) {
-        Text convertedName = converted.getDisplayName();
-        Text playerName = player.getName();
+        Text convertedName = ((MutableText) Objects.requireNonNull(converted.getDisplayName())).setStyle(Style.EMPTY.withItalic(true));
+        Text playerName = ((MutableText) Objects.requireNonNull(player.getDisplayName())).setStyle(Style.EMPTY.withItalic(true));
 
         Text convertedMessage = Text.literal("").append(convertedName).append(" has been forcefully converted by ")
-                .append(playerName).append("!");
-        sendMessageToDead(world, convertedMessage);
+                .append(playerName).append("");
+        sendMessagePlayers(world, convertedMessage);
     }
     public static boolean gameHasAliveRole(@NotNull ServerWorld world,@NotNull GameWorldComponent component,@NotNull Role role) {
         for(ServerPlayerEntity player : world.getPlayers()){
@@ -173,20 +171,20 @@ public class WyspiaExpressGameFunctions {
         }
         return false;
     }
-    public static void sendMessageToDead(@NotNull ServerWorld world, @NotNull Text message) {
-        sendMessageToDead(world, message, (PlayerEntity) null);
+    public static void sendMessagePlayers(@NotNull ServerWorld world, @NotNull Text message) {
+        sendMessagePlayers(world, message, (PlayerEntity) null);
     }
-    public static void sendMessageToDead(@NotNull ServerWorld world, @NotNull Text message, @Nullable PlayerEntity excluded) {
+    public static void sendMessagePlayers(@NotNull ServerWorld world, @NotNull Text message, @Nullable PlayerEntity excluded) {
         for(ServerPlayerEntity player: world.getPlayers()){
-            if(GameFunctions.isPlayerAliveAndSurvival(player) || player == excluded){
+            if(player == excluded){
                 continue;
             }
             player.sendMessage(message, false);
         }
     }
-    public static void sendMessageToDead(@NotNull ServerWorld world, @NotNull Text message, @NotNull List<PlayerEntity> excluded) {
+    public static void sendMessagePlayers(@NotNull ServerWorld world, @NotNull Text message, @NotNull List<PlayerEntity> excluded) {
         for(ServerPlayerEntity player: world.getPlayers()){
-            if(GameFunctions.isPlayerAliveAndSurvival(player) || excluded.contains(player)){
+            if(excluded.contains(player)){
                 continue;
             }
             player.sendMessage(message, false);
