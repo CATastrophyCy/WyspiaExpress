@@ -177,10 +177,7 @@ public abstract class HMLGameInitializeMixin {
         // end initialization
         GameTimeComponent gameTimeComponent = GameTimeComponent.KEY.get(serverWorld);
         WyspiaExpressRoles.GAME_START_TIME = gameTimeComponent.time;
-        Text message = Text.literal("A new round has started!\n").setStyle(Style.EMPTY.withItalic(true).withColor(Formatting.BLUE));
-        for(ServerPlayerEntity player : serverWorld.getPlayers()) {
-            player.sendMessage(message, false);
-        }
+
         ci.cancel();
     }
 

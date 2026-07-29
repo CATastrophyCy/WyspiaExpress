@@ -85,10 +85,6 @@ public abstract class PlayerDeathMixin {
             var world_component = WorldComponent.KEY.get(world);
             world_component.reset();
 
-            Text message = Text.literal("Round has ended!\n").setStyle(Style.EMPTY.withItalic(true).withColor(Formatting.DARK_GRAY));
-            for(ServerPlayerEntity player : world.getPlayers()) {
-                player.sendMessage(message, false);
-            }
         }
         @Unique
         private static boolean wyspiaexpress$hasRole(ServerWorld world, GameWorldComponent component, Role role) {
