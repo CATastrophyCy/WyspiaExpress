@@ -128,7 +128,7 @@ public class WyspiaExpressGameFunctions {
         if(killerName != null)
             deathMessage.append(" by ").append(killerName).append(" [").append(killerRole).append("]");
         deathMessage.append("\n").setStyle(Style.EMPTY.withColor(Formatting.WHITE));
-        sendMessagePlayers(world, deathMessage, victim);
+        sendMessageDeadPlayers(world, deathMessage, victim);
     }
     public static void sendRevivedMessage(@NotNull ServerWorld world, @NotNull GameWorldComponent gameWorldComponent,
                                           @NotNull PlayerEntity player, @NotNull PlayerEntity revived){
@@ -138,7 +138,7 @@ public class WyspiaExpressGameFunctions {
 
         Text revivedMessage = Text.literal("").append(revivedName).append(" has been revived by ")
                 .append(playerName).append(" [").append(playerRole).append("]");
-        sendMessagePlayers(world, revivedMessage);
+        sendMessageDeadPlayers(world, revivedMessage);
     }
     public static void sendConvertedMessage(@NotNull ServerWorld world, @NotNull GameWorldComponent gameWorldComponent,
                                      @NotNull PlayerEntity player, @NotNull PlayerEntity converted) {
@@ -147,7 +147,7 @@ public class WyspiaExpressGameFunctions {
 
         Text convertedMessage = Text.literal("").append(convertedName).append(" has been forcefully converted by ")
                 .append(playerName).append("");
-        sendMessagePlayers(world, convertedMessage);
+        sendMessageDeadPlayers(world, convertedMessage);
     }
     public static boolean gameHasAliveRole(@NotNull ServerWorld world,@NotNull GameWorldComponent component,@NotNull Role role) {
         for(ServerPlayerEntity player : world.getPlayers()){
@@ -171,20 +171,20 @@ public class WyspiaExpressGameFunctions {
         }
         return false;
     }
-    public static void sendMessagePlayers(@NotNull ServerWorld world, @NotNull Text message) {
-        sendMessagePlayers(world, message, (PlayerEntity) null);
+    public static void sendMessageDeadPlayers(@NotNull ServerWorld world, @NotNull Text message) {
+        sendMessageDeadPlayers(world, message, (PlayerEntity) null);
     }
-    public static void sendMessagePlayers(@NotNull ServerWorld world, @NotNull Text message, @Nullable PlayerEntity excluded) {
+    public static void sendMessageDeadPlayers(@NotNull ServerWorld world, @NotNull Text message, @Nullable PlayerEntity excluded) {
         for(ServerPlayerEntity player: world.getPlayers()){
-            if(player == excluded){
+            if(player == excluded || GameFunctions.isPlayerAliveAndSurvival(player)){
                 continue;
             }
             player.sendMessage(message, false);
         }
     }
-    public static void sendMessagePlayers(@NotNull ServerWorld world, @NotNull Text message, @NotNull List<PlayerEntity> excluded) {
+    public static void sendMessageDeadPlayers(@NotNull ServerWorld world, @NotNull Text message, @NotNull List<PlayerEntity> excluded) {
         for(ServerPlayerEntity player: world.getPlayers()){
-            if(excluded.contains(player)){
+            if(excluded.contains(player) || GameFunctions.isPlayerAliveAndSurvival(player)){
                 continue;
             }
             player.sendMessage(message, false);
