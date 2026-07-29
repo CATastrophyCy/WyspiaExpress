@@ -115,7 +115,7 @@ public class WyspiaExpressGameFunctions {
                                     )
                     );
         }
-        if(gameHasAliveRole(world, gameWorldComponent, WyspiaExpressRoles.LICH)) {
+        if(gameHasAliveRole(world, gameWorldComponent, WyspiaExpressRoles.LICH) && !gameWorldComponent.isRole(victim, WyspiaExpressRoles.LICH_GHOUL)) {
             message.append(Text.literal("There is still a Lich that could revive you\n").setStyle(Style.EMPTY.withColor(Formatting.DARK_GREEN)));
         }
         if(gameHasAliveRole(world, gameWorldComponent, WyspiaExpressRoles.CULT_LEADER) && PlayerCultistComponent.KEY.get(victim).isConverted()) {

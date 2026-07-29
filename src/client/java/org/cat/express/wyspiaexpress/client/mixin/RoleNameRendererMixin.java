@@ -87,7 +87,7 @@ public abstract class RoleNameRendererMixin {
             if(cultist.getConversionTick() > 0 && !cultist.isConverted()){
                 hudText
                     .append(Text.literal(" || Conversion: ").setStyle(Style.EMPTY.withColor(white)))
-                    .append(Text.literal(cultist.getConversionProgress() * 100 + "%").setStyle(Style.EMPTY.withColor( (alpha << 24) | WyspiaExpressRoles.CULT_LEADER.color())));
+                    .append(Text.literal( (int) (cultist.getConversionProgress() * 100) + "%").setStyle(Style.EMPTY.withColor( (alpha << 24) | WyspiaExpressRoles.CULT_LEADER.color())));
             }
             HackerComponent hacker = HackerComponent.KEY.get(targetPlayer);
             if( hacker.hackingTime > 0 && hacker.hackingTime < KinsWatheConfig.HANDLER.instance().HackerHackingTime * 20){
