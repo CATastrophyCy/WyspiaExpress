@@ -116,12 +116,26 @@ public abstract class InstinctMixin {
                     Role role = gameWorldComponent.getRole(targetPlayer);
                     if (role != null) {
                         // If the current player is killer and is alive
-                        if (WatheClient.isKiller() || gameWorldComponent.isRole(player, KinsWatheRoles.HACKER)) {
+                        if (WatheClient.isKiller()) {
                             if (WyspiaExpressRoles.TRUE_NEUTRALS.contains(role)) {
                                 cir.setReturnValue(0x4EDD35);
                                 cir.cancel();
                                 return;
                             } else if (WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)) {
+                                if (WyspiaExpress.SERVER_CONFIG.killerSpecialInstinct()) {
+                                    // role specific color instinct
+                                    cir.setReturnValue(role.color());
+                                    cir.cancel();
+                                    return;
+                                }
+                                // generic killer red
+                                cir.setReturnValue(MathHelper.hsvToRgb(0.0F, 1.0F, 0.6F));
+                                cir.cancel();
+                                return;
+                            }
+                        }
+                        if(gameWorldComponent.isRole(player, KinsWatheRoles.HACKER)){
+                            if (WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)) {
                                 if (WyspiaExpress.SERVER_CONFIG.killerSpecialInstinct()) {
                                     // role specific color instinct
                                     cir.setReturnValue(role.color());
@@ -162,14 +176,14 @@ public abstract class InstinctMixin {
         PlayerPoisonComponent playerPoisonComponent = PlayerPoisonComponent.KEY.get(targetPlayer);
         StarstruckComponent starstruckComponent = StarstruckComponent.KEY.get(targetPlayer);
         PlayerHearDeadComponent playerHearDeadComponent = PlayerHearDeadComponent.KEY.get(targetPlayer);
+        if (playerPoisonComponent.poisonTicks > 0) {
+            return Color.RED.getRGB();
+        }
         if( starstruckComponent.ticks > 0 && gameWorldComponent.isRole(targetPlayer, StarryExpressRoles.STARSTRUCK)) {
             return 0x77C2F2;
         }
         if(playerHearDeadComponent.isActive()){
             return 0x0D0A0A;
-        }
-        if (playerPoisonComponent.poisonTicks > 0) {
-            return Color.RED.getRGB();
         }
         return -1;
     }
