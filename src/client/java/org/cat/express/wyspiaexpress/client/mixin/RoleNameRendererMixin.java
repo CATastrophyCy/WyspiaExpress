@@ -93,7 +93,7 @@ public abstract class RoleNameRendererMixin {
             if( hacker.hackingTime > 0 && hacker.hackingTime < KinsWatheConfig.HANDLER.instance().HackerHackingTime * 20){
                 hudText
                         .append(Text.literal(" || Hacking: ").setStyle(Style.EMPTY.withColor(white)))
-                        .append(Text.literal(((double)hacker.hackingTime / (KinsWatheConfig.HANDLER.instance().HackerHackingTime * 20))
+                        .append(Text.literal((int)((double)hacker.hackingTime / (KinsWatheConfig.HANDLER.instance().HackerHackingTime * 20))
                                 * 100 + "%").setStyle(Style.EMPTY.withColor( (alpha << 24) | KinsWatheRoles.HACKER.color())));
             }
             int y = renderer.fontHeight / 2 + 1 + OFF_SET;
@@ -106,12 +106,11 @@ public abstract class RoleNameRendererMixin {
 
             if (playerPoisonComponent.poisonTicks > 0) {
                 if(playerPoisonComponent.poisoner != null && playerPoisonComponent.poisoner.equals(DELUSION_MARKER)) {
-                    texts.add(Text.literal("Deluded ").setStyle(Style.EMPTY.withColor( (alpha << 24) | 0x9300FF))); ;
+                    texts.add(Text.literal("Deluded " + playerPoisonComponent.poisonTicks / 20 + "s").setStyle(Style.EMPTY.withColor( (alpha << 24) | 0x9300FF))); ;
                 }
                 else{
-                    texts.add(Text.literal("Poisoned ").setStyle(Style.EMPTY.withColor( (alpha << 24) | Color.RED.getRGB())));
+                    texts.add(Text.literal("Poisoned " + playerPoisonComponent.poisonTicks / 20 + "s").setStyle(Style.EMPTY.withColor( (alpha << 24) | Color.RED.getRGB())));
                 }
-                texts.add(Text.literal(playerPoisonComponent.poisonTicks / 20 + "s").setStyle(Style.EMPTY.withColor(white)));
             }
 
             if(cultist.isConverted()){
