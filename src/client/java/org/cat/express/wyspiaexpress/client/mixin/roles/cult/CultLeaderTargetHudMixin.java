@@ -32,7 +32,9 @@ public abstract class CultLeaderTargetHudMixin {
     private static void  wyspiaexpress$getTargetPlayerHud(@NotNull TextRenderer renderer, @NotNull ClientPlayerEntity player, @NotNull DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         if (MinecraftClient.getInstance().player == null) return;
         if (WyspiaexpressClient.TARGET_PLAYER == null) return;
+        if(WyspiaexpressClient.TARGET_BODY.isInvisible()) return;
         GameWorldComponent gameWorld = GameWorldComponent.KEY.get(player.getWorld());
+
         if (gameWorld.isRole(player, WyspiaExpressRoles.CULT_LEADER) && WatheClient.isPlayerAliveAndInSurvival() && !gameWorld.isRole(WyspiaexpressClient.TARGET_PLAYER, WyspiaExpressRoles.CULTIST)) {
             context.getMatrices().push();
             context.getMatrices().translate((float) context.getScaledWindowWidth() / 2.0F, (float) context.getScaledWindowHeight() / 2.0F + 6.0F, 0.0F);
