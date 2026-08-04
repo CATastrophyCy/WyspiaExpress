@@ -25,11 +25,15 @@ public abstract class KeepGameGoingMixin {
         List<ServerPlayerEntity> players = world.getPlayers();
         List<ServerPlayerEntity> alivePlayers = players.stream().filter(GameFunctions::isPlayerAliveAndSurvival).toList();
         boolean eddieAlive = false;
+        boolean villainLicensedAlive = false;
         boolean onlyCultist = true;
         boolean cultistAlive = false;
         for (ServerPlayerEntity player : alivePlayers) {
             if (gameWorld.isRole(player, WyspiaExpressRoles.EDDIE_WAFFLES)) {
                 eddieAlive = true;
+            }
+            if (gameWorld.isRole(player, WyspiaExpressRoles.VILLAIN_LICENSED)){
+                villainLicensedAlive = true;
             }
             if(!gameWorld.isRole(player, WyspiaExpressRoles.CULTIST) && !gameWorld.isRole(player, WyspiaExpressRoles.CULT_LEADER)) {
                 onlyCultist = false;
@@ -37,7 +41,7 @@ public abstract class KeepGameGoingMixin {
             else{
                 cultistAlive = true;
             }
-            if(eddieAlive && !onlyCultist && cultistAlive){
+            if(eddieAlive && villainLicensedAlive && !onlyCultist && cultistAlive ){
                 break;
             }
         }
@@ -47,6 +51,16 @@ public abstract class KeepGameGoingMixin {
             customWinner.setWinningTextId("eddie_waffles");
             customWinner.setWinners(alivePlayers);
             customWinner.setColor(WyspiaExpressRoles.EDDIE_WAFFLES.color());
+            customWinner.sync();
+            GameRoundEndComponent gameRoundEnd = GameRoundEndComponent.KEY.get(world);
+            gameRoundEnd.setRoundEndData(players, GameFunctions.WinStatus.KILLERS);
+            GameFunctions.stopGame(world);
+        }
+        if (alivePlayers.size() == 1 && villainLicensedAlive) {
+            CustomWinnerComponent customWinner = CustomWinnerComponent.KEY.get(world);
+            customWinner.setWinningTextId("villain_licensed");
+            customWinner.setWinners(alivePlayers);
+            customWinner.setColor(WyspiaExpressRoles.VILLAIN_LICENSED.color());
             customWinner.sync();
             GameRoundEndComponent gameRoundEnd = GameRoundEndComponent.KEY.get(world);
             gameRoundEnd.setRoundEndData(players, GameFunctions.WinStatus.KILLERS);
@@ -62,7 +76,7 @@ public abstract class KeepGameGoingMixin {
             gameRoundEnd.setRoundEndData(players, GameFunctions.WinStatus.KILLERS);
             GameFunctions.stopGame(world);
         }
-        if ( (eddieAlive || cultistAlive)  && (winStatus == GameFunctions.WinStatus.KILLERS || winStatus == GameFunctions.WinStatus.PASSENGERS)) {
+        if ( (eddieAlive || villainLicensedAlive || cultistAlive)  && (winStatus == GameFunctions.WinStatus.KILLERS || winStatus == GameFunctions.WinStatus.PASSENGERS)) {
             ci.cancel();
         }
 

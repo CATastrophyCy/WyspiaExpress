@@ -20,6 +20,7 @@
     "roles.NoTargetAbilityHudMixin",
     "roles.cult.CultLeaderAbilityHudMixin",
     "roles.phantom.PhantomPsychosisMixin",
+    "roles.villain_licensed.VillainLicensedInstinctMixin",
     "ui.CoinMixin",
     "ui.HudRendererMixin",
     "ui.RolePickerWidgetMixin",

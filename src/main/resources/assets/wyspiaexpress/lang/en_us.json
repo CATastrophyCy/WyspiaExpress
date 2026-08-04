@@ -88,6 +88,11 @@
   "announcement.role.wyspiaexpress.cultist": "Nightshade cultist",
   "announcement.goals.wyspiaexpress.cultist": "Help the cult leader",
 
+  "announcement.role.wyspiaexpress.villain_licensed": "Villain Licensed",
+  "announcement.goals.wyspiaexpress.villain_licensed": "You might still retain a shred of conscience...",
+  "announcement.win.kinswathe.villain_licensed": "Villain Licensed Win!",
+  "game.win.kinswathe.villain_licensed": "The licensed villain ended everyone's life!",
+
   "announcement.modifier.wyspiaexpress.employee": "Employee",
   "announcement.modifier.wyspiaexpress.vent_crawler": "Professional Vent Crawler",
   "announcement.modifier.wyspiaexpress.elusive": "Elusive",
@@ -132,6 +137,9 @@
     "guidebook.role.title.wyspiaexpress:cultist": "Cultist",
     "guidebook.role.description.wyspiaexpress:cultist": "The nightshade's cult is a weird cult praying for the idea that life and dead can be played with\n\"Their leader says that he can hear his \"great behond\", is it true ? Is it not ? whatever the case, anyone sacrificed using his dagger will see himself\ncoming back to life with a new goal in mind, serving the said cult who took pity on them\"\n\"Luckily for you, you are one of them, be proud to be one with the cult and embrace your new destiny !",
 
+  "guidebook.role.wyspiaexpress:villain_licensed": "Villain Licensed",
+  "guidebook.role.title.wyspiaexpress:villain_licensed": "Certified Officially",
+  "guidebook.role.description.wyspiaexpress:villain_licensed": "The Villain Licensed is a rare character holding an officially certified villain license. He only appears when there are enough players\n\nThe Villain Licensed's win condition is unique - he must kill everyone. When all civilians or all killers are eliminated, the game does not end. Only he can end it all with his own hands.\n\nThe Villain Licensed has 15 seconds of sprint time, boards with Lockpick, and receives coins for completing tasks.\n\nRevolver can be purchased at the shop, and he suffers no misfire penalty when using it - after all, he's a professional.",
 
   "guidebook.role.wyspiaexpress:employee": "Employee",
     "guidebook.role.title.wyspiaexpress:employee": "Average worker at Wyspia Express",
