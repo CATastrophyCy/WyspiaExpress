@@ -5,7 +5,7 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import org.cat.express.wyspiaexpress.Entity.GrenadeEntity;
+import org.cat.express.wyspiaexpress.entity.GrenadeEntity;
 import org.jetbrains.annotations.NotNull;
 
 public class WyspiaExpressEntities {

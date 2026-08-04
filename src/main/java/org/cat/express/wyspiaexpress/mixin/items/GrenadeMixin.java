@@ -10,7 +10,7 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
-import org.cat.express.wyspiaexpress.Entity.GrenadeEntity;
+import org.cat.express.wyspiaexpress.entity.GrenadeEntity;
 import org.cat.express.wyspiaexpress.WyspiaExpressEntities;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.spongepowered.asm.mixin.Mixin;
@@ -46,9 +46,8 @@ public abstract class GrenadeMixin {
             world.spawnEntity(grenade);
         }
 
-        if (!user.isCreative()) {
-            WyspiaExpressItems.setItemCooldown(user, (Item)(Object)this, hand);
-        }
+
+        WyspiaExpressItems.setItemCooldown(user, (Item)(Object)this, hand);
 
         user.incrementStat(Stats.USED.getOrCreateStat((GrenadeItem)(Object)this));
         cir.setReturnValue(TypedActionResult.success(itemStack, world.isClient()));

@@ -86,14 +86,4 @@ public abstract class PlayerDeathMixin {
             world_component.reset();
 
         }
-        @Unique
-        private static boolean wyspiaexpress$hasRole(ServerWorld world, GameWorldComponent component, Role role) {
-            for(ServerPlayerEntity player : world.getPlayers()){
-                if(GameFunctions.isPlayerSpectatingOrCreative(player))
-                    continue;
-                if(component.isRole(player, role))
-                    return true;
-            }
-            return false;
-        }
 }

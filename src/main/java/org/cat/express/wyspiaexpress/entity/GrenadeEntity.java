@@ -1,4 +1,4 @@
-package org.cat.express.wyspiaexpress.Entity;
+package org.cat.express.wyspiaexpress.entity;
 
 import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
