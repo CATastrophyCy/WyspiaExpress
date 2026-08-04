@@ -35,10 +35,10 @@
       "wyspiaexpress:capture_device_component",
       "wyspiaexpress:sense_dead",
       "wyspiaexpress:hear_dead",
-      "wyspiaexpress:world_component"
+      "wyspiaexpress:world_component",
+      "wyspiaexpress:movement_component"
     ]
   },
-
   "mixins": [
     "wyspiaexpress.mixins.json"
     ,{

@@ -1,28 +1,24 @@
 package org.cat.express.wyspiaexpress.mixin.generic;
 
-import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.KinsWatheConfig;
+import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
 import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
+import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
 import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -68,9 +64,14 @@ public abstract class PlayerDeathMixin {
                 if (!component.isInnocent(killer) && !component.canUseKillerFeatures(killer) && KinsWatheConfig.HANDLER.instance().EnableWatheModify) {
                     ShopUtil.addCoin(killer, -(KinsWatheConfig.HANDLER.instance().IncreaseMoneyWhenKill - 100));
                 }
+                victim.removeStatusEffect(StatusEffects.NIGHT_VISION);
+                victim.removeStatusEffect(StatusEffects.SLOWNESS);
+                victim.removeStatusEffect(StatusEffects.BLINDNESS);
+
                 PlayerHearDeadComponent.KEY.get(victim).reset();
                 PlayerSenseDeadComponent.KEY.get(victim).reset();
-
+                PlayerMovementComponent.KEY.get(victim).reset();
+                PlayerEffectComponent.KEY.get(victim).reset();
 
             }
         }

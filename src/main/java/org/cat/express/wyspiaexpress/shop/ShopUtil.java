@@ -343,6 +343,8 @@ public class ShopUtil {
                 break;
             case SENSE_DEAD:
                 item = WyspiaExpressItems.SENSE_DEAD;
+            case SMOKE_BOMB:
+                item = WyspiaExpressItems.SMOKE_BOMB;
             default:
         }
         return item;

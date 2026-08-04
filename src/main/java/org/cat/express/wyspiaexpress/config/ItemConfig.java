@@ -32,6 +32,9 @@ public class ItemConfig {
     @Comment("Configuration for SENSE_DEAD")
     @Nest public SenseDeadConfig senseDeadConfig = new SenseDeadConfig();
 
+    @Comment("Configuration for SMOKE_BOMB")
+    @Nest public SmokeBombConfig smokeBombConfig = new SmokeBombConfig();
+
     // wathe
     @Comment("Configuration for REVOLVER")
     @Nest public RevolverConfig revolverConfig = new RevolverConfig();
@@ -141,6 +144,20 @@ public class ItemConfig {
         @Comment("Duration, in seconds, of seeing dead bodies")
         public int duration = 20;
     }
+    public static class SmokeBombConfig {
+        @Comment("Basic item configuration")
+        @Nest public ItemBasicConfig basic = new ItemBasicConfig();
+        @Comment("Cooldown, in seconds, minimum 0")
+        public int cooldown = 60;
+        @Comment("Radius of the explosion")
+        @RangeConstraint(min = 0.0, max = 10.0)
+        public double radius = 3.0;
+        @Comment("Radius of the explosion to the owner.")
+        @RangeConstraint(min = 0.0, max = 10.0)
+        public double ownerRadius = 1.8;
+        @Comment("Duration of the effect, in ticks")
+        public int duration = 100;
+    }
     // wathe
     public static class RevolverConfig {
         @Comment("Basic item configuration")
@@ -170,11 +187,11 @@ public class ItemConfig {
         @Comment("Basic item configuration")
         @Nest public ItemBasicConfig basic = new ItemBasicConfig();
         @Comment("Cooldown, in seconds, minimum 0")
-        public int cooldown = 180;
-        @Comment("Radius of the grenade explosion")
+        public int cooldown = 120;
+        @Comment("Radius of the explosion")
         @RangeConstraint(min = 0.0, max = 10.0)
         public double radius = 3.0;
-        @Comment("Radius of the grenade explosion to the owner.")
+        @Comment("Radius of the explosion to the owner.")
         @RangeConstraint(min = 0.0, max = 10.0)
         public double ownerRadius = 1.8;
     }

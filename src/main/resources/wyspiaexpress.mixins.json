@@ -12,7 +12,7 @@
     "generic.GunShootPayloadMixin",
     "generic.KeepGameGoingMixin",
     "generic.PassiveIncomeMixin",
-    "generic.PlayerCrawlSpeedMixin",
+    "generic.PlayerSpeedMixin",
     "generic.PlayerDeathMixin",
     "generic.PlayerShieldMixin",
     "generic.ShopMixin",

@@ -40,7 +40,7 @@ public class WyspiaExpressItems {
     public static final Item OUTLAW_REVOLVER = registerItem(new OutlawRevolverItem(new Item.Settings().maxCount(1)), "outlaw_revolver");
     public static final Item RITUAL_DAGGER = registerItem(new RitualDaggerItem(new Item.Settings().maxCount(1)), "ritual_dagger");
     public static final Item TAPE = registerItem(new TapeItem(new Item.Settings().maxCount(4)), "tape");
-
+    public static final Item SMOKE_BOMB = registerItem(new SmokeBombItem(new Item.Settings().maxCount(1)), "smoke_bomb");
     public static void registerItemConfig(){
         // custom items
         ITEMS_BASIC_CONFIG.put(FAKE_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.basic);
@@ -48,6 +48,7 @@ public class WyspiaExpressItems {
         ITEMS_BASIC_CONFIG.put(OUTLAW_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.outlawRevolverConfig.basic);
         ITEMS_BASIC_CONFIG.put(TAPE, WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.basic);
         ITEMS_BASIC_CONFIG.put(RITUAL_DAGGER, WyspiaExpress.ITEMS_CONFIG.itemConfig.ritualDaggerConfig.basic);
+        ITEMS_BASIC_CONFIG.put(SMOKE_BOMB, WyspiaExpress.ITEMS_CONFIG.itemConfig.smokeBombConfig.basic);
         // wathe
         ITEMS_BASIC_CONFIG.put(WatheItems.REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.revolverConfig.basic);
         ITEMS_BASIC_CONFIG.put(WatheItems.KNIFE, WyspiaExpress.ITEMS_CONFIG.itemConfig.knifeConfig.basic);
@@ -81,6 +82,7 @@ public class WyspiaExpressItems {
         registerItemGroup(OUTLAW_REVOLVER, WatheItems.EQUIPMENT_GROUP);
         registerItemGroup(RITUAL_DAGGER, WatheItems.EQUIPMENT_GROUP);
         registerItemGroup(TAPE, WatheItems.EQUIPMENT_GROUP);
+        registerItemGroup(SMOKE_BOMB, WatheItems.EQUIPMENT_GROUP);
     }
     public static Item registerItem(Item item, String id) {
         Identifier itemID = Identifier.of(WyspiaExpress.MOD_ID, id);
@@ -136,6 +138,7 @@ public class WyspiaExpressItems {
         registerItemCooldown(RITUAL_DAGGER, WyspiaExpress.ITEMS_CONFIG.itemConfig.ritualDaggerConfig.cooldown());
         registerItemCooldown(TAPE, WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.cooldown());
         registerItemCooldown(SENSE_DEAD, WyspiaExpress.ITEMS_CONFIG.itemConfig.senseDeadConfig.cooldown());
+        registerItemCooldown(SMOKE_BOMB, WyspiaExpress.ITEMS_CONFIG.itemConfig.smokeBombConfig.cooldown());
         // wathe
         registerItemCooldown(WatheItems.REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.revolverConfig.cooldown());
         registerItemCooldown(WatheItems.KNIFE, WyspiaExpress.ITEMS_CONFIG.itemConfig.knifeConfig.cooldown());

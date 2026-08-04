@@ -375,8 +375,10 @@ public class WyspiaExpressRoles {
             }
         });
         ResetPlayerEvent.EVENT.register(((playerEntity) -> {
-            // remove night_vision
+
             playerEntity.removeStatusEffect(StatusEffects.NIGHT_VISION);
+            playerEntity.removeStatusEffect(StatusEffects.SLOWNESS);
+            playerEntity.removeStatusEffect(StatusEffects.BLINDNESS);
             // reset components
             PlayerDepressedComponent.KEY.get(playerEntity).reset();
             PlayerFreezeComponent.KEY.get(playerEntity).reset();
@@ -385,6 +387,7 @@ public class WyspiaExpressRoles {
             PlayerSenseDeadComponent.KEY.get(playerEntity).reset();
             PlayerHearDeadComponent.KEY.get(playerEntity).reset();
             PlayerCultistComponent.KEY.get(playerEntity).reset();
+            PlayerMovementComponent.KEY.get(playerEntity).reset();
         }));
     }
     private static void registerStringRoleMap(){

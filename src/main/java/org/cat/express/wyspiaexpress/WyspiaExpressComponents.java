@@ -23,6 +23,7 @@ public class WyspiaExpressComponents implements EntityComponentInitializer, Worl
         registry.beginRegistration(PlayerEntity.class, PlayerSenseDeadComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerSenseDeadComponent::new);
         registry.beginRegistration(PlayerEntity.class, PlayerHearDeadComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerHearDeadComponent::new);
         registry.beginRegistration(PlayerEntity.class, PlayerCultistComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerCultistComponent::new);
+        registry.beginRegistration(PlayerEntity.class, PlayerMovementComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerMovementComponent::new);
 
         registry.beginRegistration(CaptureDeviceEntity.class, CaptureDeviceEntityComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(CaptureDeviceEntityComponent::new);
         registry.beginRegistration(PlayerBodyEntity.class, PlayerBodyEntityComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerBodyEntityComponent::new);

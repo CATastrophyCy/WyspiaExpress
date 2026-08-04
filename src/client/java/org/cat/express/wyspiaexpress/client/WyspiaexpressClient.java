@@ -68,7 +68,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
     }
     private static void registerEntityRenderer(){
             EntityRendererRegistry.register(WyspiaExpressEntities.GRENADE, FlyingItemEntityRenderer::new);
-
+            EntityRendererRegistry.register(WyspiaExpressEntities.SMOKE_BOMB, FlyingItemEntityRenderer::new);
     }
     private static void registerItemToolTips(){
         ItemTooltipCallback.EVENT.register(((itemStack, tooltipContext, tooltipType, list) -> {
@@ -79,6 +79,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
             ItemToolTip.addItemtip(WyspiaExpressItems.RITUAL_DAGGER, itemStack, list);
             ItemToolTip.addItemtip(WyspiaExpressItems.TAPE, itemStack, list);
             ItemToolTip.addItemtip(WyspiaExpressItems.SENSE_DEAD, itemStack, list);
+            ItemToolTip.addItemtip(WyspiaExpressItems.SMOKE_BOMB, itemStack, list);
         }));
     }
     private static void registerAbilityKey(){

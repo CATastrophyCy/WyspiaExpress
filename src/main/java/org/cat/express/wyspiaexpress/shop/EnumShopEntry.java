@@ -47,5 +47,6 @@ public enum EnumShopEntry {
     OUTLAW_REVOLVER,
     RITUAL_DAGGER,
     SENSE_DEAD,
+    SMOKE_BOMB,
 }
 
