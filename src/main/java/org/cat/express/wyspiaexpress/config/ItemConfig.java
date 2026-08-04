@@ -151,10 +151,10 @@ public class ItemConfig {
         public int cooldown = 60;
         @Comment("Radius of the explosion")
         @RangeConstraint(min = 0.0, max = 10.0)
-        public double radius = 3.0;
+        public double radius = 2.0;
         @Comment("Radius of the explosion to the owner.")
         @RangeConstraint(min = 0.0, max = 10.0)
-        public double ownerRadius = 1.8;
+        public double ownerRadius = 1.5;
         @Comment("Duration of the effect, in ticks")
         public int duration = 100;
     }

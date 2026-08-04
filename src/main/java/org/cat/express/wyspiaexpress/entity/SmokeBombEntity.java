@@ -25,6 +25,8 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressEntities;
 import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
+import org.cat.express.wyspiaexpress.particles.ParticleManager;
+import org.cat.express.wyspiaexpress.particles.SmokeBombEffect;
 
 public class SmokeBombEntity extends ThrownItemEntity {
     public SmokeBombEntity(EntityType<?> ignored, World world) {
@@ -63,8 +65,9 @@ public class SmokeBombEntity extends ThrownItemEntity {
                     continue;
                 }
                 PlayerMovementComponent.KEY.get(player).setTicks(config.duration());
-
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, config.duration(), 2, true, true, false));
             }
+            ParticleManager.addEffect(new SmokeBombEffect(world,origin, config.radius() , config.duration()));
             this.discard();
         }
     }

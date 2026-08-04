@@ -15,6 +15,7 @@ import org.cat.express.wyspiaexpress.config.WyspiaExpressModifiersConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressServerConfig;
 import org.cat.express.wyspiaexpress.packets.*;
+import org.cat.express.wyspiaexpress.particles.ParticleManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +42,7 @@ public class WyspiaExpress implements ModInitializer {
         WyspiaExpressEntities.init();
         WyspiaExpressGameFunctions.init();
         WyspiaExpressCommands.init();
+        ParticleManager.init();
         registerVersionCheck();
         registerPackets();
         ServerLifecycleEvents.SERVER_STARTING.register(RoleStatisticsManager::init);
