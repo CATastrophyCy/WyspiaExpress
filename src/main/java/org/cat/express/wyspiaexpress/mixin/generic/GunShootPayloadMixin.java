@@ -23,6 +23,7 @@ import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.config.NoellesRolesConfig;
 import org.agmas.noellesroles.executioner.ExecutionerPlayerComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -100,7 +101,7 @@ public abstract class GunShootPayloadMixin {
     private static boolean shouldDropGun(GameWorldComponent game, PlayerEntity killer, PlayerEntity victim){
 
         if(game.isInnocent(victim) && GameFunctions.isPlayerSpectatingOrCreative(victim) && GameFunctions.isPlayerAliveAndSurvival(killer) ){
-            if(game.isRole(killer, KinsWatheRoles.LICENSED_VILLAIN )) return false;
+            if(game.isRole(killer, KinsWatheRoles.LICENSED_VILLAIN) || game.isRole(killer, WyspiaExpressRoles.VILLAIN_LICENSED)) return false;
 
             return true;
         }

@@ -194,10 +194,19 @@ public class WyspiaExpressRoles {
             WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2,
             true
     ));
+    public static Role VILLAIN_LICENSED = registerRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "villain_licensed"),
+            0x404040,
+            false,
+            false,
+            Role.MoodType.FAKE,
+            WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2,
+            false
+    ));
     public static Modifier EMPLOYEE = registerModifier(new Modifier(
             Identifier.of(WyspiaExpress.MOD_ID, "employee"),
             0x0D3B66,
-            new ArrayList<>(List.of(CONDUCTOR, LICENSED_VILLAIN)),null,
+            new ArrayList<>(List.of(CONDUCTOR, LICENSED_VILLAIN, VILLAIN_LICENSED)),null,
             false,false));
 
     public static Modifier VENT_CRAWLER = registerModifier(new Modifier(
@@ -209,13 +218,15 @@ public class WyspiaExpressRoles {
     public static Modifier ELUSIVE = registerModifier(new Modifier(
             Identifier.of(WyspiaExpress.MOD_ID, "elusive"),
             0x96FFA9,
-            new ArrayList<>(List.of(THIEF,NOISEMAKER, LICENSED_VILLAIN)),null,
+            new ArrayList<>(List.of(THIEF,NOISEMAKER, LICENSED_VILLAIN, VILLAIN_LICENSED)),null,
             false,false));
+
     public static Modifier BOMBER = registerModifier(new Modifier(
             Identifier.of(WyspiaExpress.MOD_ID, "bomber"),
             0xB51010,
             null,null,
             false,true));
+
     private static void registerRoleBasicConfig(Role role, WyspiaExpressRolesConfig.RoleBasicConfig config) {
         ROLES_BASIC_CONFIG.put(role, config);
     }
@@ -274,6 +285,7 @@ public class WyspiaExpressRoles {
         TRUE_NEUTRALS.add(INITIATE);
         TRUE_NEUTRALS.add(CULT_LEADER);
         TRUE_NEUTRALS.add(CULTIST);
+        TRUE_NEUTRALS.add(VILLAIN_LICENSED);
 
         KILLER_SIDED_NEUTRALS.add(JESTER);
         KILLER_SIDED_NEUTRALS.add(VULTURE);
@@ -452,6 +464,7 @@ public class WyspiaExpressRoles {
         registerRoleBasicConfig(CULT_LEADER, WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.basic);
         registerRoleBasicConfig(CULTIST, WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.cultistConfig.basic);
         registerRoleBasicConfig(EDDIE_WAFFLES, WyspiaExpress.ROLES_CONFIG.roleConfig.eddieWafflesConfig.basic);
+        registerRoleBasicConfig(VILLAIN_LICENSED, WyspiaExpress.ROLES_CONFIG.roleConfig.villainLicensedConfig.basic);
         // wathe
         registerRoleBasicConfig(WatheRoles.VIGILANTE, WyspiaExpress.ROLES_CONFIG.roleConfig.vigilanteConfig.basic);
         // Starry Express roles
