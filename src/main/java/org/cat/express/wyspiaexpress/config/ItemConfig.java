@@ -157,6 +157,12 @@ public class ItemConfig {
         public double ownerRadius = 2.1;
         @Comment("Duration of the effect, in ticks")
         public int duration = 100;
+        @RangeConstraint(min = 0.0, max = 10.0)
+        public double smokeRadius = 3.0;
+        @Comment("Duration of the effect, in ticks")
+        public int smokeDuration = 160;
+        @Comment("Player movement speed slowdown percent")
+        public double slowness = 0.50;
         @Comment("Amount of particles to be spawned per tick frequency")
         public int particles = 1500;
     }
