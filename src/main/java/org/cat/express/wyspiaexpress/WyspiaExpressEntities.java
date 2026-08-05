@@ -15,14 +15,14 @@ public class WyspiaExpressEntities {
             Registries.ENTITY_TYPE,
             Identifier.of(WyspiaExpress.MOD_ID, "grenade"),
             EntityType.Builder.create(GrenadeEntity::new, SpawnGroup.MISC)
-                    .dimensions(.45f, .45f)
+                    .dimensions(.25f, .25f)
                     .maxTrackingRange(128).build("grenade")
     );
     public static final @NotNull EntityType<@NotNull SmokeBombEntity> SMOKE_BOMB = Registry.register(
             Registries.ENTITY_TYPE,
             Identifier.of(WyspiaExpress.MOD_ID, "smoke_bomb"),
             EntityType.Builder.create(SmokeBombEntity::new, SpawnGroup.MISC)
-                    .dimensions(.45f, .45f)
+                    .dimensions(.25f, .25f)
                     .maxTrackingRange(128).build("smoke_bomb")
     );
     public static void init() {}
