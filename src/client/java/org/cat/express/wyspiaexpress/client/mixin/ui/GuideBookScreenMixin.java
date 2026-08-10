@@ -10,6 +10,7 @@ import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.RoleComponent;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.ArrayList;
@@ -29,10 +30,7 @@ public abstract class GuideBookScreenMixin {
         if (client.world == null) return original;
         RoleComponent comp = RoleComponent.KEY.get(client.world);
         return  original.stream()
-                .filter(role ->
-                        (!comp.disabledRoles.contains(WyspiaExpressRoles.getRoleId(role)) || role == WyspiaExpressRoles.COPYCAT )
-                        && !comp.hiddenRoles.contains(WyspiaExpressRoles.getRoleId(role))
-                )
+                .filter(role -> shouldShowRole(comp, role))
                 .collect(java.util.stream.Collectors.toCollection(ArrayList::new));
     }
 
@@ -49,11 +47,17 @@ public abstract class GuideBookScreenMixin {
 
         RoleComponent comp = RoleComponent.KEY.get(client.world);
         return original.stream()
-                .filter(mod ->
-                        (!comp.disabledModifiers.contains(WyspiaExpressRoles.getModifierId(mod)) || mod == Noellesroles.GUESSER)
-                        && !comp.hiddenModifiers.contains(WyspiaExpressRoles.getModifierId(mod))
-
-                )
+                .filter( mod -> shouldShowModifier(comp, mod))
                 .collect(java.util.stream.Collectors.toCollection(ArrayList::new));
+    }
+    @Unique
+    private static boolean shouldShowRole(RoleComponent comp, Role role){
+        String roleId = WyspiaExpressRoles.getRoleId(role);
+        return role == WyspiaExpressRoles.COPYCAT || (!comp.disabledRoles.contains(roleId) && !comp.hiddenRoles.contains(roleId));
+    }
+    @Unique
+    private static boolean shouldShowModifier(RoleComponent comp, Modifier modifier){
+        String modifierId = WyspiaExpressRoles.getModifierId(modifier);
+        return modifier == Noellesroles.GUESSER || (!comp.disabledModifiers.contains(modifierId) && !comp.hiddenModifiers.contains(modifierId));
     }
 }

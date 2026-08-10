@@ -242,6 +242,8 @@ public class WyspiaExpressRoles {
         return modifier;
     }
     private static void initHiddenList(){
+        // hidden roles
+        HIDDEN_ROLES.add(COPYCAT);
         // licensed villain is hidden due to bug
         HIDDEN_ROLES.add(LICENSED_VILLAIN);
 
@@ -258,6 +260,8 @@ public class WyspiaExpressRoles {
         HIDDEN_ROLES.add(JESTER);
         HIDDEN_ROLES.add(VOODOO);
         // hidden modifiers
+        if(WyspiaExpress.MODIFIERS_CONFIG.guesserConfig.killerAlwaysGuesser())
+            HIDDEN_MODIFIERS.add(GUESSER);
         HIDDEN_MODIFIERS.add(BOMBER);
         HIDDEN_MODIFIERS.add(SEModifiers.LOVERS);
         HIDDEN_MODIFIERS.add(MAGNATE);
