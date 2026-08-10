@@ -1,7 +1,6 @@
 package org.cat.express.wyspiaexpress.particles;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 
 import java.util.Iterator;

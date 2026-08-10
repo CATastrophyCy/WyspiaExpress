@@ -1,13 +1,11 @@
 package org.cat.express.wyspiaexpress.particles;
 
 import net.minecraft.block.ShapeContext;
-import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
-import org.cat.express.wyspiaexpress.WyspiaExpress;
 
 import java.util.ArrayList;
 import java.util.List;
