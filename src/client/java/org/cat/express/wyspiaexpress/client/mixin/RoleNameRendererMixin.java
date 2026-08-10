@@ -93,8 +93,8 @@ public abstract class RoleNameRendererMixin {
             if( hacker.hackingTime > 0 && hacker.hackingTime < KinsWatheConfig.HANDLER.instance().HackerHackingTime * 20){
                 hudText
                         .append(Text.literal(" || Hacking: ").setStyle(Style.EMPTY.withColor(white)))
-                        .append(Text.literal((int)((double)hacker.hackingTime / (KinsWatheConfig.HANDLER.instance().HackerHackingTime * 20))
-                                * 100 + "%").setStyle(Style.EMPTY.withColor( (alpha << 24) | KinsWatheRoles.HACKER.color())));
+                        .append(Text.literal(( (hacker.hackingTime * 100) / (KinsWatheConfig.HANDLER.instance().HackerHackingTime * 20))
+                                + "%").setStyle(Style.EMPTY.withColor( (alpha << 24) | KinsWatheRoles.HACKER.color())));
             }
             int y = renderer.fontHeight / 2 + 1 + OFF_SET;
             context.drawTextWithShadow(renderer, hudText, -renderer.getWidth(hudText) / 2, y, white);

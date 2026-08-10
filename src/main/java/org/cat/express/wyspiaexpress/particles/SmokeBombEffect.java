@@ -3,6 +3,7 @@ package org.cat.express.wyspiaexpress.particles;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
+import org.cat.express.wyspiaexpress.WyspiaExpress;
 
 public class SmokeBombEffect extends RadialTimedEffect {
 
@@ -12,31 +13,33 @@ public class SmokeBombEffect extends RadialTimedEffect {
                 radius,
                 durationTicks,
                 ParticleTypes.LARGE_SMOKE,
-                2000
+                WyspiaExpress.ITEMS_CONFIG.itemConfig.smokeBombConfig.particles()
         );
     }
 
     @Override
+    protected Vec3d randomOffsetInSphere(double radius) {
+        return super.randomOffsetInSphere(radius).multiply(1.15, 1.0, 1.15);
+    }
+
+    @Override
     protected void spawnParticles() {
-        // Layer 1: large smoke
-        if(age % 4 == 0) {
-            world.spawnParticles(
-                    ParticleTypes.LARGE_SMOKE,
-                    center.x, center.y, center.z,
-                    particlesPerTick,
-                    radius * 0.7, 1.8, radius * 0.7,
-                    0.001
-            );
+        if(age % 10 != 0) return;
 
-            // Layer 2: campfire smoke for thicker, taller cloud
-            world.spawnParticles(
-                    ParticleTypes.CAMPFIRE_COSY_SMOKE,
-                    center.x, center.y, center.z,
-                    particlesPerTick / 3,
-                    radius * 0.4, 1.0, radius * 0.4,
-                    0.003
-            );
+        var progress = progress();
+        if(progress <= 0.62)
+            for (int i = 0; i < particlesPerTick; i++) {
+                Vec3d pos = pickVisiblePosition();
+                if (pos.equals(center)) continue;
 
-        }
+                world.spawnParticles(
+                        ParticleTypes.CAMPFIRE_COSY_SMOKE,
+                        pos.x, pos.y, pos.z,
+                        1,
+                        0.015, 0.03, 0.015,
+                        0.0005
+                );
+            }
+
     }
 }

@@ -54,9 +54,10 @@ public class SmokeBombEntity extends ThrownItemEntity {
                 if (!GameFunctions.isPlayerAliveAndSurvival(player)) {
                     continue;
                 }
+
                 // more mercy towards the owner
                 if(owner != null && player.getUuid().equals(owner.getUuid())
-                        && origin.squaredDistanceTo(player.getPos()) > config.ownerRadius() * config.ownerRadius())
+                        && player.squaredDistanceTo(origin) > config.ownerRadius() * config.ownerRadius())
                     continue;
 
                 float exposure = Explosion.getExposure(origin, player); // vanilla explosion ray cast
@@ -65,9 +66,9 @@ public class SmokeBombEntity extends ThrownItemEntity {
                     continue;
                 }
                 PlayerMovementComponent.KEY.get(player).setTicks(config.duration());
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, config.duration(), 2, true, true, false));
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, config.duration(), 2, true, true, true));
             }
-            ParticleManager.addEffect(new SmokeBombEffect(world,origin, config.radius() , config.duration()));
+            ParticleManager.addEffect(new SmokeBombEffect(world,origin, config.smokeRadius() , config.smokeDuration()));
             this.discard();
         }
     }

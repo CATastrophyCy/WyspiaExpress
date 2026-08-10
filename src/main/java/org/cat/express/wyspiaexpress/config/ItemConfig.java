@@ -151,12 +151,20 @@ public class ItemConfig {
         public int cooldown = 60;
         @Comment("Radius of the explosion")
         @RangeConstraint(min = 0.0, max = 10.0)
-        public double radius = 2.0;
+        public double radius = 3.0;
         @Comment("Radius of the explosion to the owner.")
         @RangeConstraint(min = 0.0, max = 10.0)
-        public double ownerRadius = 1.5;
+        public double ownerRadius = 2.1;
         @Comment("Duration of the effect, in ticks")
         public int duration = 100;
+        @RangeConstraint(min = 0.0, max = 10.0)
+        public double smokeRadius = 3.0;
+        @Comment("Duration of the effect, in ticks")
+        public int smokeDuration = 160;
+        @Comment("Player movement speed slowdown percent")
+        public double slowness = 0.50;
+        @Comment("Amount of particles to be spawned per tick frequency")
+        public int particles = 1500;
     }
     // wathe
     public static class RevolverConfig {
@@ -193,7 +201,7 @@ public class ItemConfig {
         public double radius = 3.0;
         @Comment("Radius of the explosion to the owner.")
         @RangeConstraint(min = 0.0, max = 10.0)
-        public double ownerRadius = 1.8;
+        public double ownerRadius = 2.1;
     }
     public static class DerringerConfig {
         @Comment("Basic item configuration")

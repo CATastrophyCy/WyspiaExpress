@@ -51,7 +51,7 @@ public class GrenadeEntity extends ThrownItemEntity {
                 }
                 // more mercy towards the owner
                 if(owner != null && player.getUuid().equals(owner.getUuid())
-                        && origin.squaredDistanceTo(player.getPos()) > config.ownerRadius() * config.ownerRadius())
+                        && player.squaredDistanceTo(origin) > config.ownerRadius() * config.ownerRadius())
                     continue;
 
                 float exposure = Explosion.getExposure(origin, player); // vanilla explosion ray cast

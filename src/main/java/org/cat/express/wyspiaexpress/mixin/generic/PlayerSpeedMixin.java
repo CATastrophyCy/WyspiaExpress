@@ -23,20 +23,22 @@ public abstract class PlayerSpeedMixin extends LivingEntity {
     @ModifyReturnValue(method = "getMovementSpeed", at = @At("RETURN"))
     public float wyspiaexpress$overrideMovementSpeed(float original) {
         PlayerEntity self = (PlayerEntity) (Object) this;
-        if(PlayerMovementComponent.KEY.get(self).isRestricted() && GameFunctions.isPlayerAliveAndSurvival(self)) return 0.0F;
+        float multiplier = 1.0f;
+        if(PlayerMovementComponent.KEY.get(self).isRestricted() && GameFunctions.isPlayerAliveAndSurvival(self))
+            multiplier -= (float) WyspiaExpress.ITEMS_CONFIG.itemConfig.smokeBombConfig.slowness();
         if (isCrawling(self)) {
-            return getCrawlingSpeed(self, original);
+            multiplier *= getCrawlingSpeedMultiplier(self);
         }
-        return original;
+        return original * multiplier;
     }
     @Unique
-    private float getCrawlingSpeed(PlayerEntity player, float original) {
+    private float getCrawlingSpeedMultiplier(PlayerEntity player) {
         WorldModifierComponent wmc = WorldModifierComponent.KEY.get(player.getWorld());
-        float speed = (float) (original *  WyspiaExpress.SERVER_CONFIG.crawlSpeedMultiplier() );
+        float multiplier = (float) WyspiaExpress.SERVER_CONFIG.crawlSpeedMultiplier();
         if(wmc.isModifier(player, WyspiaExpressRoles.VENT_CRAWLER)){
-            speed = (float) (speed * WyspiaExpress.MODIFIERS_CONFIG.ventCrawlerConfig.crawlSpeedModifier());
+            multiplier *= (float) WyspiaExpress.MODIFIERS_CONFIG.ventCrawlerConfig.crawlSpeedModifier();
         }
-        return speed;
+        return multiplier;
     }
     @Unique
     private boolean isCrawling(PlayerEntity player) {
