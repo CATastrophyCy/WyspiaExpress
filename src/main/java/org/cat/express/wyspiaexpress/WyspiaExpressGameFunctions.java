@@ -10,6 +10,7 @@ import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheEntities;
 import dev.doctor4t.wathe.util.AnnounceWelcomePayload;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
@@ -41,6 +42,7 @@ import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
 import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
+import org.cat.express.wyspiaexpress.components.RoleComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.cat.express.wyspiaexpress.config.ServerConfig;
@@ -97,8 +99,8 @@ public class WyspiaExpressGameFunctions {
         Text victimName = ((MutableText) Objects.requireNonNull(victim.getDisplayName())).setStyle(Style.EMPTY.withItalic(true));
         Text killerName = killer != null ? ((MutableText) Objects.requireNonNull(killer.getDisplayName())).setStyle(Style.EMPTY.withItalic(true)) : null;
         Text reason = deathReason != null ? getDeathReason(deathReason).setStyle(Style.EMPTY.withItalic(true)) : Text.literal("Unknown reason");
-        Text victimRole = Text.literal(WyspiaExpressRoles.getRoleString(gameWorldComponent.getRole(victim))).setStyle(Style.EMPTY.withItalic(true));
-        Text killerRole = killer != null ? Text.literal(WyspiaExpressRoles.getRoleString(gameWorldComponent.getRole(killer))).setStyle(Style.EMPTY.withItalic(true)) : null;
+        Text victimRole = Text.literal(WyspiaExpressRoles.getRoleName(gameWorldComponent.getRole(victim))).setStyle(Style.EMPTY.withItalic(true));
+        Text killerRole = killer != null ? Text.literal(WyspiaExpressRoles.getRoleName(gameWorldComponent.getRole(killer))).setStyle(Style.EMPTY.withItalic(true)) : null;
         MutableText message = Text.literal("You have fallen to ").append(reason);
         if(killerName != null)
             message.append(" by ").append(killerName).append(" [").append(killerRole).append("]");
@@ -134,7 +136,7 @@ public class WyspiaExpressGameFunctions {
                                           @NotNull PlayerEntity player, @NotNull PlayerEntity revived){
         Text revivedName = ((MutableText) Objects.requireNonNull(revived.getDisplayName())).setStyle(Style.EMPTY.withItalic(true));
         Text playerName = ((MutableText) Objects.requireNonNull(player.getDisplayName())).setStyle(Style.EMPTY.withItalic(true));
-        Text playerRole = Text.literal(WyspiaExpressRoles.getRoleString(gameWorldComponent.getRole(player))).setStyle(Style.EMPTY.withItalic(true));
+        Text playerRole = Text.literal(WyspiaExpressRoles.getRoleName(gameWorldComponent.getRole(player))).setStyle(Style.EMPTY.withItalic(true));
 
         Text revivedMessage = Text.literal("").append(revivedName).append(" has been revived by ")
                 .append(playerName).append(" [").append(playerRole).append("]");
@@ -210,6 +212,9 @@ public class WyspiaExpressGameFunctions {
         });
     }
     private static void registerEndWorldTick(){
+        ServerWorldEvents.LOAD.register( (server, world) -> {
+            RoleComponent.KEY.get(world).sync();
+        });
         ServerTickEvents.END_WORLD_TICK.register(world -> {
             if (!(world instanceof ServerWorld serverWorld)) return;
             GameWorldComponent gwc = GameWorldComponent.KEY.get(world);

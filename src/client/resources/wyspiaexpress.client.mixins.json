@@ -21,6 +21,7 @@
     "roles.cult.CultLeaderAbilityHudMixin",
     "roles.phantom.PhantomPsychosisMixin",
     "ui.CoinMixin",
+    "ui.GuideBookScreenMixin",
     "ui.HudRendererMixin",
     "ui.RolePickerWidgetMixin",
     "ui.ScreenAccessor",
