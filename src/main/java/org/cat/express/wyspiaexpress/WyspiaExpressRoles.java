@@ -291,6 +291,9 @@ public class WyspiaExpressRoles {
                 for(int i = 0 ; i < WyspiaExpress.MODIFIERS_CONFIG.bomberConfig.grenadeAmount(); i++){
                     player.giveItemStack(WatheItems.GRENADE.getDefaultStack());
                 }
+                for(int i = 0 ; i < WyspiaExpress.MODIFIERS_CONFIG.bomberConfig.smokeBombAmount(); i++){
+                    player.giveItemStack(WyspiaExpressItems.SMOKE_BOMB.getDefaultStack());
+                }
             }
         });
     }

@@ -42,7 +42,9 @@ public class ModifiersConfig {
         @Comment("1 out of chance of bomber appearing on a random civilian")
         public int chance = 1000;
         @Comment("Amount of grenade to give to player")
-        public int grenadeAmount = 5;
+        public int grenadeAmount = 3;
+        @Comment("Amount of smoke bomb to give to player")
+        public int smokeBombAmount = 3;
     }
 
     public static class ElusiveConfig{
