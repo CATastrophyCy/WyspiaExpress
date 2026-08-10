@@ -1,5 +1,7 @@
 package org.cat.express.wyspiaexpress.components;
 
+import dev.doctor4t.wathe.api.Role;
+import dev.doctor4t.wathe.api.WatheRoles;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -40,7 +42,7 @@ public class RoleComponent implements AutoSyncedComponent {
         disabledModifiers.clear();
         hiddenModifiers.clear();
 
-        disabledRoles.addAll(HarpyModLoaderConfig.HANDLER.instance().disabled);
+        disabledRoles.addAll(WatheRoles.ROLES.stream().filter(role -> !isValidRole(role)).map(WyspiaExpressRoles::getRoleId).toList());
         hiddenRoles.addAll(WyspiaExpressRoles.HIDDEN_ROLES.stream().map(WyspiaExpressRoles::getRoleId).toList());
 
         disabledModifiers.addAll(HarpyModLoaderConfig.HANDLER.instance().disabledModifiers);
@@ -48,7 +50,17 @@ public class RoleComponent implements AutoSyncedComponent {
 
         KEY.sync(this.world);
     }
+    private static boolean isValidRole(Role role) {
+        String roleId = WyspiaExpressRoles.getRoleId(role);
 
+        return !HarpyModLoaderConfig.HANDLER.instance().disabled.contains(roleId)
+                && (
+                WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role) == null
+                        || (WyspiaExpressRoles.PLAYER_COUNT >= WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role).minimumPlayerSpawn()
+                            && WyspiaExpressRoles.PLAYER_COUNT <= WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role).maximumPlayerSpawn()
+                        )
+                );
+    }
     @Override
     public void writeToNbt(@NotNull NbtCompound tag, RegistryWrapper.@NotNull WrapperLookup registryLookup) {
         tag.put("DisabledRoles", toNbtList(this.disabledRoles));
