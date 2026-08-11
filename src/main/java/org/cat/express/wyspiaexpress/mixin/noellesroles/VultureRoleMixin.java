@@ -4,6 +4,7 @@ import dev.doctor4t.wathe.api.Role;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
 import org.agmas.noellesroles.Noellesroles;
+import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -25,7 +26,8 @@ public abstract class VultureRoleMixin {
         return instance.removeIf(role ->
                 Harpymodloader.VANNILA_ROLES.contains(role) ||
                         !role.canUseKiller() ||
-                        HarpyModLoaderConfig.HANDLER.instance().disabled.contains(role.identifier().toString())
+                        HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.getRoleId(role))
+                        || !WyspiaExpressRoles.roleMeetPlayerRequirement(role)
         );
     }
 }

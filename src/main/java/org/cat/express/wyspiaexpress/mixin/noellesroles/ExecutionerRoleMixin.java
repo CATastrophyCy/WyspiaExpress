@@ -17,6 +17,7 @@ import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.executioner.ExecutionerPlayerComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -48,7 +49,8 @@ public abstract class ExecutionerRoleMixin {
                 shuffledKillerRoles.removeIf(role ->
                         Harpymodloader.VANNILA_ROLES.contains(role) ||
                                 !role.canUseKiller() ||
-                                HarpyModLoaderConfig.HANDLER.instance().disabled.contains(role.identifier().toString())
+                                HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.getRoleId(role))
+                                || !WyspiaExpressRoles.roleMeetPlayerRequirement(role)
                 );
                 if (shuffledKillerRoles.isEmpty()) shuffledKillerRoles.add(WatheRoles.KILLER);
                 Collections.shuffle(shuffledKillerRoles);
