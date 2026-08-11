@@ -22,6 +22,7 @@
     "roles.phantom.PhantomPsychosisMixin",
     "roles.villain_licensed.VillainLicensedInstinctMixin",
     "ui.CoinMixin",
+    "ui.GuideBookScreenMixin",
     "ui.HudRendererMixin",
     "ui.RolePickerWidgetMixin",
     "ui.ScreenAccessor",

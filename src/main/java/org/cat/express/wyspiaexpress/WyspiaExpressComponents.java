@@ -32,5 +32,6 @@ public class WyspiaExpressComponents implements EntityComponentInitializer, Worl
     public void registerWorldComponentFactories(@NotNull WorldComponentFactoryRegistry registry) {
         registry.register(LichReviveComponent.KEY, LichReviveComponent::new);
         registry.register(WorldComponent.KEY, WorldComponent::new);
+        registry.register(RoleComponent.KEY, RoleComponent::new);
     }
 }

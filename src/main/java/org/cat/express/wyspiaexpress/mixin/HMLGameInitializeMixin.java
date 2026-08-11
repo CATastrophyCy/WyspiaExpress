@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.Texts;
 import net.minecraft.util.Formatting;
@@ -34,6 +33,7 @@ import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.RoleCategoryStatisticsManager;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.components.RoleComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -177,6 +177,8 @@ public abstract class HMLGameInitializeMixin {
         // end initialization
         GameTimeComponent gameTimeComponent = GameTimeComponent.KEY.get(serverWorld);
         WyspiaExpressRoles.GAME_START_TIME = gameTimeComponent.time;
+
+        RoleComponent.KEY.get(serverWorld).sync();
 
         ci.cancel();
     }

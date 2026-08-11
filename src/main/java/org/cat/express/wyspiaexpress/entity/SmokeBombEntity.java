@@ -67,6 +67,8 @@ public class SmokeBombEntity extends ThrownItemEntity {
                 }
                 PlayerMovementComponent.KEY.get(player).setTicks(config.duration());
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, config.duration(), 2, true, true, true));
+                // blindness doesn't really work, but it can prevent player from running
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, config.duration(), 2, true, true, true));
             }
             ParticleManager.addEffect(new SmokeBombEffect(world,origin, config.smokeRadius() , config.smokeDuration()));
             this.discard();

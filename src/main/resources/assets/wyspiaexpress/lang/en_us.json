@@ -40,7 +40,7 @@
   "item.wyspiaexpress.sense_dead.tooltip": "Sense the location of dead bodies scattered across the train for a short duration.\nActivate on purchase",
 
   "item.wyspiaexpress.outlaw_revolver": "Outlaw Revolver",
-  "item.wyspiaexpress.outlaw_revolver.tooltip": "You feel no remorse when shooting innocents with this revolver.\n It has a longer cooldown than normal revolver.\n The cooldown is increased if you miss your shot",
+  "item.wyspiaexpress.outlaw_revolver.tooltip": "You feel no remorse when shooting innocents with this revolver.\nIt has a longer cooldown than normal revolver.\nThe cooldown is increased if you miss your shot",
 
   "item.wyspiaexpress.ritual_dagger": "Ritual Dagger",
   "item.wyspiaexpress.ritual_dagger.tooltip": "Sometimes force is needed to make them believe!\nPlayers stabbed with this will instead get stunned and converted to a Cultist",
@@ -106,11 +106,11 @@
 
   "guidebook.role.wyspiaexpress:copycat": "Copycat",
     "guidebook.role.title.wyspiaexpress:copycat": "<:",
-    "guidebook.role.description.wyspiaexpress:copycat": "The copycat is gifted by the God of Train and WyspiaExpress. This gift allows them to freely adapt to any situation. \n\n Press E and you can choose a killer role from a selected options",
+    "guidebook.role.description.wyspiaexpress:copycat": "The copycat is gifted by the God of Train and WyspiaExpress. This gift allows them to freely adapt to any situation. \n\nPress E and you can choose a killer role from a selected options",
 
   "guidebook.role.wyspiaexpress:outlaw": "The Outlaw",
     "guidebook.role.title.wyspiaexpress:outlaw": "...",
-    "guidebook.role.description.wyspiaexpress:outlaw": "People often wonder what law did The Outlaw break to receive such a name. Rumours says that he just thinks its cool to be called \"The Outlaw\" so he gave himself that name, just like how his friend Michael named himself \"The Maverick\".\n\n They spawn and can purchase an Outlaw Revolver, which doesn't drop when shooting an innocent. They could also instantly recharge the Revolver with their ability",
+    "guidebook.role.description.wyspiaexpress:outlaw": "People often wonder what law did The Outlaw break to receive such a name. Rumours says that he just thinks its cool to be called \"The Outlaw\" so he gave himself that name, just like how his friend Michael named himself \"The Maverick\".\n\nThey spawn and can purchase an Outlaw Revolver, which doesn't drop when shooting an innocent. They could also instantly recharge the Revolver with their ability",
 
 
   "guidebook.role.wyspiaexpress:edge_lord": "The Edgelord Delusional Cursed Assassin of Darkness and Coffee Addiction",
@@ -147,11 +147,11 @@
 
   "guidebook.role.wyspiaexpress:vent_crawler": "Professional Vent Crawler",
     "guidebook.role.title.wyspiaexpress:vent_crawler": "Sus ඞ",
-    "guidebook.role.description.wyspiaexpress:vent_crawler": "Why are you venting? \nGUYS RED IS SUS !!!\n\n Gain 50% increased speed when crawling",
+    "guidebook.role.description.wyspiaexpress:vent_crawler": "Why are you venting? \nGUYS RED IS SUS !!!\n\nGain 50% increased speed when crawling",
 
   "guidebook.role.wyspiaexpress:elusive": "Elusive",
     "guidebook.role.title.wyspiaexpress:elusive": "Stealth 100",
-    "guidebook.role.description.wyspiaexpress:elusive": "Master of hide and seek. \n\n Player with elusive will be hidden from most active instinct. But passive instinct like Starstruck will still see you",
+    "guidebook.role.description.wyspiaexpress:elusive": "Master of hide and seek. \n\nPlayer with elusive will be hidden from most active instinct. But passive instinct like Starstruck will still see you",
 
   "guidebook.role.wyspiaexpress:bomber": "Bomber",
   "guidebook.role.title.wyspiaexpress:bomber": "BOOOOM!",

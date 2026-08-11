@@ -36,7 +36,8 @@
       "wyspiaexpress:sense_dead",
       "wyspiaexpress:hear_dead",
       "wyspiaexpress:world_component",
-      "wyspiaexpress:movement_component"
+      "wyspiaexpress:movement_component",
+      "wyspiaexpress:role_component"
     ]
   },
   "mixins": [

@@ -28,12 +28,14 @@ import org.agmas.harpymodloader.events.ModifierAssigned;
 import org.agmas.harpymodloader.events.ResetPlayerEvent;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
 import org.agmas.harpymodloader.modifiers.Modifier;
+import org.aussiebox.starexpress.StarryExpressModifiers;
 import org.cat.express.wyspiaexpress.components.*;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
+import pro.fazeclan.river.stupid_express.constants.SEModifiers;
 import pro.fazeclan.river.stupid_express.role.avaricious.AvariciousGoldHandler;
 
 import java.util.*;
@@ -53,8 +55,9 @@ public class WyspiaExpressRoles {
         registerModifierAssigned();
         registerStringRoleMap();
         limitRoleSpawn();
+        initHiddenList();
         initNeutralList();
-        // allow spectator and creative mod to see poison
+        // allow spectator and creative mode to see poison
         CanSeePoison.EVENT.register((player)->{
             if (GameFunctions.isPlayerSpectatingOrCreative(player)) {
                 return true;
@@ -85,16 +88,23 @@ public class WyspiaExpressRoles {
     public static int PLAYER_COUNT = 0;
     private static final HashMap<String, Role> ROLES = new HashMap<>();
     private static final HashMap<String, Role> NON_MURDER_ROLES = new HashMap<>();
+    private static final HashMap<String, Modifier> MODIFIERS = new HashMap<>();
 
     public static Set<Role> TRUE_NEUTRALS = new HashSet<>();
     public static Set<Role> KILLER_SIDED_NEUTRALS = new HashSet<>();
+
+    public static Set<Role> HIDDEN_ROLES = new HashSet<>();
+    public static Set<Modifier> HIDDEN_MODIFIERS = new HashSet<>();
+
     public static final HashMap<Role, WyspiaExpressRolesConfig.RoleBasicConfig> ROLES_BASIC_CONFIG = new HashMap<>();
 
     public static final List<Role> COPYCAT_ROLES = new ArrayList<>();
-    public static final HashMap<String, Role> STRING_ROLES = new HashMap<>();// a map for role picking widget
+
+    public static final HashMap<String, Role> STRING_ROLES = new HashMap<>();
+    public static final HashMap<String, Modifier> STRING_MODIFIERS= new HashMap<>();
 
     public static HashMap<String, Role> getRoles() {return ROLES;}
-    private static final HashMap<String, Modifier> MODIFIERS = new HashMap<>();
+
     public static HashMap<String, Modifier> getModifiers() {return MODIFIERS;}
 
 
@@ -242,6 +252,34 @@ public class WyspiaExpressRoles {
         MODIFIERS.put(modifier.identifier().getPath(), modifier);
         return modifier;
     }
+    private static void initHiddenList(){
+        // hidden roles
+        HIDDEN_ROLES.add(COPYCAT);
+        // licensed villain is hidden due to bug
+        HIDDEN_ROLES.add(LICENSED_VILLAIN);
+
+        // secondary revive roles
+        HIDDEN_ROLES.add(CULTIST);
+        HIDDEN_ROLES.add(LICH_GHOUL);
+        // obsolete roles
+        HIDDEN_ROLES.add(MUZZLER);
+        HIDDEN_ROLES.add(BETTER_VIGILANTE);
+        HIDDEN_ROLES.add(AWESOME_BINGLUS);
+        HIDDEN_ROLES.add(NOTE_TAKER);
+        HIDDEN_ROLES.add(THE_INSANE_DAMNED_PARANOID_KILLER_OF_DOOM_DEATH_DESTRUCTION_AND_WAFFLES);
+        HIDDEN_ROLES.add(NECROMANCER);
+        HIDDEN_ROLES.add(JESTER);
+        HIDDEN_ROLES.add(VOODOO);
+        // hidden modifiers
+        if(WyspiaExpress.MODIFIERS_CONFIG.guesserConfig.killerAlwaysGuesser())
+            HIDDEN_MODIFIERS.add(GUESSER);
+        HIDDEN_MODIFIERS.add(BOMBER);
+        HIDDEN_MODIFIERS.add(SEModifiers.LOVERS);
+        HIDDEN_MODIFIERS.add(MAGNATE);
+        HIDDEN_MODIFIERS.add(TASKMASTER);
+        HIDDEN_MODIFIERS.add(VIOLATOR);
+        HIDDEN_MODIFIERS.add(StarryExpressModifiers.ALLERGIC);
+    }
     private static void initNeutralList(){
         TRUE_NEUTRALS.add(EDDIE_WAFFLES);
         TRUE_NEUTRALS.add(AMNESIAC);
@@ -303,6 +341,9 @@ public class WyspiaExpressRoles {
                 for(int i = 0 ; i < WyspiaExpress.MODIFIERS_CONFIG.bomberConfig.grenadeAmount(); i++){
                     player.giveItemStack(WatheItems.GRENADE.getDefaultStack());
                 }
+                for(int i = 0 ; i < WyspiaExpress.MODIFIERS_CONFIG.bomberConfig.smokeBombAmount(); i++){
+                    player.giveItemStack(WyspiaExpressItems.SMOKE_BOMB.getDefaultStack());
+                }
             }
         });
     }
@@ -344,13 +385,13 @@ public class WyspiaExpressRoles {
                 if(COPYCAT_ROLES.isEmpty()){
                     ArrayList<Role> killerRoles = getKillerRoles();
                     if (killerRoles.isEmpty()) {
-                        roleIDs.add(getRoleString(WatheRoles.KILLER));
+                        roleIDs.add(getRoleName(WatheRoles.KILLER));
                         break;
                     }
                     COPYCAT_ROLES.addAll(killerRoles);
                     Collections.shuffle(COPYCAT_ROLES);
                 }
-                roleID = getRoleString(COPYCAT_ROLES.getFirst());
+                roleID = getRoleName(COPYCAT_ROLES.getFirst());
                 COPYCAT_ROLES.removeFirst();
                 roleIDs.add(roleID);
             }
@@ -404,12 +445,27 @@ public class WyspiaExpressRoles {
     }
     private static void registerStringRoleMap(){
         WatheRoles.ROLES.forEach((r) -> {
-            STRING_ROLES.put(getRoleString(r), r);
+            STRING_ROLES.put(getRoleName(r), r);
+        });
+        HMLModifiers.MODIFIERS.forEach((m) -> {
+            STRING_MODIFIERS.put(getModifierName(m), m);
         });
     }
-    public static String getRoleString(Role role){
+    public static String getRoleName(Role role){
         if(role == null) return "Unknown role";
         return role.identifier().getPath().toLowerCase();
+    }
+    public static String getRoleId(Role role){
+        if(role == null) return "Unknown role";
+        return role.identifier().toString();
+    }
+    public static String getModifierId(Modifier modifier){
+        if(modifier == null) return "Unknown role";
+        return modifier.identifier().toString();
+    }
+    public static String getModifierName(Modifier modifier){
+        if(modifier == null) return "Unknown modifier";
+        return modifier.identifier().getPath().toLowerCase();
     }
     private static void registerRoleConfigs(){
         // mine

@@ -194,15 +194,15 @@ public abstract class InstinctMixin {
     private static int handleBartender(PlayerEntity bartender, PlayerEntity targetPlayer) {
         BartenderPlayerComponent bartenderPlayerComponent = BartenderPlayerComponent.KEY.get(targetPlayer);
         PlayerPoisonComponent playerPoisonComponent =  PlayerPoisonComponent.KEY.get(targetPlayer);
-        if (bartenderPlayerComponent.glowTicks > 0) return Color.GREEN.getRGB();
-
+        if (playerPoisonComponent.poisonTicks > 0) {
+            return Color.RED.getRGB();
+        }
         if (bartenderPlayerComponent.armor > 0) {
             if(targetPlayer == bartender)
                 return Color.BLUE.getRGB();
         }
-        if (playerPoisonComponent.poisonTicks > 0) {
-           return Color.RED.getRGB();
-        }
+        if (bartenderPlayerComponent.glowTicks > 0) return Color.GREEN.getRGB();
+
         return -1;
     }
 }
