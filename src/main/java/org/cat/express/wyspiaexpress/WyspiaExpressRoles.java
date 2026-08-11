@@ -479,7 +479,7 @@ public class WyspiaExpressRoles {
         registerRoleBasicConfig(CULT_LEADER, WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.basic);
         registerRoleBasicConfig(CULTIST, WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.cultistConfig.basic);
         registerRoleBasicConfig(EDDIE_WAFFLES, WyspiaExpress.ROLES_CONFIG.roleConfig.eddieWafflesConfig.basic);
-        registerRoleBasicConfig(VILLAIN_LICENSED, WyspiaExpress.ROLES_CONFIG.roleConfig.villainLicensedConfig.basic);
+        registerRoleBasicConfig(VILLAIN_LICENSED, WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.licensedVillainConfig.basic);
         // wathe
         registerRoleBasicConfig(WatheRoles.VIGILANTE, WyspiaExpress.ROLES_CONFIG.roleConfig.vigilanteConfig.basic);
         // Starry Express roles
