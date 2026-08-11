@@ -34,6 +34,11 @@ public class RoleComponent implements AutoSyncedComponent {
     public RoleComponent(@NotNull World world) {
         this.world = world;
     }
+    public void init(){
+        disabledRoles.addAll(HarpyModLoaderConfig.HANDLER.instance().disabled);
+        disabledModifiers.addAll(HarpyModLoaderConfig.HANDLER.instance().disabledModifiers);
+        sync();
+    }
     public void startRound(){
         disabledRoles.clear();
         disabledModifiers.clear();
