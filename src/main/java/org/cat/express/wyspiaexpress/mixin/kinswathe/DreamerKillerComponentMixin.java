@@ -47,7 +47,9 @@ public abstract class DreamerKillerComponentMixin {
             remap = false
     )
     private ArrayList<Role> wyspiaexpress$replaceRoles(ArrayList<Role> original) {
-        original.removeIf(r -> !WyspiaExpressRoles.roleMeetPlayerRequirement(r));
-        return  original;
+
+        return original.stream()
+                .filter(WyspiaExpressRoles::roleMeetPlayerRequirement)
+                .collect(java.util.stream.Collectors.toCollection(ArrayList::new));
     }
 }

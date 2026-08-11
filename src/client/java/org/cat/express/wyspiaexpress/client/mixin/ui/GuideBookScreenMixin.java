@@ -30,8 +30,9 @@ public abstract class GuideBookScreenMixin {
         if (client.world == null) return original;
 
         RoleComponent comp = RoleComponent.KEY.get(client.world);
-        original.removeIf(role -> !shouldShowRole(comp, role));
-        return original;
+        return  original.stream()
+                .filter(role -> shouldShowRole(comp, role))
+                .collect(java.util.stream.Collectors.toCollection(ArrayList::new));
     }
 
     @ModifyExpressionValue(
@@ -46,8 +47,9 @@ public abstract class GuideBookScreenMixin {
         if (client.world == null) return original;
 
         RoleComponent comp = RoleComponent.KEY.get(client.world);
-        original.removeIf(mod -> !shouldShowModifier(comp, mod));
-        return original;
+        return original.stream()
+                .filter( mod -> shouldShowModifier(comp, mod))
+                .collect(java.util.stream.Collectors.toCollection(ArrayList::new));
     }
     @Unique
     private static boolean shouldShowRole(RoleComponent comp, Role role){
