@@ -24,8 +24,6 @@ public class RoleConfig {
     @Nest public CultLeaderConfig cultLeaderConfig = new CultLeaderConfig();
     @Comment("Config options for EDDIE_WAFFLES")
     @Nest public EddieWafflesConfig eddieWafflesConfig = new EddieWafflesConfig();
-    @Comment("Config options for VILLAIN_LICENSED")
-    @Nest public VillainLicensedConfig villainLicensedConfig = new VillainLicensedConfig();
 
     // wathe
     @Comment("Config options for VIGILANTE")
@@ -140,10 +138,6 @@ public class RoleConfig {
         public int cooldown = 5;
         @Comment("Whether spectator last voicechat group for their ability. Setting this to false will keep the default behaviour of just hearing nearby spectators")
         public boolean useSpectatorVoicechat = true;
-    }
-    public static class VillainLicensedConfig{
-        @Comment("Basic role configuration")
-        @Nest public RoleBasicConfig basic = new RoleBasicConfig();
     }
 
     // wathe
