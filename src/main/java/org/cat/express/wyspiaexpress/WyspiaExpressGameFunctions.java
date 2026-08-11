@@ -213,7 +213,7 @@ public class WyspiaExpressGameFunctions {
     }
     private static void registerEndWorldTick(){
         ServerWorldEvents.LOAD.register( (server, world) -> {
-            RoleComponent.KEY.get(world).sync();
+            RoleComponent.KEY.get(world).init();
         });
         ServerTickEvents.END_WORLD_TICK.register(world -> {
             if (!(world instanceof ServerWorld serverWorld)) return;

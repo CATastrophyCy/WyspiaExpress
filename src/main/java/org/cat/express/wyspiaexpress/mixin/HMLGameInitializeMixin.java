@@ -65,6 +65,7 @@ public abstract class HMLGameInitializeMixin {
         TrainWorldComponent.KEY.get(serverWorld).setTimeOfDay(TrainWorldComponent.TimeOfDay.NIGHT);
         gameWorld.clearRoleMap();
 
+        WyspiaExpressRoles.ROUND_PLAYER_COUNT = players.size();
         for (ServerPlayerEntity player : players) {
             ResetPlayerEvent.EVENT.invoker().resetPlayer(player);
             gameWorld.addRole(player, WatheRoles.CIVILIAN);
@@ -108,7 +109,7 @@ public abstract class HMLGameInitializeMixin {
             }
         }
         // lich initialize
-        if (!HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.LICH.identifier().toString())) {
+        if (!HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.getRoleId(WyspiaExpressRoles.LICH))) {
             int maxRevives = WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.additionalRevive() + killerCount;
             LichReviveComponent component = LichReviveComponent.KEY.get(serverWorld);
             component.setAvailableRevives(WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.additionalRevive());
@@ -178,7 +179,7 @@ public abstract class HMLGameInitializeMixin {
         GameTimeComponent gameTimeComponent = GameTimeComponent.KEY.get(serverWorld);
         WyspiaExpressRoles.GAME_START_TIME = gameTimeComponent.time;
 
-        RoleComponent.KEY.get(serverWorld).sync();
+        RoleComponent.KEY.get(serverWorld).startRound();
 
         ci.cancel();
     }
@@ -386,8 +387,8 @@ public abstract class HMLGameInitializeMixin {
         for (Role role : WatheRoles.ROLES) {
             if (Harpymodloader.NON_MURDER_ROLES.contains(role)) continue;
             if (Harpymodloader.VANNILA_ROLES.contains(role)) continue;
-            if (HarpyModLoaderConfig.HANDLER.instance().disabled.contains(role.identifier().toString())) continue;
-
+            if (HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.getRoleId(role))) continue;
+            if(!WyspiaExpressRoles.roleMeetPlayerRequirement(role)) continue;
             if (role.canUseKiller()) {
                 killerRoles.add(role);
             }
@@ -422,8 +423,8 @@ public abstract class HMLGameInitializeMixin {
         for (Role role : WatheRoles.ROLES) {
             if (Harpymodloader.NON_MURDER_ROLES.contains(role)) continue;
             if (Harpymodloader.VANNILA_ROLES.contains(role)) continue;
-            if (HarpyModLoaderConfig.HANDLER.instance().disabled.contains(role.identifier().toString())) continue;
-
+            if (HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.getRoleId(role))) continue;
+            if(!WyspiaExpressRoles.roleMeetPlayerRequirement(role)) continue;
             if (WyspiaExpressRoles.TRUE_NEUTRALS.contains(role)) {
                 trueNeutralRoles.add(role);
             } else if (WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)) {
@@ -486,7 +487,7 @@ public abstract class HMLGameInitializeMixin {
                 ServerPlayerEntity player = world.getServer().getPlayerManager().getPlayer(uuid);
                 if (player == null) continue;
                 if (!source.contains(player)) continue;
-                if (Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())) continue;
+                if (!Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())) continue;
                 if (!Harpymodloader.OVERWRITE_ROLES.contains(gwc.getRole(player))) continue;
 
                 if (pickedUuids.add(player.getUuid())) {
@@ -754,7 +755,7 @@ public abstract class HMLGameInitializeMixin {
 
         List<Modifier> randomModsForPlayer = new ArrayList<>(
                 HMLModifiers.MODIFIERS.stream()
-                        .filter(mod -> !HarpyModLoaderConfig.HANDLER.instance().disabledModifiers.contains(mod.identifier.toString()))
+                        .filter(mod -> !HarpyModLoaderConfig.HANDLER.instance().disabledModifiers.contains(WyspiaExpressRoles.getModifierId(mod)))
                         .toList()
         );
 

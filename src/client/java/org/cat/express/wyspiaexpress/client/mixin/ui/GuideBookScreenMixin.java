@@ -28,6 +28,7 @@ public abstract class GuideBookScreenMixin {
     private ArrayList<Role> wyspiaexpress$replaceRoles(ArrayList<Role> original) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.world == null) return original;
+
         RoleComponent comp = RoleComponent.KEY.get(client.world);
         return  original.stream()
                 .filter(role -> shouldShowRole(comp, role))
@@ -53,11 +54,11 @@ public abstract class GuideBookScreenMixin {
     @Unique
     private static boolean shouldShowRole(RoleComponent comp, Role role){
         String roleId = WyspiaExpressRoles.getRoleId(role);
-        return role == WyspiaExpressRoles.COPYCAT || (!comp.disabledRoles.contains(roleId) && !comp.hiddenRoles.contains(roleId));
+        return role == WyspiaExpressRoles.COPYCAT || (!comp.disabledRoles.contains(roleId) && !WyspiaExpressRoles.HIDDEN_ROLES.contains(role));
     }
     @Unique
     private static boolean shouldShowModifier(RoleComponent comp, Modifier modifier){
         String modifierId = WyspiaExpressRoles.getModifierId(modifier);
-        return modifier == Noellesroles.GUESSER || (!comp.disabledModifiers.contains(modifierId) && !comp.hiddenModifiers.contains(modifierId));
+        return modifier == Noellesroles.GUESSER || (!comp.disabledModifiers.contains(modifierId) && !WyspiaExpressRoles.HIDDEN_MODIFIERS.contains(modifier));
     }
 }
