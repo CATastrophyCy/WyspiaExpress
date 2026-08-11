@@ -2,13 +2,11 @@ package org.cat.express.wyspiaexpress.mixin.kinswathe;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.doctor4t.wathe.api.Role;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import org.BsXinQin.kinswathe.roles.dreamer.DreamerKillerComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

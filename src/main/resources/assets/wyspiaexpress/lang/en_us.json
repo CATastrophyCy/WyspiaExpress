@@ -118,7 +118,7 @@
 
   "guidebook.role.wyspiaexpress:lich": "Lich",
     "guidebook.role.title.wyspiaexpress:lich": "Master of Necromancy",
-    "guidebook.role.description.wyspiaexpress:lich": "The Lich has been practicing the dark arts for years both in life and in death. They have gained the ability to bring the dead back and manipulate them to do their bidding.\\n\\nOnce every few minutes, the Lich can interact with a body to bring them back to life as a Fragile Ghoul, a much weaker killer ( you cannot revive a Fragile Ghoul again). \nThe Lich themself cannot directly kill any player, so they must rely on their ghouls doing their job.",
+    "guidebook.role.description.wyspiaexpress:lich": "The Lich has been practicing the dark arts for years both in life and in death. They have gained the ability to bring the dead back and manipulate them to do their bidding.\\n\\nOnce every few minutes, the Lich can interact with a body to bring them back to life as a Fragile Ghoul, a much weaker killer ( you cannot revive a Fragile Ghoul again). \nThe Lich themself cannot directly kill any player, so they must rely on their ghouls doing their job.\n\nA Fragile Ghoul is a much weaker version of a Killer, with limited shop and stamina(30 seconds).",
 
   "guidebook.role.wyspiaexpress:eddie_waffles": "The Insane Damned Paranoid Civilian Of Just Waffles",
     "guidebook.role.title.wyspiaexpress:eddie_waffles": "Killer of Waffles",
@@ -126,7 +126,7 @@
 
   "guidebook.role.wyspiaexpress:cult_leader": "The nightshade cult leader",
     "guidebook.role.title.wyspiaexpress:cult_leader": "Cult leader",
-    "guidebook.role.description.wyspiaexpress:cult_leader": "The nightshade's cult is a weird cult praying for the idea that life and dead can be played with\n\"Their leader says that he can hear his \"great behond\", is it true ? Is it not ? whatever the case, anyone sacrificed using his dagger will see himself\ncoming back to life with a new goal in mind, serving the said cult who took pity on them\n\nCan purchase a ritual dagger that forcefully turn another player into Cultist. Cult Leader can slowly convert players around them. Converted players are highlited to cult members and when they die, they can be revived by the Cult Leader into Cultist.",
+    "guidebook.role.description.wyspiaexpress:cult_leader": "The nightshade's cult is a weird cult praying for the idea that life and dead can be played with\n\"Their leader says that he can hear his \"great behond\", is it true ? Is it not ? whatever the case, anyone sacrificed using his dagger will see himself\ncoming back to life with a new goal in mind, serving the said cult who took pity on them\n\nCan purchase a ritual dagger that forcefully turn another player into Cultist. Cult Leader can slowly convert players around them. Converted players are highlited to cult members and when they die, they can be revived by the Cult Leader into Cultist.\n\nCultist are considered part of the Cult and thus win with Cult Leader. Cultist have limited shop and stamina, but they do share passive instinct with the Cult Leader. Cultist can also see each other with their passive instinct.",
 
   "guidebook.role.wyspiaexpress:cultist": "Nightshade cultist",
     "guidebook.role.title.wyspiaexpress:cultist": "Cultist",
