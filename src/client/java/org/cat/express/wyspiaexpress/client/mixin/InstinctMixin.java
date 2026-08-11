@@ -56,6 +56,9 @@ public abstract class InstinctMixin {
             cir.cancel();
             return;
         }
+        if (gameWorld.isRole(MinecraftClient.getInstance().player, WyspiaExpressRoles.VILLAIN_LICENSED) && WatheClient.instinctKeybind.isPressed()) {
+            cir.setReturnValue(true);
+        }
     }
 
     @Inject(method = "getInstinctHighlight", at = @At("HEAD"), cancellable = true)
