@@ -12,10 +12,7 @@ import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
-import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
-import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
-import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
-import org.cat.express.wyspiaexpress.components.WorldComponent;
+import org.cat.express.wyspiaexpress.components.*;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.spongepowered.asm.mixin.Mixin;
@@ -81,10 +78,8 @@ public abstract class PlayerDeathMixin {
                 at = @At("TAIL")
         )
         private static void wyspiaexpress$resetStat(ServerWorld world, CallbackInfo ci) {
-            var component = LichReviveComponent.KEY.get(world);
-            component.reset();
-            var world_component = WorldComponent.KEY.get(world);
-            world_component.reset();
-
+            LichReviveComponent.KEY.get(world).reset();
+            WorldComponent.KEY.get(world).reset();
+            RoleComponent.KEY.get(world).endRound();
         }
 }
