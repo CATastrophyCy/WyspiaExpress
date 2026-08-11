@@ -5,21 +5,17 @@ import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.api.event.AllowPlayerDeath;
 import dev.doctor4t.wathe.api.event.CanSeePoison;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
-import dev.doctor4t.wathe.cca.MapVariablesWorldComponent;
 import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheItems;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.LoreComponent;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Box;
 import org.BsXinQin.kinswathe.KinsWatheConfig;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
@@ -50,11 +46,11 @@ public class WyspiaExpressRoles {
 
     public static void init() {
         registerRoleConfigs();
+        registerRoleLimit();
         registerAnnouncements();
         registerRoleAssigned();
         registerModifierAssigned();
         registerStringRoleMap();
-        limitRoleSpawn();
         initHiddenList();
         initNeutralList();
         // allow spectator and creative mode to see poison
@@ -85,7 +81,7 @@ public class WyspiaExpressRoles {
         }));
     }
     public static int GAME_START_TIME = -1;
-    public static int PLAYER_COUNT = 0;
+    public static int ROUND_PLAYER_COUNT = 0; // amount of players at the start of a round
     private static final HashMap<String, Role> ROLES = new HashMap<>();
     private static final HashMap<String, Role> NON_MURDER_ROLES = new HashMap<>();
     private static final HashMap<String, Modifier> MODIFIERS = new HashMap<>();
@@ -285,33 +281,7 @@ public class WyspiaExpressRoles {
         KILLER_SIDED_NEUTRALS.add(DREAMER);
         KILLER_SIDED_NEUTRALS.add(HACKER);
     }
-    private static void limitRoleSpawn(){
-        ServerTickEvents.END_SERVER_TICK.register(((server) -> {
-            // this only takes into account the overworld
-            Box readyArea = MapVariablesWorldComponent.KEY.get(server.getOverworld()).getReadyArea();
-            Box playArea = MapVariablesWorldComponent.KEY.get(server.getOverworld()).getPlayArea();
-            PLAYER_COUNT = 0;
-            for(PlayerEntity player : server.getPlayerManager().getPlayerList()){
-                if(readyArea.contains(player.getPos()) || playArea.contains(player.getPos())
-                    && !player.isSpectator()
-                )
-                {
-                    PLAYER_COUNT++;
-                }
-            }
-            for( Role role : ROLES_BASIC_CONFIG.keySet()){
-                WyspiaExpressRolesConfig.RoleBasicConfig config = ROLES_BASIC_CONFIG.get(role);
-                if (PLAYER_COUNT >= config.minimumPlayerSpawn() && PLAYER_COUNT <= config.maximumPlayerSpawn())
-                {
-                    Harpymodloader.setRoleMaximum(role,config.maximumSpawn());
-                }
-                else {
-                    Harpymodloader.setRoleMaximum(role, 0);
-                }
-            }
-        }));
 
-    }
     private static void registerRoleAssigned(){
         registerStartingItems();
         registerRoleEffect();
@@ -393,7 +363,7 @@ public class WyspiaExpressRoles {
 
         killerRoles.removeIf(r -> (
                 (
-                    ((ROLES_BASIC_CONFIG.get(r) != null) && (( PLAYER_COUNT < ROLES_BASIC_CONFIG.get(r).minimumPlayerSpawn() || PLAYER_COUNT > ROLES_BASIC_CONFIG.get(r).maximumPlayerSpawn()))) ||
+                    !roleMeetPlayerRequirement(r)||
                     Harpymodloader.VANNILA_ROLES.contains(r) ||
                     !r.canUseKiller() ||
                     HarpyModLoaderConfig.HANDLER.instance().disabled.contains(r.identifier().toString())
@@ -438,6 +408,21 @@ public class WyspiaExpressRoles {
         HMLModifiers.MODIFIERS.forEach((m) -> {
             STRING_MODIFIERS.put(getModifierName(m), m);
         });
+    }
+    private static void registerRoleLimit(){
+        for( Role role : ROLES_BASIC_CONFIG.keySet()){
+            var config = ROLES_BASIC_CONFIG.get(role);
+            Harpymodloader.setRoleMaximum(role,config.maximumSpawn());
+        }
+    }
+    public static boolean roleMeetPlayerRequirement(Role role){
+        return roleMeetPlayerRequirement(role, ROUND_PLAYER_COUNT);
+    }
+    public static boolean roleMeetPlayerRequirement(Role role, int playerCount){
+        var config = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role);
+        if(config == null) return true;
+        return playerCount >= config.minimumPlayerSpawn()
+                && playerCount <= config.maximumPlayerSpawn();
     }
     public static String getRoleName(Role role){
         if(role == null) return "Unknown role";

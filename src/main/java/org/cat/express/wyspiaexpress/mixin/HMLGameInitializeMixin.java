@@ -65,6 +65,7 @@ public abstract class HMLGameInitializeMixin {
         TrainWorldComponent.KEY.get(serverWorld).setTimeOfDay(TrainWorldComponent.TimeOfDay.NIGHT);
         gameWorld.clearRoleMap();
 
+        WyspiaExpressRoles.ROUND_PLAYER_COUNT = players.size();
         for (ServerPlayerEntity player : players) {
             ResetPlayerEvent.EVENT.invoker().resetPlayer(player);
             gameWorld.addRole(player, WatheRoles.CIVILIAN);
@@ -178,7 +179,7 @@ public abstract class HMLGameInitializeMixin {
         GameTimeComponent gameTimeComponent = GameTimeComponent.KEY.get(serverWorld);
         WyspiaExpressRoles.GAME_START_TIME = gameTimeComponent.time;
 
-        RoleComponent.KEY.get(serverWorld).sync();
+        RoleComponent.KEY.get(serverWorld).startRound();
 
         ci.cancel();
     }
@@ -387,7 +388,7 @@ public abstract class HMLGameInitializeMixin {
             if (Harpymodloader.NON_MURDER_ROLES.contains(role)) continue;
             if (Harpymodloader.VANNILA_ROLES.contains(role)) continue;
             if (HarpyModLoaderConfig.HANDLER.instance().disabled.contains(role.identifier().toString())) continue;
-
+            if(!WyspiaExpressRoles.roleMeetPlayerRequirement(role)) continue;
             if (role.canUseKiller()) {
                 killerRoles.add(role);
             }
@@ -423,7 +424,7 @@ public abstract class HMLGameInitializeMixin {
             if (Harpymodloader.NON_MURDER_ROLES.contains(role)) continue;
             if (Harpymodloader.VANNILA_ROLES.contains(role)) continue;
             if (HarpyModLoaderConfig.HANDLER.instance().disabled.contains(role.identifier().toString())) continue;
-
+            if(!WyspiaExpressRoles.roleMeetPlayerRequirement(role)) continue;
             if (WyspiaExpressRoles.TRUE_NEUTRALS.contains(role)) {
                 trueNeutralRoles.add(role);
             } else if (WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)) {
