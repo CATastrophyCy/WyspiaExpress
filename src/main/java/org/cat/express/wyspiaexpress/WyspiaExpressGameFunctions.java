@@ -93,14 +93,19 @@ public class WyspiaExpressGameFunctions {
         );
         TrainVoicePlugin.resetPlayer(player.getUuid());
     }
+    public static Text getRoleAnnouncement(Role role){
+        if(role == null) return Text.literal("Unknown role");
+        return Text.translatable(role.identifier().toTranslationKey("announcement.role")).setStyle(Style.EMPTY.withItalic(true).withColor(role.color()));
+    }
     public static void sendPlayerDeathMessage(@NotNull ServerWorld world, @NotNull GameWorldComponent gameWorldComponent,
                                               @NotNull PlayerEntity victim, @Nullable PlayerEntity killer, @Nullable Identifier deathReason) {
 
         Text victimName = ((MutableText) Objects.requireNonNull(victim.getDisplayName())).setStyle(Style.EMPTY.withItalic(true));
         Text killerName = killer != null ? ((MutableText) Objects.requireNonNull(killer.getDisplayName())).setStyle(Style.EMPTY.withItalic(true)) : null;
-        Text reason = deathReason != null ? getDeathReason(deathReason).setStyle(Style.EMPTY.withItalic(true)) : Text.literal("Unknown reason");
-        Text victimRole = Text.literal(WyspiaExpressRoles.getRoleName(gameWorldComponent.getRole(victim))).setStyle(Style.EMPTY.withItalic(true));
-        Text killerRole = killer != null ? Text.literal(WyspiaExpressRoles.getRoleName(gameWorldComponent.getRole(killer))).setStyle(Style.EMPTY.withItalic(true)) : null;
+        Text victimRole = getRoleAnnouncement(gameWorldComponent.getRole(victim));
+        Text reason = deathReason != null ? getDeathReason(deathReason) : Text.literal("Unknown reason");
+        // Text.literal(WyspiaExpressRoles.getRoleName(gameWorldComponent.getRole(victim))).setStyle(Style.EMPTY.withItalic(true));
+        Text killerRole = killer != null ? getRoleAnnouncement(gameWorldComponent.getRole(killer)) : null;
         MutableText message = Text.literal("You have fallen to ").append(reason);
         if(killerName != null)
             message.append(" by ").append(killerName).append(" [").append(killerRole).append("]");
@@ -136,7 +141,7 @@ public class WyspiaExpressGameFunctions {
                                           @NotNull PlayerEntity player, @NotNull PlayerEntity revived){
         Text revivedName = ((MutableText) Objects.requireNonNull(revived.getDisplayName())).setStyle(Style.EMPTY.withItalic(true));
         Text playerName = ((MutableText) Objects.requireNonNull(player.getDisplayName())).setStyle(Style.EMPTY.withItalic(true));
-        Text playerRole = Text.literal(WyspiaExpressRoles.getRoleName(gameWorldComponent.getRole(player))).setStyle(Style.EMPTY.withItalic(true));
+        Text playerRole = getRoleAnnouncement(gameWorldComponent.getRole(player));
 
         Text revivedMessage = Text.literal("").append(revivedName).append(" has been revived by ")
                 .append(playerName).append(" [").append(playerRole).append("]");
@@ -145,9 +150,11 @@ public class WyspiaExpressGameFunctions {
     public static void sendConvertedMessage(@NotNull ServerWorld world, @NotNull GameWorldComponent gameWorldComponent,
                                      @NotNull PlayerEntity player, @NotNull PlayerEntity converted) {
         Text convertedName = ((MutableText) Objects.requireNonNull(converted.getDisplayName())).setStyle(Style.EMPTY.withItalic(true));
+        Text convertedRole = getRoleAnnouncement(gameWorldComponent.getRole(converted));
         Text playerName = ((MutableText) Objects.requireNonNull(player.getDisplayName())).setStyle(Style.EMPTY.withItalic(true));
 
-        Text convertedMessage = Text.literal("").append(convertedName).append(" has been forcefully converted by ")
+        Text convertedMessage = Text.literal("").append(convertedName).append(" [").append(convertedRole).append("]")
+                .append(" has been forcefully converted by ")
                 .append(playerName).append("");
         sendMessageDeadPlayers(world, convertedMessage);
     }
@@ -161,7 +168,7 @@ public class WyspiaExpressGameFunctions {
         return false;
     }
     public static MutableText getDeathReason(@NotNull Identifier reason){
-        return Text.translatable("death_reason." + reason.toTranslationKey());
+        return Text.translatable(reason.toTranslationKey("death_reason")).setStyle(Style.EMPTY.withItalic(true).withColor(Formatting.RED));
     }
     public static boolean gameHasAliveRole(@NotNull ServerWorld world,@NotNull GameWorldComponent component, @NotNull List<Role> roles) {
         for(ServerPlayerEntity player : world.getPlayers()){

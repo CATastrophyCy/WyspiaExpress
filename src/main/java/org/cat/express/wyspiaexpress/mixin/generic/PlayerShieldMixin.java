@@ -27,7 +27,7 @@ public class PlayerShieldMixin {
 
             if(WyspiaExpress.SERVER_CONFIG.blockStunTicks() > effectComponent.stunTicks)
                 effectComponent.setStunTicks(WyspiaExpress.SERVER_CONFIG.blockStunTicks());
-            Text message = Text.literal("Your protection saved you from ").append(WyspiaExpressGameFunctions.getDeathReason(deathReason)).append("!");
+            Text message = Text.literal("Your protection saved you from ").append(WyspiaExpressGameFunctions.getDeathReason(deathReason));
             victim.sendMessage(message, true);
             ci.cancel();
             return;
@@ -43,7 +43,7 @@ public class PlayerShieldMixin {
                 component.setArmour(component.getArmour() - 1);
                 component.sync();
                 victim.playSoundToPlayer(WatheSounds.ITEM_PSYCHO_ARMOUR, SoundCategory.MASTER, 5F, 1F);
-                Text message = Text.literal("Your protection saved you from ").append(WyspiaExpressGameFunctions.getDeathReason(deathReason)).append("!");;
+                Text message = Text.literal("Your protection saved you from ").append(WyspiaExpressGameFunctions.getDeathReason(deathReason));;
                 victim.sendMessage(message, true);
                 ci.cancel();
                 return;
