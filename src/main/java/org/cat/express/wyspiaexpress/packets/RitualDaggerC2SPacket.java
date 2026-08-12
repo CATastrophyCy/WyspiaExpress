@@ -73,6 +73,21 @@ public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
 
             //  only convert if the game is actually running and they are not already cultist
             if (gameWorldComponent.isRunning() && !gameWorldComponent.isRole(target, WyspiaExpressRoles.CULTIST)) {
+                // add time if a civilian is converted
+                if (gameWorldComponent.isInnocent(target)) {
+                    GameTimeComponent.KEY.get(target.getWorld()).addTime(GameConstants.TIME_ON_CIVILIAN_KILL);
+                }
+                // add counts revive to lich in case its a killer
+                if (gameWorldComponent.canUseKillerFeatures(target)) {
+                    var reviveComponent = LichReviveComponent.KEY.get(target.getWorld());
+                    // count killers that are still alive
+                    if(target.getWorld().getPlayers().stream().filter(gameWorldComponent::canUseKillerFeatures).filter(GameFunctions::isPlayerAliveAndSurvival).count()
+                            + reviveComponent.getAvailableRevives() - 1 < reviveComponent.getMaxRevives())
+                        reviveComponent.incrementAvailableRevives();
+                }
+                WorldModifierComponent.KEY.get(world).getModifiers(player).remove(Noellesroles.GUESSER);
+                TrainVoicePlugin.resetPlayer(target.getUuid());
+                WyspiaExpressGameFunctions.sendConvertedMessage(world, gameWorldComponent, player, target);
                 gameWorldComponent.addRole(target, WyspiaExpressRoles.CULTIST);
                 PlayerCultistComponent.KEY.get(target).reset();
 
@@ -86,21 +101,6 @@ public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
                 );
                 ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, WyspiaExpressRoles.CULTIST);
 
-                // add time if a civilian is converted
-                if (gameWorldComponent.isInnocent(target)) {
-                    GameTimeComponent.KEY.get(target.getWorld()).addTime(GameConstants.TIME_ON_CIVILIAN_KILL);
-                }
-                // add counts revive to lich in case its a killer
-                if (gameWorldComponent.canUseKillerFeatures(target)) {
-                    var reviveComponent = LichReviveComponent.KEY.get(target.getWorld());
-                    // count killers that are still alive
-                    if(target.getWorld().getPlayers().stream().filter(gameWorldComponent::canUseKillerFeatures).filter(GameFunctions::isPlayerAliveAndSurvival).count()
-                            + reviveComponent.getAvailableRevives() < reviveComponent.getMaxRevives())
-                        reviveComponent.incrementAvailableRevives();
-                }
-                WorldModifierComponent.KEY.get(world).getModifiers(player).remove(Noellesroles.GUESSER);
-                TrainVoicePlugin.resetPlayer(target.getUuid());
-                WyspiaExpressGameFunctions.sendConvertedMessage(world, gameWorldComponent, player, target);
             }
 
             player.swingHand(Hand.MAIN_HAND);
