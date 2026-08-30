@@ -183,7 +183,7 @@ public class ItemConfig {
         @Comment("Basic item configuration")
         @Nest public ItemBasicConfig basic = new ItemBasicConfig();
         @Comment("Cooldown, in seconds, minimum 0")
-        public int cooldown = 30;
+        public int cooldown = 90;
     }
     public static class BodyBagConfig {
         @Comment("Basic item configuration")
@@ -275,5 +275,11 @@ public class ItemConfig {
         @Nest public ItemBasicConfig basic = new ItemBasicConfig();
         @Comment("Cooldown, in seconds")
         public int cooldown = 30;
+        @Comment("Whether to enable light restoration function")
+        public boolean lightRestoration = true;
+        @Comment("Radius of light restoration")
+        public int radius = 20;
+        @Comment("Cooldown of light restoration")
+        public int lightRestorationCooldown = 120;
     }
 }
