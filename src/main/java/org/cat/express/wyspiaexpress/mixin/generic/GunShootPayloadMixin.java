@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import org.BsXinQin.kinswathe.KinsWatheRoles;
+import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.config.NoellesRolesConfig;
 import org.agmas.noellesroles.executioner.ExecutionerPlayerComponent;
@@ -51,7 +52,8 @@ public abstract class GunShootPayloadMixin {
         ServerPlayerEntity player = context.player();
         ItemStack mainHandStack = player.getMainHandStack();
         Entity targetEntity = original.call(world, targetId);
-
+        PlayerEffectComponent stunComponent = PlayerEffectComponent.KEY.get(player);
+        if(stunComponent.stunTicks > 0) return null;
         if (WyspiaExpress.SERVER_CONFIG.disableProtectionGunDrop()) {
             if (targetEntity instanceof PlayerEntity target && target.distanceTo(player) < 65.0) {
                 GameWorldComponent game = GameWorldComponent.KEY.get(player.getWorld());
