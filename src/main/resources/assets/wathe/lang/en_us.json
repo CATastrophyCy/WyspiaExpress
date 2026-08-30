@@ -1,4 +1,6 @@
 {
+  "announcement.role.wathe.vigilante": "Vigilante",
+  "announcement.role.wathe.loose_ends": "Loose Ends",
   "item.wathe.blackout.tooltip": "Turn off all lights aboard for 15 to 20 seconds\nUse your instinct to see your targets in the dark\nActivated instantly on purchase",
   "item.wathe.body_bag.tooltip": "Use on a dead body to bag it up and remove it\nSingle use",
   "item.wathe.crowbar.tooltip": "Use on any door to open it permanently",
