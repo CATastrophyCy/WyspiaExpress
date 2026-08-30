@@ -51,10 +51,7 @@ public class SmokeBombEntity extends ThrownItemEntity {
             PlayerEntity owner = (PlayerEntity) this.getOwner();
             WyspiaExpressItemsConfig.SmokeBombConfig config = WyspiaExpress.ITEMS_CONFIG.itemConfig.smokeBombConfig;
             for (ServerPlayerEntity player : PlayerLookup.around(world, origin, config.radius())) {
-                if (!GameFunctions.isPlayerAliveAndSurvival(player)) {
-                    continue;
-                }
-
+                if (!GameFunctions.isPlayerAliveAndSurvival(player)) continue;
                 // more mercy towards the owner
                 if(owner != null && player.getUuid().equals(owner.getUuid())
                         && player.squaredDistanceTo(origin) > config.ownerRadius() * config.ownerRadius())
@@ -67,10 +64,31 @@ public class SmokeBombEntity extends ThrownItemEntity {
                 }
                 PlayerMovementComponent.KEY.get(player).setTicks(config.duration());
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, config.duration(), 2, true, true, true));
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, config.duration(), 2, true, true, true));
                 // blindness doesn't really work, but it can prevent player from running
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, config.duration(), 2, true, true, true));
             }
-            ParticleManager.addEffect(new SmokeBombEffect(world,origin, config.smokeRadius() , config.smokeDuration()));
+            if(config.linger()) {
+                ParticleManager.addEffect(new SmokeBombEffect(world, origin, config.smokeRadius(), config.smokeDuration(),
+                        () -> {
+                            for (ServerPlayerEntity player : PlayerLookup.around(world, origin, config.smokeRadius())) {
+                                if (!GameFunctions.isPlayerAliveAndSurvival(player)) continue;
+
+                                float exposure = Explosion.getExposure(origin, player);
+                                if (exposure <= 0.0f) {
+                                    continue;
+                                }
+                                PlayerMovementComponent.KEY.get(player).setTicks(config.lingerDuration());
+                                player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, config.lingerDuration(), 2, true, true, true));
+                                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, config.lingerDuration(), 2, true, true, true));
+                                player.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, config.lingerDuration(), 2, true, true, true));
+                            }
+                        })
+                );
+            }
+            else {
+                ParticleManager.addEffect(new SmokeBombEffect(world, origin, config.smokeRadius(), config.smokeDuration()));
+            }
             this.discard();
         }
     }

@@ -11,5 +11,5 @@
   "item.kinswathe.pill.tooltip": "Right-click to eat\nProtects player one extra hit of life\nSingle use",
   "item.kinswathe.poison_injector.tooltip": "Use on a player to poison them\nIf the target was already suffering \nfrom ANY poison, they will immediately die",
   "item.kinswathe.sulfuric_acid_barrel.tooltip": "Use on a dead body to dissolve it",
-  "item.kinswathe.wrench.tooltip": "Use on any jammed or pried door to restore to normal\nShift right click a block to \nrestore nearby lights, cannot be used during blackouts."
+  "item.kinswathe.wrench.tooltip": "Use on any jammed or pried door to restore to normal\nShift right click a block to \nrestore nearby lights, cannot be used during blackouts, at the cost of a much longer cooldown."
 }
