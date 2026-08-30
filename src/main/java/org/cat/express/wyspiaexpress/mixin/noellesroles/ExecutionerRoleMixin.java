@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.mixin.noellesroles;
 
+import com.google.common.collect.Lists;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
@@ -45,16 +46,20 @@ public abstract class ExecutionerRoleMixin {
             ExecutionerPlayerComponent executionerPlayerComponent = ExecutionerPlayerComponent.KEY.get(executioner);
             if (executionerPlayerComponent.target.equals(victim.getUuid()) && !invalidKill) {
                 executionerPlayerComponent.won = true;
-                ArrayList<Role> shuffledKillerRoles = new ArrayList<>(WatheRoles.ROLES);
-                shuffledKillerRoles.removeIf(role ->
-                        Harpymodloader.VANNILA_ROLES.contains(role) ||
-                                !role.canUseKiller() ||
-                                HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.getRoleId(role))
-                                || !WyspiaExpressRoles.roleMeetPlayerRequirement(role)
-                );
-                if (shuffledKillerRoles.isEmpty()) shuffledKillerRoles.add(WatheRoles.KILLER);
-                Collections.shuffle(shuffledKillerRoles);
-
+                ArrayList<Role> shuffledKillerRoles;
+                if(WyspiaExpress.ROLES_CONFIG.enableRolePicking()) {
+                    shuffledKillerRoles = Lists.newArrayList(WyspiaExpressRoles.COPYCAT);
+                }else {
+                    shuffledKillerRoles = new ArrayList<>(WatheRoles.ROLES);
+                    shuffledKillerRoles.removeIf(role ->
+                            Harpymodloader.VANNILA_ROLES.contains(role) ||
+                                    !role.canUseKiller() ||
+                                    HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.getRoleId(role))
+                                    || !WyspiaExpressRoles.roleMeetPlayerRequirement(role)
+                    );
+                    if (shuffledKillerRoles.isEmpty()) shuffledKillerRoles.add(WatheRoles.KILLER);
+                    Collections.shuffle(shuffledKillerRoles);
+                }
                 gameWorldComponent.addRole(executioner,shuffledKillerRoles.getFirst());
                 ModdedRoleAssigned.EVENT.invoker().assignModdedRole(executioner,shuffledKillerRoles.getFirst());
                 ShopUtil.addCoin(executioner, WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.executionerConfig.reward());

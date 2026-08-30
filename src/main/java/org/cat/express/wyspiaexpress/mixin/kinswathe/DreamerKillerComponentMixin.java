@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.mixin.kinswathe;
 
+import com.google.common.collect.Lists;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.doctor4t.wathe.api.Role;
 import net.minecraft.util.math.MathHelper;
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Mixin(DreamerKillerComponent.class)
 public abstract class DreamerKillerComponentMixin {
@@ -45,7 +47,8 @@ public abstract class DreamerKillerComponentMixin {
             remap = false
     )
     private ArrayList<Role> wyspiaexpress$replaceRoles(ArrayList<Role> original) {
-
+        if(WyspiaExpress.ROLES_CONFIG.enableRolePicking())
+            return Lists.newArrayList(WyspiaExpressRoles.COPYCAT);
         return original.stream()
                 .filter(WyspiaExpressRoles::roleMeetPlayerRequirement)
                 .collect(java.util.stream.Collectors.toCollection(ArrayList::new));
