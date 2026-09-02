@@ -19,6 +19,7 @@
     "generic.ShopMixin",
     "generic.TaskIncomeMixin",
     "items.GrenadeMixin",
+    "items.WrenchMixin",
     "kinswathe.DreamerComponentMixin",
     "kinswathe.DreamerKillerComponentMixin",
     "noellesroles.DefenseVialEffectMixin",

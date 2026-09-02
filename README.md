@@ -57,38 +57,53 @@ When the round starts, every killer player will be assigned the Copycat role. By
 
 ## Miscellaneous
 
-- Players crawl faster
+- Players crawl faster (configurable)
 - Players that receive fatal damage but blocked it will be stunned (configurable)
 - Phantom will lose invisibility after killing a player in any way that isn't poison (configurable)
-- Tape rework. Muzzler will receive passive income for each muzzled players. Muzzled players will passively lose mood
 - Spectators can use "/sv join [0-5]" to enter different spectator voicechat group. They can also use "/sv leave" to leave the voicechat group as default voicechat group function is disabled
-- Spectators receive special instinct that allows them to see more
-- One killer each game will always have the guesser modifier
+- Spectators receive special instinct that allows them to see more information
+- One killer each game will always have the guesser modifier (configurable)
+
+## New Items & Item rework
+- (Starexpress)Tape rework: tape is made much more stable and Muzzler and Morphling will receive passive income for each muzzled players; muzzled players will passively lose mood (configurable)
+- (Kinswathe) Dream Imprint: made the teleport function configurable
+- (Kinswathe) Wrench: added a new functionality to wrench that allows it to restore nearby lights
+- Megaphone: a new item that can be used on a dead body to report it and make it temporally visible to all players. A body can only be reported once
+- Smoke bomb: a grenade that doesn't kill nearby players, but instead slows them and create a large area of smoke for a few seconds. Any player that are inside the smoke will also receive lingering effects (configurable)
 ## New roles
 
 ### Outlaw
 
-A killer that can purchase a special revolver that doesn't drop when they shoot a civilian, instead it will go to a much higher cooldown.
-They also have an ability that allows them to refresh the cooldown of every gun items.
+A killer that can purchase a special revolver that doesn't drop when they shoot a civilian, instead it will go to a much higher cooldown
+They also have an ability that allows them to refresh the cooldown of every gun items
 
 ### Lich
 
-A reimagining of the killer role Necromancer introduced by Stupid Express. 
-The Lich always revives dead players into a weaker killer role named Ghoul. 
+A reimagining of the killer role Necromancer introduced by Stupid Express
+The Lich always revives dead players into a weaker killer role named Ghoul
 
 ### Gambler
 
-A civilian role that can purchase a *Fun box*, which will be them a random item out of a selected pool.
+A civilian role that can purchase a *Fun box*, which will be them a random item out of a selected pool
 
 ### The Insane Dammed Paranoid Civilian of Just Waffles
 
-A true neutral role that wants to be the last one standing to win. They can hear dead players at their will.
+A true neutral role that wants to be the last one standing to win. They can hear dead players at their will
+
+### The Nightshade Cult Leader
+
+A true neutral role that wants to eliminate the train of non believers
+The Cult Leader will slowly convert players near them. Once fully converted, the player can be seen by ANY cult member on passive instinct
+When a fully converted player fall, their body will be visible to cult members, the Cult Leader can then go and revive the fallen player into a Cultist
+
+The Cult Leader can also purchase Ritual Dagger, which works like a knife can it turns the player into a Cultist instead of killing them. It is worth noting that the Dagger conversion does not clear
+the converted player's inventory, unlike the revive
 
 ## New modifiers
 
 ### Employee
 
-Player receives a special "Employee key" that allows them to open several doors on the map.
+Player receives a special "Employee key" that allows them to open several doors on the map
 
 ### Professional Vent Crawler
 
@@ -96,4 +111,4 @@ Player crawls much faster
 
 ### Elusive
 
-Player is hidden from active instinct when they are within a certain range of the player.
+Player is hidden from active instinct when they are within a certain range of the player

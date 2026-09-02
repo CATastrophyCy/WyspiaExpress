@@ -1,0 +1,17 @@
+{
+  "announcement.role.wathe.vigilante": "Vigilante",
+  "announcement.role.wathe.loose_ends": "Loose Ends",
+  "item.wathe.blackout.tooltip": "Turn off all lights aboard for 15 to 20 seconds\nUse your instinct to see your targets in the dark\nActivated instantly on purchase",
+  "item.wathe.body_bag.tooltip": "Use on a dead body to bag it up and remove it\nSingle use",
+  "item.wathe.crowbar.tooltip": "Use on any door to open it permanently",
+  "item.wathe.derringer.tooltip": "Point, right-click and shoot\nCan only be shot once, so make it count!\nShot is replenished after a kill",
+  "item.wathe.firecracker.tooltip": "Detonates 15 seconds after being placed on ground\nGood to simulate gunshots and lure people",
+  "item.wathe.grenade.tooltip": "Right-click to throw, explodes on impact\nGood to clear groups of people, but be wary of the blast radius!\nSingle use",
+  "item.wathe.knife.tooltip": "Right-click, hold for a second and get close to your victim\nAfter a kill, cannot be used for 1 minute\nAttack to knock back / push a player (no cooldown)",
+  "item.wathe.lockpick.tooltip": "Use on any locked door to open it (no cooldown)\nSneak-use on a door to jam it for 1 minute",
+  "item.wathe.note.tooltip": "Write a message and pin it for others to see\nSneak-use to write a message, then use on a wall or floor to place\nInvisible in hand",
+  "item.wathe.poison_vial.tooltip": "Slip in food or drinks to poison the next pickup\n",
+  "item.wathe.psycho_mode.tooltip": "\"Do you like hurting other people?\"\nHides your identity and allows you to go crazy with a bat for 30 seconds\nBat kills on full swing and cannot be unselected for the duration of the ability\nGain a shield for the duration of the ability that can block one fatal attack\nActivated instantly upon purchase",
+  "item.wathe.revolver.tooltip": "Point, right-click and shoot\nDrops if you kill an innocent(unless you are Licensed Villain)\n\nDoes not drop upon killing Executioner targets",
+  "item.wathe.scorpion.tooltip": "Slip in a bed to poison the next person looking for a rest\nConnected beds count as one bed, so you can't use it on both of them\n but the player will get poisoned if they sleep on any of the connected beds"
+}

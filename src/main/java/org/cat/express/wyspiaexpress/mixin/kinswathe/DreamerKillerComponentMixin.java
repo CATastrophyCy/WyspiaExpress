@@ -1,19 +1,21 @@
 package org.cat.express.wyspiaexpress.mixin.kinswathe;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.doctor4t.wathe.api.Role;
 import net.minecraft.util.math.MathHelper;
 import org.BsXinQin.kinswathe.roles.dreamer.DreamerKillerComponent;
+import org.agmas.harpymodloader.Harpymodloader;
+import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 @Mixin(DreamerKillerComponent.class)
 public abstract class DreamerKillerComponentMixin {
@@ -37,17 +39,23 @@ public abstract class DreamerKillerComponentMixin {
         ci.cancel();
     }
 
-    @ModifyExpressionValue(
+    @Redirect(
             method = "triggerBecomeKiller",
-            at = @At(value = "FIELD",
-                    target = "Ldev/doctor4t/wathe/api/WatheRoles;ROLES:Ljava/util/ArrayList;",
-                    opcode = Opcodes.GETSTATIC),
-            remap = false
+            at = @At(
+            value = "INVOKE",
+            target = "Ljava/util/ArrayList;removeIf(Ljava/util/function/Predicate;)Z",
+            remap = false)
     )
-    private ArrayList<Role> wyspiaexpress$replaceRoles(ArrayList<Role> original) {
-
-        return original.stream()
-                .filter(WyspiaExpressRoles::roleMeetPlayerRequirement)
-                .collect(java.util.stream.Collectors.toCollection(ArrayList::new));
+    private static boolean wyspiaexpress$replaceRoles(ArrayList<Role> instance, Predicate<? super Role> originalPredicate) {
+        if(WyspiaExpress.ROLES_CONFIG.enableRolePicking()) {
+            instance.clear();
+            return instance.add(WyspiaExpressRoles.COPYCAT);
+        }
+        return instance.removeIf(role ->
+                Harpymodloader.VANNILA_ROLES.contains(role) ||
+                        !role.canUseKiller() ||
+                        HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.getRoleId(role))
+                        || !WyspiaExpressRoles.roleMeetPlayerRequirement(role)
+        );
     }
 }

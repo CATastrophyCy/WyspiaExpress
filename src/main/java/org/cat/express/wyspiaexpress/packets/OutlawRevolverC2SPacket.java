@@ -16,6 +16,7 @@ import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
+import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +48,8 @@ public record OutlawRevolverC2SPacket(int target) implements CustomPayload {
             ItemStack mainHandStack = player.getMainHandStack();
             if (!mainHandStack.isOf(WyspiaExpressItems.OUTLAW_REVOLVER)) return;
             if (player.getItemCooldownManager().isCoolingDown(mainHandStack.getItem())) return;
-
+            PlayerEffectComponent stunComponent = PlayerEffectComponent.KEY.get(player);
+            if(stunComponent.stunTicks > 0) return ;
             player.getWorld().playSound(null, player.getX(), player.getEyeY(), player.getZ(), WatheSounds.ITEM_REVOLVER_CLICK, SoundCategory.PLAYERS, 0.5f, 1f + player.getRandom().nextFloat() * .1f - .05f);
 
 
