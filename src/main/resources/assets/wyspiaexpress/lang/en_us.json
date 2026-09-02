@@ -54,6 +54,12 @@
   "item.wyspiaexpress.megaphone": "Megaphone",
   "item.wyspiaexpress.megaphone.tooltip": "Right click to report a dead body.",
 
+  "item.wyspiaexpress.invisible_helmet": "Invisible Helmet",
+  "item.wyspiaexpress.invisible_chestplate": "Invisible Chestplate",
+  "item.wyspiaexpress.invisible_leggings": "Invisible Leggings",
+  "item.wyspiaexpress.invisible_boots": "Invisible Boots",
+
+
   "announcement.role.wyspiaexpress.note_taker": "Amazing Note Taker",
   "announcement.goals.wyspiaexpress.note_taker": "Observe, and take notes. You are amazing and not binglus anymore",
 

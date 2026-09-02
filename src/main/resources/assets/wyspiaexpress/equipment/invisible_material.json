@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": {
+          "id": "wyspiaexpress:invisible_material"
+        }
+      }
+    ]
+  }
+}
