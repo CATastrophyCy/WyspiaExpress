@@ -14,6 +14,7 @@ import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressModifiersConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressServerConfig;
+import org.cat.express.wyspiaexpress.items.InvisibleArmor;
 import org.cat.express.wyspiaexpress.packets.*;
 import org.cat.express.wyspiaexpress.particles.ParticleManager;
 import org.slf4j.Logger;
@@ -38,6 +39,7 @@ public class WyspiaExpress implements ModInitializer {
         SERVER_CONFIG.save();
         WyspiaExpressRoles.init();
         WyspiaExpressItems.init();
+        InvisibleArmor.initialize();
         WyspiaExpressSounds.init();
         WyspiaExpressEntities.init();
         WyspiaExpressGameFunctions.init();
