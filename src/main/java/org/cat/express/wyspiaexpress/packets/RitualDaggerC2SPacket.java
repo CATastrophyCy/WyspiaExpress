@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress.packets;
 
 import dev.doctor4t.wathe.cca.GameTimeComponent;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.wathe.compat.TrainVoicePlugin;
 import dev.doctor4t.wathe.game.GameConstants;
@@ -30,6 +31,7 @@ import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
+import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
 
 public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
@@ -68,6 +70,7 @@ public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
             PlayerEffectComponent playerEffectComponent = PlayerEffectComponent.KEY.get(target);
 
             target.playSound(WatheSounds.ITEM_KNIFE_STAB, 1.0f, 1.0f);
+
             WyspiaExpressItems.setItemCooldown(player, WyspiaExpressItems.RITUAL_DAGGER, null);
             playerEffectComponent.setStunTicks(WyspiaExpress.ITEMS_CONFIG.itemConfig.ritualDaggerConfig.duration());
 
@@ -90,6 +93,7 @@ public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
                 WyspiaExpressGameFunctions.sendConvertedMessage(world, gameWorldComponent, player, target);
                 gameWorldComponent.addRole(target, WyspiaExpressRoles.CULTIST);
                 PlayerCultistComponent.KEY.get(target).reset();
+                ShopUtil.setCoin(target, WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.startingCoin());
 
                 ServerPlayNetworking.send(
                         target,
