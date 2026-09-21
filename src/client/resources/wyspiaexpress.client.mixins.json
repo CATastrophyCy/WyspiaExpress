@@ -35,6 +35,7 @@
     "requireAnnotations": true
   },
   "mixins": [
+    "CrosshairMixin",
     "GetTargetMixin",
     "InstinctMixin",
     "RoleNameRendererMixin",
