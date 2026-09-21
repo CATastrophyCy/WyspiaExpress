@@ -1,15 +1,22 @@
 package org.cat.express.wyspiaexpress;
 
 
+import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.index.WatheItems;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
+import org.agmas.noellesroles.ModItems;
+import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressModifiersConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
@@ -20,6 +27,8 @@ import org.cat.express.wyspiaexpress.particles.ParticleManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class WyspiaExpress implements ModInitializer {
     public static final String MOD_ID = "wyspiaexpress";
 
@@ -29,6 +38,10 @@ public class WyspiaExpress implements ModInitializer {
     public static final WyspiaExpressModifiersConfig MODIFIERS_CONFIG = WyspiaExpressModifiersConfig.createAndLoad();
     public static final WyspiaExpressItemsConfig ITEMS_CONFIG = WyspiaExpressItemsConfig.createAndLoad();
     public static final WyspiaExpressServerConfig SERVER_CONFIG = WyspiaExpressServerConfig.createAndLoad();
+
+    public final List<Item> NO_DESPAWN_ITEMS = List.of(
+             ModItems.MASTER_KEY, WatheItems.REVOLVER
+    );
     public static int TICK = 0;
     @Override
     public void onInitialize() {
@@ -57,6 +70,19 @@ public class WyspiaExpress implements ModInitializer {
             else{
                 TICK++;
             }
+        });
+        ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+            if (!(entity instanceof ItemEntity itemEntity)) {
+                return;
+            }
+            if(!GameWorldComponent.KEY.get(world).isRunning())
+                return;
+            var itemStack = itemEntity.getStack();
+
+            if (NO_DESPAWN_ITEMS.stream().anyMatch(itemStack::isOf)) {
+                itemEntity.setNeverDespawn();
+            }
+
         });
         LOGGER.info("WyspiaExpress finished initializing.");
     }
