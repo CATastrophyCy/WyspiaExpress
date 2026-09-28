@@ -201,7 +201,7 @@ public class WyspiaExpressRoles {
             false,
             Role.MoodType.FAKE,
             WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2,
-            false
+            true
     ));
     public static Modifier EMPLOYEE = registerModifier(new Modifier(
             Identifier.of(WyspiaExpress.MOD_ID, "employee"),
