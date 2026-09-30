@@ -9,6 +9,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.RenderTickCounter;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.client.ui.DurationHud;
 import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
 import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,10 +25,14 @@ public abstract class HudRendererMixin {
     public void renderExtraBars(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         MinecraftClient client = MinecraftClient.getInstance();
 
-        if (client.player == null || !WatheClient.isPlayerAliveAndInSurvival()) return;
+        if (client.player == null) return;
 
         GameWorldComponent gameWorld = GameWorldComponent.KEY.get(client.player.getWorld());
         if (!gameWorld.isRunning()) return;
+
+        DurationHud.render(context, tickCounter);
+
+        if (!WatheClient.isPlayerAliveAndInSurvival()) return;
 
         int depressedTick = PlayerDepressedComponent.KEY.get(client.player).getDepressionTick();
         int freezeTick = PlayerFreezeComponent.KEY.get(client.player).getFreezeTick();
