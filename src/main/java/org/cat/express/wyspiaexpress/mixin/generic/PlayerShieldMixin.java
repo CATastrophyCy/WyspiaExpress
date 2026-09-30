@@ -41,7 +41,7 @@ public class PlayerShieldMixin {
                 if(WyspiaExpress.SERVER_CONFIG.psychoStunTicks()> effectComponent.stunTicks)
                     effectComponent.setStunTicks(WyspiaExpress.SERVER_CONFIG.psychoStunTicks()); // use a different stun duration
                 component.setArmour(component.getArmour() - 1);
-                component.sync();
+
                 victim.playSoundToPlayer(WatheSounds.ITEM_PSYCHO_ARMOUR, SoundCategory.MASTER, 5F, 1F);
                 Text message = Text.literal("Your protection saved you from ").append(WyspiaExpressGameFunctions.getDeathReason(deathReason));;
                 victim.sendMessage(message, true);

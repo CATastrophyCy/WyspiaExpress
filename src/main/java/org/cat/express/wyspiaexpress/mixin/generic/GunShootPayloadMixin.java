@@ -44,14 +44,14 @@ public abstract class GunShootPayloadMixin {
     )
     private Entity interceptShootingBlock(
             ServerWorld world,
-            int targetId,
+            int id,
             Operation<Entity> original,
             GunShootPayload payload,
             ServerPlayNetworking.Context context
     ) {
         ServerPlayerEntity player = context.player();
         ItemStack mainHandStack = player.getMainHandStack();
-        Entity targetEntity = original.call(world, targetId);
+        Entity targetEntity = original.call(world, id);
         PlayerEffectComponent stunComponent = PlayerEffectComponent.KEY.get(player);
         if(stunComponent.stunTicks > 0) return null;
         if (WyspiaExpress.SERVER_CONFIG.disableProtectionGunDrop()) {
