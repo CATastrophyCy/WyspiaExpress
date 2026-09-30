@@ -36,9 +36,8 @@ public abstract class LichTargetHudMixin {
             context.getMatrices().translate((float) context.getScaledWindowWidth() / 2.0F, (float) context.getScaledWindowHeight() / 2.0F + 6.0F, 0.0F);
             context.getMatrices().scale(0.6F, 0.6F, 1.0F);
             Text targetInfo = Text.translatable("hud.wyspiaexpress.lich.revive", WyspiaexpressClient.abilityBind.getBoundKeyLocalizedText()).withColor(WyspiaExpressRoles.LICH.color());
-            context.drawTextWithShadow(renderer, targetInfo, -renderer.getWidth(targetInfo) / 2, 32, WyspiaExpressRoles.LICH.color());
+            context.drawTextWithShadow(renderer, targetInfo, -renderer.getWidth(targetInfo) / 2, 64, WyspiaExpressRoles.LICH.color());
             context.getMatrices().pop();
         }
     }
 }
-
