@@ -43,7 +43,8 @@ public class OutlawRevolverMixin {
     ) {
 
         original.call(instance, entity, stack, renderMode, leftHanded, matrices, vertexConsumers, world, light, overlay, seed);
-        boolean isRevolver = stack.isOf(WyspiaExpressItems.OUTLAW_REVOLVER);
+        boolean isRevolver = stack.isOf(WyspiaExpressItems.OUTLAW_REVOLVER)
+                || stack.isOf(WyspiaExpressItems.FAKE_REVOLVER);
 
         if (entity instanceof PlayerEntity playerEntity && isRevolver) {
             if (!playerEntity.getUuid().equals(MinecraftClient.getInstance().player.getUuid()) || !renderMode.isFirstPerson()) {
@@ -74,4 +75,3 @@ public class OutlawRevolverMixin {
         return original;
     }
 }
-
