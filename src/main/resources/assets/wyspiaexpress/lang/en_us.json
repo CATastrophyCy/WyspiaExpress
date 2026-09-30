@@ -11,6 +11,7 @@
   "hud.wyspiaexpress.duration.blackout": "Blackout",
   "hud.wyspiaexpress.duration.blackout_range": "Min %ss · Max %ss",
   "hud.wyspiaexpress.duration.seconds": "%ss",
+  "hud.wyspiaexpress.survival.remaining": "%s%%",
   "tip.wyspiaexpress.ability.cooldown": "Ability usable in %ss",
   "tip.wyspiaexpress.ability.can_use": "Use %s to activate ability",
   "tip.wyspiaexpress.ability.not_enough_money": "%s§f\uE781§r required to activate ability",
