@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.doctor4t.wathe.client.gui.CrosshairRenderer;
 import dev.doctor4t.wathe.game.GameFunctions;
+import dev.doctor4t.wathe.index.WatheItems;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -40,8 +41,9 @@ public class CrosshairMixin {
         boolean target = false;
         ItemStack mainHandStack = player.getMainHandStack();
         ItemCooldownManager manager = player.getItemCooldownManager();
-        if (mainHandStack.isOf(KinsWatheItems.BLOWGUN) ||
-            mainHandStack.isOf(WyspiaExpressItems.OUTLAW_REVOLVER)
+        if (    mainHandStack.isOf(WatheItems.REVOLVER) ||
+                mainHandStack.isOf(KinsWatheItems.BLOWGUN) ||
+                mainHandStack.isOf(WyspiaExpressItems.OUTLAW_REVOLVER)
         ) {
             ci.cancel();
             context.getMatrices().push();
@@ -55,7 +57,8 @@ public class CrosshairMixin {
             }
             renderCrosshair(context, target);
         }
-        else if (mainHandStack.isOf(KinsWatheItems.HUNTING_KNIFE) ||
+        else if (mainHandStack.isOf(WatheItems.KNIFE) ||
+                mainHandStack.isOf(KinsWatheItems.HUNTING_KNIFE) ||
                 mainHandStack.isOf(KinsWatheItems.PAN) ||
                 mainHandStack.isOf(KinsWatheItems.POISON_INJECTOR) ||
                 mainHandStack.isOf(WyspiaExpressItems.RITUAL_DAGGER)) {
