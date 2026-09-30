@@ -22,6 +22,7 @@ import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.cat.express.wyspiaexpress.*;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
 import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
+import org.cat.express.wyspiaexpress.voicechat.SpectatorVoiceService;
 import org.jetbrains.annotations.NotNull;
 
 public record NoTargetAbilityC2SPacket() implements CustomPayload {
@@ -87,7 +88,7 @@ public record NoTargetAbilityC2SPacket() implements CustomPayload {
             }
             else{
                 TOGGLE = true;
-                Group targetGroup = WyspiaExpressCommands.getOrCreateGroup(5);
+                Group targetGroup = SpectatorVoiceService.getOrCreateGroup(5);
                 if (targetGroup == null) return;
                 connection.setGroup(targetGroup);
             }

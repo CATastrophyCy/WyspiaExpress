@@ -5,6 +5,7 @@ import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.gameplay.PlayerMoodService;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,6 +22,7 @@ public abstract class TaskIncomeMixin {
 
     @Inject(method = "setMood", at = @At("HEAD"))
     void wyspiaexpress$giveCoinsForMood(float mood, CallbackInfo ci) {
+        if (PlayerMoodService.getAdminChange()) return;
         GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
 
         /**
