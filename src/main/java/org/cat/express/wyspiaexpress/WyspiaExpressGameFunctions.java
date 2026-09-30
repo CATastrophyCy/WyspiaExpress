@@ -4,6 +4,7 @@ import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.MapVariablesWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
+import dev.doctor4t.wathe.cca.PlayerPoisonComponent;
 import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.wathe.compat.TrainVoicePlugin;
 import dev.doctor4t.wathe.game.GameFunctions;
@@ -58,6 +59,18 @@ public class WyspiaExpressGameFunctions {
     public static void init(){
         registerEndWorldTick();
         registerOnJoin();
+        registerPoisonSync();
+    }
+
+    private static void registerPoisonSync() {
+        ServerTickEvents.END_WORLD_TICK.register(world -> {
+            if (world.getTime() % 20 != 0) return;
+            // Remote entities may stop ticking on the client. Correct their poison countdown
+            for (ServerPlayerEntity player : world.getPlayers()) {
+                PlayerPoisonComponent poison = PlayerPoisonComponent.KEY.get(player);
+                if (poison.poisonTicks > 0) poison.sync();
+            }
+        });
     }
     public static void revivedPlayer(@NotNull GameWorldComponent gameWorldComponent,@NotNull WorldComponent worldComponent,
                 @NotNull ServerPlayerEntity player, @NotNull Role role, @NotNull List<Item> keptItems){

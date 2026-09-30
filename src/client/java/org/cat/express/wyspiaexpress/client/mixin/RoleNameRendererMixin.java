@@ -105,11 +105,12 @@ public abstract class RoleNameRendererMixin {
             PlayerPoisonComponent playerPoisonComponent = PlayerPoisonComponent.KEY.get(targetPlayer);
 
             if (playerPoisonComponent.poisonTicks > 0) {
+                double poisonSeconds = Math.ceil(playerPoisonComponent.poisonTicks / 2.0) / 10.0;
                 if(playerPoisonComponent.poisoner != null && playerPoisonComponent.poisoner.equals(DELUSION_MARKER)) {
-                    texts.add(Text.literal("Deluded " + playerPoisonComponent.poisonTicks / 20 + "s").setStyle(Style.EMPTY.withColor( (alpha << 24) | 0x9300FF))); ;
+                    texts.add(Text.literal("Deluded " + poisonSeconds + "s").setStyle(Style.EMPTY.withColor( (alpha << 24) | 0x9300FF))); ;
                 }
                 else{
-                    texts.add(Text.literal("Poisoned " + playerPoisonComponent.poisonTicks / 20 + "s").setStyle(Style.EMPTY.withColor( (alpha << 24) | Color.RED.getRGB())));
+                    texts.add(Text.literal("Poisoned " + poisonSeconds + "s").setStyle(Style.EMPTY.withColor( (alpha << 24) | Color.RED.getRGB())));
                 }
             }
 
