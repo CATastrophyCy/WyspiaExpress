@@ -54,8 +54,12 @@ public final class SpectatorVoiceService {
 
         UUID id = index == 0 ? TrainVoicePlugin.GROUP_ID : UUID.nameUUIDFromBytes(
                 ("wyspiaexpress:train_spectator_" + index).getBytes(StandardCharsets.UTF_8));
-        // Resolve against the current voice server rather than caching groups across restarts.
-        Group group = api.getGroup(id);
+        // getGroup(id) can return a non-null wrapper around a missing group in Simple Voice Chat.
+        // Enumerate registered groups so neither commands nor Wathe's death handler receive it.
+        Group group = api.getGroups().stream()
+                .filter(existing -> id.equals(existing.getId()))
+                .findFirst()
+                .orElse(null);
         if (group == null) {
             group = api.groupBuilder()
                     .setHidden(true)
