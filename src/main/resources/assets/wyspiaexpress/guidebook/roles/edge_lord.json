@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.edge_lord.summary"
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.edge_lord.ability.1"
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.edge_lord.lore"
+  }
+}

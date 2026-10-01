@@ -1,0 +1,137 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.starexpress.starstruck.summary"
+  },
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.starexpress.starstruck.lore"
+  },
+  "values": {
+    "duration": {
+      "config": "starexpress",
+      "path": "starstruckConfig.abilityDuration",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "cooldown": {
+      "config": "starexpress",
+      "path": "starstruckConfig.abilityCooldown",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "task": {
+      "config": "starexpress",
+      "path": "starstruckConfig.taskReducesCooldown",
+      "format": "boolean"
+    },
+    "reduction": {
+      "config": "starexpress",
+      "path": "starstruckConfig.taskCooldownReduction",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "speed": {
+      "config": "starexpress",
+      "path": "starstruckConfig.abilityAffectsMovementSpeed",
+      "format": "boolean"
+    },
+    "walk": {
+      "config": "starexpress",
+      "path": "starstruckConfig.abilityWalkSpeed",
+      "format": "number"
+    },
+    "sprint": {
+      "config": "starexpress",
+      "path": "starstruckConfig.abilitySprintSpeed",
+      "format": "number"
+    },
+    "sound": {
+      "config": "roles",
+      "path": "roleConfig.starryExpress.starstruckConfig.enableAbilitySound",
+      "format": "boolean"
+    },
+    "particles": {
+      "config": "roles",
+      "path": "roleConfig.starryExpress.starstruckConfig.enableAbilityParticleEffects",
+      "format": "boolean"
+    },
+    "persistentParticles": {
+      "config": "roles",
+      "path": "roleConfig.starryExpress.starstruckConfig.enablePersistentParticleEffects",
+      "format": "boolean"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.starexpress.starstruck.ability.1",
+        "with": [
+          {
+            "value": "duration"
+          },
+          {
+            "value": "cooldown"
+          }
+        ]
+      }
+    },
+    {
+      "when": {
+        "value": "task",
+        "equals": true
+      },
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.starexpress.starstruck.ability.2",
+        "with": [
+          {
+            "value": "reduction"
+          }
+        ]
+      }
+    },
+    {
+      "when": {
+        "value": "speed",
+        "equals": true
+      },
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.starexpress.starstruck.ability.3",
+        "with": [
+          {
+            "value": "walk"
+          },
+          {
+            "value": "sprint"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.starexpress.starstruck.ability.4"
+      },
+      "when": {
+        "value": "sound",
+        "equals": true
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.starexpress.starstruck.ability.5"
+      },
+      "when": {
+        "value": "particles",
+        "equals": true
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.starexpress.starstruck.ability.6"
+      },
+      "when": {
+        "value": "persistentParticles",
+        "equals": true
+      }
+    }
+  ]
+}

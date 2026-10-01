@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.hacker.summary"
+  },
+  "values": {
+    "time": {
+      "config": "derived",
+      "path": "kins.HackerHackingTime",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "instinct": {
+      "config": "roles",
+      "path": "roleConfig.kinsWatheRoles.hackerConfig.enableInstinct",
+      "format": "boolean"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.hacker.ability.1",
+        "with": [
+          {
+            "value": "time"
+          }
+        ]
+      }
+    },
+    {
+      "when": {
+        "value": "instinct",
+        "equals": true
+      },
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.hacker.ability.2"
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.hacker.ability.4"
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.hacker.lore"
+  }
+}

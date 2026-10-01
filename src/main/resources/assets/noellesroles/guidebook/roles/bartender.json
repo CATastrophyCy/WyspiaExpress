@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.noellesroles.bartender.summary"
+  },
+  "values": {
+    "maximum": {
+      "config": "derived",
+      "path": "noelles.maximumDefenseVials",
+      "format": "number"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.noellesroles.bartender.ability.1",
+        "with": [
+          {
+            "value": "maximum"
+          }
+        ]
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.noellesroles.bartender.lore"
+  }
+}

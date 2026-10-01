@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.wathe.vigilante.summary"
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wathe.vigilante.ability.1"
+      }
+    }
+  ]
+}

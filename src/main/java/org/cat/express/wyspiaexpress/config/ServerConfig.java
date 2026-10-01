@@ -13,6 +13,8 @@ import java.util.List;
 @Sync(Option.SyncMode.OVERRIDE_CLIENT)
 @Config(name = "wyspiaexpress/general", wrapperName = "WyspiaExpressServerConfig")
 public class ServerConfig {
+    @Comment("Hide StarryExpress's old inventory guidebook button. The new guide remains available through its keybind.")
+    public boolean suppressOldGuidebook = true;
     @Comment("Use custom weighted assignment")
     public boolean useCustomWeightedAssignment = true;
     @Comment("Base weight value used for customWeight assigment. The lower the value the more balanced the system is. High values add more variance (it is not recommended to go above 0.01!)." +

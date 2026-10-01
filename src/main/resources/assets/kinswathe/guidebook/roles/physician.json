@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.physician.summary"
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.physician.ability.1"
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.physician.ability.2"
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.physician.lore"
+  }
+}

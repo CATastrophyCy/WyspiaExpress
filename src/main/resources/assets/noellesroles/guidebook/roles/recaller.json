@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.noellesroles.recaller.summary"
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.noellesroles.recaller.ability.1",
+        "with": [
+          {
+            "value": "markCooldown"
+          },
+          {
+            "value": "cost"
+          },
+          {
+            "value": "returnCooldown"
+          }
+        ]
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.noellesroles.recaller.lore"
+  },
+  "values": {
+    "markCooldown": {
+      "config": "derived",
+      "path": "noelles.recallMarkCooldown",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "cost": {
+      "config": "derived",
+      "path": "noelles.recallCost",
+      "format": "coins"
+    },
+    "returnCooldown": {
+      "config": "derived",
+      "path": "noelles.recallReturnCooldown",
+      "format": "duration",
+      "unit": "seconds"
+    }
+  }
+}

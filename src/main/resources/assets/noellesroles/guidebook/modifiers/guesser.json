@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.modifiers.noellesroles.guesser.summary"
+  },
+  "values": {
+    "minimum": {
+      "config": "modifiers",
+      "path": "guesserConfig.minPlayer",
+      "format": "number"
+    },
+    "automatic": {
+      "config": "modifiers",
+      "path": "guesserConfig.killerAlwaysGuesser",
+      "format": "boolean"
+    },
+    "maximum": {
+      "config": "modifiers",
+      "path": "guesserConfig.maximumGuessers",
+      "format": "number"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.modifiers.noellesroles.guesser.ability.1",
+        "with": [
+          {
+            "value": "minimum"
+          }
+        ]
+      }
+    },
+    {
+      "when": {
+        "value": "automatic",
+        "equals": true
+      },
+      "text": {
+        "translate": "guidebook.wyspiaexpress.modifiers.noellesroles.guesser.ability.2",
+        "with": [
+          {
+            "value": "maximum"
+          }
+        ]
+      }
+    }
+  ],
+  "lore": ""
+}

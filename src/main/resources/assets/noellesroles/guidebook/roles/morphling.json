@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.noellesroles.morphling.summary"
+  },
+  "values": {
+    "payoutOn": {
+      "config": "roles",
+      "path": "roleConfig.starryExpress.muzzlerConfig.enablePayout",
+      "format": "boolean"
+    },
+    "payout": {
+      "config": "roles",
+      "path": "roleConfig.starryExpress.muzzlerConfig.muzzledPayout",
+      "format": "coins"
+    },
+    "duration": {
+      "config": "derived",
+      "path": "noelles.morphDuration",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "recovery": {
+      "config": "derived",
+      "path": "noelles.morphRecovery",
+      "format": "duration",
+      "unit": "seconds"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.noellesroles.morphling.ability.1",
+        "with": [
+          {
+            "value": "duration"
+          },
+          {
+            "value": "recovery"
+          }
+        ]
+      }
+    },
+    {
+      "when": {
+        "value": "payoutOn",
+        "equals": true
+      },
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.noellesroles.morphling.ability.2",
+        "with": [
+          {
+            "value": "payout"
+          }
+        ]
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.noellesroles.morphling.lore"
+  }
+}

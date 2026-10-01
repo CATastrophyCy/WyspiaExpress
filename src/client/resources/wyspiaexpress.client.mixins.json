@@ -23,6 +23,8 @@
     "roles.villain_licensed.VillainLicensedInstinctMixin",
     "ui.CoinMixin",
     "ui.GuideBookScreenMixin",
+    "ui.GuidebookKeyMixin",
+    "ui.LegacyGuidebookButtonMixin",
     "ui.HudRendererMixin",
     "ui.RolePickerWidgetMixin",
     "ui.ScreenAccessor",

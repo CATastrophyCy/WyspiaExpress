@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.villain_licensed.summary"
+  },
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.villain_licensed.lore"
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.villain_licensed.ability.1"
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.villain_licensed.ability.2",
+        "with": [
+          {
+            "value": "stamina"
+          }
+        ]
+      }
+    }
+  ],
+  "values": {
+    "stamina": {
+      "config": "derived",
+      "path": "role.wyspiaexpress:villain_licensed.sprint",
+      "format": "duration",
+      "unit": "ticks"
+    }
+  }
+}

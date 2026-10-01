@@ -24,6 +24,7 @@
     "items.WrenchMixin",
     "kinswathe.DreamerComponentMixin",
     "kinswathe.DreamerKillerComponentMixin",
+    "kinswathe.KinsGuideConfigMixin",
     "noellesroles.DefenseVialEffectMixin",
     "noellesroles.ExecutionerRoleMixin",
     "noellesroles.NoellesRolesMixin",

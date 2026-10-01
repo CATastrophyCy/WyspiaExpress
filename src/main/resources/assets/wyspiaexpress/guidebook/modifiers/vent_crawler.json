@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.modifiers.wyspiaexpress.vent_crawler.summary"
+  },
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.modifiers.wyspiaexpress.vent_crawler.lore"
+  },
+  "values": {
+    "speed": {
+      "config": "modifiers",
+      "path": "ventCrawlerConfig.crawlSpeedModifier",
+      "format": "multiplier"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.modifiers.wyspiaexpress.vent_crawler.ability.1",
+        "with": [
+          {
+            "value": "speed"
+          }
+        ]
+      }
+    }
+  ]
+}

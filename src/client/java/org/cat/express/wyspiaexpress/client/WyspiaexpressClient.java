@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.loader.api.FabricLoader;
@@ -25,6 +26,11 @@ import org.cat.express.wyspiaexpress.WyspiaExpressEntities;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.client.items.ItemToolTip;
+import org.cat.express.wyspiaexpress.client.guidebook.GuidebookDefinitions;
+import org.cat.express.wyspiaexpress.client.guidebook.GuidebookSources;
+import org.cat.express.wyspiaexpress.client.guidebook.WyspiaGuidebookScreen;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.minecraft.resource.ResourceType;
 import org.cat.express.wyspiaexpress.client.roles.NoTargetAbilityUtil;
 import org.cat.express.wyspiaexpress.client.roles.TargetAbilityUtil;
 import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
@@ -35,10 +41,13 @@ import java.util.concurrent.CompletableFuture;
 
 public class WyspiaexpressClient implements ClientModInitializer {
     public static KeyBinding abilityBind;
+    public static KeyBinding guidebookBind;
     public static PlayerBodyEntity TARGET_BODY = null;
     public static PlayerEntity TARGET_PLAYER = null;
     @Override
     public void onInitializeClient() {
+        registerGuidebook();
+        registerCooldownRefresh();
         registerItemToolTips();
         registerItemsBlood();
         registerAbilityKey();
@@ -65,6 +74,29 @@ public class WyspiaexpressClient implements ClientModInitializer {
                     }
             );
         }
+    }
+    private static void registerCooldownRefresh() {
+        // Cooldown tables used to refresh from item hovers. Keep them current when config mirrors
+        // change or a connection is established, so tooltips and guide previews stay read-only.
+        WyspiaExpress.ITEMS_CONFIG.forEachOption(option -> {
+            if (option.key().name().toLowerCase(java.util.Locale.ROOT).endsWith("cooldown")) {
+                option.observe(ignored -> MinecraftClient.getInstance().execute(WyspiaExpressItems::registerItemsCooldown));
+            }
+        });
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> WyspiaExpressItems.registerItemsCooldown());
+    }
+    private static void registerGuidebook() {
+        GuidebookSources.init();
+        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(GuidebookDefinitions.INSTANCE);
+        guidebookBind = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.wyspiaexpress.guidebook",
+                InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_L, "category.wathe.keybinds"));
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            while (guidebookBind.wasPressed()) {
+                if (client.world != null && client.player != null && client.currentScreen == null) {
+                    client.setScreen(new WyspiaGuidebookScreen());
+                }
+            }
+        });
     }
     private static void registerEntityRenderer(){
             EntityRendererRegistry.register(WyspiaExpressEntities.GRENADE, FlyingItemEntityRenderer::new);

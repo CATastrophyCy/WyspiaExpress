@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.noellesroles.conductor.summary"
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.noellesroles.conductor.ability.1"
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.noellesroles.conductor.ability.2"
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.noellesroles.conductor.lore"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.robot.summary"
+  },
+  "values": {
+    "cooldown": {
+      "config": "derived",
+      "path": "kins.RobotAbilityCooldown",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "duration": {
+      "config": "derived",
+      "path": "kins.RobotAbilityDuration",
+      "format": "duration",
+      "unit": "seconds"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.robot.ability.1",
+        "with": [
+          {
+            "value": "duration"
+          },
+          {
+            "value": "cooldown"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.robot.ability.2"
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.robot.lore"
+  }
+}

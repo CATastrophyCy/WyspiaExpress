@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.gambler.summary"
+  },
+  "values": {
+    "miss": {
+      "config": "roles",
+      "path": "roleConfig.gamblerConfig.missChance",
+      "format": "percent"
+    },
+    "good": {
+      "config": "roles",
+      "path": "roleConfig.gamblerConfig.goodPoolChance",
+      "format": "percent"
+    },
+    "compensation": {
+      "config": "roles",
+      "path": "roleConfig.gamblerConfig.missCompensationCoin",
+      "format": "coins"
+    },
+    "goodPool": {
+      "config": "roles",
+      "path": "roleConfig.gamblerConfig.goodPool",
+      "format": "items"
+    },
+    "badPool": {
+      "config": "roles",
+      "path": "roleConfig.gamblerConfig.badPool",
+      "format": "items"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.gambler.ability.1",
+        "with": [
+          {
+            "value": "miss"
+          },
+          {
+            "value": "compensation"
+          },
+          {
+            "value": "good"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.gambler.ability.2",
+        "with": [
+          {
+            "value": "goodPool"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.gambler.ability.3",
+        "with": [
+          {
+            "value": "badPool"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.gambler.ability.4"
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.gambler.lore"
+  }
+}

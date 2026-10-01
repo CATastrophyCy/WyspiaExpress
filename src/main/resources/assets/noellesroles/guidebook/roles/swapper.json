@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.noellesroles.swapper.summary"
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.noellesroles.swapper.ability.1",
+        "with": [
+          {
+            "value": "cooldown"
+          }
+        ]
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.noellesroles.swapper.lore"
+  },
+  "values": {
+    "cooldown": {
+      "config": "derived",
+      "path": "noelles.swapCooldown",
+      "format": "duration",
+      "unit": "seconds"
+    }
+  }
+}

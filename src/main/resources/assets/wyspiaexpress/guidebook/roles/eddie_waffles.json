@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.eddie_waffles.summary"
+  },
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.eddie_waffles.lore"
+  },
+  "values": {
+    "cooldown": {
+      "config": "roles",
+      "path": "roleConfig.eddieWafflesConfig.cooldown",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "group": {
+      "config": "roles",
+      "path": "roleConfig.eddieWafflesConfig.useSpectatorVoicechat",
+      "format": "boolean"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.eddie_waffles.ability.1",
+        "with": [
+          {
+            "value": "cooldown"
+          }
+        ]
+      }
+    },
+    {
+      "when": {
+        "value": "group",
+        "equals": true
+      },
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.eddie_waffles.ability.2"
+      }
+    },
+    {
+      "when": {
+        "value": "group",
+        "equals": false
+      },
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.eddie_waffles.ability.3"
+      }
+    }
+  ]
+}

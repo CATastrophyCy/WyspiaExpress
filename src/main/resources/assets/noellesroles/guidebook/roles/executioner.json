@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.noellesroles.executioner.summary"
+  },
+  "values": {
+    "reward": {
+      "config": "roles",
+      "path": "roleConfig.noellesRoles.executionerConfig.reward",
+      "format": "coins"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.noellesroles.executioner.ability.1",
+        "with": [
+          {
+            "value": "reward"
+          }
+        ]
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.noellesroles.executioner.lore"
+  }
+}

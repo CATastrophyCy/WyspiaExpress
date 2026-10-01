@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.detective.summary"
+  },
+  "values": {
+    "cooldown": {
+      "config": "derived",
+      "path": "kins.DetectiveAbilityCooldown",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "cost": {
+      "config": "derived",
+      "path": "kins.DetectiveAbilityPrice",
+      "format": "coins"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.detective.ability.1",
+        "with": [
+          {
+            "value": "cost"
+          },
+          {
+            "value": "cooldown"
+          }
+        ]
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.detective.lore"
+  }
+}

@@ -6,7 +6,6 @@ import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import dev.doctor4t.wathe.util.ShopEntry;
 import net.minecraft.entity.player.PlayerEntity;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
-import org.cat.express.wyspiaexpress.config.ShopConfig;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
@@ -33,7 +32,7 @@ public abstract class ShopMixin {
         if (basicConfig != null) {
             if(basicConfig.enableShop()) {
 
-                List<ShopEntry> shop = ShopUtil.fromShopEntryConfigs(ShopConfig.fromStrings(basicConfig.shopEntries()));
+                List<ShopEntry> shop = org.cat.express.wyspiaexpress.guidebook.RoleShopResolver.configured(playerRole);
                 if (index < 0 || index >= shop.size()) return;
                 ShopEntry entries = shop.get(index);
 

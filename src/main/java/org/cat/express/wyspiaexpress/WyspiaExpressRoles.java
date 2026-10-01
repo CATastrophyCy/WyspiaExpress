@@ -319,23 +319,8 @@ public class WyspiaExpressRoles {
     }
     private static void registerStartingItems(){
         ModdedRoleAssigned.EVENT.register((player, role)->{
-            var basicConfig = ROLES_BASIC_CONFIG.get(role);
-
-            if(basicConfig != null){
-
-                List<EnumShopEntry> startingItems = basicConfig.items();
-                List<Integer> startingItemAmount = basicConfig.itemAmount();
-                for(int i = 0; i < startingItems.size(); i++) {
-                    EnumShopEntry entry = startingItems.get(i);
-                    int amount = 1;
-                    if( i < startingItemAmount.size()){
-                        amount = startingItemAmount.get(i);
-                    }
-                    //
-                    ItemStack item = ShopUtil.fromEnumShopEntry(entry).getDefaultStack();
-                    item.setCount(amount);
-                    player.giveItemStack(item);
-                }
+            for (ItemStack stack : org.cat.express.wyspiaexpress.guidebook.RoleLoadoutResolver.configured(role)) {
+                player.giveItemStack(stack);
             }
         });
     }

@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.drugmaker.summary"
+  },
+  "values": {
+    "reward": {
+      "config": "derived",
+      "path": "kins.DrugmakerGetCoins",
+      "format": "coins"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.drugmaker.ability.1",
+        "with": [
+          {
+            "value": "reward"
+          }
+        ]
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.drugmaker.lore"
+  }
+}

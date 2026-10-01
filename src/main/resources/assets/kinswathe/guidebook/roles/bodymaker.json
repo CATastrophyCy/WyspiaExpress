@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.bodymaker.summary"
+  },
+  "values": {
+    "cooldown": {
+      "config": "derived",
+      "path": "kins.BodymakerAbilityCooldown",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "fakeRole": {
+      "config": "derived",
+      "path": "kins.BodymakerAbilityFakeRole",
+      "format": "boolean"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.bodymaker.ability.1",
+        "with": [
+          {
+            "value": "cooldown"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.bodymaker.ability.2"
+      },
+      "when": {
+        "value": "fakeRole",
+        "equals": true
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.bodymaker.ability.3"
+      },
+      "when": {
+        "value": "fakeRole",
+        "equals": false
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.bodymaker.lore"
+  }
+}

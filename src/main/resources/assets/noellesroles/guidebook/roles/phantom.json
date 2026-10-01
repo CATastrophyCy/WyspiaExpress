@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.noellesroles.phantom.summary"
+  },
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.noellesroles.phantom.lore"
+  },
+  "values": {
+    "duration": {
+      "config": "roles",
+      "path": "roleConfig.noellesRoles.phantomConfig.duration",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "cooldown": {
+      "config": "roles",
+      "path": "roleConfig.noellesRoles.phantomConfig.cooldown",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "reveal": {
+      "config": "roles",
+      "path": "roleConfig.noellesRoles.phantomConfig.loseInvisibilityWhenKill",
+      "format": "boolean"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.noellesroles.phantom.ability.1",
+        "with": [
+          {
+            "value": "duration"
+          },
+          {
+            "value": "cooldown"
+          }
+        ]
+      }
+    },
+    {
+      "when": {
+        "value": "reveal",
+        "equals": true
+      },
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.noellesroles.phantom.ability.2"
+      }
+    },
+    {
+      "when": {
+        "value": "reveal",
+        "equals": false
+      },
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.noellesroles.phantom.ability.3"
+      }
+    }
+  ]
+}

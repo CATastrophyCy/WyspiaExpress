@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.modifiers.wyspiaexpress.bomber.summary"
+  },
+  "values": {
+    "chance": {
+      "config": "modifiers",
+      "path": "bomberConfig.chance",
+      "format": "number"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.modifiers.wyspiaexpress.bomber.ability.1",
+        "with": [
+          {
+            "value": "chance"
+          }
+        ]
+      }
+    }
+  ]
+}

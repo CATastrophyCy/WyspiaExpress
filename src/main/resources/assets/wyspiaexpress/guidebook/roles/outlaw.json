@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.outlaw.summary"
+  },
+  "values": {
+    "cost": {
+      "config": "roles",
+      "path": "roleConfig.outlawConfig.cost",
+      "format": "coins"
+    },
+    "cooldown": {
+      "config": "roles",
+      "path": "roleConfig.outlawConfig.cooldown",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "stun": {
+      "config": "roles",
+      "path": "roleConfig.outlawConfig.selfStunDuration",
+      "format": "duration",
+      "unit": "ticks"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.outlaw.ability.1",
+        "with": [
+          {
+            "value": "cost"
+          },
+          {
+            "value": "cooldown"
+          },
+          {
+            "value": "stun"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.outlaw.ability.2"
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.outlaw.lore"
+  }
+}

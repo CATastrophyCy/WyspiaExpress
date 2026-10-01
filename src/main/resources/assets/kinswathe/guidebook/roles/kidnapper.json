@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.kidnapper.summary"
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.kidnapper.ability.1"
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.kidnapper.ability.2",
+        "with": [
+          {
+            "value": "reward"
+          }
+        ]
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.kidnapper.lore"
+  },
+  "values": {
+    "reward": {
+      "config": "derived",
+      "path": "kins.KidnapperGetAdditionalCoins",
+      "format": "coins"
+    }
+  }
+}

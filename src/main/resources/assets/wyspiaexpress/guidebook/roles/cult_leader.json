@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.cult_leader.summary"
+  },
+  "values": {
+    "conversion": {
+      "config": "roles",
+      "path": "roleConfig.cultLeaderConfig.enableConversion",
+      "format": "boolean"
+    },
+    "range": {
+      "config": "roles",
+      "path": "roleConfig.cultLeaderConfig.conversionRange",
+      "format": "number"
+    },
+    "time": {
+      "config": "roles",
+      "path": "roleConfig.cultLeaderConfig.conversionTime",
+      "format": "duration",
+      "unit": "ticks"
+    },
+    "reward": {
+      "config": "roles",
+      "path": "roleConfig.cultLeaderConfig.convertionReward",
+      "format": "coins"
+    },
+    "cooldown": {
+      "config": "roles",
+      "path": "roleConfig.cultLeaderConfig.cooldown",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "coins": {
+      "config": "roles",
+      "path": "roleConfig.cultLeaderConfig.startingCoin",
+      "format": "coins"
+    },
+    "stun": {
+      "config": "roles",
+      "path": "roleConfig.cultLeaderConfig.stun",
+      "format": "duration",
+      "unit": "ticks"
+    }
+  },
+  "abilities": [
+    {
+      "when": {
+        "value": "conversion",
+        "equals": true
+      },
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.cult_leader.ability.1",
+        "with": [
+          {
+            "value": "range"
+          },
+          {
+            "value": "time"
+          },
+          {
+            "value": "reward"
+          }
+        ]
+      }
+    },
+    {
+      "when": {
+        "value": "conversion",
+        "equals": false
+      },
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.cult_leader.ability.2"
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.cult_leader.ability.3",
+        "with": [
+          {
+            "value": "cooldown"
+          },
+          {
+            "value": "coins"
+          },
+          {
+            "value": "stun"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.cult_leader.ability.4"
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.cult_leader.lore"
+  }
+}

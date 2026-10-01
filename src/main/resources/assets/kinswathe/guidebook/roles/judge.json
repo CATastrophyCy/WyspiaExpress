@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.judge.summary"
+  },
+  "values": {
+    "cooldown": {
+      "config": "derived",
+      "path": "kins.JudgeAbilityCooldown",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "cost": {
+      "config": "derived",
+      "path": "kins.JudgeAbilityPrice",
+      "format": "coins"
+    },
+    "duration": {
+      "config": "derived",
+      "path": "kins.JudgeAbilityGlowing",
+      "format": "duration",
+      "unit": "seconds"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.judge.ability.1",
+        "with": [
+          {
+            "value": "duration"
+          },
+          {
+            "value": "cost"
+          },
+          {
+            "value": "cooldown"
+          }
+        ]
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.judge.lore"
+  }
+}

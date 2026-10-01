@@ -13,19 +13,14 @@ import net.minecraft.text.Text;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ItemToolTip {
 
-    private static final Map<Item, Integer> presetCooldowns = new HashMap<>();
-
-    public static int getItemCooldownTicks(@NotNull Item item) {return presetCooldowns.getOrDefault(item, 0);}
-
-    public static void initItemCooldown() {
-        WyspiaExpressItems.registerItemsCooldown();
-        presetCooldowns.putAll(GameConstants.ITEM_COOLDOWNS);
+    public static int getItemCooldownTicks(@NotNull Item item) {
+        Integer seconds = WyspiaExpressItems.configuredCooldowns().get(item);
+        return seconds != null && seconds >= 0 ? GameConstants.getInTicks(0, seconds)
+                : GameConstants.ITEM_COOLDOWNS.getOrDefault(item, 0);
     }
 
     public static void addItemtip(@NotNull Item item, @NotNull ItemStack itemStack, @NotNull List<Text> list) {
@@ -44,7 +39,6 @@ public class ItemToolTip {
     public static void addCooldowntip(@NotNull Item item, @NotNull ItemStack itemStack, @NotNull List<Text> list) {
         if (MinecraftClient.getInstance().player == null) return;
         if (itemStack.isOf(item)) {
-            initItemCooldown();
             ItemCooldownManager itemCooldown = MinecraftClient.getInstance().player.getItemCooldownManager();
             if (itemCooldown != null && itemCooldown.isCoolingDown(item)) {
                 float progress = itemCooldown.getCooldownProgress(item, 0);

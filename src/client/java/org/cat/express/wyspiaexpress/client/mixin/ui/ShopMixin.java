@@ -10,8 +10,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.text.Text;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
-import org.cat.express.wyspiaexpress.config.ShopConfig;
-import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -47,7 +45,7 @@ public abstract class ShopMixin extends LimitedHandledScreen<PlayerScreenHandler
             accessor.getSelectables().removeIf(w -> w instanceof LimitedInventoryScreen.StoreItemWidget);
             if(basicConfig.enableShop()) {
                 // Replaces the shop with our own
-                List<ShopEntry> entries = ShopUtil.fromShopEntryConfigs(ShopConfig.fromStrings(basicConfig.shopEntries()));
+                List<ShopEntry> entries = org.cat.express.wyspiaexpress.guidebook.RoleShopResolver.configured(playerRole);
                 // Need to add logic to count the times bough of each item to the player via component, and here we only draw those that he can still buy
                 int apart = 36;
                 int x = this.width / 2 - (entries.size()) * apart / 2 + 9;

@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.hunter.summary"
+  },
+  "values": {
+    "cooldown": {
+      "config": "derived",
+      "path": "kins.HunterAbilityCooldown",
+      "format": "duration",
+      "unit": "seconds"
+    },
+    "cost": {
+      "config": "derived",
+      "path": "kins.HunterAbilityPrice",
+      "format": "coins"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.hunter.ability.1",
+        "with": [
+          {
+            "value": "cost"
+          },
+          {
+            "value": "cooldown"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.hunter.ability.2"
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.roles.kinswathe.hunter.lore"
+  }
+}

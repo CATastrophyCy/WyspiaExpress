@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.modifiers.wyspiaexpress.elusive.summary"
+  },
+  "values": {
+    "minimum": {
+      "config": "modifiers",
+      "path": "elusiveConfig.minimumDistance",
+      "format": "number"
+    },
+    "maximum": {
+      "config": "modifiers",
+      "path": "elusiveConfig.maximumDistance",
+      "format": "number"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.modifiers.wyspiaexpress.elusive.ability.1",
+        "with": [
+          {
+            "value": "minimum"
+          },
+          {
+            "value": "maximum"
+          }
+        ]
+      }
+    }
+  ],
+  "lore": {
+    "translate": "guidebook.wyspiaexpress.modifiers.wyspiaexpress.elusive.lore"
+  }
+}

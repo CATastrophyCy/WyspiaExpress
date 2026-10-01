@@ -30,6 +30,10 @@ public class RoleComponent implements AutoSyncedComponent {
     private final World world;
     public final Set<String> disabledRoles = new HashSet<>();
     public final Set<String> disabledModifiers = new HashSet<>();
+    /** Snapshot taken at round start, never refreshed from a live player count. */
+    public int participantCount;
+    public int roundParticipantCount;
+    public boolean guideContextReady;
 
     public RoleComponent(@NotNull World world) {
         this.world = world;
@@ -37,9 +41,12 @@ public class RoleComponent implements AutoSyncedComponent {
     public void init(){
         disabledRoles.addAll(HarpyModLoaderConfig.HANDLER.instance().disabled);
         disabledModifiers.addAll(HarpyModLoaderConfig.HANDLER.instance().disabledModifiers);
-        sync();
+        guideContextReady = true;
     }
     public void startRound(){
+        roundParticipantCount = WyspiaExpressRoles.ROUND_PLAYER_COUNT;
+        participantCount = roundParticipantCount;
+        guideContextReady = true;
         disabledRoles.clear();
         disabledModifiers.clear();
 
@@ -49,7 +56,6 @@ public class RoleComponent implements AutoSyncedComponent {
     }
     public void endRound(){
         disabledRoles.removeIf(roleId -> !HarpyModLoaderConfig.HANDLER.instance().disabled.contains(roleId));
-        sync();
     }
     public void sync() {
         KEY.sync(this.world);
@@ -64,6 +70,9 @@ public class RoleComponent implements AutoSyncedComponent {
     public void writeToNbt(@NotNull NbtCompound tag, RegistryWrapper.@NotNull WrapperLookup registryLookup) {
         tag.put("DisabledRoles", toNbtList(this.disabledRoles));
         tag.put("DisabledModifiers", toNbtList(this.disabledModifiers));
+        tag.putInt("GuideParticipants", participantCount);
+        tag.putInt("GuideRoundParticipants", roundParticipantCount);
+        tag.putBoolean("GuideContextReady", guideContextReady);
     }
 
     @Override
@@ -73,6 +82,9 @@ public class RoleComponent implements AutoSyncedComponent {
 
         fromNbtList(tag, "DisabledRoles", this.disabledRoles);
         fromNbtList(tag, "DisabledModifiers", this.disabledModifiers);
+        participantCount = tag.getInt("GuideParticipants");
+        roundParticipantCount = tag.getInt("GuideRoundParticipants");
+        guideContextReady = tag.getBoolean("GuideContextReady");
     }
 
     private static NbtList toNbtList(Set<String> set) {
