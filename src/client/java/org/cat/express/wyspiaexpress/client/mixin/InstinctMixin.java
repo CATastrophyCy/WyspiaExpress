@@ -1,5 +1,7 @@
 package org.cat.express.wyspiaexpress.client.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerPoisonComponent;
@@ -21,6 +23,7 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.client.roles.TargetAbilityUtil;
 import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
+import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
 import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,6 +39,25 @@ import java.util.UUID;
 public abstract class InstinctMixin {
     // apparently they replaced fake poison's poisoner to this uuid, and in PlayerPoisonComponent they used a mixin to guarantee that delusion_maker won't kill
     @Unique private static final UUID DELUSION_MARKER = UUID.fromString("00000000-0000-0000-dead-c0de00000000"); // unique string used by Kinswathe
+
+    @WrapMethod(method = "isInstinctEnabled")
+    private static boolean wyspiaexpress$disableSmokedInstinct(Operation<Boolean> original) {
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        if (player != null && PlayerMovementComponent.KEY.get(player).isRestricted()) {
+            return false;
+        }
+        return original.call();
+    }
+
+    @WrapMethod(method = "getInstinctHighlight")
+    private static int wyspiaexpress$hideSmokedInstinct(Entity target, Operation<Integer> original) {
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        if ((player != null && PlayerMovementComponent.KEY.get(player).isRestricted())
+                || (target instanceof PlayerEntity targetPlayer && PlayerMovementComponent.KEY.get(targetPlayer).isRestricted())) {
+            return -1;
+        }
+        return original.call(target);
+    }
 
     @Inject(method = "isInstinctEnabled", at = @At("HEAD"), cancellable = true)
     private static void isInstinctEnabled(@NotNull CallbackInfoReturnable<Boolean> cir) {

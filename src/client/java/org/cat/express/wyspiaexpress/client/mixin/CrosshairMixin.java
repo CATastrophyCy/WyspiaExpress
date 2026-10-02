@@ -1,7 +1,10 @@
 package org.cat.express.wyspiaexpress.client.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import dev.doctor4t.wathe.cca.WorldBlackoutComponent;
 import dev.doctor4t.wathe.client.gui.CrosshairRenderer;
 import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheItems;
@@ -18,6 +21,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
+import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -34,6 +38,42 @@ public class CrosshairMixin {
     @Unique private static final Identifier KNIFE_ATTACK = Identifier.of("wathe", "hud/knife_attack");
     @Unique private static final Identifier KNIFE_PROGRESS = Identifier.of("wathe", "hud/knife_progress");
     @Unique private static final Identifier KNIFE_BACKGROUND = Identifier.of("wathe", "hud/knife_background");
+
+    @WrapMethod(method = "renderCrosshair")
+    private static void wyspiaexpress$hideCrosshair(MinecraftClient client, ClientPlayerEntity player,
+                                                  DrawContext context, RenderTickCounter tickCounter, Operation<Void> original) {
+        if (!client.options.getPerspective().isFirstPerson()) {
+            original.call(client, player, context, tickCounter);
+            return;
+        }
+        if (PlayerMovementComponent.KEY.get(player).isRestricted()
+                || WorldBlackoutComponent.KEY.get(player.getWorld()).isBlackoutActive()) {
+            return;
+        }
+
+        ItemStack stack = player.getMainHandStack();
+        float range;
+        if (stack.isOf(WatheItems.REVOLVER) || stack.isOf(KinsWatheItems.BLOWGUN)
+                || stack.isOf(WyspiaExpressItems.OUTLAW_REVOLVER)) {
+            range = 15.0F;
+        } else if (stack.isOf(WatheItems.KNIFE) || stack.isOf(KinsWatheItems.HUNTING_KNIFE)
+                || stack.isOf(KinsWatheItems.PAN) || stack.isOf(KinsWatheItems.POISON_INJECTOR)
+                || stack.isOf(WyspiaExpressItems.RITUAL_DAGGER)) {
+            range = 3.0F;
+        } else {
+            original.call(client, player, context, tickCounter);
+            return;
+        }
+
+        // Keep smoked players in the raycast so it cannot reveal a player behind them.
+        HitResult hit = ProjectileUtil.getCollision(player, entity -> entity instanceof PlayerEntity target
+                && GameFunctions.isPlayerAliveAndSurvival(target) && !target.isInvisible(), range);
+        if (hit instanceof EntityHitResult entityHit && entityHit.getEntity() instanceof PlayerEntity target
+                && PlayerMovementComponent.KEY.get(target).isRestricted()) {
+            return;
+        }
+        original.call(client, player, context, tickCounter);
+    }
 
     @Inject(method = "renderCrosshair", at = @At(value = "HEAD"), cancellable = true)
     private static void renderCrosshair(@NotNull MinecraftClient client, @NotNull ClientPlayerEntity player, @NotNull DrawContext context, @NotNull RenderTickCounter tickCounter, @NotNull CallbackInfo ci) {
