@@ -8,6 +8,11 @@
       "text": {
         "translate": "guidebook.wyspiaexpress.roles.stupid_express.arsonist.ability.1"
       }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.stupid_express.arsonist.ability.2"
+      }
     }
   ],
   "lore": {

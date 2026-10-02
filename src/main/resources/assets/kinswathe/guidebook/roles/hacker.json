@@ -28,17 +28,17 @@
       }
     },
     {
-      "when": {
-        "value": "instinct",
-        "equals": true
-      },
       "text": {
         "translate": "guidebook.wyspiaexpress.roles.kinswathe.hacker.ability.2"
       }
     },
     {
+      "when": {
+        "value": "instinct",
+        "equals": true
+      },
       "text": {
-        "translate": "guidebook.wyspiaexpress.roles.kinswathe.hacker.ability.4"
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.hacker.ability.3"
       }
     }
   ],

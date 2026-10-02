@@ -20,6 +20,11 @@
           }
         ]
       }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.noellesroles.executioner.ability.2"
+      }
     }
   ],
   "lore": {

@@ -52,17 +52,17 @@
       }
     },
     {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.dreamer.ability.3"
+      }
+    },
+    {
       "when": {
         "value": "instinct",
         "equals": true
       },
       "text": {
         "translate": "guidebook.wyspiaexpress.roles.kinswathe.dreamer.ability.4"
-      }
-    },
-    {
-      "text": {
-        "translate": "guidebook.wyspiaexpress.roles.kinswathe.dreamer.ability.5"
       }
     }
   ]

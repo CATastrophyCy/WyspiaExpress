@@ -216,7 +216,7 @@
   "guidebook.namespace.wyspiaexpress": "Mod: WyspiaExpress",
 
   "guidebook.wyspiaexpress.roles.kinswathe.bellringer.summary": "Watch the clock and disrupt the killers’ schedule.",
-  "guidebook.wyspiaexpress.roles.kinswathe.bellringer.ability.1": "Your HUD shows the remaining round time. Ring the Time Bell to remove one minute from it. Cost: %1$s; cooldown: %2$s.",
+  "guidebook.wyspiaexpress.roles.kinswathe.bellringer.ability.1": "Your HUD shows the remaining round time. Use your ability to ring the Time Bell to remove one minute from it. Cost: %1$s; cooldown: %2$s.",
   "guidebook.wyspiaexpress.roles.kinswathe.bellringer.lore": "The Bellringer holds the secrets of time aboard the train. Its passage can disrupt even the most careful plan.",
 
   "guidebook.wyspiaexpress.roles.kinswathe.bodymaker.summary": "Create false bodies to mislead investigators.",
@@ -226,7 +226,7 @@
   "guidebook.wyspiaexpress.roles.kinswathe.bodymaker.lore": "Bodies can deceive. The Bodymaker specializes in leaving investigators deeply perplexed.",
 
   "guidebook.wyspiaexpress.roles.kinswathe.cleaner.summary": "Remove bodies and evidence for the killer team.",
-  "guidebook.wyspiaexpress.roles.kinswathe.cleaner.ability.1": "Clear dropped items with your ability. Cost: %1$s; cooldown: %2$s.",
+  "guidebook.wyspiaexpress.roles.kinswathe.cleaner.ability.1": "Use your ability to clear nearby dropped items with your ability. Cost: %1$s; cooldown: %2$s.",
   "guidebook.wyspiaexpress.roles.kinswathe.cleaner.ability.2": "Dissolve bodies with Sulfuric Acid to receive %1$s per body.",
   "guidebook.wyspiaexpress.roles.kinswathe.cleaner.lore": "The Cleaner is an expert sent by the killer organization. For the killers, no body means no evidence.",
 
@@ -235,33 +235,34 @@
   "guidebook.wyspiaexpress.roles.kinswathe.cook.lore": "The most popular person on the train. After all, who does not want a hot meal on a long journey?",
 
   "guidebook.wyspiaexpress.roles.kinswathe.detective.summary": "Gather evidence to identify innocent passengers.",
-  "guidebook.wyspiaexpress.roles.kinswathe.detective.ability.1": "Use Insight on a passenger to learn whether their role is innocent. A non-innocent result does not distinguish a killer from a neutral. Cost: %1$s; cooldown: %2$s.",
+  "guidebook.wyspiaexpress.roles.kinswathe.detective.ability.1": "Use your ability on a passenger to learn whether their role is innocent. A non-innocent result does not distinguish a killer from a neutral. Cost: %1$s; cooldown: %2$s.",
   "guidebook.wyspiaexpress.roles.kinswathe.detective.lore": "The Detective received an anonymous letter hinting at a murder on this journey. Their presence aboard the train is no coincidence.",
 
   "guidebook.wyspiaexpress.roles.kinswathe.dreamer.summary": "Protect passengers with Dream Imprints and become a killer.",
-  "guidebook.wyspiaexpress.roles.kinswathe.dreamer.ability.1": "Give passengers Dream Imprints to give them a protection. Each consumed Imprint advances your conversion progress. Imprint protection will fade if you die. Conversion to a killer requires progress within the configured range of %1$s–%2$s.",
-  "guidebook.wyspiaexpress.roles.kinswathe.dreamer.ability.2": "When an Imprint is consumed, its wearer teleports to you if you are alive and they are not in Psycho Mode.",
+  "guidebook.wyspiaexpress.roles.kinswathe.dreamer.ability.1": "Use Dream Imprint on a passenger to give them protection, they will be notifed when a Imprint is used on them. Each consumed Imprint advances your delusion progress. Imprint protection will fade if you die. Be careful who you spend your imprint on, you want to save them for your killer allies!",
+  "guidebook.wyspiaexpress.roles.kinswathe.dreamer.ability.2": "When an Imprint is consumed, its wearer teleports to your location if they are not in Psycho Mode.",
+  "guidebook.wyspiaexpress.roles.kinswathe.dreamer.ability.3": "Deluding non-killer passengers via delusion vial also advances conversion progress. Once your delusion progress reaches %1$s–%2$s you will become a killer.",
   "guidebook.wyspiaexpress.roles.kinswathe.dreamer.ability.4": "Instinct is enabled for this role.",
-  "guidebook.wyspiaexpress.roles.kinswathe.dreamer.ability.5": "Deluding non-killer passengers via delusion vial also advances conversion progress",
   "guidebook.wyspiaexpress.roles.kinswathe.dreamer.lore": "The Dreamer serves the killer organization, walking between reality and illusion. Reality is merely a dream that can be rewritten.",
 
   "guidebook.wyspiaexpress.roles.kinswathe.drugmaker.summary": "Poison passengers and profit from the use of poison.",
-  "guidebook.wyspiaexpress.roles.kinswathe.drugmaker.ability.1": "Receive %1$s whenever a passenger is poisoned, even by another player. Delusion vial and defense vial do not count.",
+  "guidebook.wyspiaexpress.roles.kinswathe.drugmaker.ability.1": "Receive %1$s whenever a passenger is poisoned, even by another player. Delusion vial do not count.",
+  "guidebook.wyspiaexpress.roles.kinswathe.drugmaker.ability.2": "You can see players that are poisoned.",
   "guidebook.wyspiaexpress.roles.kinswathe.drugmaker.lore": "The Drugmaker savours every second of a victim’s suffering. To them, death is just a matter of prescription.",
 
   "guidebook.wyspiaexpress.roles.kinswathe.hacker.summary": "Share intelligence and support the killers remotely.",
-  "guidebook.wyspiaexpress.roles.kinswathe.hacker.ability.1": "A game with hacker will equip the killers with phones. Look at a passenger for cumulative of %1$s to uncover their role. Every phone will also show a list of hacked players in it's description",
-  "guidebook.wyspiaexpress.roles.kinswathe.hacker.ability.2": "Instinct is enabled for this role.",
-  "guidebook.wyspiaexpress.roles.kinswathe.hacker.ability.4": "When offered in your configured shop, support actions can trigger a blackout, refresh the killers’ weapon or ability cooldowns, or clear effects from them. Clearing effects preserves invisibility and night vision.",
+  "guidebook.wyspiaexpress.roles.kinswathe.hacker.ability.1": "A game with hacker will equip the killers with phones. Look at a passenger for cumulative of %1$s to uncover their role. Each phone will also show a list of hacked players in it's description",
+  "guidebook.wyspiaexpress.roles.kinswathe.hacker.ability.2": "You have a variety of tools and powers at your disposal to assist the killers!",
+  "guidebook.wyspiaexpress.roles.kinswathe.hacker.ability.3": "Instinct is enabled for this role.",
   "guidebook.wyspiaexpress.roles.kinswathe.hacker.lore": "The Hacker works in the shadows to help the killer team achieve its goal. Staying undercover is part of the job.",
 
   "guidebook.wyspiaexpress.roles.kinswathe.hunter.summary": "Chase your prey and keep your knives ready.",
-  "guidebook.wyspiaexpress.roles.kinswathe.hunter.ability.1": "Refresh all knife cooldowns with your ability. Cost: %1$s; cooldown: %2$s.",
+  "guidebook.wyspiaexpress.roles.kinswathe.hunter.ability.1": "Use your ability to refresh all knife cooldowns with your ability. Cost: %1$s; cooldown: %2$s.",
   "guidebook.wyspiaexpress.roles.kinswathe.hunter.ability.2": "Sprint while actively raising a Hunting Knife to gain extra speed. The Hunting Knife can stay raised longer and becomes ready again as soon as you lower it.",
   "guidebook.wyspiaexpress.roles.kinswathe.hunter.lore": "A born chaser, the Hunter enjoys the feeling of pursuing prey. Running away only fuels that desire.",
 
   "guidebook.wyspiaexpress.roles.kinswathe.judge.summary": "Mark a suspicious passenger for everyone to see.",
-  "guidebook.wyspiaexpress.roles.kinswathe.judge.ability.1": "Mark a target with glowing for %1$s. Cost: %2$s; cooldown: %3$s.",
+  "guidebook.wyspiaexpress.roles.kinswathe.judge.ability.1": "Use your ability to mark a passenger with glowing for %1$s. Cost: %2$s; cooldown: %3$s.",
   "guidebook.wyspiaexpress.roles.kinswathe.judge.lore": "The Judge boarded the train for a holiday. Their sense of justice makes it difficult to turn a blind eye, though not everyone trusts their verdicts.",
 
   "guidebook.wyspiaexpress.roles.kinswathe.kidnapper.summary": "Drug passengers and lead them away from help.",
@@ -275,7 +276,7 @@
   "guidebook.wyspiaexpress.roles.kinswathe.physician.lore": "Sworn to heal the wounded and save the dying, the Physician is someone the passengers hope they can trust.",
 
   "guidebook.wyspiaexpress.roles.kinswathe.robot.summary": "A tireless machine equipped for darkness.",
-  "guidebook.wyspiaexpress.roles.kinswathe.robot.ability.1": "Activate to gain night vision for %1$s. Ability cooldown: %2$s.",
+  "guidebook.wyspiaexpress.roles.kinswathe.robot.ability.1": "Use your ability to gain night vision for %1$s. Ability cooldown: %2$s.",
   "guidebook.wyspiaexpress.roles.kinswathe.robot.ability.2": "You have no mood or stamina limit, and are immune to poison and Knockout Drug.",
   "guidebook.wyspiaexpress.roles.kinswathe.robot.lore": "The Robot infiltrated the train for an unknown purpose. Some say it is malfunctioning; others believe it carries a secret mission.",
 
@@ -286,7 +287,8 @@
   "guidebook.wyspiaexpress.roles.kinswathe.technician.lore": "The Technician keeps the train running. Repairs rarely seem glamorous until something stops working.",
 
   "guidebook.wyspiaexpress.roles.noellesroles.bartender.summary": "Identify poisoned trays and prepare protective drinks.",
-  "guidebook.wyspiaexpress.roles.noellesroles.bartender.ability.1": "You can see passengers that have recently drunk. Use Defense Vials on food or drink trays to protect the next consumer from one attack. Maximum vials: %1$s. Killers can receive this protection too, so choose carefully.",
+  "guidebook.wyspiaexpress.roles.noellesroles.bartender.ability.1": "You can see passengers that have recently drunk, or are poisoned. You can detect poisoned food, drink and beds.",
+  "guidebook.wyspiaexpress.roles.noellesroles.bartender.ability.2": "Use Defense Vials on food or drink trays to protect the next consumer from one attack. Maximum vials: %1$s. Killers can receive this protection too, so choose carefully.",
   "guidebook.wyspiaexpress.roles.noellesroles.bartender.lore": "The Bartender has studied the art of drinks for a long time and has developed a keen eye for a suspicious tray.",
 
   "guidebook.wyspiaexpress.roles.noellesroles.conductor.summary": "Use your Master Key to reach locked rooms.",
@@ -299,7 +301,8 @@
   "guidebook.wyspiaexpress.roles.noellesroles.coroner.lore": "The Coroner reads the dead like scrolls. Every body has a story to tell.",
 
   "guidebook.wyspiaexpress.roles.noellesroles.executioner.summary": "Arrange for your assigned target to be executed.",
-  "guidebook.wyspiaexpress.roles.noellesroles.executioner.ability.1": "You start with a passenger as your target. If the target dies without being killed by a killer, you join the killer team and receive %1$s.",
+  "guidebook.wyspiaexpress.roles.noellesroles.executioner.ability.1": "You start with a passenger as your target. If the target dies by a non killer passenger, including yourself, you become a killer and receive %1$s. If your target falls to a killer, you will receive a new target.",
+  "guidebook.wyspiaexpress.roles.noellesroles.executioner.ability.2": "Unlike other non-civilian roles, the Executioner can pick up guns on the floor the same way a civilian can. But be careful, if you kill any passenger that isn't your target, you will also fall!",
   "guidebook.wyspiaexpress.roles.noellesroles.executioner.lore": "The Executioner boarded the train awaiting one particular passenger’s demise. Sometimes it is better to let someone else do the dirty work.",
 
   "guidebook.wyspiaexpress.roles.noellesroles.mimic.summary": "Appear to killers as one of their cohorts.",
@@ -307,7 +310,7 @@
   "guidebook.wyspiaexpress.roles.noellesroles.mimic.lore": "The Mimic is a spy pretending to be a killer alongside a friend who may or may not be a convicted murderer on the run.",
 
   "guidebook.wyspiaexpress.roles.noellesroles.morphling.summary": "Disguise yourself as another living passenger.",
-  "guidebook.wyspiaexpress.roles.noellesroles.morphling.ability.1": "Use your ability on a living passenger to copy their appearance for %1$s. Your voice stays the same. Their death or departure ends the disguise; afterward, wait %2$s before morphing again.",
+  "guidebook.wyspiaexpress.roles.noellesroles.morphling.ability.1": "Use your ability to copy another living passenger's appearance for %1$s. Your voice stays the same. If the morphed player dies or disconnects, the disguise is ended; afterward, wait %2$s before morphing again.",
   "guidebook.wyspiaexpress.roles.noellesroles.morphling.ability.2": "Every silenced civilian provides %1$s every ten seconds.",
   "guidebook.wyspiaexpress.roles.noellesroles.morphling.lore": "The Morphling has mastered the art of imitation. Passengers who cannot speak make especially convincing disguises.",
 
@@ -316,7 +319,7 @@
   "guidebook.wyspiaexpress.roles.noellesroles.noisemaker.lore": "The Noisemaker was devoid of attention as a child. Laugh at this attention seeker, everyone!",
 
   "guidebook.wyspiaexpress.roles.noellesroles.phantom.summary": "Turn invisible and strike from the shadows.",
-  "guidebook.wyspiaexpress.roles.noellesroles.phantom.ability.1": "Turn invisible for %1$s. Ability cooldown: %2$s. Held items remain visible.",
+  "guidebook.wyspiaexpress.roles.noellesroles.phantom.ability.1": "Use your ability to clear glowing effect and turn invisible for %1$s. Ability cooldown: %2$s. Held items remain visible.",
   "guidebook.wyspiaexpress.roles.noellesroles.phantom.ability.2": "Killing directly reveals you. Poison kills do not remove invisibility.",
   "guidebook.wyspiaexpress.roles.noellesroles.phantom.ability.3": "Killing does not remove your invisibility.",
   "guidebook.wyspiaexpress.roles.noellesroles.phantom.lore": "The Phantom prefers to break into rooms and wait inside them for an unsuspecting victim.",
@@ -334,7 +337,7 @@
   "guidebook.wyspiaexpress.roles.noellesroles.trapper.lore": "The Trapper boarded the train with a few mechanical tricks up their sleeve.",
 
   "guidebook.wyspiaexpress.roles.noellesroles.vulture.summary": "Consume bodies to become a killer.",
-  "guidebook.wyspiaexpress.roles.noellesroles.vulture.ability.1": "Use your ability while looking at an uneaten body. Reach the body requirement shown on your HUD to join the killer team",
+  "guidebook.wyspiaexpress.roles.noellesroles.vulture.ability.1": "Use your ability while looking at an uneaten body to eat it. Eating the amount shown on your HUD to become a killer",
   "guidebook.wyspiaexpress.roles.noellesroles.vulture.ability.2": "Eating a body makes an audible cue and briefly slows you. Ability cooldown: %1$s.",
   "guidebook.wyspiaexpress.roles.noellesroles.vulture.lore": "Vultures hunger for flesh and bone. Once their hunger is satisfied, another killer will arrive on the train.",
 
@@ -354,9 +357,9 @@
   "guidebook.wyspiaexpress.modifiers.noellesroles.tiny.summary": "A smaller body makes you harder to notice.",
 
   "guidebook.wyspiaexpress.roles.starexpress.starstruck.summary": "Use a burst of instinct to locate nearby passengers.",
-  "guidebook.wyspiaexpress.roles.starexpress.starstruck.ability.1": "Activate instinct for %1$s. Ability cooldown: %2$s.",
+  "guidebook.wyspiaexpress.roles.starexpress.starstruck.ability.1": "Use your ability to gain instinct for %1$s. Ability cooldown: %2$s.",
   "guidebook.wyspiaexpress.roles.starexpress.starstruck.ability.2": "Completing a task reduces the ability cooldown by %1$s.",
-  "guidebook.wyspiaexpress.roles.starexpress.starstruck.ability.3": "The ability also changes walk speed to %1$s and sprint speed to %2$s.",
+  "guidebook.wyspiaexpress.roles.starexpress.starstruck.ability.3": "The ability also increases walk speed and sprint speed.",
   "guidebook.wyspiaexpress.roles.starexpress.starstruck.ability.4": "Activating your ability makes a sound that nearby passengers can hear.",
   "guidebook.wyspiaexpress.roles.starexpress.starstruck.ability.5": "Activation releases visible particles that can reveal your role.",
   "guidebook.wyspiaexpress.roles.starexpress.starstruck.ability.6": "You leave a visible sparkle trail while the ability is active.",
@@ -368,6 +371,7 @@
 
   "guidebook.wyspiaexpress.roles.stupid_express.arsonist.summary": "Douse passengers and burn your way to victory.",
   "guidebook.wyspiaexpress.roles.stupid_express.arsonist.ability.1": "Douse passengers with your Jerry Can, then use your Lighter once you meet its ignition threshold: 30% of living passengers, rounded down. It kills every doused passenger regardless of alignment. Igniting below the threshold kills you instead.",
+  "guidebook.wyspiaexpress.roles.stupid_express.arsonist.ability.2": "You have instinct.",
   "guidebook.wyspiaexpress.roles.stupid_express.arsonist.lore": "The Arsonist smuggled a Jerry Can and a Lighter aboard the train. Their mission is to have fun at everyone else’s expense.",
 
   "guidebook.wyspiaexpress.roles.stupid_express.avaricious.summary": "Stay close to passengers to earn your income.",
@@ -379,7 +383,7 @@
   "guidebook.wyspiaexpress.roles.stupid_express.initiate.lore": "The Initiate boarded the train with an unresolved rivalry and a chance to settle it forever.",
 
   "guidebook.wyspiaexpress.roles.stupid_express.thief.summary": "Steal equipment and be the last one standing.",
-  "guidebook.wyspiaexpress.roles.stupid_express.thief.ability.1": "With an empty hand, use a nearby player to steal a random eligible item. Maximum steal distance: %1$s blocks.",
+  "guidebook.wyspiaexpress.roles.stupid_express.thief.ability.1": "With an empty hand, right click a player to steal a random eligible item from them. Maximum steal distance: %1$s blocks.",
   "guidebook.wyspiaexpress.roles.stupid_express.thief.ability.2": "A successful steal has a %1$s cooldown. An unsuccessful steal has a %2$s cooldown.",
   "guidebook.wyspiaexpress.roles.stupid_express.thief.ability.3": "Instinct helps you locate players and useful dropped equipment. Only eligible items can be stolen; choose targets who may carry the tools you need.",
   "guidebook.wyspiaexpress.roles.stupid_express.thief.lore": "Empty pockets leave the Thief vulnerable. Someone else’s equipment may be the key to their survival.",
@@ -398,10 +402,10 @@
   "guidebook.role.wyspiaexpress:cult_leader": "The nightshade cult leader",
   "guidebook.role.title.wyspiaexpress:cult_leader": "Cult leader",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.cult_leader.summary": "Convert passengers and lead your cult to victory.",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.cult_leader.ability.1": "Spend more than %2$s total within %1$s blocks of a passenger to mark them as converted. They keep their current role and alignment until revived as a Cultist. Each completed conversion rewards %3$s.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.cult_leader.ability.1": "Spend more than %2$s total within %1$s blocks of a passenger to mark them as converted. They keep their current role and alignment until revived as a Cultist. Each completed conversion rewards %3$s. Converted players are not part of the cult yet!",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.cult_leader.ability.2": "Passive proximity conversion is disabled by the server.",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.cult_leader.ability.3": "Use your ability on a converted dead passenger to revive them beside you as a Cultist. Revive cooldown: %1$s; they start with %2$s, and are stunned for %3$s. A Cultist cannot be revived again.",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.cult_leader.ability.4": "The Ritual Dagger immediately changes its victim into a Cultist. Cult members recognize each other through instinct. The cult wins when only its members remain alive.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.cult_leader.ability.4": "The Ritual Dagger immediately changes its victim into a Cultist. Cult members can recognize each other through instinct. Converted passengers and dead bodies can also be seen with instinct. The cult wins when only its members remain alive.",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.cult_leader.lore": "The nightshade's cult is a weird cult praying for the idea that life and dead can be played with\n\"Their leader says that he can hear his \"great behond\", is it true ? Is it not ? whatever the case, anyone sacrificed using his dagger will see himself\ncoming back to life with a new goal in mind, serving the said cult who took pity on them.",
   "guidebook.role.description.wyspiaexpress:cult_leader": "The nightshade's cult is a weird cult praying for the idea that life and dead can be played with\n\"Their leader says that he can hear his \"great behond\", is it true ? Is it not ? whatever the case, anyone sacrificed using his dagger will see himself\ncoming back to life with a new goal in mind, serving the said cult who took pity on them\n\nCan purchase a ritual dagger that forcefully turn another player into Cultist. Cult Leader can slowly convert players around them. Converted players are highlited to cult members and when they die, they can be revived by the Cult Leader into Cultist.\n\nCultist are considered part of the Cult and thus win with Cult Leader. Cultist have limited shop and stamina, but they do share passive instinct with the Cult Leader. Cultist can also see each other with their passive instinct.",
 
@@ -461,7 +465,7 @@
   "guidebook.role.wyspiaexpress:outlaw": "The Outlaw",
   "guidebook.role.title.wyspiaexpress:outlaw": "Outlaw",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.outlaw.summary": "A killer disguised as a Vigilante, armed with a revolver.",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.outlaw.ability.1": "Refresh all gun cooldowns for %1$s. Ability cooldown: %2$s. Using this ability stuns you for %3$s.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.outlaw.ability.1": "Use your ability to refresh gun cooldowns for %1$s. Ability cooldown: %2$s. Using this ability stuns you for %3$s.",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.outlaw.ability.2": "The Outlaw Revolver stays in your hand after shooting an innocent; it has no normal misfire penalty.",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.outlaw.lore": "People often wonder what law The Outlaw broke to earn such a name. Rumour says he simply thought it sounded cool, much like his friend Michael naming himself “The Maverick”.",
   "guidebook.role.description.wyspiaexpress:outlaw": "People often wonder what law did The Outlaw break to receive such a name. Rumours says that he just thinks its cool to be called \"The Outlaw\" so he gave himself that name, just like how his friend Michael named himself \"The Maverick\".\n\nThey spawn and can purchase an Outlaw Revolver, which doesn't drop when shooting an innocent. They could also instantly recharge the Revolver with their ability",
@@ -470,7 +474,7 @@
   "guidebook.role.title.wyspiaexpress:villain_licensed": "Certified Officially",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.villain_licensed.summary": "A licensed killer whose only allegiance is to themself.",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.villain_licensed.ability.1": "Be the last passenger alive to win. You can fire your revolver freely without suffering any penalty.",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.villain_licensed.ability.2": "Your sprint stamina lasts %1$s.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.villain_licensed.ability.2": "You have instinct and your sprint stamina lasts %1$s.",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.villain_licensed.lore": "The Licensed Villain carries an officially certified villain licence. After all, he is a professional.",
   "guidebook.role.description.wyspiaexpress:villain_licensed": "The Licensed Villain is a rare character holding an officially certified villain license. He only appears when there are enough players\n\nThe Licensed Villain's win condition is unique - he must kill everyone. When all civilians or all killers are eliminated, the game does not end. Only he can end it all with his own hands.\n\nThe Licensed Villain has 15 seconds of sprint time, boards with Lockpick, and receives coins for completing tasks.\n\nRevolver can be purchased at the shop, and he suffers no misfire penalty when using it - after all, he's a professional.",
 
