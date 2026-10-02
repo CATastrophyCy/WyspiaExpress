@@ -21,7 +21,7 @@ import java.util.Set;
 public final class GuidebookCatalog {
     private GuidebookCatalog() {}
 
-    public enum Availability { ALL, ENABLED, DISABLED }
+    public enum Availability { ALL, CURRENT, UNAVAILABLE, DISABLED }
 
     public static List<GuidebookEntry> entries() {
         List<GuidebookEntry> entries = new ArrayList<>();
@@ -63,8 +63,7 @@ public final class GuidebookCatalog {
     }
 
     public static boolean normallyVisible(GuidebookEntry entry) {
-        if (entry.role() != null) return entry.role() == WyspiaExpressRoles.COPYCAT
-                || !WyspiaExpressRoles.HIDDEN_ROLES.contains(entry.role());
+        if (entry.role() != null) return !WyspiaExpressRoles.HIDDEN_ROLES.contains(entry.role());
         return entry.modifier() == Noellesroles.GUESSER || entry.modifier() == WyspiaExpressRoles.BOMBER
                 || !WyspiaExpressRoles.HIDDEN_MODIFIERS.contains(entry.modifier());
     }
@@ -82,27 +81,22 @@ public final class GuidebookCatalog {
 
     public static Status status(GuidebookEntry entry) {
         var client = MinecraftClient.getInstance();
-        if (client.world == null) return new Status(false, false, false, false, 0, null, null);
+        if (client.world == null) return new Status(false, false, false, null, null);
         var context = RoleComponent.KEY.get(client.world);
         var basic = entry.role() != null ? WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(entry.role()) : null;
         Integer min = basic != null ? basic.minimumPlayerSpawn() : null;
         Integer max = basic != null ? basic.maximumPlayerSpawn() : null;
-        boolean enabled = entry.role() != null ? !context.disabledRoles.contains(entry.id().toString())
+        boolean current = entry.role() != null ? !context.disabledRoles.contains(entry.id().toString())
                 : !context.disabledModifiers.contains(entry.id().toString());
+        boolean serverDisabled = entry.role() != null ? context.configuredDisabledRoles.contains(entry.id().toString())
+                : context.disabledModifiers.contains(entry.id().toString());
         boolean blocked = !normallyVisible(entry);
         if (basic != null && basic.maximumSpawn() <= 0) blocked = true;
         if (entry.role() == WyspiaExpressRoles.COPYCAT && !WyspiaExpress.ROLES_CONFIG.enableRolePicking()) blocked = true;
         if (entry.modifier() == WyspiaExpressRoles.BOMBER) {
             blocked = !WyspiaExpress.MODIFIERS_CONFIG.bomberConfig.enabled();
         }
-        if (entry.modifier() == Noellesroles.GUESSER && WyspiaExpress.MODIFIERS_CONFIG.guesserConfig.killerAlwaysGuesser()) {
-            enabled = WyspiaExpress.MODIFIERS_CONFIG.guesserConfig.maximumGuessers() > 0;
-        }
-        // During a round, use the server's original allowed-role snapshot, never a live player count.
-        boolean meets = entry.role() != null && GameWorldComponent.KEY.get(client.world).isRunning()
-                ? !context.disabledRoles.contains(entry.id().toString())
-                : min == null || context.participantCount >= min && context.participantCount <= max;
-        return new Status(context.guideContextReady, enabled, blocked, meets, context.participantCount, min, max);
+        return new Status(current, serverDisabled, blocked, min, max);
     }
 
     public static List<GuidebookEntry> filter(List<GuidebookEntry> entries, String search, Availability availability,
@@ -119,13 +113,16 @@ public final class GuidebookCatalog {
             if (permanentlyExcluded(entry)) return false;
             if (copycat) return choices.contains(entry.key()) && entry.name().getString().toLowerCase(Locale.ROOT).contains(query);
             if (mine) return own.contains(entry.key()) && entry.name().getString().toLowerCase(Locale.ROOT).contains(query);
-            if ((!normallyVisible(entry) && !own.contains(entry.key())) || !entry.name().getString().toLowerCase(Locale.ROOT).contains(query)) return false;
+            if (!normallyVisible(entry) || !entry.name().getString().toLowerCase(Locale.ROOT).contains(query)) return false;
             Status status = status(entry);
-            if (availability != Availability.ALL && (!status.ready || (availability == Availability.ENABLED) != status.enabled)) return false;
-            return true;
+            return switch (availability) {
+                case ALL -> true;
+                case CURRENT -> status.current();
+                case DISABLED -> status.serverDisabled();
+                case UNAVAILABLE -> !status.current() && !status.serverDisabled();
+            };
         }).toList();
     }
 
-    public record Status(boolean ready, boolean enabled, boolean blocked, boolean meetsRequirement,
-                         int participants, Integer minimum, Integer maximum) {}
+    public record Status(boolean current, boolean serverDisabled, boolean blocked, Integer minimum, Integer maximum) {}
 }

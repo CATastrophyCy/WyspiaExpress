@@ -3,12 +3,17 @@ package org.cat.express.wyspiaexpress.client.guidebook;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.sound.SoundManager;
 
 /** Horizontal section tab attached above the book frame. */
 final class GuidebookTabButton extends ButtonWidget {
     GuidebookTabButton(int x, int y, int width, GuidebookTab tab, Runnable action) {
         super(x, y, width, 18, GuidebookStyle.font(tab.title()),
                 button -> action.run(), DEFAULT_NARRATION_SUPPLIER);
+    }
+
+    @Override public void playDownSound(SoundManager soundManager) {
+        GuidebookSounds.playClick(soundManager);
     }
 
     @Override protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {

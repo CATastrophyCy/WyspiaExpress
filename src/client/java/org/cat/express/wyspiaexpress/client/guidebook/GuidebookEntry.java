@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public record GuidebookEntry(Identifier id, Role role, Modifier modifier, Category category, int color) {
     public enum Category {
-        KILLER, KILLER_NEUTRAL, CIVILIAN, TRUE_NEUTRAL, MODIFIER;
+        KILLER, KILLER_NEUTRAL, TRUE_NEUTRAL, CIVILIAN, MODIFIER;
         public Text title() { return Text.translatable("gui.wyspiaexpress.guidebook.category." + name().toLowerCase(java.util.Locale.ROOT)); }
     }
 

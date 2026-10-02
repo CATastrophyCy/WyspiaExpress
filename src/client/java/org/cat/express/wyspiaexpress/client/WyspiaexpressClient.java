@@ -89,7 +89,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
         GuidebookSources.init();
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(GuidebookDefinitions.INSTANCE);
         guidebookBind = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.wyspiaexpress.guidebook",
-                InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_L, "category.wathe.keybinds"));
+                InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_F, "category.wathe.keybinds"));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (guidebookBind.wasPressed()) {
                 if (client.world != null && client.player != null && client.currentScreen == null) {

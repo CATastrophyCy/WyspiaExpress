@@ -2,8 +2,6 @@ package org.cat.express.wyspiaexpress.client.guidebook;
 
 import net.minecraft.client.MinecraftClient;
 import org.BsXinQin.kinswathe.component.ConfigWorldComponent;
-import org.cat.express.wyspiaexpress.WyspiaExpress;
-import org.cat.express.wyspiaexpress.components.RoleComponent;
 import org.cat.express.wyspiaexpress.guidebook.KinsGuideConfig;
 
 import java.util.function.Function;
@@ -38,17 +36,7 @@ public final class GuidebookSources {
         for (String key : KinsGuideConfig.KEYS) {
             GuidebookValues.registerDerived("kins." + key, () -> kinsExtra(key));
         }
-        GuidebookValues.registerDerived("round.participants", () -> {
-            var world = MinecraftClient.getInstance().world;
-            return world == null ? null : RoleComponent.KEY.get(world).participantCount;
-        });
-        GuidebookValues.registerDerived("dreamer.requirement", () -> {
-            var world = MinecraftClient.getInstance().world;
-            if (world == null) return null;
-            int count = RoleComponent.KEY.get(world).participantCount / 5;
-            var config = WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.dreamerConfig;
-            return net.minecraft.util.math.MathHelper.clamp(count, config.minimumRequirement(), config.maximumRequirement());
-        });
+
     }
 
     private static void kins(String key, Function<ConfigWorldComponent, ?> getter) {

@@ -80,6 +80,5 @@ public abstract class PlayerDeathMixin {
         private static void wyspiaexpress$resetStat(ServerWorld world, CallbackInfo ci) {
             LichReviveComponent.KEY.get(world).reset();
             WorldComponent.KEY.get(world).reset();
-            RoleComponent.KEY.get(world).endRound();
         }
 }

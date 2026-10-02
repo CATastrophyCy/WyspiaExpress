@@ -7,11 +7,6 @@
     "translate": "guidebook.wyspiaexpress.roles.kinswathe.dreamer.lore"
   },
   "values": {
-    "requirement": {
-      "config": "derived",
-      "path": "dreamer.requirement",
-      "format": "number"
-    },
     "teleport": {
       "config": "roles",
       "path": "roleConfig.kinsWatheRoles.dreamerConfig.enableDreamImprintTeleport",
@@ -21,6 +16,16 @@
       "config": "roles",
       "path": "roleConfig.kinsWatheRoles.dreamerConfig.enableInstinct",
       "format": "boolean"
+    },
+    "minimum": {
+      "config": "roles",
+      "path": "roleConfig.kinsWatheRoles.dreamerConfig.minimumRequirement",
+      "format": "number"
+    },
+    "maximum": {
+      "config": "roles",
+      "path": "roleConfig.kinsWatheRoles.dreamerConfig.maximumRequirement",
+      "format": "number"
     }
   },
   "abilities": [
@@ -29,7 +34,10 @@
         "translate": "guidebook.wyspiaexpress.roles.kinswathe.dreamer.ability.1",
         "with": [
           {
-            "value": "requirement"
+            "value": "minimum"
+          },
+          {
+            "value": "maximum"
           }
         ]
       }

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import static org.cat.express.wyspiaexpress.client.guidebook.GuidebookStyle.*;
 
@@ -27,16 +28,17 @@ public final class WyspiaGuidebookScreen extends Screen {
     private final List<PagePart> parts = new ArrayList<>();
     private final EnumSet<GuidebookEntry.Category> collapsed = EnumSet.noneOf(GuidebookEntry.Category.class);
     private List<GuidebookEntry> catalogue = List.of(), filtered = List.of();
+    private Set<String> ownEntries = Set.of();
     private GuidebookEntry selected;
-    private GuidebookCatalog.Availability availability = GuidebookCatalog.Availability.ENABLED;
+    private GuidebookCatalog.Availability availability = GuidebookCatalog.Availability.CURRENT;
     private boolean mine, copycat, relatedView, defaultsApplied, transparentBackground, selectionRestored;
     private GuidebookTab activeTab = GuidebookTab.ROLES;
     private GuidebookCatalog.Availability savedAvailability;
     private String query = "", savedQuery = "";
     private TextFieldWidget search;
-    private GuidebookFilterButton allButton, enabledButton, disabledButton, mineButton, copycatButton, backgroundButton;
-    private int generation = -1, left, top, right, bottom, detailX, filterX, filterWidth, entryInset;
-    private String language = "", pageSignature = "", listSignature = "";
+    private GuidebookFilterButton allButton, currentButton, disabledButton, unavailableButton, mineButton, copycatButton, backgroundButton, clickSoundsButton;
+    private int left, top, right, bottom, detailX, filterX, filterWidth, entryInset;
+    private String listSignature = "";
     private List<Text> hoveredTooltip;
 
     public WyspiaGuidebookScreen() {
@@ -55,35 +57,43 @@ public final class WyspiaGuidebookScreen extends Screen {
     }
 
     @Override protected void init() {
-        int panelWidth = Math.min(670, Math.min(width - 8, Math.max(326, Math.round(width * .92f))));
-        int panelHeight = Math.min(400, Math.min(height - 26, Math.max(220, Math.round(height * .92f))));
+        int panelWidth = Math.min(670, Math.clamp(Math.round(width * .92f), Math.min(326, width - 8), width - 8));
+        int panelHeight = Math.min(400, Math.clamp(Math.round(height * .92f), Math.min(220, height - 26), height - 26));
         left = (width - panelWidth) / 2; top = Math.max(22, (height - panelHeight) / 2);
         right = left + panelWidth; bottom = top + panelHeight;
         entryInset = panelWidth < 400 ? 8 : 12;
-        filterX = left + 6; filterWidth = panelWidth < 400 ? 26 : 30;
+        filterX = left + 6;
+        filterWidth = Math.max(30, Math.max(textRenderer.getWidth(label("unavailable.filter.short")), Math.max(textRenderer.getWidth(label("current.short")), textRenderer.getWidth(label("disabled.short")))) + 8);
         int listX = filterX + filterWidth + 6;
-        int listWidth = Math.min(146, Math.max(84, panelWidth / 4));
+        int listWidth = Math.clamp(panelWidth / 4, 84, 146);
         detailX = listX + listWidth + 8;
         search = new TextFieldWidget(textRenderer, listX, top + 24, listWidth - 4, 17, label("search"));
         search.setMaxLength(128); search.setPlaceholder(label("search"));
         search.setRenderTextProvider((value, first) -> font(Text.literal(value)).asOrderedText());
         search.setEditableColor(TEXT);
         search.setText(query);
-        search.setChangedListener(value -> { query = value; relatedView = false; listPanel.offset = 0; refreshList(); });
+        search.setChangedListener(value -> { query = value; relatedView = false; listPanel.offset = 0; refreshContents(); });
         addDrawableChild(search);
         listPanel.bounds(listX, top + 45, listWidth, bottom - top - 61);
         pagePanel.bounds(detailX + 10, top + 25, Math.max(50, right - detailX - 20), bottom - top - 34);
-        int step = Math.max(19, Math.min(25, (bottom - top - 28) / 5));
-        enabledButton = filterButton(top + 25, "enabled", 0xA6DCA0, () -> setAvailability(GuidebookCatalog.Availability.ENABLED));
+        int step = Math.clamp((bottom - top - 28) / 6, 19, 25);
+        currentButton = filterButton(top + 25, "current", 0xA6DCA0, () -> setAvailability(GuidebookCatalog.Availability.CURRENT));
         mineButton = filterButton(top + 25 + step, "mine", 0x9DBDED, () -> toggleQuickFilter(false));
         copycatButton = filterButton(top + 25 + step * 2, "copycat", 0xC5A6ED, () -> toggleQuickFilter(true));
-        disabledButton = filterButton(top + 25 + step * 3, "disabled", 0xCF9388, () -> setAvailability(GuidebookCatalog.Availability.DISABLED));
-        allButton = filterButton(top + 25 + step * 4, "all", 0xB9BAB3, () -> setAvailability(GuidebookCatalog.Availability.ALL));
+        unavailableButton = filterButton(top + 25 + step * 3, "unavailable.filter", 0xCF9388, () -> setAvailability(GuidebookCatalog.Availability.UNAVAILABLE));
+        disabledButton = filterButton(top + 25 + step * 4, "disabled", 0xE6AA7A, () -> setAvailability(GuidebookCatalog.Availability.DISABLED));
+        allButton = filterButton(top + 25 + step * 5, "all", 0xB9BAB3, () -> setAvailability(GuidebookCatalog.Availability.ALL));
         addDrawableChild(new GuidebookTabButton(left + 3, top - 18, 57, GuidebookTab.ROLES,
-                () -> activeTab = GuidebookTab.ROLES));
+                () -> { activeTab = GuidebookTab.ROLES; refreshContents(); }));
         backgroundButton = addDrawableChild(new GuidebookFilterButton(right - 54, top + 5, 27, 15,
-                label("background.short"), GOLD, () -> { transparentBackground = !transparentBackground; updateFilterButtons(); }));
+                label("background.short"), GOLD, () -> { transparentBackground = !transparentBackground; refreshContents(); }));
         backgroundButton.setTooltip(Tooltip.of(label("background")));
+        clickSoundsButton = addDrawableChild(new GuidebookFilterButton(right - 86, top + 5, 27, 15,
+                label("sounds.short"), GOLD, () -> {
+                    var preferences = GuidebookPreferences.get();
+                    preferences.clickSounds = !preferences.clickSounds;
+                    refreshContents();
+                }));
         addDrawableChild(new GuidebookFilterButton(right - 22, top + 5, 16, 15, Text.literal("×"), GOLD, this::close));
         if (!defaultsApplied) {
             defaultsApplied = true;
@@ -100,7 +110,7 @@ public final class WyspiaGuidebookScreen extends Screen {
             String lastSelected = GuidebookPreferences.get().selected;
             filtered.stream().filter(entry -> entry.key().equals(lastSelected)).findFirst().ifPresent(this::select);
         }
-        pageSignature = ""; refreshPage();
+        refreshPage();
     }
 
     @Override public void removed() {
@@ -109,7 +119,7 @@ public final class WyspiaGuidebookScreen extends Screen {
         preferences.collapsed.clear(); preferences.collapsed.addAll(collapsed);
         preferences.availability = availability;
         preferences.mine = mine; preferences.copycat = copycat; preferences.query = query;
-        preferences.savedAvailability = savedAvailability == null ? GuidebookCatalog.Availability.ENABLED : savedAvailability;
+        preferences.savedAvailability = savedAvailability == null ? GuidebookCatalog.Availability.CURRENT : savedAvailability;
         preferences.savedQuery = savedQuery;
         preferences.selected = selected == null ? "" : selected.key();
         preferences.save();
@@ -121,7 +131,7 @@ public final class WyspiaGuidebookScreen extends Screen {
         button.setTooltip(Tooltip.of(label(key))); addDrawableChild(button); return button;
     }
 
-    private void setAvailability(GuidebookCatalog.Availability choice) { leaveQuickFilter(); relatedView = false; availability = choice; refreshList(); }
+    private void setAvailability(GuidebookCatalog.Availability choice) { leaveQuickFilter(); relatedView = false; availability = choice; refreshContents(); }
     private void leaveQuickFilter() {
         if (!mine && !copycat) return;
         mine = false; copycat = false; availability = savedAvailability;
@@ -136,12 +146,16 @@ public final class WyspiaGuidebookScreen extends Screen {
             mine = !choices; copycat = choices; availability = GuidebookCatalog.Availability.ALL;
             search.setText(""); listPanel.offset = 0;
         }
-        refreshList();
+        refreshContents();
+    }
+
+    private void refreshContents() {
+        reloadCatalogue(); refreshPage();
     }
 
     private void reloadCatalogue() {
-        catalogue = GuidebookCatalog.entries(); generation = GuidebookDefinitions.INSTANCE.generation();
-        language = client.options.language; refreshList();
+        if (copycat && !GuidebookCatalog.isCopycat()) leaveQuickFilter();
+        catalogue = GuidebookCatalog.entries(); refreshList();
     }
 
     private void refreshList() {
@@ -167,7 +181,8 @@ public final class WyspiaGuidebookScreen extends Screen {
             listPanel.contentHeight(y);
         }
         if (!relatedView && (selected == null || filtered.stream().noneMatch(entry -> entry.key().equals(selected.key())))) {
-            select(filtered.isEmpty() ? null : filtered.getFirst());
+            selected = filtered.isEmpty() ? null : filtered.getFirst();
+            pagePanel.offset = 0;
         }
         updateFilterButtons();
     }
@@ -175,44 +190,41 @@ public final class WyspiaGuidebookScreen extends Screen {
     private boolean isCollapsed(GuidebookEntry.Category category) { return !mine && !copycat && query.isBlank() && collapsed.contains(category); }
     private void toggleCategory(GuidebookEntry.Category category) {
         if (!collapsed.remove(category)) collapsed.add(category);
-        refreshList();
+        refreshContents();
     }
     private void updateFilterButtons() {
         if (allButton == null) return;
         allButton.selected(!mine && !copycat && availability == GuidebookCatalog.Availability.ALL);
-        enabledButton.selected(!mine && !copycat && availability == GuidebookCatalog.Availability.ENABLED);
+        currentButton.selected(!mine && !copycat && availability == GuidebookCatalog.Availability.CURRENT);
         disabledButton.selected(!mine && !copycat && availability == GuidebookCatalog.Availability.DISABLED);
+        unavailableButton.selected(!mine && !copycat && availability == GuidebookCatalog.Availability.UNAVAILABLE);
         mineButton.selected(mine);
         copycatButton.visible = GuidebookCatalog.isCopycat(); copycatButton.selected(copycat);
         backgroundButton.selected(transparentBackground);
+        clickSoundsButton.selected(GuidebookPreferences.get().clickSounds);
+        clickSoundsButton.setTooltip(Tooltip.of(label("sounds", label(GuidebookPreferences.get().clickSounds ? "on" : "off"))));
     }
 
     private void select(GuidebookEntry entry) {
-        if (Objects.equals(selected, entry)) return;
-        relatedView = false; selected = entry; pagePanel.offset = 0; pageSignature = ""; refreshPage();
+        if (!Objects.equals(selected, entry)) pagePanel.offset = 0;
+        relatedView = false; selected = entry; refreshContents();
     }
 
     @Override public void tick() {
         super.tick();
-        if (client.world == null || client.player == null) { close(); return; }
-        if (copycat && !GuidebookCatalog.isCopycat()) leaveQuickFilter();
-        if (generation != GuidebookDefinitions.INSTANCE.generation() || !language.equals(client.options.language)) reloadCatalogue();
-        if (selected != null && GuidebookCatalog.permanentlyExcluded(selected)) { selected = null; relatedView = false; }
-        refreshList(); refreshPage();
+        if (client.world == null || client.player == null) close();
     }
 
     private void refreshPage() {
-        if (selected == null) { parts.clear(); pagePanel.contentHeight(0); pageSignature = ""; return; }
+        ownEntries = GuidebookCatalog.ownEntries();
+        parts.clear();
+        if (selected == null) { pagePanel.contentHeight(0); return; }
         Text subtitle = selected.title(), summary = selected.definition().field("summary", null), lore = selected.lore();
         List<Text> abilities = new ArrayList<>(selected.definition().abilities());
         var basic = selected.role() != null ? WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(selected.role()) : null;
         if (basic != null && basic.seePoison()) abilities.add(label("poison"));
         List<GuidebookItems.Offer> starting = GuidebookItems.starting(selected), shop = GuidebookItems.shop(selected);
         var status = GuidebookCatalog.status(selected);
-        String signature = selected.key() + ":" + width + ":" + generation + ":" + language + ":" + status
-                + ":" + selected.name() + ":" + subtitle + ":" + summary + ":" + lore + ":" + abilities + ":" + starting + ":" + shop;
-        if (signature.equals(pageSignature)) return;
-        pageSignature = signature; parts.clear();
         int w = pagePanel.contentWidth(), accent = readable(selected.color());
         int artSize = w >= 180 ? 40 : 32;
         int requirementWidth = status.minimum() == null ? 0 : textRenderer.getWidth(label("requirement.badge", status.minimum(), status.maximum()));
@@ -229,9 +241,6 @@ public final class WyspiaGuidebookScreen extends Screen {
         if (subtitle != null && !subtitle.getString().isBlank()) y = paragraph(font(subtitle), 0, y, bodyWidth, MUTED, .9f) + 4;
         if (summary != null) y = paragraph(summary, 0, y, y < sideEnd ? bodyWidth : w, TEXT, 1) + 5;
         y = Math.max(y, sideEnd) + 5;
-        if (!status.ready()) y = paragraph(label("loading"), 0, y, w, MUTED, 1) + 4;
-        else if (!status.enabled()) y = paragraph(label("disabled"), 0, y, w, MUTED, 1) + 4;
-        else if (status.blocked()) y = paragraph(label("blocked"), 0, y, w, MUTED, 1) + 4;
         if (selected.role() != null || !abilities.isEmpty()) {
             y = heading("ability", y, w, accent);
             if (abilities.isEmpty()) y = paragraph(label("ability.unavailable"), 0, y, w, MUTED, 1) + 5;
@@ -252,7 +261,8 @@ public final class WyspiaGuidebookScreen extends Screen {
         }
         if (selected.role() == WyspiaExpressRoles.LICH || selected.role() == WyspiaExpressRoles.CULT_LEADER) {
             var child = selected.role() == WyspiaExpressRoles.LICH ? WyspiaExpressRoles.LICH_GHOUL : WyspiaExpressRoles.CULTIST;
-            parts.add(new LinkPart(y, GuidebookEntry.role(child))); y += 20;
+            var entry = GuidebookEntry.role(child);
+            parts.add(new LinkPart(y, entry, colored(label("related", entry.name()), readable(entry.color())))); y += 20;
         }
         pagePanel.contentHeight(y + 4);
     }
@@ -282,7 +292,8 @@ public final class WyspiaGuidebookScreen extends Screen {
     }
 
     private int itemGrid(List<GuidebookItems.Offer> offers, int y, int width) {
-        int columns = Math.min(3, Math.max(1, width / 105)), gap = 5, cellWidth = (width - gap * (columns - 1)) / columns;
+        var cooldowns = org.cat.express.wyspiaexpress.WyspiaExpressItems.configuredCooldowns();
+        int columns = Math.clamp(width / 105, 1, 3), gap = 5, cellWidth = (width - gap * (columns - 1)) / columns;
         for (int first = 0; first < offers.size(); first += columns) {
             int height = 29;
             for (int i = first; i < Math.min(first + columns, offers.size()); i++) {
@@ -290,7 +301,12 @@ public final class WyspiaGuidebookScreen extends Screen {
                 height = Math.max(height, lines * 10 + 15);
             }
             for (int col = 0; col < columns && first + col < offers.size(); col++) {
-                parts.add(new ItemPart(col * (cellWidth + gap), y, cellWidth, height, offers.get(first + col)));
+                var offer = offers.get(first + col);
+                var tooltip = new ArrayList<>(offer.stack().getTooltip(Item.TooltipContext.create(client.world), client.player, TooltipType.BASIC));
+                Integer cooldown = cooldowns.get(offer.stack().getItem());
+                if (cooldown != null && cooldown >= 0) tooltip.add(label("cooldown", cooldown).copy().withColor(0xC5ADFF));
+                if (offer.action()) tooltip.add(label("action").copy().withColor(GOLD));
+                parts.add(new ItemPart(col * (cellWidth + gap), y, cellWidth, height, offer, List.copyOf(tooltip)));
             }
             y += height + 4;
         }
@@ -325,7 +341,7 @@ public final class WyspiaGuidebookScreen extends Screen {
             int y = listPanel.y + 5;
             for (var line : lines) { context.drawText(textRenderer, line, listPanel.x + 3, y, MUTED, false); y += 11; }
         }
-        var own = GuidebookCatalog.ownEntries();
+        var own = ownEntries;
         for (var row : rows) {
             int y = listPanel.drawY(row.y);
             if (y + row.height < listPanel.y || y > listPanel.y + listPanel.height) continue;
@@ -349,16 +365,9 @@ public final class WyspiaGuidebookScreen extends Screen {
                 if (yours) context.drawBorder(listPanel.x + entryInset + 1, y + 1, listPanel.contentWidth() - entryInset - 2, row.height - 2, 0xFF000000 | accent);
                 int offset = 4;
                 for (var line : row.lines.stream().limit(2).toList()) { context.drawText(textRenderer, line, listPanel.x + entryInset + 6, y + offset, accent, false); offset += 10; }
-                if (hover) hoveredTooltip = yours ? List.of(colored(row.entry.name(), accent), label("yours"), label(statusKey(GuidebookCatalog.status(row.entry))))
-                        : List.of(colored(row.entry.name(), accent), label(statusKey(GuidebookCatalog.status(row.entry))));
             }
         }
         listPanel.end(context); listPanel.scrollbar(context);
-    }
-
-    private static String statusKey(GuidebookCatalog.Status status) {
-        return !status.ready() ? "loading" : !status.enabled() ? "disabled" : status.blocked() ? "blocked"
-                : !status.meetsRequirement() ? "requirement.failed" : "enabled";
     }
 
     private void renderPage(DrawContext context, int mouseX, int mouseY) {
@@ -380,7 +389,7 @@ public final class WyspiaGuidebookScreen extends Screen {
             } else if (part instanceof RequirementPart requirement) {
                 var status = requirement.status;
                 int x = pagePanel.x + requirement.x;
-                int color = status.meetsRequirement() ? 0xA6DCA0 : 0xE8A77D;
+                int color = GOLD;
                 Text min = font(Text.literal(status.minimum() + " ≤ "));
                 int iconX = x + textRenderer.getWidth(min);
                 context.drawText(textRenderer, min, x, y + 2, color, false);
@@ -400,15 +409,9 @@ public final class WyspiaGuidebookScreen extends Screen {
                 Text extra = item.offer.price() == null ? label("quantity", item.offer.amount()) : label("price", item.offer.price());
                 if (item.offer.price() != null && item.offer.amount() > 1) extra = extra.copy().append("  ").append(label("quantity", item.offer.amount()));
                 context.drawText(textRenderer, extra, x + 24, y + offset + 1, item.offer.price() == null ? MUTED : 0xF0C66E, false);
-                if (hover) {
-                    var tooltip = new ArrayList<>(item.offer.stack().getTooltip(Item.TooltipContext.create(client.world), client.player, TooltipType.BASIC));
-                    Integer cooldown = org.cat.express.wyspiaexpress.WyspiaExpressItems.configuredCooldowns().get(item.offer.stack().getItem());
-                    if (cooldown != null && cooldown >= 0) tooltip.add(label("cooldown", cooldown).copy().withColor(0xC5ADFF));
-                    if (item.offer.action()) tooltip.add(label("action").copy().withColor(GOLD));
-                    hoveredTooltip = tooltip;
-                }
+                if (hover) hoveredTooltip = item.tooltip;
             } else if (part instanceof LinkPart link) {
-                context.drawText(textRenderer, colored(label("related", link.entry.name()), readable(link.entry.color())), pagePanel.x, y + 4, GOLD, false);
+                context.drawText(textRenderer, link.text, pagePanel.x, y + 4, GOLD, false);
             } else if (part instanceof RulePart rule) {
                 context.fill(pagePanel.x, y, pagePanel.x + pagePanel.contentWidth(), y + 1, 0x60000000 | rule.color);
             }
@@ -431,29 +434,37 @@ public final class WyspiaGuidebookScreen extends Screen {
     }
 
     @Override public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (!search.isMouseOver(mouseX, mouseY)) setFocused(null);
         if (button == 0) {
-            if (listPanel.click(mouseX, mouseY) || pagePanel.click(mouseX, mouseY)) return true;
+            if (listPanel.click(mouseX, mouseY) || pagePanel.click(mouseX, mouseY)) { refreshContents(); return true; }
             if (listPanel.contains(mouseX, mouseY) && mouseX < listPanel.x + listPanel.contentWidth()) for (var row : rows) {
                 if (mouseY >= listPanel.drawY(row.y) && mouseY < listPanel.drawY(row.y + row.height)) {
-                    if (row.entry != null) { select(row.entry); setFocused(null); }
-                    else if (!mine && !copycat && query.isBlank()) toggleCategory(row.category);
+                    if (row.entry != null) { GuidebookSounds.playClick(client.getSoundManager()); select(row.entry); setFocused(null); }
+                    else if (!mine && !copycat && query.isBlank()) {
+                        GuidebookSounds.playClick(client.getSoundManager()); toggleCategory(row.category);
+                    }
                     return true;
                 }
             }
             if (pagePanel.contains(mouseX, mouseY)) for (var part : parts) if (part instanceof LinkPart link) {
                 if (mouseY >= pagePanel.drawY(link.y) && mouseY < pagePanel.drawY(link.y + 20)) {
-                    selected = link.entry; relatedView = true; pagePanel.offset = 0; pageSignature = ""; refreshPage(); return true;
+                    GuidebookSounds.playClick(client.getSoundManager());
+                    selected = link.entry; relatedView = true; pagePanel.offset = 0; refreshContents(); return true;
                 }
             }
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        boolean handled = super.mouseClicked(mouseX, mouseY, button);
+        if (handled && client.currentScreen == this && getFocused() == search) refreshContents();
+        return handled;
     }
     @Override public boolean mouseDragged(double mx, double my, int button, double dx, double dy) {
         return button == 0 && (listPanel.drag(mx, my) || pagePanel.drag(mx, my)) || super.mouseDragged(mx, my, button, dx, dy);
     }
     @Override public boolean mouseReleased(double mx, double my, int button) { listPanel.release(); pagePanel.release(); return super.mouseReleased(mx, my, button); }
     @Override public boolean mouseScrolled(double mx, double my, double horizontal, double vertical) {
-        return listPanel.scroll(mx, my, vertical) || pagePanel.scroll(mx, my, vertical) || super.mouseScrolled(mx, my, horizontal, vertical);
+        boolean handled = listPanel.scroll(mx, my, vertical) || pagePanel.scroll(mx, my, vertical) || super.mouseScrolled(mx, my, horizontal, vertical);
+        if (handled) refreshContents();
+        return handled;
     }
     @Override public boolean keyPressed(int key, int scan, int modifiers) {
         if (search.isFocused()) return super.keyPressed(key, scan, modifiers);
@@ -467,6 +478,7 @@ public final class WyspiaGuidebookScreen extends Screen {
             }
         }
         if (key == GLFW.GLFW_KEY_PAGE_DOWN || key == GLFW.GLFW_KEY_PAGE_UP) {
+            refreshContents();
             pagePanel.offset += pagePanel.height * (key == GLFW.GLFW_KEY_PAGE_DOWN ? 1 : -1); pagePanel.clamp(); return true;
         }
         return super.keyPressed(key, scan, modifiers);
@@ -478,7 +490,7 @@ public final class WyspiaGuidebookScreen extends Screen {
     private record TextPart(int x, int y, List<OrderedText> lines, int color, float scale) implements PagePart {}
     private record ArtPart(int x, int y, int size, GuidebookImages.Art art) implements PagePart {}
     private record RequirementPart(int x, int y, int width, GuidebookCatalog.Status status) implements PagePart {}
-    private record ItemPart(int x, int y, int width, int height, GuidebookItems.Offer offer) implements PagePart {}
-    private record LinkPart(int y, GuidebookEntry entry) implements PagePart {}
+    private record ItemPart(int x, int y, int width, int height, GuidebookItems.Offer offer, List<Text> tooltip) implements PagePart {}
+    private record LinkPart(int y, GuidebookEntry entry, Text text) implements PagePart {}
     private record RulePart(int y, int color) implements PagePart {}
 }

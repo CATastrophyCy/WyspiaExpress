@@ -30,32 +30,26 @@ public class RoleComponent implements AutoSyncedComponent {
     private final World world;
     public final Set<String> disabledRoles = new HashSet<>();
     public final Set<String> disabledModifiers = new HashSet<>();
-    /** Snapshot taken at round start, never refreshed from a live player count. */
-    public int participantCount;
-    public int roundParticipantCount;
-    public boolean guideContextReady;
+    public final Set<String> configuredDisabledRoles = new HashSet<>();
 
     public RoleComponent(@NotNull World world) {
         this.world = world;
     }
     public void init(){
+
+        configuredDisabledRoles.addAll(HarpyModLoaderConfig.HANDLER.instance().disabled);
         disabledRoles.addAll(HarpyModLoaderConfig.HANDLER.instance().disabled);
         disabledModifiers.addAll(HarpyModLoaderConfig.HANDLER.instance().disabledModifiers);
-        guideContextReady = true;
     }
     public void startRound(){
-        roundParticipantCount = WyspiaExpressRoles.ROUND_PLAYER_COUNT;
-        participantCount = roundParticipantCount;
-        guideContextReady = true;
+        configuredDisabledRoles.clear();
         disabledRoles.clear();
         disabledModifiers.clear();
 
+        configuredDisabledRoles.addAll(HarpyModLoaderConfig.HANDLER.instance().disabled);
         disabledRoles.addAll(WatheRoles.ROLES.stream().filter(role -> !isValidRole(role)).map(WyspiaExpressRoles::getRoleId).toList());
         disabledModifiers.addAll(HarpyModLoaderConfig.HANDLER.instance().disabledModifiers);
         sync();
-    }
-    public void endRound(){
-        disabledRoles.removeIf(roleId -> !HarpyModLoaderConfig.HANDLER.instance().disabled.contains(roleId));
     }
     public void sync() {
         KEY.sync(this.world);
@@ -70,21 +64,18 @@ public class RoleComponent implements AutoSyncedComponent {
     public void writeToNbt(@NotNull NbtCompound tag, RegistryWrapper.@NotNull WrapperLookup registryLookup) {
         tag.put("DisabledRoles", toNbtList(this.disabledRoles));
         tag.put("DisabledModifiers", toNbtList(this.disabledModifiers));
-        tag.putInt("GuideParticipants", participantCount);
-        tag.putInt("GuideRoundParticipants", roundParticipantCount);
-        tag.putBoolean("GuideContextReady", guideContextReady);
+        tag.put("ConfiguredDisabledRoles", toNbtList(this.configuredDisabledRoles));
     }
 
     @Override
     public void readFromNbt(@NotNull NbtCompound tag, RegistryWrapper.@NotNull WrapperLookup registryLookup) {
         this.disabledRoles.clear();
         this.disabledModifiers.clear();
+        this.configuredDisabledRoles.clear();
 
         fromNbtList(tag, "DisabledRoles", this.disabledRoles);
         fromNbtList(tag, "DisabledModifiers", this.disabledModifiers);
-        participantCount = tag.getInt("GuideParticipants");
-        roundParticipantCount = tag.getInt("GuideRoundParticipants");
-        guideContextReady = tag.getBoolean("GuideContextReady");
+        fromNbtList(tag, "ConfiguredDisabledRoles", this.configuredDisabledRoles);
     }
 
     private static NbtList toNbtList(Set<String> set) {

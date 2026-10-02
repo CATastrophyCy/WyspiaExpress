@@ -3,6 +3,7 @@ package org.cat.express.wyspiaexpress.client.guidebook;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.sound.SoundManager;
 import net.minecraft.text.Text;
 
 /** Solid selected state and distinct filter colors, without relying on a text glint. */
@@ -16,6 +17,10 @@ final class GuidebookFilterButton extends ButtonWidget {
     }
 
     void selected(boolean selected) { this.selected = selected; }
+
+    @Override public void playDownSound(SoundManager soundManager) {
+        GuidebookSounds.playClick(soundManager);
+    }
 
     @Override protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         int background = selected ? 0xFF000000 | accent : isHovered() || isFocused() ? 0xFF373A3B : 0xFF252A2E;
