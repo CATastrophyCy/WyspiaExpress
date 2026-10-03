@@ -24,9 +24,19 @@ import java.util.List;
 import java.util.UUID;
 
 public final class GuesserAbility {
+
+    private static final List<Role> EXCLUDED_TARGET_ROLES = List.of(
+            WyspiaExpressRoles.LICH_GHOUL,
+            WyspiaExpressRoles.CULTIST
+    );
+
     public enum Result { IGNORED, FORBIDDEN, INVALID, CORRECT, WRONG }
     public record Guess(Role role, boolean forbidden) {}
     private GuesserAbility() {}
+
+    public static boolean canTarget(Role role) {
+        return role != null && !EXCLUDED_TARGET_ROLES.contains(role);
+    }
 
     public static boolean civilian(Role role) {
         return role != null && role.isInnocent() && !role.canUseKiller()
@@ -54,7 +64,7 @@ public final class GuesserAbility {
                 || !WorldModifierComponent.KEY.get(world).isModifier(player, WyspiaExpressRoles.GUESSER)) return Result.IGNORED;
         var target = targetId == null ? null : world.getPlayerByUuid(targetId);
         if (target == player || !(target instanceof ServerPlayerEntity) || !GameFunctions.isPlayerAliveAndSurvival(target)
-                || game.getRole(target) == null) return Result.IGNORED;
+                || !canTarget(game.getRole(target))) return Result.IGNORED;
         long civilians = world.getPlayers().stream().filter(GameFunctions::isPlayerAliveAndSurvival)
                 .filter(p -> civilian(game.getRole(p))).count();
         if (civilians < WyspiaExpress.MODIFIERS_CONFIG.guesserConfig.minPlayer()) return Result.IGNORED;

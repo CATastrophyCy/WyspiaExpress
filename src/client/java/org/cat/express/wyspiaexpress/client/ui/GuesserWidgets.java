@@ -55,7 +55,8 @@ public final class GuesserWidgets {
         long civilians = entries.stream().filter(entry -> GuesserAbility.civilian(game.getRoles().get(entry.getProfile().getId()))).count();
         var widgets = new ArrayList<ClickableWidget>();
         if (civilians >= WyspiaExpress.MODIFIERS_CONFIG.guesserConfig.minPlayer()) for (var entry : entries) {
-            if (entry.getProfile().getId().equals(screen.player.getUuid())) continue;
+            if (entry.getProfile().getId().equals(screen.player.getUuid())
+                    || !GuesserAbility.canTarget(game.getRoles().get(entry.getProfile().getId()))) continue;
             var button = new ButtonWidget(0, 0, 16, 16, Text.literal(entry.getProfile().getName()),
                     b -> { if (GuesserComponent.KEY.get(screen.player).cooldown() == 0) edit(entry.getProfile().getId()); }, supplier -> supplier.get()) {
                 @Override protected void renderWidget(net.minecraft.client.gui.DrawContext context, int x, int y, float delta) {
