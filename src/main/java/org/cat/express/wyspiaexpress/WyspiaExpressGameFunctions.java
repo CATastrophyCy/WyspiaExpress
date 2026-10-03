@@ -40,7 +40,6 @@ import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
-import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
 import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
 import org.cat.express.wyspiaexpress.components.RoleComponent;
@@ -72,8 +71,8 @@ public class WyspiaExpressGameFunctions {
             }
         });
     }
-    public static void revivedPlayer(@NotNull GameWorldComponent gameWorldComponent,@NotNull WorldComponent worldComponent,
-                @NotNull ServerPlayerEntity player, @NotNull Role role, @NotNull List<Item> keptItems){
+    public static void revivePlayer(@NotNull GameWorldComponent gameWorldComponent, @NotNull WorldComponent worldComponent,
+                                    @NotNull ServerPlayerEntity player, @NotNull Role role, @NotNull List<Item> keptItems){
 
         PlayerInventory inv = player.getInventory();
         for (int i = 0; i < PlayerInventory.getHotbarSize(); i++) {

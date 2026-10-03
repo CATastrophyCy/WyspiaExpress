@@ -88,7 +88,7 @@ public record CultLeaderReviveC2SPacket(UUID playerBody) implements CustomPayloa
                     revived.teleportTo(target);
                     body.remove(Entity.RemovalReason.DISCARDED);
 
-                    WyspiaExpressGameFunctions.revivedPlayer(gameWorldComponent, world_component, revived, WyspiaExpressRoles.CULTIST,
+                    WyspiaExpressGameFunctions.revivePlayer(gameWorldComponent, world_component, revived, WyspiaExpressRoles.CULTIST,
                             List.of(WatheItems.KEY));
                     ShopUtil.setCoin(revived, WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.startingCoin());
 

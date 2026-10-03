@@ -94,7 +94,7 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
                     revived.teleportTo(target);
                     body.remove(Entity.RemovalReason.DISCARDED);
 
-                    WyspiaExpressGameFunctions.revivedPlayer(gameWorldComponent, world_component, revived, selectedRole,
+                    WyspiaExpressGameFunctions.revivePlayer(gameWorldComponent, world_component, revived, selectedRole,
                             List.of(WatheItems.KEY, KinsWatheItems.PHONE));
                     ShopUtil.setCoin(revived, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.startingCoin());
 
