@@ -57,11 +57,7 @@ When the round starts, every killer player will be assigned the Copycat role. By
 
 ## Guidebook
 
-Press **L** to open the role/modifier guide in the **Roles** tab; the key is rebindable. **All** lists non-hidden/non-obsolete entries; **Current** shows the possible round roster; **Unavailable** shows enabled roles that missed this round’s spawn requirements; **Disabled** shows explicit server-config exclusions. These snapshots refresh only at round start and remain stable between rounds. Discovery Civilian, Loose End, base Civilian/Killer and obsolete entries never appear. **Me** shows your role/modifiers and **Pick** your Copycat choices. First use defaults to Pick for Copycat and Current otherwise; later openings restore your cached choice. Background (transparent by default), folds, search and selected page are saved locally. The top Roles tab leaves the full interior for the guide. Current roles/modifiers are highlighted when visible. Press its configured key again to close it, unless a text input has focus; clicking anywhere outside the input clears that focus. Role rows have no hover messages, and detail pages omit roster state messages. Guide content refreshes on opening and interaction, including BG, rather than polling each tick. Saved preferences reset when their format version differs.
-
-The top **BG** button toggles background transparency. **SFX** beside it toggles all guidebook click sounds; the choice is saved locally. Guide text uses Minecraft’s default font. Pages show inclusive spawn requirements, a summary, optional artwork (falling back to the mod icon), config-linked abilities, starting items, shop prices with item tooltips, and lore. Values follow the existing server configuration synchronization. Resource packs can supply the new JSON format while old StarryExpress name/title/description keys remain compatible. See [Guidebook system reference](doc/guidebook.md) for authoring and extension details.
-
-`suppressOldGuidebook` in the synchronized general config defaults to **true**, removing StarryExpress's old top-left inventory guidebook button. Set it false and reopen the inventory to restore it.
+Press **L** to open the role/modifier guide in the **Roles** tab
 
 ## Miscellaneous
 
