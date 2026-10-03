@@ -55,6 +55,14 @@ Wyspia Express introduces a way for killer players to choose a killer role when 
 When the round starts, every killer player will be assigned the Copycat role. By opening your inventory, you can see three buttons 
 , and by clikcing the button you receive the corresponding role.
 
+## Guidebook
+
+Press **L** to open the role/modifier guide in the **Roles** tab; the key is rebindable. **All** lists non-hidden/non-obsolete entries; **Current** shows the possible round roster; **Unavailable** shows enabled roles that missed this round’s spawn requirements; **Disabled** shows explicit server-config exclusions. These snapshots refresh only at round start and remain stable between rounds. Discovery Civilian, Loose End, base Civilian/Killer and obsolete entries never appear. **Me** shows your role/modifiers and **Pick** your Copycat choices. First use defaults to Pick for Copycat and Current otherwise; later openings restore your cached choice. Background (transparent by default), folds, search and selected page are saved locally. The top Roles tab leaves the full interior for the guide. Current roles/modifiers are highlighted when visible. Press its configured key again to close it, unless a text input has focus; clicking anywhere outside the input clears that focus. Role rows have no hover messages, and detail pages omit roster state messages. Guide content refreshes on opening and interaction, including BG, rather than polling each tick. Saved preferences reset when their format version differs.
+
+The top **BG** button toggles background transparency. **SFX** beside it toggles all guidebook click sounds; the choice is saved locally. Guide text uses Minecraft’s default font. Pages show inclusive spawn requirements, a summary, optional artwork (falling back to the mod icon), config-linked abilities, starting items, shop prices with item tooltips, and lore. Values follow the existing server configuration synchronization. Resource packs can supply the new JSON format while old StarryExpress name/title/description keys remain compatible. See [Guidebook system reference](doc/guidebook.md) for authoring and extension details.
+
+`suppressOldGuidebook` in the synchronized general config defaults to **true**, removing StarryExpress's old top-left inventory guidebook button. Set it false and reopen the inventory to restore it.
+
 ## Miscellaneous
 
 - Players crawl faster (configurable)
@@ -63,6 +71,16 @@ When the round starts, every killer player will be assigned the Copycat role. By
 - Spectators can use "/sv join [0-5]" to enter different spectator voicechat group. They can also use "/sv leave" to leave the voicechat group as default voicechat group function is disabled
 - Spectators receive special instinct that allows them to see more information
 - One killer each game will always have the guesser modifier (configurable)
+
+## Operator commands
+
+| Command | Behavior |
+| --- | --- |
+| `/sv drag <player> <index>` | Move a player into spectator voice group `0` through the configured maximum. Group `0` is the default Wathe spectator group. |
+| `/sv drag <player>` | Force the player out of their voice group. |
+| `/revive <player> [x y z]` | Switch the player to Adventure and remove them from spectator voice chat. With coordinates, teleport into the command source's dimension; without coordinates, retain their position and dimension. Relative (`~`) and local (`^`) coordinates are supported. Clears the death record and resets freezing, depression and mood. |
+| `/setMood <player> <amount>` | Set mood to a value from `0.0` through `1.0`, without granting task coins. The player's role must use real mood. |
+| `/setRole <player> <role>` | Assign a role during an active round. |
 
 ## New Items & Item rework
 - (Starexpress)Tape rework: tape is made much more stable and Muzzler and Morphling will receive passive income for each muzzled players; muzzled players will passively lose mood (configurable)
