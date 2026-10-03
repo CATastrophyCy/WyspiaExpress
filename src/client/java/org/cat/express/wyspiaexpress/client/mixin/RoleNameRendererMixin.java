@@ -1,5 +1,7 @@
 package org.cat.express.wyspiaexpress.client.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
@@ -14,9 +16,14 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.LightType;
+import net.minecraft.world.World;
 import org.BsXinQin.kinswathe.KinsWatheConfig;
 import org.BsXinQin.kinswathe.KinsWatheRoles;
 import org.BsXinQin.kinswathe.roles.dreamer.DreamerComponent;
@@ -30,6 +37,7 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
 import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
+import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -53,6 +61,23 @@ public abstract class RoleNameRendererMixin {
     @Unique
     private static int OFF_SET = 41;
     @Unique private static PlayerEntity targetPlayer;
+
+    @WrapOperation(method = "renderHud", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/World;getLightLevel(Lnet/minecraft/world/LightType;Lnet/minecraft/util/math/BlockPos;)I"), require = 2)
+    private static int wyspiaexpress$nametagVisibility(World world, LightType type, BlockPos pos,
+                                                     Operation<Integer> original,
+                                                     @Local(argsOnly = true) ClientPlayerEntity player) {
+        if (GameFunctions.isPlayerSpectatingOrCreative(player)) return 15;
+
+        if (PlayerMovementComponent.KEY.get(player).isRestricted()) return 0;
+
+        if (ProjectileUtil.getCollision(player, entity -> entity instanceof PlayerEntity, 2f)
+                instanceof EntityHitResult hit && hit.getEntity() instanceof PlayerEntity target
+                && PlayerMovementComponent.KEY.get(target).isRestricted()) return 0;
+
+        return original.call(world, type, pos);
+    }
+
     @Inject(method = "renderHud", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I", ordinal = 0))
     private static void b(TextRenderer renderer, ClientPlayerEntity player, DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         GameWorldComponent worldComponent = GameWorldComponent.KEY.get(player.getWorld());
