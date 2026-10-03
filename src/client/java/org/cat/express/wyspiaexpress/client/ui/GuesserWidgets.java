@@ -1,31 +1,29 @@
 package org.cat.express.wyspiaexpress.client.ui;
 
+import dev.doctor4t.wathe.api.Role;
+import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.client.gui.screen.ingame.LimitedInventoryScreen;
+import dev.doctor4t.wathe.util.ShopEntry;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.text.Text;
 import net.minecraft.world.GameMode;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.client.guidebook.GuidebookEntry;
 import org.cat.express.wyspiaexpress.components.GuesserComponent;
+import org.cat.express.wyspiaexpress.components.RoleComponent;
 import org.cat.express.wyspiaexpress.modifiers.GuesserAbility;
 import org.cat.express.wyspiaexpress.packets.GuessC2SPacket;
-import dev.doctor4t.wathe.util.ShopEntry;
-import dev.doctor4t.wathe.api.Role;
-import dev.doctor4t.wathe.api.WatheRoles;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 
 public final class GuesserWidgets {
     private final LimitedInventoryScreen screen;
@@ -38,7 +36,10 @@ public final class GuesserWidgets {
     public GuesserWidgets(LimitedInventoryScreen screen) {
         this.screen = screen;
         this.group = new InventoryAbilityPanel.Group("guesser", Text.translatable("modifier.wyspiaexpress.guesser"), new ArrayList<>(), true);
+        var roundRoles = RoleComponent.KEY.get(screen.player.getWorld());
+
         this.roles = WatheRoles.ROLES.stream().filter(GuesserAbility::civilian)
+                .filter(role -> !roundRoles.disabledRoles.contains(WyspiaExpressRoles.getRoleId(role)))
                 .sorted(Comparator.comparing(r -> GuidebookEntry.role(r).name().getString())).toList();
         players();
     }
@@ -94,7 +95,7 @@ public final class GuesserWidgets {
         input.setPlaceholder(Text.translatable("gui.wyspiaexpress.guesser.role"));
         input.setChangedListener(text -> editor());
         editor();
-        if (panel != null) { panel.select("guesser"); panel.focusWidget(input); }
+        if (panel != null) { panel.select("guesser"); panel.focusWidget(null); }
     }
     private void editor() {
         var widgets = new ArrayList<ClickableWidget>();
@@ -105,13 +106,13 @@ public final class GuesserWidgets {
         for (Role role : roles) {
             Text name = GuidebookEntry.role(role).name();
             if (!search.isEmpty() && !name.getString().toLowerCase(Locale.ROOT).contains(search)
-                    && !role.identifier().toString().toLowerCase(Locale.ROOT).contains(search)) continue;
+                    && !WyspiaExpressRoles.getRoleId(role).toLowerCase(Locale.ROOT).contains(search)) continue;
             var button = ButtonWidget.builder(name.copy().withColor(role.color()), b -> {
-                        input.setText(role.identifier().toString());
+                        input.setText(WyspiaExpressRoles.getRoleId(role));
                         submit();
                     })
                     .dimensions(0, 0, 140, 20).build();
-            button.setTooltip(Tooltip.of(Text.literal(role.identifier().toString())));
+            button.setTooltip(Tooltip.of(Text.literal(WyspiaExpressRoles.getRoleId(role))));
             if (group.rowBreakBefore == null) group.rowBreakBefore = button;
             widgets.add(button);
         }
@@ -125,7 +126,7 @@ public final class GuesserWidgets {
         if (guess.role() == null) {
             String typed = text;
             var translated = WatheRoles.ROLES.stream().filter(r -> GuidebookEntry.role(r).name().getString().equalsIgnoreCase(typed)).toList();
-            if (translated.size() == 1) { text = translated.getFirst().identifier().toString(); guess = GuesserAbility.resolve(text); }
+            if (translated.size() == 1) { text = WyspiaExpressRoles.getRoleId(translated.getFirst()); guess = GuesserAbility.resolve(text); }
         }
         if (guess.forbidden()) {
             // Report an invalid attempt without transmitting a non-civilian role guess.
