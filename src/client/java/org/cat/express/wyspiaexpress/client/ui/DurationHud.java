@@ -48,7 +48,7 @@ public final class DurationHud {
             y += TEXT_HEIGHT + GAP;
         }
 
-        if (player.isCreative() || player.isSpectator() || gameWorld.canUseKillerFeatures(player)
+        if (GameFunctions.isPlayerSpectatingOrCreative(player) || gameWorld.canUseKillerFeatures(player)
                 || WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)) {
             BlackoutDuration blackout = (BlackoutDuration) WorldBlackoutComponent.KEY.get(player.getWorld());
             if (blackout.getBlackoutRemainingTicks() > 0) {
@@ -64,6 +64,8 @@ public final class DurationHud {
 
     private static AbilityDuration getAbilityDuration(MinecraftClient client, Role role) {
         var player = client.player;
+        if(player == null)
+            return null;
         if (role == Noellesroles.PHANTOM) {
             return fromEffect("phantom", player.getStatusEffect(StatusEffects.INVISIBILITY), 0xFF000000 | role.color());
         }
@@ -97,7 +99,7 @@ public final class DurationHud {
         countdown = countdown.copy().styled(style -> style.withBold(true).withColor(numberColor));
         int numberWidth = renderer.getWidth(countdown);
         int availableWidth = context.getScaledWindowWidth() - 16;
-        int width = Math.min(availableWidth, Math.max(160, renderer.getWidth(label) + numberWidth + 28));
+        int width = Math.clamp(renderer.getWidth(label) + numberWidth + 28, 160, availableWidth);
         int x = (context.getScaledWindowWidth() - width) / 2;
         int height = fraction < 0 ? TEXT_HEIGHT : BAR_HEIGHT;
 

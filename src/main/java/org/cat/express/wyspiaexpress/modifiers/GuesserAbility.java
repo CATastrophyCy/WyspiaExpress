@@ -49,7 +49,7 @@ public final class GuesserAbility {
     public static Guess resolve(String input) {
         String text = input == null ? "" : input.strip();
         List<Role> matches = WatheRoles.ROLES.stream().filter(role ->
-                role.identifier().toString().equalsIgnoreCase(text) || role.identifier().getPath().equalsIgnoreCase(text)).toList();
+                WyspiaExpressRoles.getRoleId(role).equalsIgnoreCase(text) || WyspiaExpressRoles.getRoleName(role).equalsIgnoreCase(text)).toList();
         if (matches.size() != 1) return new Guess(null, false);
         Role role = matches.getFirst();
         return new Guess(role, !civilian(role));

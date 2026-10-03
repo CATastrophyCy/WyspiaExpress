@@ -18,8 +18,8 @@ import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.guidebook.RoleLoadoutResolver;
 import org.cat.express.wyspiaexpress.guidebook.RoleShopResolver;
-import pro.fazeclan.river.stupid_express.constants.SERoles;
 import pro.fazeclan.river.stupid_express.constants.SEItems;
+import pro.fazeclan.river.stupid_express.constants.SERoles;
 
 import java.util.ArrayList;
 import java.util.List;

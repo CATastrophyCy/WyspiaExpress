@@ -1,6 +1,5 @@
 package org.cat.express.wyspiaexpress.mixin.noellesroles;
 
-import com.google.common.collect.Lists;
 import dev.doctor4t.wathe.api.Role;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.config.HarpyModLoaderConfig;

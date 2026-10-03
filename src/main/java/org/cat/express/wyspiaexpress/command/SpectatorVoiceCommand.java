@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.doctor4t.wathe.game.GameFunctions;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -37,7 +38,7 @@ public final class SpectatorVoiceCommand {
 
     private static int join(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-        if (!player.isCreative() && !player.isSpectator()) {
+        if (!GameFunctions.isPlayerSpectatingOrCreative(player)) {
             context.getSource().sendError(Text.literal("Command reserved for spectators!"));
             return 0;
         }

@@ -2,7 +2,10 @@ package org.cat.express.wyspiaexpress.mixin;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
-import dev.doctor4t.wathe.cca.*;
+import dev.doctor4t.wathe.cca.GameTimeComponent;
+import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.cca.ScoreboardRoleSelectorComponent;
+import dev.doctor4t.wathe.cca.TrainWorldComponent;
 import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.index.WatheItems;
@@ -35,6 +38,7 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.RoleComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
+import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -169,7 +173,7 @@ public abstract class HMLGameInitializeMixin {
                             players.size() - roleCount
                     )
             );
-            //WyspiaExpress.LOGGER.info("Announcement sent!, player {}, role {}", player.getName().getString(), role.identifier().toString());
+            //WyspiaExpress.LOGGER.info("Announcement sent!, player {}, role {}", player.getName().getString(), WyspiaExpressRoles.getRoleId(role));
         }
         // clean up
         Harpymodloader.FORCED_MODDED_ROLE.clear();
@@ -261,7 +265,7 @@ public abstract class HMLGameInitializeMixin {
             gameWorld.addRole(killerUUID, WatheRoles.KILLER);
             PlayerEntity killer = world.getPlayerByUuid(killerUUID);
             if (killer != null) {
-                PlayerShopComponent.KEY.get(killer).setBalance(GameConstants.MONEY_START);
+                ShopUtil.setCoin(killer, GameConstants.MONEY_START);
             }
         }
         return killers.size();

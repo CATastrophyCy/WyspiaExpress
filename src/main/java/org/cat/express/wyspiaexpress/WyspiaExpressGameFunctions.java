@@ -332,8 +332,7 @@ public class WyspiaExpressGameFunctions {
         for (PlayerEntity p : world.getPlayers()) {
             if (p instanceof ServerPlayerEntity player
                     && player.isAlive()
-                    && !player.isSpectator()
-                    && !player.isCreative()) {
+                    && GameFunctions.isPlayerAliveAndSurvival(player)) {
                 targets.add(player);
             }
         }

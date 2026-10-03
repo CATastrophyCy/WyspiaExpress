@@ -21,6 +21,7 @@ import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.commands.argument.RoleArgumentType;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.cat.express.wyspiaexpress.WyspiaExpressCommands;
+import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 
 public final class SetRoleCommand {
     private SetRoleCommand() {}
@@ -40,7 +41,7 @@ public final class SetRoleCommand {
         Role role = RoleArgumentType.getRole(context, "role");
         GameWorldComponent gameWorld = GameWorldComponent.KEY.get(targetPlayer.getWorld());
         final MutableText roleText = Harpymodloader.getRoleName(role).withColor(role.color()).styled(style ->
-                style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(role.identifier().toString()))));
+                style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(WyspiaExpressRoles.getRoleId(role)))));
 
         if (!gameWorld.isRunning()) {
             context.getSource().sendFeedback(() -> Text.translatable("commands.setrole.fail"), true);

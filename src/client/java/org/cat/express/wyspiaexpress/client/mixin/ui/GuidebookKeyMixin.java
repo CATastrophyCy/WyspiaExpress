@@ -1,10 +1,10 @@
 package org.cat.express.wyspiaexpress.client.mixin.ui;
 
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.InputUtil;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import org.cat.express.wyspiaexpress.client.WyspiaexpressClient;
 import org.cat.express.wyspiaexpress.client.guidebook.WyspiaGuidebookScreen;
 import org.lwjgl.glfw.GLFW;
@@ -22,10 +22,7 @@ public abstract class GuidebookKeyMixin {
     @Inject(method = "onKey", at = @At("HEAD"), cancellable = true)
     private void wyspiaexpress$guidebookKey(long window, int key, int scanCode, int action, int modifiers, CallbackInfo ci) {
         var binding = WyspiaexpressClient.guidebookBind;
-        // L is also vanilla's Advancements key. Wathe suppresses keys equal to that binding
-        // (including matchesKey/wasPressed). Compare the configured key itself instead;
-        // leave other screens, focused text entry and F3 shortcuts alone.
-        if (window == client.getWindow().getHandle() && action == GLFW.GLFW_PRESS
+    if (window == client.getWindow().getHandle() && action == GLFW.GLFW_PRESS
                 && binding != null && KeyBindingHelper.getBoundKeyOf(binding).equals(InputUtil.fromKeyCode(key, scanCode))
                 && client.world != null && client.player != null
                 && !InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_F3)) {

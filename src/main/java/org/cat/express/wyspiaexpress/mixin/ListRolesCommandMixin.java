@@ -5,7 +5,6 @@ import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.*;
-import net.minecraft.util.Identifier;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.commands.ListRolesCommand;
 import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
@@ -29,15 +28,17 @@ public abstract class ListRolesCommandMixin {
         message.append(Texts.join(WatheRoles.ROLES.stream().filter(ListRolesCommandMixin::wyspiaexpress$shouldShowRole).toList(),
                 Text.literal("\n"), role -> {
             final boolean disabled = HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.getRoleId(role));
-            final MutableText status = wyspiaexpress$createStatus(context.getSource(), disabled, "/setEnabledRole " + role.identifier() + " " + disabled);
-            return wyspiaexpress$buildElementText(Harpymodloader.getRoleName(role).withColor(role.color()), role.identifier(), status);
+            final String roleId = WyspiaExpressRoles.getRoleId(role);
+            final MutableText status = wyspiaexpress$createStatus(context.getSource(), disabled, "/setEnabledRole " + roleId + " " + disabled);
+            return wyspiaexpress$buildElementText(Harpymodloader.getRoleName(role).withColor(role.color()), roleId, status);
         }));
         message.append("\n\n");
         message.append(Text.translatable("commands.listroles.modifier.title")).append("\n");
         message.append(Texts.join(HMLModifiers.MODIFIERS.stream().filter(ListRolesCommandMixin::wyspiaexpress$shouldShowModifier).toList(), Text.literal("\n"), modifier -> {
             final boolean disabled = HarpyModLoaderConfig.HANDLER.instance().disabledModifiers.contains(WyspiaExpressRoles.getModifierId(modifier));
-            final MutableText status = wyspiaexpress$createStatus(context.getSource(), disabled, "/setEnabledModifier " + modifier.identifier() + " " + disabled);
-            return wyspiaexpress$buildElementText(modifier.getName().withColor(modifier.color), modifier.identifier(), status);
+            final String modifierId = WyspiaExpressRoles.getModifierId(modifier);
+            final MutableText status = wyspiaexpress$createStatus(context.getSource(), disabled, "/setEnabledModifier " + modifierId + " " + disabled);
+            return wyspiaexpress$buildElementText(modifier.getName().withColor(modifier.color), modifierId, status);
         }));
 
         context.getSource().sendMessage(message);
@@ -45,7 +46,7 @@ public abstract class ListRolesCommandMixin {
     }
 
     @Unique
-    private static MutableText wyspiaexpress$buildElementText(Text name, Identifier identifier, Text status) {
+    private static MutableText wyspiaexpress$buildElementText(Text name, String identifier, Text status) {
         return Text.empty().append(name.copy()).append(" ").append(Text.literal("(" + identifier + ")")).append(" ").append(status);
     }
 

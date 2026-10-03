@@ -27,7 +27,10 @@ public record GuidebookEntry(Identifier id, Role role, Modifier modifier, Catego
         return new GuidebookEntry(modifier.identifier(), null, modifier, Category.MODIFIER, modifier.color());
     }
 
-    public String key() { return (role != null ? "role:" : "modifier:") + id; }
+    public String key() {
+        return role != null ? "role:" + WyspiaExpressRoles.getRoleId(role)
+                : "modifier:" + WyspiaExpressRoles.getModifierId(modifier);
+    }
     public GuidebookDefinition definition() { return GuidebookDefinitions.INSTANCE.get(this); }
 
     public Text name() {

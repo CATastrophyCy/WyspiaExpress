@@ -19,9 +19,13 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.KinsWathe;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
-import org.cat.express.wyspiaexpress.*;
+import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressItems;
+import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.WyspiaExpressSounds;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
 import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
+import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.cat.express.wyspiaexpress.voicechat.SpectatorVoiceService;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,7 +63,7 @@ public record NoTargetAbilityC2SPacket() implements CustomPayload {
     public static void handleOutlaw(@NotNull ServerPlayerEntity player, GameWorldComponent gameWorldComponent, AbilityCooldownComponent abilityPlayerComponent) {
         PlayerShopComponent playerShop = PlayerShopComponent.KEY.get(player);
         if (playerShop.balance < WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.cost()) return;
-        playerShop.addToBalance(-WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.cost());
+        ShopUtil.addCoin(player, -WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.cost());
         PlayerEffectComponent.KEY.get(player).setStunTicks(WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.selfStunDuration());
         player.getItemCooldownManager().set(WyspiaExpressItems.OUTLAW_REVOLVER, 0);
         player.getItemCooldownManager().set(WyspiaExpressItems.FAKE_REVOLVER, 0);

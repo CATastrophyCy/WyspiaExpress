@@ -29,7 +29,6 @@ import org.aussiebox.starexpress.StarryExpressModifiers;
 import org.cat.express.wyspiaexpress.components.*;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
-import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
 import pro.fazeclan.river.stupid_express.constants.SEModifiers;
@@ -244,17 +243,17 @@ public class WyspiaExpressRoles {
     }
     private static Role registerRole(Role role) {
         WatheRoles.registerRole(role);
-        ROLES.put(role.identifier().getPath(), role);
+        ROLES.put(getRoleName(role), role);
         return role;
     }
     private static Role registerNonMurderRole(Role role){
         Harpymodloader.NON_MURDER_ROLES.add(role);
-        NON_MURDER_ROLES.put(role.identifier().getPath(), role);
+        NON_MURDER_ROLES.put(getRoleName(role), role);
         return role;
     }
     private static Modifier registerModifier(Modifier modifier) {
         HMLModifiers.registerModifier(modifier);
-        MODIFIERS.put(modifier.identifier().getPath(), modifier);
+        MODIFIERS.put(getModifierName(modifier), modifier);
         return modifier;
     }
     private static void initHiddenList(){
@@ -373,7 +372,7 @@ public class WyspiaExpressRoles {
                     !roleMeetPlayerRequirement(r)||
                     Harpymodloader.VANNILA_ROLES.contains(r) ||
                     !r.canUseKiller() ||
-                    HarpyModLoaderConfig.HANDLER.instance().disabled.contains(r.identifier().toString())
+                    HarpyModLoaderConfig.HANDLER.instance().disabled.contains(getRoleId(r))
                 )
         ));
         return killerRoles;

@@ -73,7 +73,7 @@ public class ShopUtil {
         }
         var random = player.getRandom();
         if(random.nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.missChance()) {
-            PlayerShopComponent.KEY.get(player).addToBalance(WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.missCompensationCoin());
+            addCoin(player, WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.missCompensationCoin());
             return; // loss the gamble
         }
         if( random.nextDouble() < WyspiaExpress.ROLES_CONFIG.roleConfig.gamblerConfig.goodPoolChance()){

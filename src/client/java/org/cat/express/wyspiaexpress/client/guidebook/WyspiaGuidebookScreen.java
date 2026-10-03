@@ -13,11 +13,7 @@ import net.minecraft.util.math.MathHelper;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static org.cat.express.wyspiaexpress.client.guidebook.GuidebookStyle.*;
 
