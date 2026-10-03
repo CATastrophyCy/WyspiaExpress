@@ -40,19 +40,12 @@ public abstract class InstinctMixin {
     // apparently they replaced fake poison's poisoner to this uuid, and in PlayerPoisonComponent they used a mixin to guarantee that delusion_maker won't kill
     @Unique private static final UUID DELUSION_MARKER = UUID.fromString("00000000-0000-0000-dead-c0de00000000"); // unique string used by Kinswathe
 
-    @WrapMethod(method = "isInstinctEnabled")
-    private static boolean wyspiaexpress$disableSmokedInstinct(Operation<Boolean> original) {
-        PlayerEntity player = MinecraftClient.getInstance().player;
-        if (player != null && PlayerMovementComponent.KEY.get(player).isRestricted()) {
-            return false;
-        }
-        return original.call();
-    }
 
     @WrapMethod(method = "getInstinctHighlight")
     private static int wyspiaexpress$hideSmokedInstinct(Entity target, Operation<Integer> original) {
         PlayerEntity player = MinecraftClient.getInstance().player;
-        if ((player != null && PlayerMovementComponent.KEY.get(player).isRestricted())
+        if(WatheClient.isPlayerSpectatingOrCreative()) return original.call(target);
+        if ( (player != null && PlayerMovementComponent.KEY.get(player).isRestricted())
                 || (target instanceof PlayerEntity targetPlayer && PlayerMovementComponent.KEY.get(targetPlayer).isRestricted())) {
             return -1;
         }

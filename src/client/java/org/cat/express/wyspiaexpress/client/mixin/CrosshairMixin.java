@@ -50,28 +50,6 @@ public class CrosshairMixin {
                 || WorldBlackoutComponent.KEY.get(player.getWorld()).isBlackoutActive()) {
             return;
         }
-
-        ItemStack stack = player.getMainHandStack();
-        float range;
-        if (stack.isOf(WatheItems.REVOLVER) || stack.isOf(KinsWatheItems.BLOWGUN)
-                || stack.isOf(WyspiaExpressItems.OUTLAW_REVOLVER)) {
-            range = 15.0F;
-        } else if (stack.isOf(WatheItems.KNIFE) || stack.isOf(KinsWatheItems.HUNTING_KNIFE)
-                || stack.isOf(KinsWatheItems.PAN) || stack.isOf(KinsWatheItems.POISON_INJECTOR)
-                || stack.isOf(WyspiaExpressItems.RITUAL_DAGGER)) {
-            range = 3.0F;
-        } else {
-            original.call(client, player, context, tickCounter);
-            return;
-        }
-
-        // Keep smoked players in the raycast so it cannot reveal a player behind them.
-        HitResult hit = ProjectileUtil.getCollision(player, entity -> entity instanceof PlayerEntity target
-                && GameFunctions.isPlayerAliveAndSurvival(target) && !target.isInvisible(), range);
-        if (hit instanceof EntityHitResult entityHit && entityHit.getEntity() instanceof PlayerEntity target
-                && PlayerMovementComponent.KEY.get(target).isRestricted()) {
-            return;
-        }
         original.call(client, player, context, tickCounter);
     }
 
@@ -91,7 +69,7 @@ public class CrosshairMixin {
             RenderSystem.defaultBlendFunc();
             RenderSystem.disableBlend();
             HitResult hitResult = ProjectileUtil.getCollision(player, entity -> entity instanceof @NotNull PlayerEntity targetPlayer
-                    && GameFunctions.isPlayerAliveAndSurvival(targetPlayer) && !targetPlayer.isInvisible(), 15.0F);
+                    && GameFunctions.isPlayerAliveAndSurvival(targetPlayer) && !targetPlayer.isInvisible() && !PlayerMovementComponent.KEY.get(targetPlayer).isRestricted(), 15.0F);
             if (!manager.isCoolingDown(mainHandStack.getItem()) && hitResult instanceof @NotNull EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof @NotNull PlayerEntity) {
                 target = true;
             }
@@ -108,7 +86,7 @@ public class CrosshairMixin {
             RenderSystem.defaultBlendFunc();
             RenderSystem.disableBlend();
             HitResult hitResult = ProjectileUtil.getCollision(player, entity -> entity instanceof @NotNull PlayerEntity targetPlayer
-                    && GameFunctions.isPlayerAliveAndSurvival(targetPlayer) && !targetPlayer.isInvisible(), 3.0F);
+                    && GameFunctions.isPlayerAliveAndSurvival(targetPlayer) && !targetPlayer.isInvisible() && !PlayerMovementComponent.KEY.get(targetPlayer).isRestricted(), 3.0F);
             if (!manager.isCoolingDown(mainHandStack.getItem()) && hitResult instanceof @NotNull EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof @NotNull PlayerEntity) {
                 target = true;
                 context.drawGuiTexture(KNIFE_ATTACK, -5, 5, 10, 7);
