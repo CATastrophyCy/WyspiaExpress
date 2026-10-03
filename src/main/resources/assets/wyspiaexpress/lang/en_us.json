@@ -76,6 +76,10 @@
   "item.wyspiaexpress.tp_ready": "Teleport to Ready Area",
 
   "announcement.modifier.wyspiaexpress.bomber": "Bomber",
+  "announcement.modifier.wyspiaexpress.elusive": "Elusive",
+  "announcement.modifier.wyspiaexpress.employee": "Employee",
+  "announcement.modifier.wyspiaexpress.guesser": "Guesser",
+  "announcement.modifier.wyspiaexpress.vent_crawler": "Professional Vent Crawler",
 
   "announcement.role.wyspiaexpress.copycat": "Copycat",
   "announcement.goals.wyspiaexpress.copycat": "Press E and choose what you want to become today",
@@ -97,9 +101,6 @@
   "announcement.role.wyspiaexpress.edge_lord": "The Edgelord Delusional Cursed Assassin of Darkness and Coffee Addiction",
   "announcement.goals.wyspiaexpress.edge_lord": "Assassinate everyone in the darkness you manifest, embrace your inner edgelord, but be careful to not cut yourself.",
 
-  "announcement.modifier.wyspiaexpress.elusive": "Elusive",
-
-  "announcement.modifier.wyspiaexpress.employee": "Employee",
 
   "announcement.role.wyspiaexpress.gambler": "Gambler",
   "announcement.goals.wyspiaexpress.gambler": "Spin the wheel, and survive",
@@ -116,12 +117,19 @@
   "announcement.role.wyspiaexpress.outlaw": "The Outlaw",
   "announcement.goals.wyspiaexpress.outlaw": "Blend in as a Vigilante and eliminate the civilians",
 
-  "announcement.modifier.wyspiaexpress.vent_crawler": "Professional Vent Crawler",
 
   "announcement.role.wyspiaexpress.villain_licensed": "Licensed Villain",
   "announcement.goals.wyspiaexpress.villain_licensed": "You might still retain a shred of conscience...",
   "announcement.win.kinswathe.villain_licensed": "Licensed Villain Win!",
   "game.win.kinswathe.villain_licensed": "The licensed villain ended everyone's life!",
+
+  "gui.wyspiaexpress.guesser.civilian_only": "Only civilian roles can be guessed.",
+  "gui.wyspiaexpress.guesser.role": "Civilian role",
+
+  "gui.wyspiaexpress.inventory.bodymaker": "Bodymaker",
+  "gui.wyspiaexpress.inventory.judge": "Judge",
+  "gui.wyspiaexpress.inventory.morphling": "Morphling",
+  "gui.wyspiaexpress.inventory.swapper": "Swapper",
 
   "gui.wyspiaexpress.guidebook.ability": "Abilities",
   "gui.wyspiaexpress.guidebook.ability.unavailable": "No ability information provided.",
@@ -350,10 +358,6 @@
   "guidebook.wyspiaexpress.modifiers.noellesroles.graverobber.summary": "Read the victim’s role, cause of death and time of death from a body.",
   "guidebook.wyspiaexpress.modifiers.noellesroles.graverobber.lore": "The Graverobber learned from the Coroner and twisted those talents to serve murderous ideals.",
 
-  "guidebook.wyspiaexpress.modifiers.noellesroles.guesser.summary": "Identify a passenger’s role to kill them instantly.",
-  "guidebook.wyspiaexpress.modifiers.noellesroles.guesser.ability.1": "Use the role-guessing interface to guess an eligible passenger’s role. A correct guess kills them immediately. The interface requires at least %1$s eligible targets and excludes the Mimic. Server rules can make an incorrect guess fatal.",
-  "guidebook.wyspiaexpress.modifiers.noellesroles.guesser.ability.2": "Killers receive this modifier automatically, up to %1$s Guessers.",
-
   "guidebook.wyspiaexpress.modifiers.noellesroles.tiny.summary": "A smaller body makes you harder to notice.",
 
   "guidebook.wyspiaexpress.roles.starexpress.starstruck.summary": "Use a burst of instinct to locate nearby passengers.",
@@ -495,6 +499,15 @@
   "guidebook.role.title.wyspiaexpress:employee": "Average worker at Wyspia Express",
   "guidebook.wyspiaexpress.modifiers.wyspiaexpress.employee.summary": "Carry an Employee Key for certain doors.",
   "guidebook.role.description.wyspiaexpress:employee": "You get no benefit other than a key called \"Employee Key\". This key can open some doors",
+
+  "modifier.wyspiaexpress.guesser": "Guesser",
+  "guidebook.role.wyspiaexpress:guesser": "Guesser",
+  "guidebook.role.title.wyspiaexpress:guesser": "A calculated gamble",
+  "guidebook.wyspiaexpress.modifiers.wyspiaexpress.guesser.summary": "Identify a passenger’s civilian role to kill them instantly.",
+  "guidebook.wyspiaexpress.modifiers.wyspiaexpress.guesser.ability.1": "You can choose any living participant and guess their role. A correct guess kills the target. A valid but incorrect guess follows the server’s will kill you instead. Ability cooldown: %1$s.",
+  "guidebook.wyspiaexpress.modifiers.wyspiaexpress.guesser.ability.2": "Misspelling or inputting a non-civilian role will not kill you, instead it puts the ability on a %1$s cooldown.",
+  "guidebook.wyspiaexpress.modifiers.wyspiaexpress.guesser.ability.3": "At least %1$s living civilians must remain for the ability to be active.",
+  "guidebook.wyspiaexpress.modifiers.wyspiaexpress.guesser.ability.4": "Killers receive this modifier automatically, up to %1$s Guessers.",
 
   "guidebook.role.wyspiaexpress:vent_crawler": "Professional Vent Crawler",
   "guidebook.role.title.wyspiaexpress:vent_crawler": "Sus ඞ",

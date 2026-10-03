@@ -24,6 +24,7 @@ import org.agmas.harpymodloader.events.ModifierAssigned;
 import org.agmas.harpymodloader.events.ResetPlayerEvent;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
 import org.agmas.harpymodloader.modifiers.Modifier;
+import org.agmas.noellesroles.Noellesroles;
 import org.aussiebox.starexpress.StarryExpressModifiers;
 import org.cat.express.wyspiaexpress.components.*;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
@@ -45,6 +46,8 @@ import static pro.fazeclan.river.stupid_express.constants.SERoles.*;
 public class WyspiaExpressRoles {
 
     public static void init() {
+        // Leave upstream identity checks intact while assigning only our replacement.
+        HMLModifiers.MODIFIERS.remove(Noellesroles.GUESSER);
         registerRoleConfigs();
         registerRoleLimit();
         registerAnnouncements();
@@ -203,6 +206,12 @@ public class WyspiaExpressRoles {
             WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2,
             true
     ));
+    public static Modifier GUESSER = registerModifier(new Modifier(
+            Identifier.of(WyspiaExpress.MOD_ID, "guesser"),
+            org.agmas.noellesroles.Noellesroles.GUESSER.color(),
+            org.agmas.noellesroles.Noellesroles.GUESSER.cannotBeAppliedTo(), null,
+            org.agmas.noellesroles.Noellesroles.GUESSER.killerOnly, false));
+
     public static Modifier EMPLOYEE = registerModifier(new Modifier(
             Identifier.of(WyspiaExpress.MOD_ID, "employee"),
             0x0D3B66,
@@ -267,6 +276,7 @@ public class WyspiaExpressRoles {
         HIDDEN_ROLES.add(JESTER);
         HIDDEN_ROLES.add(VOODOO);
         // hidden modifiers
+        HIDDEN_MODIFIERS.add(Noellesroles.GUESSER); // obsolete now
         if(WyspiaExpress.MODIFIERS_CONFIG.guesserConfig.killerAlwaysGuesser())
             HIDDEN_MODIFIERS.add(GUESSER);
         HIDDEN_MODIFIERS.add(BOMBER);
@@ -396,6 +406,7 @@ public class WyspiaExpressRoles {
             PlayerHearDeadComponent.KEY.get(playerEntity).reset();
             PlayerCultistComponent.KEY.get(playerEntity).reset();
             PlayerMovementComponent.KEY.get(playerEntity).reset();
+            GuesserComponent.KEY.get(playerEntity).reset();
         }));
     }
     private static void registerStringRoleMap(){

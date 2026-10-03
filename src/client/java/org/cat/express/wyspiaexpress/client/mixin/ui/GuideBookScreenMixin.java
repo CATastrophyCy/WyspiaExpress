@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.doctor4t.wathe.api.Role;
 import net.minecraft.client.MinecraftClient;
 import org.agmas.harpymodloader.modifiers.Modifier;
-import org.agmas.noellesroles.Noellesroles;
 import org.aussiebox.starexpress.client.gui.screen.GuidebookScreen;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.RoleComponent;
@@ -59,6 +58,6 @@ public abstract class GuideBookScreenMixin {
     @Unique
     private static boolean shouldShowModifier(RoleComponent comp, Modifier modifier){
         String modifierId = WyspiaExpressRoles.getModifierId(modifier);
-        return modifier == Noellesroles.GUESSER || (!comp.disabledModifiers.contains(modifierId) && !WyspiaExpressRoles.HIDDEN_MODIFIERS.contains(modifier));
+        return modifier == WyspiaExpressRoles.GUESSER || (!comp.disabledModifiers.contains(modifierId) && !WyspiaExpressRoles.HIDDEN_MODIFIERS.contains(modifier));
     }
 }

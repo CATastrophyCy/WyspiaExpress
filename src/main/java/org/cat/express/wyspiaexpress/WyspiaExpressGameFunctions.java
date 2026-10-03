@@ -93,7 +93,7 @@ public class WyspiaExpressGameFunctions {
         PlayerFreezeComponent.KEY.get(player).reset();
         PlayerMoodComponent.KEY.get(player).reset();
         PlayerDepressedComponent.KEY.get(player).reset();
-        WorldModifierComponent.KEY.get(player.getWorld()).getModifiers(player).remove(Noellesroles.GUESSER);
+        WorldModifierComponent.KEY.get(player.getWorld()).getModifiers(player).remove(WyspiaExpressRoles.GUESSER);
         gameWorldComponent.addRole(player, role);
         ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, role);
         ServerPlayNetworking.send(

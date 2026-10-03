@@ -1,6 +1,10 @@
 package org.cat.express.wyspiaexpress.mixin.noellesroles;
 
 import dev.doctor4t.wathe.game.GameConstants;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import org.cat.express.wyspiaexpress.modifiers.GuesserAbility;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -14,6 +18,14 @@ import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(Noellesroles.class)
 public abstract class NoellesRolesMixin {
+    // Old payloads must obey the same validation as the replacement interface.
+    @Inject(method = "lambda$registerPackets$15", at = @At("HEAD"), cancellable = true, remap = false)
+    private static void wyspiaexpress$validateGuess(org.agmas.noellesroles.packet.GuessC2SPacket packet,
+                                                   ServerPlayNetworking.Context context, CallbackInfo ci) {
+        context.server().execute(() -> GuesserAbility.guess(context.player(), packet.player(), packet.guess()));
+        ci.cancel();
+    }
+
 
     @Redirect(
             method = "lambda$registerPackets$16",

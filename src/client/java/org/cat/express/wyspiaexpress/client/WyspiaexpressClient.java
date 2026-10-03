@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress.client;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.client.gui.screen.ingame.LimitedInventoryScreen;
 import dev.doctor4t.wathe.entity.PlayerBodyEntity;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -10,6 +11,8 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
+import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
@@ -33,6 +36,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.resource.ResourceType;
 import org.cat.express.wyspiaexpress.client.roles.NoTargetAbilityUtil;
 import org.cat.express.wyspiaexpress.client.roles.TargetAbilityUtil;
+import org.cat.express.wyspiaexpress.client.ui.InventoryAbilityPanel;
 import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
 import org.lwjgl.glfw.GLFW;
 
@@ -47,6 +51,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         registerGuidebook();
+        registerInventoryFocus();
         registerCooldownRefresh();
         registerItemToolTips();
         registerItemsBlood();
@@ -74,6 +79,17 @@ public class WyspiaexpressClient implements ClientModInitializer {
                     }
             );
         }
+    }
+    private static void registerInventoryFocus() {
+
+        ScreenEvents.AFTER_INIT.register((client, screen, width, height) -> {
+            if (!(screen instanceof LimitedInventoryScreen)) return;
+            ScreenMouseEvents.beforeMouseClick(screen).register((current, x, y, button) -> {
+                for (var child : current.children()) {
+                    if (child instanceof InventoryAbilityPanel panel) panel.blurForClick(x, y);
+                }
+            });
+        });
     }
     private static void registerCooldownRefresh() {
         // Cooldown tables used to refresh from item hovers. Keep them current when config mirrors

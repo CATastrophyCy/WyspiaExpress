@@ -88,7 +88,7 @@ public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
                             + reviveComponent.getAvailableRevives() - 1 < reviveComponent.getMaxRevives())
                         reviveComponent.incrementAvailableRevives();
                 }
-                WorldModifierComponent.KEY.get(world).getModifiers(player).remove(Noellesroles.GUESSER);
+                WorldModifierComponent.KEY.get(world).getModifiers(player).remove(WyspiaExpressRoles.GUESSER);
                 TrainVoicePlugin.resetPlayer(target.getUuid());
                 WyspiaExpressGameFunctions.sendConvertedMessage(world, gameWorldComponent, player, target);
                 gameWorldComponent.addRole(target, WyspiaExpressRoles.CULTIST);

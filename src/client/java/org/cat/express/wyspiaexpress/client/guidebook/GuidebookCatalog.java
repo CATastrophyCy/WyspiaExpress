@@ -5,7 +5,6 @@ import dev.doctor4t.wathe.cca.GameWorldComponent;
 import net.minecraft.client.MinecraftClient;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
-import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.RoleComponent;
@@ -64,7 +63,7 @@ public final class GuidebookCatalog {
 
     public static boolean normallyVisible(GuidebookEntry entry) {
         if (entry.role() != null) return !WyspiaExpressRoles.HIDDEN_ROLES.contains(entry.role());
-        return entry.modifier() == Noellesroles.GUESSER || entry.modifier() == WyspiaExpressRoles.BOMBER
+        return entry.modifier() == WyspiaExpressRoles.GUESSER || entry.modifier() == WyspiaExpressRoles.BOMBER
                 || !WyspiaExpressRoles.HIDDEN_MODIFIERS.contains(entry.modifier());
     }
 
@@ -76,7 +75,7 @@ public final class GuidebookCatalog {
                 && entry.role() != WyspiaExpressRoles.COPYCAT && entry.role() != WyspiaExpressRoles.CULTIST
                 && entry.role() != WyspiaExpressRoles.LICH_GHOUL;
         return WyspiaExpressRoles.HIDDEN_MODIFIERS.contains(entry.modifier())
-                && entry.modifier() != Noellesroles.GUESSER && entry.modifier() != WyspiaExpressRoles.BOMBER;
+                && entry.modifier() != WyspiaExpressRoles.GUESSER && entry.modifier() != WyspiaExpressRoles.BOMBER;
     }
 
     public static Status status(GuidebookEntry entry) {

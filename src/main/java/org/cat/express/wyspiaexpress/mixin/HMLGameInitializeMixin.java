@@ -789,9 +789,9 @@ public abstract class HMLGameInitializeMixin {
         if (WyspiaExpress.MODIFIERS_CONFIG.guesserConfig.killerAlwaysGuesser()) {
             int count = 0;
             for (ServerPlayerEntity player : shuffledPlayers) {
-                if (!wmc.isModifier(player, Noellesroles.GUESSER) && gwc.canUseKillerFeatures(player)) {
-                    wmc.addModifier(player.getUuid(), Noellesroles.GUESSER);
-                    ModifierAssigned.EVENT.invoker().assignModifier(player, Noellesroles.GUESSER);
+                if (!wmc.isModifier(player, WyspiaExpressRoles.GUESSER) && gwc.canUseKillerFeatures(player)) {
+                    wmc.addModifier(player.getUuid(), WyspiaExpressRoles.GUESSER);
+                    ModifierAssigned.EVENT.invoker().assignModifier(player, WyspiaExpressRoles.GUESSER);
                     count++;
                 }
                 if (count >= WyspiaExpress.MODIFIERS_CONFIG.guesserConfig.maximumGuessers()) {

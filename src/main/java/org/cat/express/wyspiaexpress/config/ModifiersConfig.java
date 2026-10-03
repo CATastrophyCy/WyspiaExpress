@@ -28,8 +28,12 @@ public class ModifiersConfig {
         public boolean killerAlwaysGuesser = true;
         @Comment("Maximum amount of guessers when killerAlwaysGuesser is enabled")
         public int maximumGuessers = 1;
-        @Comment("Minimum amount of civilian players for guesser to be able to guess")
+        @Comment("Minimum amount of living civilian players for guesser to be able to guess")
         public int minPlayer = 3;
+        @Comment("Guesser cooldown after a valid civilian role guess, in seconds. Zero disables the cooldown")
+        public int cooldown = 120;
+        @Comment("Guesser cooldown after unknown, misspelled or non-civilian input, in seconds. Zero disables the cooldown")
+        public int invalidGuessCooldown = 5;
     }
     public static class VentCrawlerConfig{
         @Comment("Crawling speed boost. Is multiplicative with general crawl speed boost")
