@@ -1,6 +1,7 @@
 package org.cat.express.wyspiaexpress.client.ui;
 
 import dev.doctor4t.wathe.client.gui.screen.ingame.LimitedInventoryScreen;
+import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -9,6 +10,8 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
+import org.BsXinQin.kinswathe.client.roles.judge.JudgePlayerWidget;
+import org.BsXinQin.kinswathe.component.ConfigWorldComponent;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -75,8 +78,10 @@ public final class InventoryAbilityPanel extends ClickableWidget {
             if (showTitles) { titles.add(new GroupHeading(group.title, originX + layoutWidth / 2, getY() + 2 + y)); y += 12; }
             for (var widget : group.widgets) {
                 boolean head = group.heads && !(widget instanceof TextFieldWidget) && widget.getWidth() == 16;
-                int cellWidth = Math.min(availableWidth, head ? 36 : widget.getWidth() + 4);
-                int cellHeight = Math.min(availableHeight, head ? 32 : Math.max(24, widget.getHeight() + 4));
+                boolean judge = widget instanceof JudgePlayerWidget;
+                int headWidth = judge ? Math.max(36, MinecraftClient.getInstance().textRenderer.getWidth(judgePrice()) + 14) : 36;
+                int cellWidth = Math.min(availableWidth, head ? headWidth : widget.getWidth() + 4);
+                int cellHeight = Math.min(availableHeight, head ? (judge ? 44 : 32) : Math.max(24, widget.getHeight() + 4));
                 if (x > 0 && (widget == group.rowBreakBefore || x + cellWidth > availableWidth)) { x = 0; y += rowHeight + 2; rowHeight = 0; }
                 if (y > 0 && y + cellHeight > availableHeight) { currentPage++; x = 0; y = 0; rowHeight = 0; }
                 int offset = head ? Math.clamp(cellHeight - 23, 0, 10) : 2;
@@ -166,6 +171,9 @@ public final class InventoryAbilityPanel extends ClickableWidget {
     @Override public void setFocused(boolean focused) {
         super.setFocused(focused);
     }
+    private Text judgePrice() {
+        return Text.literal(ConfigWorldComponent.KEY.get(screen.player.getWorld()).JudgeAbilityPrice + "");
+    }
     @Override protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         var client = MinecraftClient.getInstance();
         int tabY = tabbed ? getY() + height - 17 : getY() + height;
@@ -178,17 +186,19 @@ public final class InventoryAbilityPanel extends ClickableWidget {
             context.drawCenteredTextWithShadow(client.textRenderer, Text.literal(label), x + tabWidth / 2, tabY + 4,
                     i == selected ? 0xFFEAB3 : 0xCCCCCC);
         }
-        // Prices and other screen text can still be queued in shared vertex buffers.
-        // Flush before changing clipping, then finish panel batches before restoring it.
+        // Only visible-page widgets render. Their hover names/tooltips must be allowed
+        // outside the panel bounds, just like their original inventory rendering.
         context.draw();
-        context.enableScissor(getX(), getY() + 2, getX() + width, tabY - 2);
-        try {
-            for (GroupHeading heading : headings) context.drawCenteredTextWithShadow(client.textRenderer, heading.title, heading.x, heading.y, 0xDDDDDD);
-            for (Placement p : List.copyOf(placements)) if (p.page == page) p.widget.render(context, mouseX, mouseY, delta);
-        } finally {
-            context.draw();
-            context.disableScissor();
+        for (GroupHeading heading : headings) context.drawCenteredTextWithShadow(client.textRenderer, heading.title, heading.x, heading.y, 0xDDDDDD);
+        for (Placement p : List.copyOf(placements)) if (p.page == page) {
+            p.widget.render(context, mouseX, mouseY, delta);
+            if (p.widget instanceof JudgePlayerWidget) {
+                int price = ConfigWorldComponent.KEY.get(screen.player.getWorld()).JudgeAbilityPrice;
+                int color = PlayerShopComponent.KEY.get(screen.player).balance >= price ? 0xFFBF49 : 0xFF7777;
+                context.drawCenteredTextWithShadow(client.textRenderer, judgePrice(), p.x + p.width / 2, p.y + 24, color);
+            }
         }
+        context.draw();
         if (pages > 1) {
             Text count = Text.literal((page + 1) + "/" + pages);
             context.drawTextWithShadow(client.textRenderer, count, getX() + width - client.textRenderer.getWidth(count) - 2,
