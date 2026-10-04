@@ -41,6 +41,9 @@
   "tip.wyspiaexpress.items.megaphone": "A body has been reported!",
   "tip.wyspiaexpress.items.megaphone_spectator": "A body has been reported by %s!",
 
+  "item.wyspiaexpress.cooldown_refresher": "Cooldown Refresher",
+  "item.wyspiaexpress.cooldown_refresher.tooltip": "Debug item: reset all your item, ability and Guesser cooldowns.",
+
   "item.wyspiaexpress.fake_revolver": "Fake Revolver",
   "item.wyspiaexpress.fake_revolver.tooltip": "\"Wha... what do you mean its not a real gun, I'll prove it now!\"",
 

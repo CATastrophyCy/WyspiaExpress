@@ -27,6 +27,7 @@ import org.agmas.noellesroles.ModItems;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
+import org.cat.express.wyspiaexpress.components.GuesserComponent;
 import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.cat.express.wyspiaexpress.config.ShopConfig;
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +50,23 @@ public class ShopUtil {
         PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(player);
         playerShopComponent.setBalance(amount);
     }
+    public static void refreshAllCooldowns(@NotNull ServerPlayerEntity player) {
+        var itemCooldowns = player.getItemCooldownManager();
+        for (Item item : WyspiaExpressItems.configuredCooldowns().keySet()) {
+            itemCooldowns.set(item, GameConstants.getInTicks(0,0));
+        }
+
+        AbilityCooldownComponent.KEY.get(player).reset();
+        GuesserComponent.KEY.get(player).reset();
+        AbilityPlayerComponent.KEY.get(player).reset(); // Kin's Wathe
+        org.agmas.noellesroles.AbilityPlayerComponent.KEY.get(player).reset();
+        org.aussiebox.starexpress.cca.AbilityComponent.KEY.get(player).reset();
+        var stupidExpress = pro.fazeclan.river.stupid_express.cca.AbilityCooldownComponent.KEY.get(player);
+        stupidExpress.setCooldown(0);
+        stupidExpress.sync();
+
+    }
+
     public static boolean handlePurchase(@NotNull PlayerEntity player, int balance, @NotNull Item item, int price) {
         if (balance >= price && !player.getItemCooldownManager().isCoolingDown(item)) {
             giveItem(player, item);
@@ -142,17 +160,18 @@ public class ShopUtil {
 
         for(ServerPlayerEntity serverPlayer : player.getServer().getPlayerManager().getPlayerList()) {
             if (serverPlayer != null && gameWorld.canUseKillerFeatures(serverPlayer)) {
+                var itemCooldown = serverPlayer.getItemCooldownManager();
                 serverPlayer.sendMessage(Text.translatable("tip.kinswathe.hacker.weapon_cooldown_refresh").withColor(Color.RED.getRGB()), true);
                 serverPlayer.playSoundToPlayer(SoundEvents.BLOCK_GRINDSTONE_USE, SoundCategory.PLAYERS, 1.0F, 1.0F);
-                serverPlayer.getItemCooldownManager().set(KinsWatheItems.BLOWGUN, GameConstants.getInTicks(0, 0));
-                serverPlayer.getItemCooldownManager().set(KinsWatheItems.HUNTING_KNIFE, GameConstants.getInTicks(0, 0));
-                serverPlayer.getItemCooldownManager().set(KinsWatheItems.POISON_INJECTOR, GameConstants.getInTicks(0, 0));
-                serverPlayer.getItemCooldownManager().set(WatheItems.KNIFE, GameConstants.getInTicks(0, 0));
-                serverPlayer.getItemCooldownManager().set(WatheItems.REVOLVER, GameConstants.getInTicks(0, 0));
-                serverPlayer.getItemCooldownManager().set(WatheItems.GRENADE, GameConstants.getInTicks(0, 0));
-                serverPlayer.getItemCooldownManager().set(WyspiaExpressItems.OUTLAW_REVOLVER, GameConstants.getInTicks(0, 0));
-                serverPlayer.getItemCooldownManager().set(WyspiaExpressItems.FAKE_REVOLVER, GameConstants.getInTicks(0, 0));
-                serverPlayer.getItemCooldownManager().set(WyspiaExpressItems.TAPE, GameConstants.getInTicks(0, 0));
+                itemCooldown.set(KinsWatheItems.BLOWGUN, GameConstants.getInTicks(0, 0));
+                itemCooldown.set(KinsWatheItems.HUNTING_KNIFE, GameConstants.getInTicks(0, 0));
+                itemCooldown.set(KinsWatheItems.POISON_INJECTOR, GameConstants.getInTicks(0, 0));
+                itemCooldown.set(WatheItems.KNIFE, GameConstants.getInTicks(0, 0));
+                itemCooldown.set(WatheItems.REVOLVER, GameConstants.getInTicks(0, 0));
+                itemCooldown.set(WatheItems.GRENADE, GameConstants.getInTicks(0, 0));
+                itemCooldown.set(WyspiaExpressItems.OUTLAW_REVOLVER, GameConstants.getInTicks(0, 0));
+                itemCooldown.set(WyspiaExpressItems.FAKE_REVOLVER, GameConstants.getInTicks(0, 0));
+                itemCooldown.set(WyspiaExpressItems.TAPE, GameConstants.getInTicks(0, 0));
             }
         }
 

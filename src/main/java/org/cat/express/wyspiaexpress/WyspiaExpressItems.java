@@ -9,17 +9,25 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TypedActionResult;
+import net.minecraft.world.World;
 import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.agmas.noellesroles.ModItems;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
 import org.cat.express.wyspiaexpress.items.*;
+import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
+import java.util.List;
 
 public class WyspiaExpressItems {
 
@@ -41,6 +49,19 @@ public class WyspiaExpressItems {
     public static final Item RITUAL_DAGGER = registerItem(new RitualDaggerItem(new Item.Settings().maxCount(1)), "ritual_dagger");
     public static final Item TAPE = registerItem(new TapeItem(new Item.Settings().maxCount(4)), "tape");
     public static final Item SMOKE_BOMB = registerItem(new SmokeBombItem(new Item.Settings().maxCount(1)), "smoke_bomb");
+    public static final Item COOLDOWN_REFRESHER = registerItem(new Item(new Item.Settings().maxCount(1)) {
+        @Override
+        public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+            ItemStack stack = user.getStackInHand(hand);
+            if (user instanceof ServerPlayerEntity player) ShopUtil.refreshAllCooldowns(player);
+            return TypedActionResult.success(stack, world.isClient());
+        }
+
+        @Override
+        public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+            tooltip.add(Text.translatable("item.wyspiaexpress.cooldown_refresher.tooltip"));
+        }
+    }, "cooldown_refresher");
     public static void registerItemConfig(){
         // custom items
         ITEMS_BASIC_CONFIG.put(FAKE_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.basic);
@@ -83,6 +104,7 @@ public class WyspiaExpressItems {
         registerItemGroup(RITUAL_DAGGER, WatheItems.EQUIPMENT_GROUP);
         registerItemGroup(TAPE, WatheItems.EQUIPMENT_GROUP);
         registerItemGroup(SMOKE_BOMB, WatheItems.EQUIPMENT_GROUP);
+        registerItemGroup(COOLDOWN_REFRESHER, WatheItems.EQUIPMENT_GROUP);
     }
     public static Item registerItem(Item item, String id) {
         Identifier itemID = Identifier.of(WyspiaExpress.MOD_ID, id);
