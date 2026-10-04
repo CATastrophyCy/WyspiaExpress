@@ -7,6 +7,7 @@ import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.Text;
+import net.minecraft.world.GameMode;
 import org.BsXinQin.kinswathe.client.roles.bodymaker.BodymakerDeathReasonWidget;
 import org.BsXinQin.kinswathe.client.roles.bodymaker.BodymakerPlayerWidget;
 import org.BsXinQin.kinswathe.client.roles.bodymaker.BodymakerRoleWidget;
@@ -25,6 +26,7 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.UUID;
 
 @Mixin(LimitedInventoryScreen.class)
 public abstract class GuesserScreenMixin extends Screen {
@@ -45,7 +47,17 @@ public abstract class GuesserScreenMixin extends Screen {
                     : child instanceof JudgePlayerWidget ? "judge"
                     : child instanceof BodymakerPlayerWidget || child instanceof BodymakerDeathReasonWidget || child instanceof BodymakerRoleWidget ? "bodymaker" : null;
             if (id != null && child instanceof ClickableWidget widget) {
-                groups.computeIfAbsent(id, key -> new ArrayList<>()).add(widget); remove(child);
+                remove(child);
+                UUID target = child instanceof MorphlingPlayerWidget morphling ? morphling.disguiseTarget.getUuid()
+                        : child instanceof SwapperPlayerWidget swapper ? swapper.disguiseTarget.getUuid()
+                        : child instanceof JudgePlayerWidget judge ? judge.targetUUID
+                        : child instanceof BodymakerPlayerWidget bodymaker ? bodymaker.targetUUID : null;
+                if (target != null) {
+                    var entry = screen.player.networkHandler.getPlayerListEntry(target);
+                    if (entry == null || entry.getGameMode() == GameMode.CREATIVE
+                            || entry.getGameMode() == GameMode.SPECTATOR) continue;
+                }
+                groups.computeIfAbsent(id, key -> new ArrayList<>()).add(widget);
             }
         }
         var modifier = WorldModifierComponent.KEY.get(screen.player.getWorld());
