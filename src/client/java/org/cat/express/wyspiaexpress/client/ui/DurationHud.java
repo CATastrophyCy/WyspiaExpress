@@ -19,7 +19,7 @@ import org.aussiebox.starexpress.cca.StarstruckComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.BlackoutDuration;
 
-/** Active durations below the round clock, with separate rows for ability and blackout. */
+/** Active durations below the round clock, with separate rows for ability, glowing and blackout. */
 public final class DurationHud {
     private static final int TOP = 28;
     private static final int GAP = 4;
@@ -45,6 +45,15 @@ public final class DurationHud {
             Text countdown = ability.infinite() ? Text.literal("∞")
                     : Text.translatable("hud.wyspiaexpress.duration.seconds", seconds(ability.ticks()));
             drawPanel(context, client, y, ability.label(), countdown, ability.color(), ability.color(), -1);
+            y += TEXT_HEIGHT + GAP;
+        }
+
+        AbilityDuration glowing = GameFunctions.isPlayerAliveAndSurvival(player)
+                ? fromEffect("glowing", player.getStatusEffect(StatusEffects.GLOWING), 0xFFFFE680) : null;
+        if (glowing != null && (glowing.infinite() || glowing.ticks() > 0)) {
+            Text countdown = glowing.infinite() ? Text.literal("∞")
+                    : Text.translatable("hud.wyspiaexpress.duration.seconds", seconds(glowing.ticks()));
+            drawPanel(context, client, y, glowing.label(), countdown, glowing.color(), glowing.color(), -1);
             y += TEXT_HEIGHT + GAP;
         }
 

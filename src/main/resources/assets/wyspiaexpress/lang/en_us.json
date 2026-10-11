@@ -11,6 +11,7 @@
 
   "hud.wyspiaexpress.duration.blackout": "Blackout",
   "hud.wyspiaexpress.duration.blackout_range": "Min %ss · Max %ss",
+  "hud.wyspiaexpress.duration.glowing": "Glowing",
   "hud.wyspiaexpress.duration.morphling": "Disguise",
   "hud.wyspiaexpress.duration.phantom": "Invisibility",
   "hud.wyspiaexpress.duration.robot": "Night vision",
