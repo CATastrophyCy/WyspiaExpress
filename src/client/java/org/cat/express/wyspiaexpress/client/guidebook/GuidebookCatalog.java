@@ -86,6 +86,10 @@ public final class GuidebookCatalog {
                 : !context.disabledModifiers.contains(id);
         boolean serverDisabled = entry.role() != null ? context.configuredDisabledRoles.contains(id)
                 : context.disabledModifiers.contains(id);
+        if (entry.modifier() == WyspiaExpressRoles.GUESSER && WyspiaExpress.MODIFIERS_CONFIG.guesserConfig.killerAlwaysGuesser()) {
+            current = true;
+            serverDisabled = false;
+        }
         boolean blocked = !normallyVisible(entry);
         if (basic != null && basic.maximumSpawn() <= 0) blocked = true;
         if (entry.role() == WyspiaExpressRoles.COPYCAT && !WyspiaExpress.ROLES_CONFIG.enableRolePicking()) blocked = true;

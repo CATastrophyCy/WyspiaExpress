@@ -40,13 +40,9 @@ public abstract class LichHudMixin {
     }
     @Unique
     private static @NotNull Text getText(LichReviveComponent component, AbilityCooldownComponent abilityPlayerComponent) {
-        Text line = Text.translatable("tip.wyspiaexpress.ability.lich.revive", component.getAvailableRevives());
-        ;
-        if(component.getAvailableRevives() <= 0){
-            line = Text.translatable("tip.wyspiaexpress.ability.lich.no_revive");
-        }
+        var line = Text.translatable("tip.wyspiaexpress.ability.lich.revive", component.getAvailableRevives());
         if (abilityPlayerComponent.cooldown > 0) {
-            line = Text.translatable("tip.wyspiaexpress.ability.cooldown", abilityPlayerComponent.cooldown/20);
+            line.append(" (").append(Text.translatable("tip.wyspiaexpress.ability.cooldown", abilityPlayerComponent.cooldown/20)).append(")");
         }
         return line;
     }

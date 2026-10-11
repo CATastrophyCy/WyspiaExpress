@@ -401,8 +401,9 @@
   "guidebook.role.wyspiaexpress:copycat": "Copycat",
   "guidebook.role.title.wyspiaexpress:copycat": "<:",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.copycat.summary": "Choose a killer role from your own selection.",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.copycat.ability.1": "Use your role ability to open the picker and choose from %1$s options. If you do not choose within %2$s, a role is selected automatically.",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.copycat.ability.2": "Use the Pick filter in this guide to read about your current choices before selecting a role.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.copycat.ability.1": "Choose from %1$s killer role options. If you do not choose within %2$s, a role is selected automatically.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.copycat.ability.2": "Open your inventory to select your role.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.copycat.ability.3": "Use the Pick filter in this guide to read about your current choices before selecting a role.",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.copycat.lore": "The Copycat is gifted by the God of Train and WyspiaExpress. This gift allows them to adapt to any situation.",
   "guidebook.role.description.wyspiaexpress:copycat": "The copycat is gifted by the God of Train and WyspiaExpress. This gift allows them to freely adapt to any situation. \n\nPress E and you can choose a killer role from a selected options",
 
