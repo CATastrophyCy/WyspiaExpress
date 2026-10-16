@@ -18,6 +18,7 @@ import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.cat.express.wyspiaexpress.RoleStatisticsManager;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.PlayerRolePickingComponent;
 import org.jetbrains.annotations.NotNull;
@@ -76,6 +77,7 @@ public record RolePickC2SPacket(String role) implements CustomPayload {
 
                 gameWorldComponent.addRole(player, role);
                 ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, role);
+                WyspiaExpressGameFunctions.sendRoleChangedMessage(player.getServerWorld(), player, WyspiaExpressRoles.COPYCAT, role);
                 ServerPlayNetworking.send(
                         player,
                         new AnnounceWelcomePayload(

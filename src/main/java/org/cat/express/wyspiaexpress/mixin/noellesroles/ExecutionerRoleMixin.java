@@ -18,6 +18,7 @@ import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.executioner.ExecutionerPlayerComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.spongepowered.asm.mixin.Mixin;
@@ -62,6 +63,8 @@ public abstract class ExecutionerRoleMixin {
                 }
                 gameWorldComponent.addRole(executioner,shuffledKillerRoles.getFirst());
                 ModdedRoleAssigned.EVENT.invoker().assignModdedRole(executioner,shuffledKillerRoles.getFirst());
+                WyspiaExpressGameFunctions.sendRoleChangedMessage(((ServerPlayerEntity) executioner).getServerWorld(),
+                        executioner, Noellesroles.EXECUTIONER, shuffledKillerRoles.getFirst());
                 ShopUtil.addCoin(executioner, WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.executionerConfig.reward());
                 PlayerPoisonComponent.KEY.get(executioner).reset();
                 if (Harpymodloader.VANNILA_ROLES.contains(gameWorldComponent.getRole(executioner))) {

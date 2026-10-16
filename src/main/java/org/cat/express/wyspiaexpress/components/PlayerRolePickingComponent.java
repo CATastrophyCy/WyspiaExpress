@@ -18,6 +18,7 @@ import net.minecraft.util.Identifier;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
@@ -51,6 +52,8 @@ public class PlayerRolePickingComponent implements AutoSyncedComponent, ServerTi
                     if (role == null) role = WatheRoles.KILLER;
                     gameWorldComponent.addRole(player, role);
                     ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, role);
+                    WyspiaExpressGameFunctions.sendRoleChangedMessage(((ServerPlayerEntity) player).getServerWorld(),
+                            player, WyspiaExpressRoles.COPYCAT, role);
                     ServerPlayNetworking.send(
                             (ServerPlayerEntity) player,
                             new AnnounceWelcomePayload(
