@@ -34,6 +34,9 @@
   "hud.wyspiaexpress.duration.seconds": "%ss",
   "hud.wyspiaexpress.duration.starstruck": "Starstruck",
 
+  "hud.wyspiaexpress.status.glowing": "Glowing %ss",
+  "hud.wyspiaexpress.status.night_vision": "Night vision %ss",
+  "hud.wyspiaexpress.status.starstruck": "Starstruck %ss",
 
   "hud.wyspiaexpress.task.current": "Task: %s",
   "hud.wyspiaexpress.task.waiting": "Next task: %ss",

@@ -15,6 +15,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.text.MutableText;
@@ -33,11 +34,14 @@ import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.bartender.BartenderPlayerComponent;
 import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
 import org.aussiebox.starexpress.cca.SilenceComponent;
+import org.aussiebox.starexpress.cca.StarstruckComponent;
+import org.aussiebox.starexpress.StarryExpressRoles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
 import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
 import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
+import org.cat.express.wyspiaexpress.components.PlayerTaskComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -121,12 +125,25 @@ public abstract class RoleNameRendererMixin {
                         .append(Text.literal(( (hacker.hackingTime * 100) / (KinsWatheConfig.HANDLER.instance().HackerHackingTime * 20))
                                 + "%").setStyle(Style.EMPTY.withColor( (alpha << 24) | KinsWatheRoles.HACKER.color())));
             }
+            if (WyspiaExpress.SERVER_CONFIG.spectatorSpecialHud()) {
+                hudText.append(Text.literal(" || ").withColor(white))
+                        .append(PlayerTaskComponent.KEY.get(targetPlayer).hudText());
+            }
             int y = renderer.fontHeight / 2 + 1 + OFF_SET;
             context.drawTextWithShadow(renderer, hudText, -renderer.getWidth(hudText) / 2, y, white);
-            y+= renderer.fontHeight  + 1;
-
+            y += renderer.fontHeight + 1;
 
             List<Text> texts = new ArrayList<>();
+            var judged = targetPlayer.getStatusEffect(StatusEffects.GLOWING);
+            if (judged != null && !judged.isInfinite() && judged.getDuration() > 0) {
+                texts.add(Text.translatable("hud.wyspiaexpress.status.glowing", (int) Math.ceil(judged.getDuration() / 20.0))
+                        .withColor(KinsWatheRoles.JUDGE.color()));
+            }
+            var nightVision = targetPlayer.getStatusEffect(StatusEffects.NIGHT_VISION);
+            if (nightVision != null && !nightVision.isInfinite() && nightVision.getDuration() > 0) {
+                texts.add(Text.translatable("hud.wyspiaexpress.status.night_vision", (int) Math.ceil(nightVision.getDuration() / 20.0))
+                        .withColor(KinsWatheRoles.ROBOT.color()));
+            }
             PlayerPoisonComponent playerPoisonComponent = PlayerPoisonComponent.KEY.get(targetPlayer);
 
             if (playerPoisonComponent.poisonTicks > 0) {
@@ -150,6 +167,12 @@ public abstract class RoleNameRendererMixin {
             MorphlingPlayerComponent morphlingPlayerComponent = MorphlingPlayerComponent.KEY.get(targetPlayer);
             if( worldComponent.isRole(targetPlayer, Noellesroles.MORPHLING) && morphlingPlayerComponent.morphTicks > 0 ) {
                 texts.add(Text.literal("Transformed").setStyle(Style.EMPTY.withColor( (alpha << 24) | Noellesroles.MORPHLING.color())));
+            }
+
+            StarstruckComponent starstruck = StarstruckComponent.KEY.get(targetPlayer);
+            if (starstruck.ticks > 0) {
+                texts.add(Text.translatable("hud.wyspiaexpress.status.starstruck", (int) Math.ceil(starstruck.ticks / 20.0))
+                        .withColor(StarryExpressRoles.STARSTRUCK.color()));
             }
 
             DousedPlayerComponent doused = DousedPlayerComponent.KEY.get(targetPlayer);
