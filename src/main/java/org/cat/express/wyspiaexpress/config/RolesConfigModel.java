@@ -28,6 +28,7 @@ public class RolesConfigModel {
     - items & itemAmount: Starting items and their quantities
     - minimumPlayerSpawn : Min players required to spawn this role
     - maximumPlayerSpawn : Max players that allows this role to spawn
+    - playersPerAdditionalSpawn : Extra players above minimumPlayerSpawn needed to allow another copy (0 disables scaling)
     - maximumSpawn (0-20): Max number of this role allowed
     - seePoison: Whether this role can see poison, only affects roles that couldn't see it by default
    \s

@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.config;
 
+
 import io.wispforest.owo.config.annotation.RangeConstraint;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 
@@ -17,6 +18,7 @@ public class RoleBasicConfig {
     public List<Integer> itemAmount = new ArrayList<>();
     public int minimumPlayerSpawn = 1;
     public int maximumPlayerSpawn = 99;
+    public int playersPerAdditionalSpawn = 0;
 
     @RangeConstraint(min = 0, max = 20)
     public int maximumSpawn = 1;

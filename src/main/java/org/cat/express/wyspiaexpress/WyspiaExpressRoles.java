@@ -431,6 +431,20 @@ public class WyspiaExpressRoles {
         return playerCount >= config.minimumPlayerSpawn()
                 && playerCount <= config.maximumPlayerSpawn();
     }
+    public static int getRoleSpawnLimit(Role role) {
+        int limit = Harpymodloader.ROLE_MAX.getOrDefault(role.identifier(), Integer.MAX_VALUE);
+        var config = ROLES_BASIC_CONFIG.get(role);
+        if (config == null) return limit;
+        if (!roleMeetPlayerRequirement(role)) return 0;
+
+        limit = Math.min(limit, config.maximumSpawn());
+        int interval = config.playersPerAdditionalSpawn();
+        if (interval > 0) {
+            long allowed = 1 + ((long) ROUND_PLAYER_COUNT - config.minimumPlayerSpawn()) / interval;
+            limit = (int) Math.min(limit, allowed);
+        }
+        return Math.max(0, limit);
+    }
     public static String getRoleName(Role role){
         if(role == null) return "Unknown role";
         return role.identifier().getPath().toLowerCase();

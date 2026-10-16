@@ -402,8 +402,9 @@ public abstract class HMLGameInitializeMixin {
         for (Role role : killerRoles) {
             int roleSpecificDesiredCount = desiredRoleCount;
 
-            if (Harpymodloader.ROLE_MAX.containsKey(role.identifier())) {
-                roleSpecificDesiredCount = Math.min(Harpymodloader.ROLE_MAX.get(role.identifier()), roleSpecificDesiredCount);
+            if (Harpymodloader.ROLE_MAX.containsKey(role.identifier())
+                    || WyspiaExpressRoles.ROLES_BASIC_CONFIG.containsKey(role)) {
+                roleSpecificDesiredCount = Math.min(WyspiaExpressRoles.getRoleSpawnLimit(role), roleSpecificDesiredCount);
             }
             if (roleSpecificDesiredCount > 0) {
                 roleSpecificDesiredCount = world.getRandom().nextInt(roleSpecificDesiredCount) + 1;
@@ -565,8 +566,9 @@ public abstract class HMLGameInitializeMixin {
 
             int roleSpecificDesiredCount = desiredRoleCount;
 
-            if (Harpymodloader.ROLE_MAX.containsKey(role.identifier())) {
-                roleSpecificDesiredCount = Math.min(Harpymodloader.ROLE_MAX.get(role.identifier()), roleSpecificDesiredCount);
+            if (Harpymodloader.ROLE_MAX.containsKey(role.identifier())
+                    || WyspiaExpressRoles.ROLES_BASIC_CONFIG.containsKey(role)) {
+                roleSpecificDesiredCount = Math.min(WyspiaExpressRoles.getRoleSpawnLimit(role), roleSpecificDesiredCount);
             }
             else{
                 roleSpecificDesiredCount = Math.min(Math.round((float) players.size() / shuffledRoles.size()), roleSpecificDesiredCount);
@@ -604,8 +606,9 @@ public abstract class HMLGameInitializeMixin {
         for (Role role : shuffledCivilianRoles) {
             int roleSpecificDesiredCount = desiredRoleCount;
 
-            if (Harpymodloader.ROLE_MAX.containsKey(role.identifier())) {
-                roleSpecificDesiredCount = Math.min(Harpymodloader.ROLE_MAX.get(role.identifier()), desiredRoleCount);
+            if (Harpymodloader.ROLE_MAX.containsKey(role.identifier())
+                    || WyspiaExpressRoles.ROLES_BASIC_CONFIG.containsKey(role)) {
+                roleSpecificDesiredCount = Math.min(WyspiaExpressRoles.getRoleSpawnLimit(role), desiredRoleCount);
             }
             else{
                 roleSpecificDesiredCount = Math.min(Math.round((float) playersForCivilianRoles.size() / shuffledCivilianRoles.size()), roleSpecificDesiredCount);
@@ -644,6 +647,13 @@ public abstract class HMLGameInitializeMixin {
                                     ModdedWeights.roleRounds.get(role).getOrDefault(player.getUuid(), 1) + 1);
                 }
             }
+        }
+        // Forced picks retain their override; normal picks use only the remaining scaled slots.
+        var config = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role);
+        if (config != null && config.playersPerAdditionalSpawn() > 0) {
+            long existing = gameWorldComponent.getRoles().values().stream().filter(role::equals).count();
+            int remaining = (int) Math.max(0, WyspiaExpressRoles.getRoleSpawnLimit(role) - existing - assignedPlayers.size());
+            desiredRoleCount = Math.min(desiredRoleCount, remaining);
         }
         Map<ServerPlayerEntity, Float> weightMap = new HashMap<>();
         float total = 0.0F;
