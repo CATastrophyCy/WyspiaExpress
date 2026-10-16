@@ -92,7 +92,7 @@ public class RoleCategoryStatisticsManager {
             case NEUTRAL -> stats.neutralPercentage;
             case CIVILIAN -> stats.civilianPercentage;
         };
-        double deficit = Math.max(target - percentage, 0.0);
+        double deficit = Math.max(target - percentage / 100.0, 0.0);
         return WyspiaExpress.SERVER_CONFIG.baseWeight() + deficit;
     }
     private File getFile() {

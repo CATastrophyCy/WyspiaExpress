@@ -52,76 +52,76 @@ import java.util.*;
 public abstract class HMLGameInitializeMixin {
 
     @Unique
-    private boolean HAS_HACKER;
+    private boolean hasAssignedHacker;
     /**
      * Complete replacement for ModdedMurderGameMode.initializeGame.
      */
     @Inject(method = "initializeGame", at = @At("HEAD"), cancellable = true)
-    private void wyspiaexpress$initializeGame(
-            ServerWorld serverWorld,
+    private void wyspiaexpress$initializeRound(
+            ServerWorld world,
             GameWorldComponent gameWorld,
-            List<ServerPlayerEntity> players,
+            List<ServerPlayerEntity> participants,
             CallbackInfo ci
     ) {
         // init
         Harpymodloader.refreshRoles();
         HarpyModLoaderConfig.HANDLER.load();
-        TrainWorldComponent.KEY.get(serverWorld).setTimeOfDay(TrainWorldComponent.TimeOfDay.NIGHT);
+        TrainWorldComponent.KEY.get(world).setTimeOfDay(TrainWorldComponent.TimeOfDay.NIGHT);
         gameWorld.clearRoleMap();
 
-        WyspiaExpressRoles.ROUND_PLAYER_COUNT = players.size();
-        for (ServerPlayerEntity player : players) {
+        WyspiaExpressRoles.ROUND_PLAYER_COUNT = participants.size();
+        for (ServerPlayerEntity player : participants) {
             ResetPlayerEvent.EVENT.invoker().resetPlayer(player);
             gameWorld.addRole(player, WatheRoles.CIVILIAN);
         }
 
-        // assign roles
-        int killerCount = players.size() / gameWorld.getKillerDividend();
-        int neutralCount = players.size() /  WyspiaExpress.SERVER_CONFIG.neutralDividend();
-        int roleCount = wyspiaexpress$assignBaseVanillaRoles(serverWorld, gameWorld, players);
+        // Category budgets and the actual number of selected base killers are distinct.
+        int targetKillerCount = participants.size() / gameWorld.getKillerDividend();
+        int targetNeutralCount = participants.size() /  WyspiaExpress.SERVER_CONFIG.neutralDividend();
+        int assignedKillerCount = wyspiaexpress$assignBaseTeams(world, gameWorld, participants);
 
-        HAS_HACKER = false;
+        hasAssignedHacker = false;
 
-        List<ServerPlayerEntity> killers = new ArrayList<>(players);
-        killers.removeIf(player -> {
+        List<ServerPlayerEntity> killerPlayers = new ArrayList<>(participants);
+        killerPlayers.removeIf(player -> {
             Role role = gameWorld.getRole(player);
             return !Harpymodloader.OVERWRITE_ROLES.contains(role) || !role.canUseKiller();
         });
-        // copy cat or normal killer assignment
+        // Replace the selected base killers, or let them choose through Copycat.
         if (WyspiaExpress.ROLES_CONFIG.enableRolePicking()) {
             WyspiaExpressRoles.COPYCAT_ROLES.clear();
-            for (ServerPlayerEntity player : killers) {
+            for (ServerPlayerEntity player : killerPlayers) {
                 gameWorld.addRole(player, WyspiaExpressRoles.COPYCAT);
             }
         }
         else{
-            wyspiaexpress$assignKillerReplacements(serverWorld, gameWorld, killers, roleCount);
+            wyspiaexpress$assignKillerRoles(world, gameWorld, killerPlayers);
         }
 
-        List<ServerPlayerEntity> civilians = new ArrayList<>(players);
-        civilians.removeIf(player -> {
+        List<ServerPlayerEntity> civilianCandidates = new ArrayList<>(participants);
+        civilianCandidates.removeIf(player -> {
             Role role = gameWorld.getRole(player);
-            return !Harpymodloader.OVERWRITE_ROLES.contains(role) || role.canUseKiller(); // civilians are all that are not vigilante or killer
+            return !Harpymodloader.OVERWRITE_ROLES.contains(role) || role.canUseKiller(); // Base civilians still awaiting a replacement role.
         });
 
-        wyspiaexpress$assignCivilianNeutrals(serverWorld, gameWorld, civilians, roleCount, neutralCount);
+        wyspiaexpress$assignCivilianAndNeutralRoles(world, gameWorld, civilianCandidates, targetNeutralCount);
 
         // turn any left over civilian into amnesiacs
-        for(ServerPlayerEntity player : civilians){
+        for(ServerPlayerEntity player : civilianCandidates){
             if(gameWorld.isRole(player, WatheRoles.CIVILIAN)){
                 gameWorld.addRole(player, SERoles.AMNESIAC);
             }
         }
         // lich initialize
         if (!HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.getRoleId(WyspiaExpressRoles.LICH))) {
-            int maxRevives = WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.additionalRevive() + killerCount;
-            LichReviveComponent component = LichReviveComponent.KEY.get(serverWorld);
+            int maxRevives = WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.additionalRevive() + targetKillerCount;
+            LichReviveComponent component = LichReviveComponent.KEY.get(world);
             component.setAvailableRevives(WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.additionalRevive());
             component.setMaxRevives(maxRevives);
         }
 
-        // moddedRoleAssignedEvents and stats recording
-        for (ServerPlayerEntity player : players) {
+        // Notify role listeners only after the complete role map is populated.
+        for (ServerPlayerEntity player : participants) {
             Role role = gameWorld.getRole(player);
             if (role == null) continue;
 
@@ -145,11 +145,11 @@ public abstract class HMLGameInitializeMixin {
         }
 
         // modifier assign
-        int modifierRoleCount = roleCount * HarpyModLoaderConfig.HANDLER.instance().modifierMultiplier;
-        wyspiaexpress$assignModifiersAndAnnounce(serverWorld, gameWorld, players, modifierRoleCount, killerCount);
+        int modifierAssignmentBudget = assignedKillerCount * HarpyModLoaderConfig.HANDLER.instance().modifierMultiplier;
+        wyspiaexpress$assignAndAnnounceModifiers(world, gameWorld, participants, modifierAssignmentBudget);
 
         // role announcements
-        for (ServerPlayerEntity player : players) {
+        for (ServerPlayerEntity player : participants) {
             Role role = gameWorld.getRole(player);
             int index;
             if (Harpymodloader.VANNILA_ROLES.contains(role)) {
@@ -169,42 +169,41 @@ public abstract class HMLGameInitializeMixin {
                     player,
                     new AnnounceWelcomePayload(
                             index,
-                            roleCount,
-                            players.size() - roleCount
+                            assignedKillerCount,
+                            participants.size() - assignedKillerCount
                     )
             );
-            //WyspiaExpress.LOGGER.info("Announcement sent!, player {}, role {}", player.getName().getString(), WyspiaExpressRoles.getRoleId(role));
         }
         // clean up
         Harpymodloader.FORCED_MODDED_ROLE.clear();
         Harpymodloader.FORCED_MODDED_ROLE_FLIP.clear();
         Harpymodloader.FORCED_MODDED_MODIFIER.clear();
         // end initialization
-        GameTimeComponent gameTimeComponent = GameTimeComponent.KEY.get(serverWorld);
+        GameTimeComponent gameTimeComponent = GameTimeComponent.KEY.get(world);
         WyspiaExpressRoles.GAME_START_TIME = gameTimeComponent.time;
 
-        RoleComponent.KEY.get(serverWorld).startRound();
+        RoleComponent.KEY.get(world).startRound();
 
         ci.cancel();
     }
 
     @Unique
-    private int wyspiaexpress$assignBaseVanillaRoles(ServerWorld serverWorld,
-                                                     GameWorldComponent gameWorld,
-                                                     List<ServerPlayerEntity> players) {
+    private int wyspiaexpress$assignBaseTeams(ServerWorld world,
+            GameWorldComponent gameWorld,
+            List<ServerPlayerEntity> participants) {
         ScoreboardRoleSelectorComponent roleSelector =
-                ScoreboardRoleSelectorComponent.KEY.get(serverWorld.getScoreboard());
+                ScoreboardRoleSelectorComponent.KEY.get(world.getScoreboard());
 
-        int killerCount =  players.size() /  gameWorld.getKillerDividend();
-        int vigilanteCount = players.size() /  gameWorld.getVigilanteDividend();
+        int killerSlots =  participants.size() /  gameWorld.getKillerDividend();
+        int vigilanteSlots = participants.size() /  gameWorld.getVigilanteDividend();
 
-        List<ServerPlayerEntity> playersForVigilante = new ArrayList<>(players);
-        playersForVigilante.removeIf(player ->
+        List<ServerPlayerEntity> vigilanteCandidates = new ArrayList<>(participants);
+        vigilanteCandidates.removeIf(player ->
                 Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())
         );
 
-        List<ServerPlayerEntity> playersForKiller = new ArrayList<>(players);
-        playersForKiller.removeIf(player -> {
+        List<ServerPlayerEntity> killerCandidates = new ArrayList<>(participants);
+        killerCandidates.removeIf(player -> {
             if (!Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())) {
                 return false;
             }
@@ -214,66 +213,66 @@ public abstract class HMLGameInitializeMixin {
             }
             return true;
         });
-        int total;
+        int assignedKillerCount;
         if(WyspiaExpress.SERVER_CONFIG.useCustomWeightedAssignment()){
-            total = customKillerAssigment(serverWorld, roleSelector, gameWorld, playersForKiller, killerCount);
-            playersForVigilante.removeIf(gameWorld::canUseKillerFeatures);
-            customVigilanteAssigment(serverWorld, roleSelector, gameWorld, playersForVigilante, vigilanteCount);
+            assignedKillerCount = wyspiaexpress$assignKillersUsingCategoryHistory(world, roleSelector, gameWorld, killerCandidates, killerSlots);
+            vigilanteCandidates.removeIf(gameWorld::canUseKillerFeatures);
+            wyspiaexpress$assignVigilantesUsingCategoryHistory(world, roleSelector, gameWorld, vigilanteCandidates, vigilanteSlots);
         }
         else {
-            total = roleSelector.assignKillers(serverWorld, gameWorld, playersForKiller, killerCount);
-            playersForVigilante.removeIf(gameWorld::canUseKillerFeatures);
-            roleSelector.assignVigilantes(serverWorld, gameWorld, playersForVigilante, vigilanteCount);
+            assignedKillerCount = roleSelector.assignKillers(world, gameWorld, killerCandidates, killerSlots);
+            vigilanteCandidates.removeIf(gameWorld::canUseKillerFeatures);
+            roleSelector.assignVigilantes(world, gameWorld, vigilanteCandidates, vigilanteSlots);
         }
-        return total;
+        return assignedKillerCount;
     }
     @Unique
-    private int customKillerAssigment(ServerWorld world, ScoreboardRoleSelectorComponent roleSelector, GameWorldComponent gameWorld,
-                                      List<ServerPlayerEntity> players, int killerCount) {
-        ArrayList<UUID> killers = new ArrayList<>();
+    private int wyspiaexpress$assignKillersUsingCategoryHistory(ServerWorld world, ScoreboardRoleSelectorComponent roleSelector, GameWorldComponent gameWorld,
+            List<ServerPlayerEntity> candidatePlayers, int remainingKillerSlots) {
+        ArrayList<UUID> selectedKillerIds = new ArrayList<>();
         for (UUID uuid : roleSelector.forcedKillers) {
-            killers.add(uuid);
-            killerCount--;
+            selectedKillerIds.add(uuid);
+            remainingKillerSlots--;
             roleSelector.killerRounds.put(uuid, roleSelector.killerRounds.getOrDefault(uuid, 1) + 1);
         }
         roleSelector.forcedKillers.clear();
 
-        if(killerCount > 0) {
+        if(remainingKillerSlots > 0) {
             double totalWeight = 0;
-            HashMap<UUID, Double> weighMap = new HashMap<>();
-            for (ServerPlayerEntity player : players) {
+            HashMap<UUID, Double> playerWeights = new HashMap<>();
+            for (ServerPlayerEntity player : candidatePlayers) {
                 double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(gameWorld.getKillerDividend(), player.getUuid(),
                         RoleCategoryStatisticsManager.RoleCategory.KILLER);
-                weighMap.put(player.getUuid(), weight);
+                playerWeights.put(player.getUuid(), weight);
                 totalWeight += weight;
             }
 
-            for (int i = 0; i < killerCount; i++) {
+            for (int i = 0; i < remainingKillerSlots && !playerWeights.isEmpty(); i++) {
                 double random = world.getRandom().nextDouble() * totalWeight;
 
-                UUID selected = weightedPick(weighMap, random);
-                double weight = weighMap.get(selected);
+                UUID selectedPlayerId = wyspiaexpress$selectWeightedPlayerId(playerWeights, random);
+                double weight = playerWeights.get(selectedPlayerId);
 
-                killers.add(selected);
-                weighMap.remove(selected);
+                selectedKillerIds.add(selectedPlayerId);
+                playerWeights.remove(selectedPlayerId);
                 totalWeight -= weight;
 
-                roleSelector.killerRounds.put(selected, roleSelector.killerRounds.getOrDefault(selected, 1) + 1);
+                roleSelector.killerRounds.put(selectedPlayerId, roleSelector.killerRounds.getOrDefault(selectedPlayerId, 1) + 1);
             }
         }
-        for (UUID killerUUID : killers) {
+        for (UUID killerUUID : selectedKillerIds) {
             gameWorld.addRole(killerUUID, WatheRoles.KILLER);
             PlayerEntity killer = world.getPlayerByUuid(killerUUID);
             if (killer != null) {
                 ShopUtil.setCoin(killer, GameConstants.MONEY_START);
             }
         }
-        return killers.size();
+        return selectedKillerIds.size();
     }
     @Unique
-    private UUID weightedPick(Map<UUID, Double> weighMap, double random) {
+    private UUID wyspiaexpress$selectWeightedPlayerId(Map<UUID, Double> playerWeights, double random) {
         double cumulativeWeight = 0.0;
-        for (Map.Entry<UUID, Double> entry : weighMap.entrySet()) {
+        for (Map.Entry<UUID, Double> entry : playerWeights.entrySet()) {
             double weight = entry.getValue();
             cumulativeWeight += weight;
             if(cumulativeWeight >= random) {
@@ -281,112 +280,88 @@ public abstract class HMLGameInitializeMixin {
             }
         }
 
-        return weighMap.entrySet().iterator().next().getKey();
+        return playerWeights.entrySet().iterator().next().getKey();
     }
     @Unique
-    private void customVigilanteAssigment(ServerWorld world, ScoreboardRoleSelectorComponent roleSelector, GameWorldComponent gameWorld,
-                                          List<ServerPlayerEntity> players, int vigilanteCount) {
-        ArrayList<UUID> vigilantes = new ArrayList<>();
+    private void wyspiaexpress$assignVigilantesUsingCategoryHistory(ServerWorld world, ScoreboardRoleSelectorComponent roleSelector, GameWorldComponent gameWorld,
+            List<ServerPlayerEntity> candidatePlayers, int remainingVigilanteSlots) {
+        ArrayList<UUID> selectedVigilanteIds = new ArrayList<>();
         for (UUID uuid : roleSelector.forcedVigilantes) {
-            vigilantes.add(uuid);
-            vigilanteCount--;
+            selectedVigilanteIds.add(uuid);
+            remainingVigilanteSlots--;
             roleSelector.vigilanteRounds.put(uuid, roleSelector.vigilanteRounds.getOrDefault(uuid, 1) + 1);
 
         }
         roleSelector.forcedVigilantes.clear();
 
-        if(vigilanteCount > 0) {
+        if(remainingVigilanteSlots > 0) {
             double totalWeight = 0;
-            HashMap<UUID, Double> weighMap = new HashMap<>();
-            for (ServerPlayerEntity player : players) {
-                double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(gameWorld.getKillerDividend(), player.getUuid(),
+            HashMap<UUID, Double> playerWeights = new HashMap<>();
+            for (ServerPlayerEntity player : candidatePlayers) {
+                double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(gameWorld.getVigilanteDividend(), player.getUuid(),
                         RoleCategoryStatisticsManager.RoleCategory.VIGILANTE);
-                weighMap.put(player.getUuid(), weight);
+                playerWeights.put(player.getUuid(), weight);
                 totalWeight += weight;
             }
 
-            for (int i = 0; i < vigilanteCount; i++) {
+            for (int i = 0; i < remainingVigilanteSlots && !playerWeights.isEmpty(); i++) {
                 double random = world.getRandom().nextDouble() * totalWeight;
 
-                UUID selected = weightedPick(weighMap, random);
-                double weight = weighMap.get(selected);
+                UUID selectedPlayerId = wyspiaexpress$selectWeightedPlayerId(playerWeights, random);
+                double weight = playerWeights.get(selectedPlayerId);
 
-                vigilantes.add(selected);
-                weighMap.remove(selected);
+                selectedVigilanteIds.add(selectedPlayerId);
+                playerWeights.remove(selectedPlayerId);
                 totalWeight -= weight;
 
-                roleSelector.vigilanteRounds.put(selected, roleSelector.vigilanteRounds.getOrDefault(selected, 1) + 1);
+                roleSelector.vigilanteRounds.put(selectedPlayerId, roleSelector.vigilanteRounds.getOrDefault(selectedPlayerId, 1) + 1);
             }
         }
 
-        for (UUID uuid : vigilantes) {
+        for (UUID uuid : selectedVigilanteIds) {
             PlayerEntity player = world.getPlayerByUuid(uuid);
-            if (player instanceof ServerPlayerEntity serverPlayer && players.contains(serverPlayer) && !gameWorld.canUseKillerFeatures(player)) {
+            if (player instanceof ServerPlayerEntity serverPlayer && candidatePlayers.contains(serverPlayer) && !gameWorld.canUseKillerFeatures(player)) {
                 player.giveItemStack(new ItemStack(WatheItems.REVOLVER)); // I'd like to change this to roleAssigned, but that would break the normal behavior
                 gameWorld.addRole(player, WatheRoles.VIGILANTE);
             }
         }
     }
     @Unique
-    private List<ServerPlayerEntity> customNeutralSelection(ServerWorld world, GameWorldComponent gameWorld, List<ServerPlayerEntity> players,
-                                                            List<Role> trueNeutralRoles, List<Role> killerSidedNeutralRoles, int neutralCount ) {
-        List<ServerPlayerEntity> picked = new ArrayList<>();
-        if (neutralCount <= 0 || players.isEmpty()) {
-            return picked;
+    private List<ServerPlayerEntity> wyspiaexpress$selectNeutralsUsingCategoryHistory(ServerWorld world, GameWorldComponent gameWorld, List<ServerPlayerEntity> candidatePlayers,
+            int remainingSlots) {
+        List<ServerPlayerEntity> selectedPlayers = new ArrayList<>();
+        if (remainingSlots <= 0 || candidatePlayers.isEmpty()) {
+            return selectedPlayers;
         }
-        Set<UUID> pickedUuids = new HashSet<>();
-        Set<Role> allNeutralRoles = new HashSet<>();
-        allNeutralRoles.addAll(trueNeutralRoles);
-        allNeutralRoles.addAll(killerSidedNeutralRoles);
-
-        for (Role role : allNeutralRoles) {
-            List<UUID> forced = Harpymodloader.FORCED_MODDED_ROLE.get(role);
-            if (forced == null) continue;
-
-            for (UUID uuid : forced) {
-                PlayerEntity player = world.getPlayerByUuid(uuid);
-                if (player instanceof ServerPlayerEntity serverPlayer) {
-                    if (!players.contains(serverPlayer)) continue;
-                    if (Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(uuid)) continue;
-                    if (!Harpymodloader.OVERWRITE_ROLES.contains(gameWorld.getRole(serverPlayer))) continue;
-                    if (pickedUuids.add(uuid)) {
-                        picked.add(serverPlayer);
-                        neutralCount--;
-                    }
-                }
-            }
+        double totalWeight = 0;
+        HashMap<UUID, Double> playerWeights = new HashMap<>();
+        for (ServerPlayerEntity player : candidatePlayers) {
+            if (Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())) continue;
+            if (!Harpymodloader.OVERWRITE_ROLES.contains(gameWorld.getRole(player))) continue;
+            double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(WyspiaExpress.SERVER_CONFIG.neutralDividend(), player.getUuid(),
+                    RoleCategoryStatisticsManager.RoleCategory.NEUTRAL);
+            playerWeights.put(player.getUuid(), weight);
+            totalWeight += weight;
         }
 
-        if(neutralCount > 0) {
-            double totalWeight = 0;
-            HashMap<UUID, Double> weighMap = new HashMap<>();
-            for (ServerPlayerEntity player : players) {
-                double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(gameWorld.getKillerDividend(), player.getUuid(),
-                        RoleCategoryStatisticsManager.RoleCategory.NEUTRAL);
-                weighMap.put(player.getUuid(), weight);
-                totalWeight += weight;
-            }
+        for (int i = 0; i < remainingSlots && !playerWeights.isEmpty(); i++) {
+            double random = world.getRandom().nextDouble() * totalWeight;
 
-            for (int i = 0; i < neutralCount; i++) {
-                double random = world.getRandom().nextDouble() * totalWeight;
-
-                UUID selected = weightedPick(weighMap, random);
-                double weight = weighMap.get(selected);
-                PlayerEntity player = world.getPlayerByUuid(selected);
-                if (player instanceof ServerPlayerEntity serverPlayer) {
-                    picked.add(serverPlayer);
-                    weighMap.remove(selected);
-                    totalWeight -= weight;
-                }
+            UUID selectedPlayerId = wyspiaexpress$selectWeightedPlayerId(playerWeights, random);
+            double weight = playerWeights.get(selectedPlayerId);
+            PlayerEntity player = world.getPlayerByUuid(selectedPlayerId);
+            if (player instanceof ServerPlayerEntity serverPlayer) {
+                selectedPlayers.add(serverPlayer);
+                playerWeights.remove(selectedPlayerId);
+                totalWeight -= weight;
             }
         }
-        return picked;
+        return selectedPlayers;
     }
     @Unique
-    private void wyspiaexpress$assignKillerReplacements(ServerWorld world,
-                                                        GameWorldComponent gwc,
-                                                        List<ServerPlayerEntity> killers,
-                                                        int desiredRoleCount) {
+    private void wyspiaexpress$assignKillerRoles(ServerWorld world,
+            GameWorldComponent gameWorld,
+            List<ServerPlayerEntity> killerPlayers) {
         List<Role> killerRoles = new ArrayList<>();
         for (Role role : WatheRoles.ROLES) {
             if (Harpymodloader.NON_MURDER_ROLES.contains(role)) continue;
@@ -398,33 +373,28 @@ public abstract class HMLGameInitializeMixin {
             }
         }
         Collections.shuffle(killerRoles);
-        List<ServerPlayerEntity> assigning = new ArrayList<>(killers);
+        List<ServerPlayerEntity> remainingCandidates = new ArrayList<>(killerPlayers);
         for (Role role : killerRoles) {
-            int roleSpecificDesiredCount = desiredRoleCount;
-
-            if (Harpymodloader.ROLE_MAX.containsKey(role.identifier())
-                    || WyspiaExpressRoles.ROLES_BASIC_CONFIG.containsKey(role)) {
-                roleSpecificDesiredCount = Math.min(WyspiaExpressRoles.getRoleSpawnLimit(role), roleSpecificDesiredCount);
-            }
-            if (roleSpecificDesiredCount > 0) {
-                roleSpecificDesiredCount = world.getRandom().nextInt(roleSpecificDesiredCount) + 1;
+            int roleAssignmentCount = Math.min(WyspiaExpressRoles.getRemainingRoleSpawnLimit(role, gameWorld),
+                    remainingCandidates.size());
+            if (roleAssignmentCount > 0) {
+                roleAssignmentCount = world.getRandom().nextInt(roleAssignmentCount) + 1;
             }
 
-            wyspiaexpress$findAndAssignPlayers(
-                    roleSpecificDesiredCount, role, assigning, gwc, world
+            wyspiaexpress$assignPlayersToRole(
+                    roleAssignmentCount, role, remainingCandidates, gameWorld, world
             );
-            assigning.removeIf(player -> !Harpymodloader.OVERWRITE_ROLES.contains(gwc.getRole(player)));
+            remainingCandidates.removeIf(player -> !Harpymodloader.OVERWRITE_ROLES.contains(gameWorld.getRole(player)));
         }
     }
     @Unique
-    private void wyspiaexpress$assignCivilianNeutrals(ServerWorld world,
-                                                      GameWorldComponent gwc,
-                                                      List<ServerPlayerEntity> civilians,
-                                                      int desiredRoleCount,
-                                                      int neutralCount) {
+    private void wyspiaexpress$assignCivilianAndNeutralRoles(ServerWorld world,
+            GameWorldComponent gameWorld,
+            List<ServerPlayerEntity> civilianCandidates,
+            int targetNeutralCount) {
         List<Role> civilianRoles = new ArrayList<>();
         List<Role> trueNeutralRoles = new ArrayList<>();
-        List<Role> killerSidedNeutralRoles = new ArrayList<>();
+        List<Role> killerAlignedNeutralRoles = new ArrayList<>();
         for (Role role : WatheRoles.ROLES) {
             if (Harpymodloader.NON_MURDER_ROLES.contains(role)) continue;
             if (Harpymodloader.VANNILA_ROLES.contains(role)) continue;
@@ -433,204 +403,151 @@ public abstract class HMLGameInitializeMixin {
             if (WyspiaExpressRoles.TRUE_NEUTRALS.contains(role)) {
                 trueNeutralRoles.add(role);
             } else if (WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)) {
-                killerSidedNeutralRoles.add(role);
+                killerAlignedNeutralRoles.add(role);
             } else if (role.isInnocent() && !role.canUseKiller()) {
                 civilianRoles.add(role);
             }
         }
-        // neutrals
-        int killerSidedNeutralMax = neutralCount / 2 + (neutralCount % 2 );
-        int killerSidedNeutralCount = killerSidedNeutralMax <= 0 ? 0 : world.getRandom().nextInt(killerSidedNeutralMax + 1);
-        int trueNeutralCount = Math.max(0, neutralCount - killerSidedNeutralCount);
+        List<Role> eligibleNeutralRoles = new ArrayList<>(trueNeutralRoles);
+        eligibleNeutralRoles.addAll(killerAlignedNeutralRoles);
+        int forcedNeutralCount = wyspiaexpress$assignForcedNeutralRoles(world, gameWorld, civilianCandidates, eligibleNeutralRoles);
+        int remainingNeutralSlots = Math.max(0, targetNeutralCount - forcedNeutralCount);
 
-        List<ServerPlayerEntity> neutralPlayers = WyspiaExpress.SERVER_CONFIG.useCustomWeightedAssignment()?
-                customNeutralSelection(world, gwc, civilians, trueNeutralRoles, killerSidedNeutralRoles, neutralCount)
+        int maxKillerAlignedNeutralSlots = remainingNeutralSlots / 2 + (remainingNeutralSlots % 2 );
+        int killerAlignedNeutralSlots = maxKillerAlignedNeutralSlots <= 0 ? 0 : world.getRandom().nextInt(maxKillerAlignedNeutralSlots + 1);
+        int trueNeutralSlots = Math.max(0, remainingNeutralSlots - killerAlignedNeutralSlots);
+
+        List<ServerPlayerEntity> neutralCandidates = WyspiaExpress.SERVER_CONFIG.useCustomWeightedAssignment()?
+                wyspiaexpress$selectNeutralsUsingCategoryHistory(world, gameWorld, civilianCandidates, remainingNeutralSlots)
                 :
-                wyspiaexpress$pickPlayersForNeutral(
-                world, gwc, civilians, trueNeutralRoles, killerSidedNeutralRoles, neutralCount
+                wyspiaexpress$selectNeutralsUsingRoleHistory(
+                world, gameWorld, civilianCandidates, trueNeutralRoles, killerAlignedNeutralRoles, remainingNeutralSlots
         );
 
-        wyspiaexpress$assignRoleGroupToPlayers(world, gwc, neutralPlayers, trueNeutralRoles, trueNeutralCount, desiredRoleCount);
+        wyspiaexpress$assignNeutralRoles(world, gameWorld, neutralCandidates, trueNeutralRoles, trueNeutralSlots);
 
-        List<ServerPlayerEntity> playersForKillerNeutral = new ArrayList<>(neutralPlayers);
-        playersForKillerNeutral.removeIf(player -> !Harpymodloader.OVERWRITE_ROLES.contains(gwc.getRole(player)));
-        wyspiaexpress$assignRoleGroupToPlayers(world, gwc, playersForKillerNeutral, killerSidedNeutralRoles, killerSidedNeutralCount, desiredRoleCount);
+        List<ServerPlayerEntity> killerAlignedCandidates = new ArrayList<>(neutralCandidates);
+        killerAlignedCandidates.removeIf(player -> !Harpymodloader.OVERWRITE_ROLES.contains(gameWorld.getRole(player)));
+        wyspiaexpress$assignNeutralRoles(world, gameWorld, killerAlignedCandidates, killerAlignedNeutralRoles, killerAlignedNeutralSlots);
 
-        for (ServerPlayerEntity player : neutralPlayers) {
-            if(gwc.isRole(player, WatheRoles.CIVILIAN))
-                gwc.addRole(player, SERoles.AMNESIAC);
+        for (ServerPlayerEntity player : neutralCandidates) {
+            if(gameWorld.isRole(player, WatheRoles.CIVILIAN))
+                gameWorld.addRole(player, SERoles.AMNESIAC);
         }
-        // civilians
-        List<ServerPlayerEntity> playersForCivilians = new ArrayList<>(civilians);
-        playersForCivilians.removeIf(player -> !gwc.getRole(player).isInnocent());
+        // Assign civilian replacements to the remaining base civilians.
+        List<ServerPlayerEntity> civilianRoleCandidates = new ArrayList<>(civilianCandidates);
+        civilianRoleCandidates.removeIf(player -> !gameWorld.getRole(player).isInnocent());
 
-        wyspiaexpress$assignCivilianRoles(world, gwc, playersForCivilians, civilianRoles, desiredRoleCount);
+        wyspiaexpress$assignCivilianRoles(world, gameWorld, civilianRoleCandidates, civilianRoles);
     }
 
     @Unique
-    private List<ServerPlayerEntity> wyspiaexpress$pickPlayersForNeutral(ServerWorld world,
-                                                                         GameWorldComponent gwc,
-                                                                         List<ServerPlayerEntity> source,
-                                                                         List<Role> trueNeutralRoles,
-                                                                         List<Role> killerSidedNeutralRoles,
-                                                                         int amount) {
-        List<ServerPlayerEntity> picked = new ArrayList<>();
-        if (amount <= 0 || source.isEmpty()) {
-            return picked;
+    private int wyspiaexpress$assignForcedNeutralRoles(ServerWorld world, GameWorldComponent gameWorld,
+            List<ServerPlayerEntity> candidatePlayers, List<Role> eligibleNeutralRoles) {
+        List<ServerPlayerEntity> remainingCandidates = new ArrayList<>(candidatePlayers);
+        int assignedCount = 0;
+        for (Role role : eligibleNeutralRoles) {
+            assignedCount += wyspiaexpress$assignPlayersToRole(0, role, remainingCandidates, gameWorld, world);
+            remainingCandidates.removeIf(player -> !Harpymodloader.OVERWRITE_ROLES.contains(gameWorld.getRole(player)));
         }
-        Set<UUID> pickedUuids = new HashSet<>();
-        Set<Role> allNeutralRoles = new HashSet<>();
-        allNeutralRoles.addAll(trueNeutralRoles);
-        allNeutralRoles.addAll(killerSidedNeutralRoles);
+        return assignedCount;
+    }
 
-        // 1) Forced neutral picks first
-        for (Role role : allNeutralRoles) {
-            List<UUID> forced = Harpymodloader.FORCED_MODDED_ROLE.get(role);
-            if (forced == null) continue;
-
-            for (UUID uuid : forced) {
-                ServerPlayerEntity player = world.getServer().getPlayerManager().getPlayer(uuid);
-                if (player == null) continue;
-                if (!source.contains(player)) continue;
-                if (!Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())) continue;
-                if (!Harpymodloader.OVERWRITE_ROLES.contains(gwc.getRole(player))) continue;
-
-                if (pickedUuids.add(player.getUuid())) {
-                    picked.add(player);
-                    amount--;
-
-                }
-            }
+    @Unique
+    private List<ServerPlayerEntity> wyspiaexpress$selectNeutralsUsingRoleHistory(ServerWorld world,
+            GameWorldComponent gameWorld,
+            List<ServerPlayerEntity> candidatePlayers,
+            List<Role> trueNeutralRoles,
+            List<Role> killerAlignedNeutralRoles,
+            int remainingSlots) {
+        List<ServerPlayerEntity> selectedPlayers = new ArrayList<>();
+        if (remainingSlots <= 0 || candidatePlayers.isEmpty()) {
+            return selectedPlayers;
         }
-        if(amount > 0) {
-            // 2) Weighted fill for remaining neutral slots
-            Map<ServerPlayerEntity, Float> weights = new HashMap<>();
-            float total = 0.0F;
-
-            for (ServerPlayerEntity player : source) {
-                if (pickedUuids.contains(player.getUuid())) continue;
-                if (Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())) continue;
-                if (!Harpymodloader.OVERWRITE_ROLES.contains(gwc.getRole(player))) continue;
-
-                float weight = 0.0F;
-                for (Role role : trueNeutralRoles) {
-                    weight += wyspiaexpress$getPlayerWeightForRole(gwc, player, role);
-                }
-                for (Role role : killerSidedNeutralRoles) {
-                    weight += wyspiaexpress$getPlayerWeightForRole(gwc, player, role);
-                }
-
-                if (weight > 0.0F) {
-                    weights.put(player, weight);
-                    total += weight;
-                }
-            }
-
-            int rolls = Math.min(amount, weights.size());
-            for (int i = 0; i < rolls && total > 0.0F; i++) {
-                float random = world.getRandom().nextFloat() * total;
-
-                Iterator<Map.Entry<ServerPlayerEntity, Float>> it = weights.entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry<ServerPlayerEntity, Float> entry = it.next();
-                    random -= entry.getValue();
-                    if (random <= 0.0F) {
-                        ServerPlayerEntity player = entry.getKey();
-                        picked.add(player);
-                        pickedUuids.add(player.getUuid());
-                        total -= entry.getValue();
-                        it.remove();
-                        break;
-                    }
-                }
-            }
-        }
-        return picked;
+        List<ServerPlayerEntity> eligiblePlayers = new ArrayList<>(candidatePlayers);
+        eligiblePlayers.removeIf(player -> Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())
+                || !Harpymodloader.OVERWRITE_ROLES.contains(gameWorld.getRole(player)));
+        List<Role> eligibleRoles = new ArrayList<>(trueNeutralRoles);
+        eligibleRoles.addAll(killerAlignedNeutralRoles);
+        return WyspiaExpressRoles.selectPlayersByRoleHistory(eligiblePlayers, eligibleRoles, remainingSlots,
+                gameWorld.areWeightsEnabled(), world.getRandom());
     }
     @Unique
-    private void wyspiaexpress$assignRoleGroupToPlayers(ServerWorld world,
-                                                        GameWorldComponent gwc,
-                                                        List<ServerPlayerEntity> players,
-                                                        List<Role> roles,
-                                                        int totalWanted,
-                                                        int desiredRoleCount) {
-        if (totalWanted <= 0 || players.isEmpty() || roles.isEmpty()) return;
+    private void wyspiaexpress$assignNeutralRoles(ServerWorld world,
+            GameWorldComponent gameWorld,
+            List<ServerPlayerEntity> candidatePlayers,
+            List<Role> roles,
+            int groupAssignmentLimit) {
+        if (groupAssignmentLimit <= 0 || candidatePlayers.isEmpty() || roles.isEmpty()) return;
 
         List<Role> shuffledRoles = new ArrayList<>(roles);
         Collections.shuffle(shuffledRoles);
-        List<ServerPlayerEntity> assigning = new ArrayList<>(players);
-        totalWanted = Math.min(totalWanted, players.size());
-        int assigned = 0;
+        List<ServerPlayerEntity> remainingCandidates = new ArrayList<>(candidatePlayers);
+        groupAssignmentLimit = Math.min(groupAssignmentLimit, candidatePlayers.size());
+        int assignedCount = 0;
         for (Role role : shuffledRoles) {
-            if (assigned >= totalWanted) break;
+            if (assignedCount >= groupAssignmentLimit) break;
 
-            int roleSpecificDesiredCount = desiredRoleCount;
-
-            if (Harpymodloader.ROLE_MAX.containsKey(role.identifier())
-                    || WyspiaExpressRoles.ROLES_BASIC_CONFIG.containsKey(role)) {
-                roleSpecificDesiredCount = Math.min(WyspiaExpressRoles.getRoleSpawnLimit(role), roleSpecificDesiredCount);
+            int roleAssignmentCount = Math.min(WyspiaExpressRoles.getRemainingRoleSpawnLimit(role, gameWorld),
+                    remainingCandidates.size());
+            if (!Harpymodloader.ROLE_MAX.containsKey(role.identifier())
+                    && !WyspiaExpressRoles.ROLES_BASIC_CONFIG.containsKey(role)) {
+                roleAssignmentCount = Math.min(Math.round((float) candidatePlayers.size() / shuffledRoles.size()), roleAssignmentCount);
             }
-            else{
-                roleSpecificDesiredCount = Math.min(Math.round((float) players.size() / shuffledRoles.size()), roleSpecificDesiredCount);
-            }
-            roleSpecificDesiredCount = Math.min(roleSpecificDesiredCount, totalWanted - assigned);
+            roleAssignmentCount = Math.min(roleAssignmentCount, groupAssignmentLimit - assignedCount);
 
             // inititate fix, always assign 2 of this role
             if(role.equals(SERoles.INITIATE)) {
-                if(assigning.size() >= 2  && roleSpecificDesiredCount > 0)
-                    roleSpecificDesiredCount = 2;
+                if(remainingCandidates.size() >= 2  && roleAssignmentCount > 0)
+                    roleAssignmentCount = 2;
                 else
                     continue;
             }
 
-            int justAssigned = wyspiaexpress$findAndAssignPlayers(
-                    roleSpecificDesiredCount, role, assigning, gwc, world
+            int newAssignments = wyspiaexpress$assignPlayersToRole(
+                    roleAssignmentCount, role, remainingCandidates, gameWorld, world
             );
 
-            assigning.removeIf(player -> !Harpymodloader.OVERWRITE_ROLES.contains(gwc.getRole(player)));
-            assigned += justAssigned;
+            remainingCandidates.removeIf(player -> !Harpymodloader.OVERWRITE_ROLES.contains(gameWorld.getRole(player)));
+            assignedCount += newAssignments;
 
         }
     }
     @Unique
     private void wyspiaexpress$assignCivilianRoles(ServerWorld world,
-                                                   GameWorldComponent gwc,
-                                                   List<ServerPlayerEntity> playersForCivilianRoles,
-                                                   List<Role> civilianRoles,
-                                                   int desiredRoleCount) {
-        if (playersForCivilianRoles.isEmpty() || civilianRoles.isEmpty()) return;
+            GameWorldComponent gameWorld,
+            List<ServerPlayerEntity> civilianRoleCandidates,
+            List<Role> civilianRoles) {
+        if (civilianRoleCandidates.isEmpty() || civilianRoles.isEmpty()) return;
         List<Role> shuffledCivilianRoles = new ArrayList<>(civilianRoles);
         Collections.shuffle(shuffledCivilianRoles);
 
-        List<ServerPlayerEntity> assigning = new ArrayList<>(playersForCivilianRoles);
+        List<ServerPlayerEntity> remainingCandidates = new ArrayList<>(civilianRoleCandidates);
         for (Role role : shuffledCivilianRoles) {
-            int roleSpecificDesiredCount = desiredRoleCount;
-
-            if (Harpymodloader.ROLE_MAX.containsKey(role.identifier())
-                    || WyspiaExpressRoles.ROLES_BASIC_CONFIG.containsKey(role)) {
-                roleSpecificDesiredCount = Math.min(WyspiaExpressRoles.getRoleSpawnLimit(role), desiredRoleCount);
+            int roleAssignmentCount = Math.min(WyspiaExpressRoles.getRemainingRoleSpawnLimit(role, gameWorld),
+                    remainingCandidates.size());
+            if (!Harpymodloader.ROLE_MAX.containsKey(role.identifier())
+                    && !WyspiaExpressRoles.ROLES_BASIC_CONFIG.containsKey(role)) {
+                roleAssignmentCount = Math.min(Math.round((float) civilianRoleCandidates.size() / shuffledCivilianRoles.size()), roleAssignmentCount);
             }
-            else{
-                roleSpecificDesiredCount = Math.min(Math.round((float) playersForCivilianRoles.size() / shuffledCivilianRoles.size()), roleSpecificDesiredCount);
-            }
-            if(roleSpecificDesiredCount > 0)
-                roleSpecificDesiredCount = world.random.nextInt(roleSpecificDesiredCount) + 1;
+            if(roleAssignmentCount > 0)
+                roleAssignmentCount = world.random.nextInt(roleAssignmentCount) + 1;
 
-            wyspiaexpress$findAndAssignPlayers(
-                    roleSpecificDesiredCount, role, assigning, gwc, world
+            wyspiaexpress$assignPlayersToRole(
+                    roleAssignmentCount, role, remainingCandidates, gameWorld, world
             );
-            assigning.removeIf(player -> !Harpymodloader.OVERWRITE_ROLES.contains(gwc.getRole(player)));
+            remainingCandidates.removeIf(player -> !Harpymodloader.OVERWRITE_ROLES.contains(gameWorld.getRole(player)));
 
         }
     }
 
     @Unique
-    private int wyspiaexpress$findAndAssignPlayers(int desiredRoleCount,
-                                                   Role role,
-                                                   List<ServerPlayerEntity> players,
-                                                   GameWorldComponent gameWorldComponent,
-                                                   World world) {
-        if(HAS_HACKER && !KinsWatheConfig.HANDLER.instance().HackerGenerateWithMimic && role.equals(Noellesroles.MIMIC)){
+    private int wyspiaexpress$assignPlayersToRole(int requestedAssignments,
+            Role role,
+            List<ServerPlayerEntity> candidatePlayers,
+            GameWorldComponent gameWorld,
+            World world) {
+        if(hasAssignedHacker && !KinsWatheConfig.HANDLER.instance().HackerGenerateWithMimic && role.equals(Noellesroles.MIMIC)){
             return 0;
         }
         List<ServerPlayerEntity> assignedPlayers = new ArrayList<>();
@@ -638,9 +555,11 @@ public abstract class HMLGameInitializeMixin {
         if (Harpymodloader.FORCED_MODDED_ROLE.containsKey(role)) {
             for (UUID uuid : Harpymodloader.FORCED_MODDED_ROLE.get(role)) {
                 PlayerEntity player = world.getPlayerByUuid(uuid);
-                if (player instanceof ServerPlayerEntity serverPlayer && players.contains(serverPlayer)) {
+                if (player instanceof ServerPlayerEntity serverPlayer && candidatePlayers.contains(serverPlayer)
+                        && role.equals(Harpymodloader.FORCED_MODDED_ROLE_FLIP.get(uuid))
+                        && !assignedPlayers.contains(serverPlayer)) {
                     assignedPlayers.add(serverPlayer);
-                    desiredRoleCount--;
+                    requestedAssignments--;
                     ModdedWeights.roleRounds
                             .computeIfAbsent(role, r -> new HashMap<>())
                             .put(player.getUuid(),
@@ -651,112 +570,72 @@ public abstract class HMLGameInitializeMixin {
         // Forced picks retain their override; normal picks use only the remaining scaled slots.
         var config = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role);
         if (config != null && config.playersPerAdditionalSpawn() > 0) {
-            long existing = gameWorldComponent.getRoles().values().stream().filter(role::equals).count();
-            int remaining = (int) Math.max(0, WyspiaExpressRoles.getRoleSpawnLimit(role) - existing - assignedPlayers.size());
-            desiredRoleCount = Math.min(desiredRoleCount, remaining);
+            long existingAssignments = gameWorld.getRoles().values().stream().filter(role::equals).count();
+            int remainingRoleSlots = (int) Math.max(0, WyspiaExpressRoles.getRoleSpawnLimit(role) - existingAssignments - assignedPlayers.size());
+            requestedAssignments = Math.min(requestedAssignments, remainingRoleSlots);
         }
-        Map<ServerPlayerEntity, Float> weightMap = new HashMap<>();
-        float total = 0.0F;
-
-        for (ServerPlayerEntity player : players) {
-            if (!Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())) {
-                float weight = wyspiaexpress$getPlayerWeightForRole(gameWorldComponent, player, role);
-                weightMap.put(player, weight);
-                total += weight;
-            }
-        }
-
-        int rolls = Math.min(desiredRoleCount, weightMap.size());
-        for (int i = 0; i < rolls; i++) {
-            float random = world.getRandom().nextFloat() * total;
-
-            Iterator<Map.Entry<ServerPlayerEntity, Float>> it = weightMap.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<ServerPlayerEntity, Float> entry = it.next();
-                random -= entry.getValue();
-                if (random <= 0.0F) {
-                    ServerPlayerEntity picked = entry.getKey();
-                    assignedPlayers.add(picked);
-                    total -= entry.getValue();
-                    it.remove();
-
-                    ModdedWeights.roleRounds
-                            .computeIfAbsent(role, r -> new HashMap<>())
-                            .put(picked.getUuid(),
-                                    ModdedWeights.roleRounds.get(role).getOrDefault(picked.getUuid(), 1) + 1);
-                    break;
-                }
-            }
+        List<ServerPlayerEntity> eligiblePlayers = new ArrayList<>(candidatePlayers);
+        eligiblePlayers.removeIf(player -> Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid()));
+        for (ServerPlayerEntity player : WyspiaExpressRoles.selectPlayersByRoleHistory(eligiblePlayers, List.of(role),
+                requestedAssignments, gameWorld.areWeightsEnabled(), world.getRandom())) {
+            assignedPlayers.add(player);
+            ModdedWeights.roleRounds
+                    .computeIfAbsent(role, r -> new HashMap<>())
+                    .put(player.getUuid(), ModdedWeights.roleRounds.get(role).getOrDefault(player.getUuid(), 1) + 1);
         }
 
-        int assigned = assignedPlayers.size();
+        int assignedCount = assignedPlayers.size();
         for (ServerPlayerEntity player : assignedPlayers) {
-            gameWorldComponent.addRole(player, role);
+            gameWorld.addRole(player, role);
         }
-        if(assigned > 0 && role.equals(KinsWatheRoles.HACKER)){
-            HAS_HACKER = true;
+        if(assignedCount > 0 && role.equals(KinsWatheRoles.HACKER)){
+            hasAssignedHacker = true;
         }
-        return assigned;
+        return assignedCount;
     }
     @Unique
-    private float wyspiaexpress$getPlayerWeightForRole(GameWorldComponent gwc,
-                                                       ServerPlayerEntity player,
-                                                       Role role) {
-        if (!gwc.areWeightsEnabled()) {
-            return 1.0F;
-        }
+    private void wyspiaexpress$assignAndAnnounceModifiers(ServerWorld world,
+            GameWorldComponent gameWorld,
+            List<ServerPlayerEntity> participants,
+            int modifierAssignmentBudget) {
 
-        int rounds = ModdedWeights.roleRounds
-                .computeIfAbsent(role, r -> new HashMap<>())
-                .getOrDefault(player.getUuid(), 1);
-
-        return (float) Math.exp(-(rounds * 4.0));
-    }
-
-    @Unique
-    private void wyspiaexpress$assignModifiersAndAnnounce(ServerWorld serverWorld,
-                                                          GameWorldComponent gwc,
-                                                          List<ServerPlayerEntity> players,
-                                                          int desiredRoleCount,
-                                                          int killerCount) {
-
-        WorldModifierComponent wmc = WorldModifierComponent.KEY.get(serverWorld);
-        wmc.getModifiers().clear();
+        WorldModifierComponent worldModifiers = WorldModifierComponent.KEY.get(world);
+        worldModifiers.getModifiers().clear();
 
         // Pre-calculate the maximum allowed distribution for each modifier
-        Map<Modifier, Integer> maxAllowedPerMod = new HashMap<>();
-        Map<Modifier, Integer> currentlyAssigned = new HashMap<>();
+        Map<Modifier, Integer> modifierCaps = new HashMap<>();
+        Map<Modifier, Integer> modifierCounts = new HashMap<>();
 
-        int killerMods = (int) HMLModifiers.MODIFIERS.stream().filter(m -> m.killerOnly).count();
-        for (Modifier mod : HMLModifiers.MODIFIERS) {
-            currentlyAssigned.put(mod, 0);
-            int target = desiredRoleCount;
-            if (mod.killerOnly && killerMods > 0) {
-                target = Math.max(1,
+        int killerModifierTypes = (int) HMLModifiers.MODIFIERS.stream().filter(m -> m.killerOnly).count();
+        for (Modifier modifier : HMLModifiers.MODIFIERS) {
+            modifierCounts.put(modifier, 0);
+            int modifierCap = modifierAssignmentBudget;
+            if (modifier.killerOnly && killerModifierTypes > 0) {
+                modifierCap = Math.max(1,
                         (int) Math.floor(
-                                (players.size() / (double) gwc.getKillerDividend()) / killerMods
+                                (participants.size() / (double) gameWorld.getKillerDividend()) / killerModifierTypes
                         )
                 );
             }
             // Apply hard limits if they exist
-            if (Harpymodloader.MODIFIER_MAX.containsKey(mod.identifier)) {
-                target = Math.min(target, Harpymodloader.MODIFIER_MAX.get(mod.identifier));
+            if (Harpymodloader.MODIFIER_MAX.containsKey(modifier.identifier)) {
+                modifierCap = Math.min(modifierCap, Harpymodloader.MODIFIER_MAX.get(modifier.identifier));
             }
-            maxAllowedPerMod.put(mod, target);
+            modifierCaps.put(modifier, modifierCap);
         }
         // BOMBER is special: handled manually later
-        maxAllowedPerMod.put(WyspiaExpressRoles.BOMBER, 0);
+        modifierCaps.put(WyspiaExpressRoles.BOMBER, 0);
 
         // Forced modifiers
         if (!Harpymodloader.FORCED_MODDED_MODIFIER.isEmpty()) {
-            for (Modifier mod : HMLModifiers.MODIFIERS) {
-                if (Harpymodloader.FORCED_MODDED_MODIFIER.containsKey(mod)) {
-                    List<UUID> forcedUUIDs = Harpymodloader.FORCED_MODDED_MODIFIER.get(mod);
-                    for (ServerPlayerEntity player : players) {
+            for (Modifier modifier : HMLModifiers.MODIFIERS) {
+                if (Harpymodloader.FORCED_MODDED_MODIFIER.containsKey(modifier)) {
+                    List<UUID> forcedUUIDs = Harpymodloader.FORCED_MODDED_MODIFIER.get(modifier);
+                    for (ServerPlayerEntity player : participants) {
                         if (forcedUUIDs.contains(player.getUuid())) {
-                            wmc.addModifier(player.getUuid(), mod);
-                            ModifierAssigned.EVENT.invoker().assignModifier(player, mod);
-                            currentlyAssigned.put(mod, currentlyAssigned.get(mod) + 1);
+                            worldModifiers.addModifier(player.getUuid(), modifier);
+                            ModifierAssigned.EVENT.invoker().assignModifier(player, modifier);
+                            modifierCounts.put(modifier, modifierCounts.get(modifier) + 1);
                         }
                     }
                 }
@@ -764,38 +643,38 @@ public abstract class HMLGameInitializeMixin {
         }
 
         // Random assignment
-        List<ServerPlayerEntity> shuffledPlayers = new ArrayList<>(players);
+        List<ServerPlayerEntity> shuffledPlayers = new ArrayList<>(participants);
         Collections.shuffle(shuffledPlayers);
 
-        List<Modifier> randomModsForPlayer = new ArrayList<>(
+        List<Modifier> randomModifiers = new ArrayList<>(
                 HMLModifiers.MODIFIERS.stream()
-                        .filter(mod -> !HarpyModLoaderConfig.HANDLER.instance().disabledModifiers.contains(WyspiaExpressRoles.getModifierId(mod)))
+                        .filter(modifier -> !HarpyModLoaderConfig.HANDLER.instance().disabledModifiers.contains(WyspiaExpressRoles.getModifierId(modifier)))
                         .toList()
         );
 
         for (ServerPlayerEntity player : shuffledPlayers) {
-            if (wyspiaexpress$getPlayerModCount(player, wmc) >= HarpyModLoaderConfig.HANDLER.instance().modifierMaximum) {
+            if (wyspiaexpress$countPlayerModifiers(player, worldModifiers) >= HarpyModLoaderConfig.HANDLER.instance().modifierMaximum) {
                 continue;
             }
-            Collections.shuffle(randomModsForPlayer);
+            Collections.shuffle(randomModifiers);
 
-            for (Modifier mod : randomModsForPlayer) {
-                if (wyspiaexpress$getPlayerModCount(player, wmc) >= HarpyModLoaderConfig.HANDLER.instance().modifierMaximum) {
+            for (Modifier modifier : randomModifiers) {
+                if (wyspiaexpress$countPlayerModifiers(player, worldModifiers) >= HarpyModLoaderConfig.HANDLER.instance().modifierMaximum) {
                     break;
                 }
-                if (currentlyAssigned.get(mod) >= maxAllowedPerMod.get(mod)) {
+                if (modifierCounts.get(modifier) >= modifierCaps.get(modifier)) {
                     continue;
                 }
-                if (wmc.getModifiers(player) != null && wmc.getModifiers(player).contains(mod)) {
+                if (worldModifiers.getModifiers(player) != null && worldModifiers.getModifiers(player).contains(modifier)) {
                     continue;
                 }
-                if (!wyspiaexpress$isModifierEligible(player, mod, gwc)) {
+                if (!wyspiaexpress$canReceiveModifier(player, modifier, gameWorld)) {
                     continue;
                 }
 
-                wmc.addModifier(player.getUuid(), mod);
-                ModifierAssigned.EVENT.invoker().assignModifier(player, mod);
-                currentlyAssigned.put(mod, currentlyAssigned.get(mod) + 1);
+                worldModifiers.addModifier(player.getUuid(), modifier);
+                ModifierAssigned.EVENT.invoker().assignModifier(player, modifier);
+                modifierCounts.put(modifier, modifierCounts.get(modifier) + 1);
             }
         }
 
@@ -803,8 +682,8 @@ public abstract class HMLGameInitializeMixin {
         if (WyspiaExpress.MODIFIERS_CONFIG.guesserConfig.killerAlwaysGuesser()) {
             int count = 0;
             for (ServerPlayerEntity player : shuffledPlayers) {
-                if (!wmc.isModifier(player, WyspiaExpressRoles.GUESSER) && gwc.canUseKillerFeatures(player)) {
-                    wmc.addModifier(player.getUuid(), WyspiaExpressRoles.GUESSER);
+                if (!worldModifiers.isModifier(player, WyspiaExpressRoles.GUESSER) && gameWorld.canUseKillerFeatures(player)) {
+                    worldModifiers.addModifier(player.getUuid(), WyspiaExpressRoles.GUESSER);
                     ModifierAssigned.EVENT.invoker().assignModifier(player, WyspiaExpressRoles.GUESSER);
                     count++;
                 }
@@ -816,26 +695,26 @@ public abstract class HMLGameInitializeMixin {
 
         // Random civilian bomber
         if (WyspiaExpress.MODIFIERS_CONFIG.bomberConfig.enabled()) {
-            if (serverWorld.random.nextInt(WyspiaExpress.MODIFIERS_CONFIG.bomberConfig.chance()) == 0) {
-                List<ServerPlayerEntity> civilians = shuffledPlayers.stream()
-                        .filter(gwc::isInnocent)
+            if (world.random.nextInt(WyspiaExpress.MODIFIERS_CONFIG.bomberConfig.chance()) == 0) {
+                List<ServerPlayerEntity> civilianCandidates = shuffledPlayers.stream()
+                        .filter(gameWorld::isInnocent)
                         .toList();
-                if (!civilians.isEmpty()) {
-                    int i = serverWorld.random.nextInt(civilians.size());
-                    ServerPlayerEntity chosen = civilians.get(i);
+                if (!civilianCandidates.isEmpty()) {
+                    int i = world.random.nextInt(civilianCandidates.size());
+                    ServerPlayerEntity chosen = civilianCandidates.get(i);
                     WyspiaExpress.LOGGER.info("[BOMBER] Player {} received BOMBER!", chosen.getName().getString());
-                    wmc.addModifier(chosen.getUuid(), WyspiaExpressRoles.BOMBER);
+                    worldModifiers.addModifier(chosen.getUuid(), WyspiaExpressRoles.BOMBER);
                     ModifierAssigned.EVENT.invoker().assignModifier(chosen, WyspiaExpressRoles.BOMBER);
                 }
             }
         }
 
         // Modifier announcements
-        for (ServerPlayerEntity player : players) {
-            if (wmc.getModifiers(player) != null && !wmc.getModifiers(player).isEmpty()) {
+        for (ServerPlayerEntity player : participants) {
+            if (worldModifiers.getModifiers(player) != null && !worldModifiers.getModifiers(player).isEmpty()) {
                 MutableText modifiersText = Text.translatable("announcement.modifier").formatted(Formatting.GRAY)
                         .append(Texts.join(
-                                wmc.getModifiers(player),
+                                worldModifiers.getModifiers(player),
                                 Text.literal(", "),
                                 modifier -> modifier.getName(false).withColor(modifier.color)
                         ));
@@ -847,30 +726,30 @@ public abstract class HMLGameInitializeMixin {
     }
 
     @Unique
-    private boolean wyspiaexpress$isModifierEligible(ServerPlayerEntity player,
-                                                     Modifier mod,
-                                                     GameWorldComponent gwc) {
-        if (mod.canOnlyBeAppliedTo != null && gwc.getRole(player) != null &&
-                !mod.canOnlyBeAppliedTo.contains(gwc.getRole(player))) {
+    private boolean wyspiaexpress$canReceiveModifier(ServerPlayerEntity player,
+            Modifier modifier,
+            GameWorldComponent gameWorld) {
+        if (modifier.canOnlyBeAppliedTo != null && gameWorld.getRole(player) != null &&
+                !modifier.canOnlyBeAppliedTo.contains(gameWorld.getRole(player))) {
             return false;
         }
-        if (mod.cannotBeAppliedTo != null && gwc.getRole(player) != null &&
-                mod.cannotBeAppliedTo.contains(gwc.getRole(player))) {
+        if (modifier.cannotBeAppliedTo != null && gameWorld.getRole(player) != null &&
+                modifier.cannotBeAppliedTo.contains(gameWorld.getRole(player))) {
             return false;
         }
 
-        if (mod.killerOnly && mod.civilianOnly) {
-            return gwc.canUseKillerFeatures(player) || gwc.isInnocent(player);
+        if (modifier.killerOnly && modifier.civilianOnly) {
+            return gameWorld.canUseKillerFeatures(player) || gameWorld.isInnocent(player);
         }
-        if (mod.killerOnly && !gwc.canUseKillerFeatures(player)) return false;
-        if (mod.civilianOnly && !gwc.isInnocent(player)) return false;
+        if (modifier.killerOnly && !gameWorld.canUseKillerFeatures(player)) return false;
+        if (modifier.civilianOnly && !gameWorld.isInnocent(player)) return false;
         return true;
     }
 
     @Unique
-    private int wyspiaexpress$getPlayerModCount(ServerPlayerEntity player,
-                                                WorldModifierComponent wmc) {
-        return wmc.getModifiers(player) == null ? 0 : wmc.getModifiers(player).size();
+    private int wyspiaexpress$countPlayerModifiers(ServerPlayerEntity player,
+            WorldModifierComponent worldModifiers) {
+        return worldModifiers.getModifiers(player) == null ? 0 : worldModifiers.getModifiers(player).size();
     }
 
 }
