@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.BsXinQin.kinswathe.items.WrenchItem;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
-import org.cat.express.wyspiaexpress.WyspiaExpressItems;
+import org.cat.express.wyspiaexpress.util.ItemUtil;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -48,7 +48,7 @@ public abstract class WrenchMixin {
             return;
         }
 
-        WyspiaExpressItems.setItemCooldown(player, (Item)(Object)this, null, config.lightRestorationCooldown());
+        ItemUtil.setItemCooldown(player, (Item)(Object)this, null, config.lightRestorationCooldown());
         BlockPos center = player.getBlockPos();
         BlockPos.Mutable pos = new BlockPos.Mutable();
         world.playSound(null, center, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.PLAYERS, 0.8F, 1.0F);

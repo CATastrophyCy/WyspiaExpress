@@ -9,6 +9,7 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.PlayerRolePickingComponent;
 import org.cat.express.wyspiaexpress.components.RoleComponent;
+import org.cat.express.wyspiaexpress.util.RoleUtil;
 
 import java.util.*;
 
@@ -31,9 +32,9 @@ public final class GuidebookCatalog {
         Set<String> keys = new HashSet<>();
         if (client.world == null || client.player == null) return keys;
         var role = GameWorldComponent.KEY.get(client.world).getRole(client.player);
-        if (role != null) keys.add("role:" + WyspiaExpressRoles.getRoleId(role));
+        if (role != null) keys.add("role:" + RoleUtil.getRoleId(role));
         var modifiers = WorldModifierComponent.KEY.get(client.world).getModifiers(client.player);
-        if (modifiers != null) modifiers.forEach(mod -> keys.add("modifier:" + WyspiaExpressRoles.getModifierId(mod)));
+        if (modifiers != null) modifiers.forEach(mod -> keys.add("modifier:" + RoleUtil.getModifierId(mod)));
         return keys;
     }
 
@@ -50,8 +51,8 @@ public final class GuidebookCatalog {
         for (String choice : component.getRoles()) {
             // The existing picker uses path IDs; resolve through the same map as its server handler.
             var role = WyspiaExpressRoles.STRING_ROLES.get(choice);
-            if (role == null && choice.equals(WyspiaExpressRoles.getRoleName(WatheRoles.KILLER))) role = WatheRoles.KILLER;
-            if (role != null) keys.add("role:" + WyspiaExpressRoles.getRoleId(role));
+            if (role == null && choice.equals(RoleUtil.getRoleName(WatheRoles.KILLER))) role = WatheRoles.KILLER;
+            if (role != null) keys.add("role:" + RoleUtil.getRoleId(role));
         }
         return keys;
     }
@@ -80,8 +81,8 @@ public final class GuidebookCatalog {
         var basic = entry.role() != null ? WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(entry.role()) : null;
         Integer min = basic != null ? basic.minimumPlayerSpawn() : null;
         Integer max = basic != null ? basic.maximumPlayerSpawn() : null;
-        String id = entry.role() != null ? WyspiaExpressRoles.getRoleId(entry.role())
-                : WyspiaExpressRoles.getModifierId(entry.modifier());
+        String id = entry.role() != null ? RoleUtil.getRoleId(entry.role())
+                : RoleUtil.getModifierId(entry.modifier());
         boolean current = entry.role() != null ? !context.disabledRoles.contains(id)
                 : !context.disabledModifiers.contains(id);
         boolean serverDisabled = entry.role() != null ? context.configuredDisabledRoles.contains(id)

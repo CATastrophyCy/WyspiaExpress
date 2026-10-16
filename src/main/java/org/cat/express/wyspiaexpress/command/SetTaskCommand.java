@@ -14,7 +14,6 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import org.cat.express.wyspiaexpress.WyspiaExpressCommands;
 import org.cat.express.wyspiaexpress.components.PlayerTaskComponent;
 
 import java.util.Arrays;
@@ -27,7 +26,7 @@ public final class SetTaskCommand {
                                 CommandRegistryAccess registryAccess,
                                 CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(CommandManager.literal("setTask")
-                .requires(WyspiaExpressCommands::isOperator)
+                .requires(source -> source.hasPermissionLevel(2))
                 .then(CommandManager.literal("task")
                         .then(CommandManager.argument("player", EntityArgumentType.player())
                                 .then(CommandManager.argument("task", StringArgumentType.word())

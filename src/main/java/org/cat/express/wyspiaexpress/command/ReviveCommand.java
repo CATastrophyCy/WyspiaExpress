@@ -17,7 +17,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
-import org.cat.express.wyspiaexpress.WyspiaExpressCommands;
 import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
 import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
@@ -31,7 +30,7 @@ public final class ReviveCommand {
                                 CommandRegistryAccess registryAccess,
                                 CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(CommandManager.literal("revive")
-                .requires(WyspiaExpressCommands::isOperator)
+                .requires(source -> source.hasPermissionLevel(2))
                 .then(CommandManager.argument("player", EntityArgumentType.player())
                         .executes(context -> execute(context, null))
                         .then(CommandManager.argument("coordinates", Vec3ArgumentType.vec3())

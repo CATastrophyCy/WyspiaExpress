@@ -7,6 +7,7 @@ import org.agmas.harpymodloader.modifiers.Modifier;
 import org.aussiebox.starexpress.client.gui.screen.GuidebookScreen;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.RoleComponent;
+import org.cat.express.wyspiaexpress.util.RoleUtil;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -52,12 +53,12 @@ public abstract class GuideBookScreenMixin {
     }
     @Unique
     private static boolean shouldShowRole(RoleComponent comp, Role role){
-        String roleId = WyspiaExpressRoles.getRoleId(role);
+        String roleId = RoleUtil.getRoleId(role);
         return role == WyspiaExpressRoles.COPYCAT || (!comp.disabledRoles.contains(roleId) && !WyspiaExpressRoles.HIDDEN_ROLES.contains(role));
     }
     @Unique
     private static boolean shouldShowModifier(RoleComponent comp, Modifier modifier){
-        String modifierId = WyspiaExpressRoles.getModifierId(modifier);
+        String modifierId = RoleUtil.getModifierId(modifier);
         return modifier == WyspiaExpressRoles.GUESSER || (!comp.disabledModifiers.contains(modifierId) && !WyspiaExpressRoles.HIDDEN_MODIFIERS.contains(modifier));
     }
 }

@@ -21,7 +21,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
-import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -46,7 +46,7 @@ public class CrosshairMixin {
             original.call(client, player, context, tickCounter);
             return;
         }
-        if (PlayerMovementComponent.KEY.get(player).isRestricted()
+        if (GameUtil.isUnderSmokeEffect(player)
                 || WorldBlackoutComponent.KEY.get(player.getWorld()).isBlackoutActive()) {
             return;
         }
@@ -69,7 +69,7 @@ public class CrosshairMixin {
             RenderSystem.defaultBlendFunc();
             RenderSystem.disableBlend();
             HitResult hitResult = ProjectileUtil.getCollision(player, entity -> entity instanceof @NotNull PlayerEntity targetPlayer
-                    && GameFunctions.isPlayerAliveAndSurvival(targetPlayer) && !targetPlayer.isInvisible() && !PlayerMovementComponent.KEY.get(targetPlayer).isRestricted(), 15.0F);
+                    && GameFunctions.isPlayerAliveAndSurvival(targetPlayer) && !targetPlayer.isInvisible() && !GameUtil.isUnderSmokeEffect(targetPlayer), 15.0F);
             if (!manager.isCoolingDown(mainHandStack.getItem()) && hitResult instanceof @NotNull EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof @NotNull PlayerEntity) {
                 target = true;
             }
@@ -86,7 +86,7 @@ public class CrosshairMixin {
             RenderSystem.defaultBlendFunc();
             RenderSystem.disableBlend();
             HitResult hitResult = ProjectileUtil.getCollision(player, entity -> entity instanceof @NotNull PlayerEntity targetPlayer
-                    && GameFunctions.isPlayerAliveAndSurvival(targetPlayer) && !targetPlayer.isInvisible() && !PlayerMovementComponent.KEY.get(targetPlayer).isRestricted(), 3.0F);
+                    && GameFunctions.isPlayerAliveAndSurvival(targetPlayer) && !targetPlayer.isInvisible() && !GameUtil.isUnderSmokeEffect(targetPlayer), 3.0F);
             if (!manager.isCoolingDown(mainHandStack.getItem()) && hitResult instanceof @NotNull EntityHitResult entityHitResult && entityHitResult.getEntity() instanceof @NotNull PlayerEntity) {
                 target = true;
                 context.drawGuiTexture(KNIFE_ATTACK, -5, 5, 10, 7);

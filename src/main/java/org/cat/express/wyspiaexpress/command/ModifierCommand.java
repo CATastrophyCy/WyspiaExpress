@@ -11,13 +11,12 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Text;
+import org.cat.express.wyspiaexpress.util.RoleUtil;
 import org.agmas.harpymodloader.commands.argument.ModifierArgumentType;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.harpymodloader.events.ModifierAssigned;
 import org.agmas.harpymodloader.events.ModifierRemoved;
 import org.agmas.harpymodloader.modifiers.Modifier;
-import org.cat.express.wyspiaexpress.WyspiaExpressCommands;
-import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 
 public final class ModifierCommand {
     private ModifierCommand() {}
@@ -31,7 +30,7 @@ public final class ModifierCommand {
 
     private static void register(CommandDispatcher<ServerCommandSource> dispatcher, String name, boolean add) {
         dispatcher.register(CommandManager.literal(name)
-                .requires(WyspiaExpressCommands::isOperator)
+                .requires(source -> source.hasPermissionLevel(2))
                 .then(CommandManager.argument("player", EntityArgumentType.player())
                         .then(CommandManager.argument("modifier", ModifierArgumentType.create())
                                 .executes(context -> execute(context, add)))));
@@ -47,7 +46,7 @@ public final class ModifierCommand {
         Modifier modifier = ModifierArgumentType.getModifier(context, "modifier");
         WorldModifierComponent modifiers = WorldModifierComponent.KEY.get(player.getWorld());
         Text modifierText = modifier.getName().withColor(modifier.color()).styled(style -> style.withHoverEvent(
-                new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(WyspiaExpressRoles.getModifierId(modifier)))));
+                new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(RoleUtil.getModifierId(modifier)))));
         if (modifiers.isModifier(player, modifier) == add) {
             context.getSource().sendError(Text.translatable(add
                     ? "commands.modifier.already_assigned" : "commands.modifier.not_assigned",

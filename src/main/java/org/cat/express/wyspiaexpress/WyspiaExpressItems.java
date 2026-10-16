@@ -2,8 +2,6 @@ package org.cat.express.wyspiaexpress;
 
 import dev.doctor4t.wathe.api.event.AllowPlayerPunching;
 import dev.doctor4t.wathe.api.event.ShouldDropOnDeath;
-import dev.doctor4t.wathe.game.GameConstants;
-import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheItems;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,7 +23,8 @@ import org.agmas.noellesroles.ModItems;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
 import org.cat.express.wyspiaexpress.items.*;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
-import org.jetbrains.annotations.NotNull;
+import org.cat.express.wyspiaexpress.util.ItemUtil;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -111,25 +110,7 @@ public class WyspiaExpressItems {
 
         return Registry.register(Registries.ITEM, itemID, item);
     }
-    public static void setItemCooldown(@NotNull PlayerEntity player, @NotNull Item item, Hand hand) {
-        if (GameFunctions.isPlayerAliveAndSurvival(player)) {
-            player.getItemCooldownManager().set(item, GameConstants.ITEM_COOLDOWNS.get(item));
-            if (hand != null) player.getStackInHand(hand).decrement(1);
-        }
-    }
-    public static void setItemCooldown(@NotNull PlayerEntity player, @NotNull Item item, Hand hand, int seconds) {
-        if (GameFunctions.isPlayerAliveAndSurvival(player)) {
-            player.getItemCooldownManager().set(item, GameConstants.getInTicks(0,seconds));
-            if (hand != null) player.getStackInHand(hand).decrement(1);
-        }
-    }
-    public static void registerItemCooldown(Item item, int minutes, int seconds) {
-        GameConstants.ITEM_COOLDOWNS.put(item, GameConstants.getInTicks(minutes, seconds));
-    }
-    public static void registerItemCooldown(Item item, int seconds) {
-        if(seconds < 0) return;
-        registerItemCooldown(item,0,seconds);
-    }
+
     public static void registerItemGroup(Item item, RegistryKey<ItemGroup> itemGroup){
         ItemGroupEvents.modifyEntriesEvent(itemGroup).register( entries -> {
             entries.add(item);
@@ -152,36 +133,8 @@ public class WyspiaExpressItems {
             return config != null && config.dropOnDeath();
         }));
     }
-    public static java.util.Map<Item, Integer> configuredCooldowns() {
-        return java.util.Map.ofEntries(
-                java.util.Map.entry(FAKE_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.cooldown()),
-                java.util.Map.entry(MEGAPHONE, WyspiaExpress.ITEMS_CONFIG.itemConfig.megaphoneConfig.cooldown()),
-                java.util.Map.entry(OUTLAW_REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.outlawRevolverConfig.cooldown()),
-                java.util.Map.entry(RITUAL_DAGGER, WyspiaExpress.ITEMS_CONFIG.itemConfig.ritualDaggerConfig.cooldown()),
-                java.util.Map.entry(TAPE, WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.cooldown()),
-                java.util.Map.entry(SENSE_DEAD, WyspiaExpress.ITEMS_CONFIG.itemConfig.senseDeadConfig.cooldown()),
-                java.util.Map.entry(SMOKE_BOMB, WyspiaExpress.ITEMS_CONFIG.itemConfig.smokeBombConfig.cooldown()),
-                java.util.Map.entry(WatheItems.REVOLVER, WyspiaExpress.ITEMS_CONFIG.itemConfig.revolverConfig.cooldown()),
-                java.util.Map.entry(WatheItems.KNIFE, WyspiaExpress.ITEMS_CONFIG.itemConfig.knifeConfig.cooldown()),
-                java.util.Map.entry(WatheItems.LOCKPICK, WyspiaExpress.ITEMS_CONFIG.itemConfig.lockPickConfig.cooldown()),
-                java.util.Map.entry(WatheItems.BODY_BAG, WyspiaExpress.ITEMS_CONFIG.itemConfig.bodyBagConfig.cooldown()),
-                java.util.Map.entry(WatheItems.GRENADE, WyspiaExpress.ITEMS_CONFIG.itemConfig.grenadeConfig.cooldown()),
-                java.util.Map.entry(WatheItems.DERRINGER, WyspiaExpress.ITEMS_CONFIG.itemConfig.derringerConfig.cooldown()),
-                java.util.Map.entry(WatheItems.PSYCHO_MODE, WyspiaExpress.ITEMS_CONFIG.itemConfig.psychoModeCooldown()),
-                java.util.Map.entry(WatheItems.BLACKOUT, WyspiaExpress.ITEMS_CONFIG.itemConfig.blackOutCooldown()),
-                java.util.Map.entry(KinsWatheItems.HUNTING_KNIFE, WyspiaExpress.ITEMS_CONFIG.itemConfig.huntingKnifeConfig.cooldown()),
-                java.util.Map.entry(KinsWatheItems.POISON_INJECTOR, WyspiaExpress.ITEMS_CONFIG.itemConfig.poisonInjectorConfig.cooldown()),
-                java.util.Map.entry(KinsWatheItems.BLOWGUN, WyspiaExpress.ITEMS_CONFIG.itemConfig.blowgunConfig.cooldown()),
-                java.util.Map.entry(KinsWatheItems.KNOCKOUT_DRUG, WyspiaExpress.ITEMS_CONFIG.itemConfig.knockoutDrugConfig.cooldown()),
-                java.util.Map.entry(KinsWatheItems.CAPTURE_DEVICE, WyspiaExpress.ITEMS_CONFIG.itemConfig.captureDeviceConfig.cooldown()),
-                java.util.Map.entry(KinsWatheItems.PAN, WyspiaExpress.ITEMS_CONFIG.itemConfig.panConfig.cooldown()),
-                java.util.Map.entry(KinsWatheItems.PILL, WyspiaExpress.ITEMS_CONFIG.itemConfig.pillConfig.cooldown()),
-                java.util.Map.entry(KinsWatheItems.SULFURIC_ACID_BARREL, WyspiaExpress.ITEMS_CONFIG.itemConfig.acidBarrelConfig.cooldown()),
-                java.util.Map.entry(KinsWatheItems.WRENCH, WyspiaExpress.ITEMS_CONFIG.itemConfig.wrenchConfig.cooldown()),
-                java.util.Map.entry(KinsWatheItems.ICON_POWER_RESTORATION, WyspiaExpress.ITEMS_CONFIG.itemConfig.powerRestoreCooldown()));
-    }
 
     public static void registerItemsCooldown() {
-        configuredCooldowns().forEach(WyspiaExpressItems::registerItemCooldown);
+        ItemUtil.configuredCooldowns().forEach(ItemUtil::registerItemCooldown);
     }
 }

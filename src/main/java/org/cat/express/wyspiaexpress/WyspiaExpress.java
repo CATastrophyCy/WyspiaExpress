@@ -1,6 +1,5 @@
 package org.cat.express.wyspiaexpress;
 
-
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.api.WatheGameModes;
 import dev.doctor4t.wathe.api.WatheMapEffects;
@@ -13,7 +12,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
@@ -29,6 +27,8 @@ import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressModdedGameMode;
 import org.cat.express.wyspiaexpress.game.mapeffect.WyspiaExpressMapEffect;
 import org.cat.express.wyspiaexpress.packets.*;
 import org.cat.express.wyspiaexpress.particles.ParticleManager;
+import org.cat.express.wyspiaexpress.util.GameUtil;
+import org.cat.express.wyspiaexpress.util.VersionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +76,7 @@ public class WyspiaExpress implements ModInitializer {
         GameEvents.ON_GAME_START.register(gameMode -> ROUND_TICKS = 0);
         GameEvents.ON_GAME_STOP.register(gameMode -> {
             if (ROUND_TICKS >= 0) {
-                LOGGER.info("A round has finished after {}.", WyspiaExpressGameFunctions.formatRoundTime(ROUND_TICKS));
+                LOGGER.info("A round has finished after {}.", GameUtil.formatRoundTime(ROUND_TICKS));
             }
         });
         ServerLifecycleEvents.SERVER_STARTING.register(RoleStatisticsManager::init);
@@ -109,28 +109,14 @@ public class WyspiaExpress implements ModInitializer {
         LOGGER.info("WyspiaExpress finished initializing.");
     }
 
-    public static String getVersion() {
-        return FabricLoader.getInstance()
-                .getModContainer(MOD_ID)
-                .map(c -> c.getMetadata().getVersion().getFriendlyString())
-                .orElse("UNKNOWN");
-    }
-    public static String getForceCrawlVersion() {
-        return FabricLoader.getInstance()
-                .getModContainer("forcecrawl")
-                .map(c -> c.getMetadata().getVersion().getFriendlyString())
-                .orElse("UNKNOWN");
-    }
     private void registerVersionCheck() {
         // 1) When login queries start, send server version to the client
         ServerLoginConnectionEvents.QUERY_START.register((handler, server, sender, synchronizer) -> {
-            String serverVersion = WyspiaExpress.getVersion();
+            String serverVersion = VersionUtil.getVersion();
             PacketByteBuf buf = PacketByteBufs.create();
             buf.writeString(serverVersion);
             sender.sendPacket(VersionCheckNetwork.VERSION_QUERY_ID, buf);
         });
-
-
 
         // 2) Handle client's response and kick if mismatch / no mod
         ServerLoginNetworking.registerGlobalReceiver(
@@ -138,12 +124,12 @@ public class WyspiaExpress implements ModInitializer {
                 (server, handler, understood, buf, synchronizer, responseSender) -> {
                     if (!understood) {
                         handler.disconnect(Text.literal(
-                                "You must install " + WyspiaExpress.MOD_ID + " version " + WyspiaExpress.getVersion() +  " to join this server."));
+                                "You must install " + WyspiaExpress.MOD_ID + " version " + VersionUtil.getVersion() +  " to join this server."));
                         return;
                     }
 
                     String clientVersion = buf.readString(64);
-                    String serverVersion = WyspiaExpress.getVersion();
+                    String serverVersion = VersionUtil.getVersion();
                     if (!clientVersion.equals(serverVersion)) {
                         handler.disconnect(Text.literal(
                                 "Incompatible " + WyspiaExpress.MOD_ID + " version.\n" +
@@ -152,10 +138,10 @@ public class WyspiaExpress implements ModInitializer {
                 }
         );
 
-        String forceCrawlVersion = WyspiaExpress.getForceCrawlVersion();
+        String forceCrawlVersion = VersionUtil.getForceCrawlVersion();
         if (!forceCrawlVersion.equals("UNKNOWN")) {
             ServerLoginConnectionEvents.QUERY_START.register((handler, server, sender, synchronizer) -> {
-                String serverVersion = WyspiaExpress.getForceCrawlVersion();
+                String serverVersion = VersionUtil.getForceCrawlVersion();
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeString(serverVersion);
                 sender.sendPacket(VersionCheckNetwork.VERSION_QUERY_FORCE_CRAWL_ID, buf);
@@ -165,12 +151,12 @@ public class WyspiaExpress implements ModInitializer {
                     (server, handler, understood, buf, synchronizer, responseSender) -> {
                         if (!understood) {
                             handler.disconnect(Text.literal(
-                                    "You must install " + "ForceCrawl"+ " version " + WyspiaExpress.getForceCrawlVersion() +  " to join this server."));
+                                    "You must install " + "ForceCrawl"+ " version " + VersionUtil.getForceCrawlVersion() +  " to join this server."));
                             return;
                         }
 
                         String clientVersion = buf.readString(64);
-                        String serverVersion = WyspiaExpress.getForceCrawlVersion();
+                        String serverVersion = VersionUtil.getForceCrawlVersion();
                         if (!clientVersion.equals(serverVersion)) {
                             handler.disconnect(Text.literal(
                                     "Incompatible " + "ForceCrawl" + " version.\n" +

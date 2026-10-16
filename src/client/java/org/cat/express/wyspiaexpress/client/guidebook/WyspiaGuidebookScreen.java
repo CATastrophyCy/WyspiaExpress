@@ -11,10 +11,10 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.util.ItemUtil;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
-
 import static org.cat.express.wyspiaexpress.client.guidebook.GuidebookStyle.*;
 
 public final class WyspiaGuidebookScreen extends Screen {
@@ -288,7 +288,7 @@ public final class WyspiaGuidebookScreen extends Screen {
     }
 
     private int itemGrid(List<GuidebookItems.Offer> offers, int y, int width) {
-        var cooldowns = org.cat.express.wyspiaexpress.WyspiaExpressItems.configuredCooldowns();
+        var cooldowns = ItemUtil.configuredCooldowns();
         int columns = Math.clamp(width / 105, 1, 3), gap = 5, cellWidth = (width - gap * (columns - 1)) / columns;
         for (int first = 0; first < offers.size(); first += columns) {
             int height = 29;

@@ -14,9 +14,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
-import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressSounds;
 import org.cat.express.wyspiaexpress.components.PlayerBodyEntityComponent;
+import org.cat.express.wyspiaexpress.util.ItemUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class MegaphoneItem extends Item{
@@ -28,7 +28,7 @@ public class MegaphoneItem extends Item{
         if (!player.getWorld().isClient && entity instanceof @NotNull PlayerBodyEntity playerBody) {
             var component = PlayerBodyEntityComponent.KEY.get(playerBody);
             if(component.isReported()) return ActionResult.FAIL;
-            WyspiaExpressItems.setItemCooldown(player, this, hand); // passing hand will make the item removed
+            ItemUtil.setItemCooldown(player, this, hand); // passing hand will make the item removed
             for(PlayerEntity playerEntity : player.getWorld().getPlayers()) {
                 if(GameFunctions.isPlayerAliveAndSurvival(playerEntity)) {
                     playerEntity.sendMessage(Text.translatable("tip.wyspiaexpress.items.megaphone"), true);
@@ -53,6 +53,4 @@ public class MegaphoneItem extends Item{
         return ActionResult.PASS;
     }
 }
-
-
 

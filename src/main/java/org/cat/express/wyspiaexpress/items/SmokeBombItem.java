@@ -10,8 +10,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.cat.express.wyspiaexpress.WyspiaExpressEntities;
-import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.entity.SmokeBombEntity;
+import org.cat.express.wyspiaexpress.util.ItemUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class SmokeBombItem extends Item {
@@ -31,7 +31,7 @@ public class SmokeBombItem extends Item {
             world.spawnEntity(smokeBomb);
         }
 
-        WyspiaExpressItems.setItemCooldown(user, this, hand);
+        ItemUtil.setItemCooldown(user, this, hand);
 
         user.incrementStat(Stats.USED.getOrCreateStat(this));
         itemStack.decrementUnlessCreative(1, user);

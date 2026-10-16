@@ -7,7 +7,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
-import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 
 public final class RoundTimeCommand {
     private RoundTimeCommand() {}
@@ -24,7 +24,7 @@ public final class RoundTimeCommand {
                     GameWorldComponent.KEY.get(context.getSource().getServer().getOverworld()).getGameStatus()
                             == GameWorldComponent.GameStatus.ACTIVE
                             ? "commands.roundtime.current" : "commands.roundtime.previous",
-                    WyspiaExpressGameFunctions.formatRoundTime(WyspiaExpress.ROUND_TICKS)), false);
+                    GameUtil.formatRoundTime(WyspiaExpress.ROUND_TICKS)), false);
             return 1;
         }));
     }

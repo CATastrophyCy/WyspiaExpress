@@ -38,10 +38,10 @@ import org.cat.express.wyspiaexpress.client.roles.NoTargetAbilityUtil;
 import org.cat.express.wyspiaexpress.client.roles.TargetAbilityUtil;
 import org.cat.express.wyspiaexpress.client.ui.InventoryAbilityPanel;
 import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
+import org.cat.express.wyspiaexpress.util.VersionUtil;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.concurrent.CompletableFuture;
-
 
 public class WyspiaexpressClient implements ClientModInitializer {
     public static KeyBinding abilityBind;
@@ -61,18 +61,18 @@ public class WyspiaexpressClient implements ClientModInitializer {
         ClientLoginNetworking.registerGlobalReceiver(
                 VersionCheckNetwork.VERSION_QUERY_ID,
                 (client, handler, buf, listenerAdder) -> {
-                    String clientVersion = WyspiaExpress.getVersion();
+                    String clientVersion = VersionUtil.getVersion();
                     PacketByteBuf reply = PacketByteBufs.create();
                     reply.writeString(clientVersion);
                     return CompletableFuture.completedFuture(reply);
                 }
         );
-        String forceCrawlVersion = WyspiaExpress.getForceCrawlVersion();
+        String forceCrawlVersion = VersionUtil.getForceCrawlVersion();
         if (!forceCrawlVersion.equals("UNKNOWN")) {
             ClientLoginNetworking.registerGlobalReceiver(
                     VersionCheckNetwork.VERSION_QUERY_FORCE_CRAWL_ID,
                     (client, handler, buf, listenerAdder) -> {
-                        String clientVersion = WyspiaExpress.getForceCrawlVersion();
+                        String clientVersion = VersionUtil.getForceCrawlVersion();
                         PacketByteBuf reply = PacketByteBufs.create();
                         reply.writeString(clientVersion);
                         return CompletableFuture.completedFuture(reply);

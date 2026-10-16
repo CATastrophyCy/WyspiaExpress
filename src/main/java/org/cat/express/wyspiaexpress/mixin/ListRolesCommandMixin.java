@@ -11,6 +11,7 @@ import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
 import org.agmas.harpymodloader.modifiers.Modifier;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.util.RoleUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,16 +28,16 @@ public abstract class ListRolesCommandMixin {
         message.append(Text.translatable("commands.listroles.role.title")).append("\n");
         message.append(Texts.join(WatheRoles.ROLES.stream().filter(ListRolesCommandMixin::wyspiaexpress$shouldShowRole).toList(),
                 Text.literal("\n"), role -> {
-            final boolean disabled = HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.getRoleId(role));
-            final String roleId = WyspiaExpressRoles.getRoleId(role);
+            final boolean disabled = HarpyModLoaderConfig.HANDLER.instance().disabled.contains(RoleUtil.getRoleId(role));
+            final String roleId = RoleUtil.getRoleId(role);
             final MutableText status = wyspiaexpress$createStatus(context.getSource(), disabled, "/setEnabledRole " + roleId + " " + disabled);
             return wyspiaexpress$buildElementText(Harpymodloader.getRoleName(role).withColor(role.color()), roleId, status);
         }));
         message.append("\n\n");
         message.append(Text.translatable("commands.listroles.modifier.title")).append("\n");
         message.append(Texts.join(HMLModifiers.MODIFIERS.stream().filter(ListRolesCommandMixin::wyspiaexpress$shouldShowModifier).toList(), Text.literal("\n"), modifier -> {
-            final boolean disabled = HarpyModLoaderConfig.HANDLER.instance().disabledModifiers.contains(WyspiaExpressRoles.getModifierId(modifier));
-            final String modifierId = WyspiaExpressRoles.getModifierId(modifier);
+            final boolean disabled = HarpyModLoaderConfig.HANDLER.instance().disabledModifiers.contains(RoleUtil.getModifierId(modifier));
+            final String modifierId = RoleUtil.getModifierId(modifier);
             final MutableText status = wyspiaexpress$createStatus(context.getSource(), disabled, "/setEnabledModifier " + modifierId + " " + disabled);
             return wyspiaexpress$buildElementText(modifier.getName().withColor(modifier.color), modifierId, status);
         }));
@@ -63,12 +64,12 @@ public abstract class ListRolesCommandMixin {
     }
     @Unique
     private static boolean wyspiaexpress$shouldShowRole(Role role){
-        return !HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.getRoleId(role))
+        return !HarpyModLoaderConfig.HANDLER.instance().disabled.contains(RoleUtil.getRoleId(role))
                 || !WyspiaExpressRoles.HIDDEN_ROLES.contains(role);
     }
     @Unique
     private static boolean wyspiaexpress$shouldShowModifier(Modifier modifier){
-        return !HarpyModLoaderConfig.HANDLER.instance().disabledModifiers.contains(WyspiaExpressRoles.getModifierId(modifier))
+        return !HarpyModLoaderConfig.HANDLER.instance().disabledModifiers.contains(RoleUtil.getModifierId(modifier))
                 || !WyspiaExpressRoles.HIDDEN_MODIFIERS.contains(modifier);
     }
 }

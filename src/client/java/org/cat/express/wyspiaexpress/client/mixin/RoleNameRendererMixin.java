@@ -40,9 +40,9 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
 import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
-import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
 import org.cat.express.wyspiaexpress.components.PlayerTaskComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -73,11 +73,11 @@ public abstract class RoleNameRendererMixin {
                                                      @Local(argsOnly = true) ClientPlayerEntity player) {
         if (GameFunctions.isPlayerSpectatingOrCreative(player)) return 15;
 
-        if (PlayerMovementComponent.KEY.get(player).isRestricted()) return 0;
+        if (GameUtil.isUnderSmokeEffect(player)) return 0;
 
         if (ProjectileUtil.getCollision(player, entity -> entity instanceof PlayerEntity, 2f)
                 instanceof EntityHitResult hit && hit.getEntity() instanceof PlayerEntity target
-                && PlayerMovementComponent.KEY.get(target).isRestricted()) return 0;
+                && GameUtil.isUnderSmokeEffect(target)) return 0;
 
         return original.call(world, type, pos);
     }
@@ -210,5 +210,4 @@ public abstract class RoleNameRendererMixin {
     private static void b(TextRenderer renderer, ClientPlayerEntity player, DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci, @Local(name = "target") PlayerEntity target) {
         targetPlayer = target;
     }
-
 }

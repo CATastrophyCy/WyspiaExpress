@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
-import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.util.RoleUtil;
 import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
@@ -47,7 +47,7 @@ public class RoleComponent implements AutoSyncedComponent {
         disabledModifiers.clear();
 
         configuredDisabledRoles.addAll(HarpyModLoaderConfig.HANDLER.instance().disabled);
-        disabledRoles.addAll(WatheRoles.ROLES.stream().filter(role -> !isValidRole(role)).map(WyspiaExpressRoles::getRoleId).toList());
+        disabledRoles.addAll(WatheRoles.ROLES.stream().filter(role -> !isValidRole(role)).map(RoleUtil::getRoleId).toList());
         disabledModifiers.addAll(HarpyModLoaderConfig.HANDLER.instance().disabledModifiers);
         sync();
     }
@@ -55,10 +55,10 @@ public class RoleComponent implements AutoSyncedComponent {
         KEY.sync(this.world);
     }
     private static boolean isValidRole(Role role) {
-        String roleId = WyspiaExpressRoles.getRoleId(role);
+        String roleId = RoleUtil.getRoleId(role);
 
         return !HarpyModLoaderConfig.HANDLER.instance().disabled.contains(roleId)
-                && WyspiaExpressRoles.roleMeetPlayerRequirement(role);
+                && RoleUtil.roleMeetPlayerRequirement(role);
     }
     @Override
     public void writeToNbt(@NotNull NbtCompound tag, RegistryWrapper.@NotNull WrapperLookup registryLookup) {
@@ -94,7 +94,4 @@ public class RoleComponent implements AutoSyncedComponent {
             }
         }
     }
-
-
-
 }

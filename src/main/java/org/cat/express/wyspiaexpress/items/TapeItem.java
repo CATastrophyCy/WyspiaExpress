@@ -12,6 +12,7 @@ import org.aussiebox.starexpress.ModSounds;
 import org.aussiebox.starexpress.cca.SilenceComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
+import org.cat.express.wyspiaexpress.util.ItemUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class TapeItem extends Item {
@@ -29,7 +30,7 @@ public class TapeItem extends Item {
         SilenceComponent victimSilence = SilenceComponent.KEY.get(victim);
         if (victimSilence.isSilenced()) return ActionResult.FAIL;
 
-        WyspiaExpressItems.setItemCooldown(player, WyspiaExpressItems.TAPE, interactionHand);
+        ItemUtil.setItemCooldown(player, WyspiaExpressItems.TAPE, interactionHand);
         if (WyspiaExpress.ITEMS_CONFIG.itemConfig.tapeConfig.enableSound()) {
             player.playSound(ModSounds.ITEM_TAPE_APPLY, 1.0F, 1.0F);
         } else {

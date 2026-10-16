@@ -20,12 +20,12 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
-import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -94,11 +94,11 @@ public record LichReviveC2SPacket(UUID playerBody) implements CustomPayload {
                     revived.teleportTo(target);
                     body.remove(Entity.RemovalReason.DISCARDED);
 
-                    WyspiaExpressGameFunctions.revivePlayer(gameWorldComponent, world_component, revived, selectedRole,
+                    GameUtil.revivePlayer(gameWorldComponent, world_component, revived, selectedRole,
                             List.of(WatheItems.KEY, KinsWatheItems.PHONE));
                     ShopUtil.setCoin(revived, WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.startingCoin());
 
-                    WyspiaExpressGameFunctions.sendRevivedMessage(world, gameWorldComponent, player, revived);
+                    GameUtil.sendRevivedMessage(world, gameWorldComponent, player, revived);
                 }
             }
         });

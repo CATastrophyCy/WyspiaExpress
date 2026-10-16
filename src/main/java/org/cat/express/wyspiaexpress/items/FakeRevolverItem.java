@@ -14,6 +14,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
+import org.cat.express.wyspiaexpress.util.ItemUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class FakeRevolverItem extends Item {
@@ -25,7 +26,7 @@ public class FakeRevolverItem extends Item {
     public TypedActionResult<ItemStack> use(@NotNull World world, @NotNull PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
         if (user.getItemCooldownManager().isCoolingDown(this)) return TypedActionResult.fail(stack);
-        WyspiaExpressItems.setItemCooldown(user, WyspiaExpressItems.FAKE_REVOLVER, null);
+        ItemUtil.setItemCooldown(user, WyspiaExpressItems.FAKE_REVOLVER, null);
         user.playSound(WatheSounds.ITEM_REVOLVER_SHOOT, 5f, 1f + user.getRandom().nextFloat() * .1f - .05f);
         if (WyspiaExpress.ITEMS_CONFIG.itemConfig.fakeRevolverConfig.enableShotEffects()) {
             if (world.isClient) {
@@ -41,5 +42,4 @@ public class FakeRevolverItem extends Item {
         }
         return TypedActionResult.consume(user.getStackInHand(hand));
     }
-
 }

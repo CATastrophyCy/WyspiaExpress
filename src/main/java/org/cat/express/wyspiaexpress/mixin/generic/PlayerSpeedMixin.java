@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
-import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,7 +24,7 @@ public abstract class PlayerSpeedMixin extends LivingEntity {
     public float wyspiaexpress$overrideMovementSpeed(float original) {
         PlayerEntity self = (PlayerEntity) (Object) this;
         float multiplier = 1.0f;
-        if(PlayerMovementComponent.KEY.get(self).isRestricted() && GameFunctions.isPlayerAliveAndSurvival(self))
+        if(GameUtil.isUnderSmokeEffect(self) && GameFunctions.isPlayerAliveAndSurvival(self))
             multiplier -= (float) WyspiaExpress.ITEMS_CONFIG.itemConfig.smokeBombConfig.slowness();
         if (isCrawling(self)) {
             multiplier *= getCrawlingSpeedMultiplier(self);

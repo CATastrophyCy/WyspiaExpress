@@ -11,8 +11,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.cat.express.wyspiaexpress.WyspiaExpressEntities;
-import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.entity.GrenadeEntity;
+import org.cat.express.wyspiaexpress.util.ItemUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -46,8 +46,7 @@ public abstract class GrenadeMixin {
             world.spawnEntity(grenade);
         }
 
-
-        WyspiaExpressItems.setItemCooldown(user, (Item)(Object)this, hand);
+        ItemUtil.setItemCooldown(user, (Item)(Object)this, hand);
 
         user.incrementStat(Stats.USED.getOrCreateStat((GrenadeItem)(Object)this));
         cir.setReturnValue(TypedActionResult.success(itemStack, world.isClient()));

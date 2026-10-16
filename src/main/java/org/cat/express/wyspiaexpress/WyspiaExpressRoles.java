@@ -12,34 +12,28 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.LoreComponent;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.server.network.ServerPlayerEntity;
 import org.BsXinQin.kinswathe.KinsWatheConfig;
 import org.agmas.harpymodloader.Harpymodloader;
-import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.agmas.harpymodloader.events.ModifierAssigned;
 import org.agmas.harpymodloader.events.ResetPlayerEvent;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
 import org.agmas.harpymodloader.modifiers.Modifier;
-import org.agmas.harpymodloader.modded_murder.ModdedWeights;
 import org.agmas.noellesroles.Noellesroles;
 import org.aussiebox.starexpress.StarryExpressModifiers;
 import org.cat.express.wyspiaexpress.components.*;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
-import org.jetbrains.annotations.NotNull;
+import org.cat.express.wyspiaexpress.util.RoleUtil;
 import pro.fazeclan.river.stupid_express.constants.SEModifiers;
 import pro.fazeclan.river.stupid_express.role.avaricious.AvariciousGoldHandler;
 
 import java.util.*;
-
 import static org.BsXinQin.kinswathe.KinsWatheRoles.*;
 import static org.agmas.noellesroles.Noellesroles.*;
 import static org.aussiebox.starexpress.StarryExpressRoles.MUZZLER;
@@ -74,7 +68,6 @@ public class WyspiaExpressRoles {
         AllowPlayerDeath.EVENT.register(((victim, killer,identifier) -> {
             GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(victim.getWorld());
 
-
             // disallow follower from killing their leader
             if (killer != null) {
                 if (gameWorldComponent.isRole(victim, LICH) && gameWorldComponent.isRole(killer, LICH_GHOUL))
@@ -108,7 +101,6 @@ public class WyspiaExpressRoles {
     public static HashMap<String, Role> getRoles() {return ROLES;}
 
     public static HashMap<String, Modifier> getModifiers() {return MODIFIERS;}
-
 
     public static Role COPYCAT = registerRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "copycat"),
@@ -247,17 +239,17 @@ public class WyspiaExpressRoles {
     }
     private static Role registerRole(Role role) {
         WatheRoles.registerRole(role);
-        ROLES.put(getRoleName(role), role);
+        ROLES.put(RoleUtil.getRoleName(role), role);
         return role;
     }
     private static Role registerNonMurderRole(Role role){
         Harpymodloader.NON_MURDER_ROLES.add(role);
-        NON_MURDER_ROLES.put(getRoleName(role), role);
+        NON_MURDER_ROLES.put(RoleUtil.getRoleName(role), role);
         return role;
     }
     private static Modifier registerModifier(Modifier modifier) {
         HMLModifiers.registerModifier(modifier);
-        MODIFIERS.put(getModifierName(modifier), modifier);
+        MODIFIERS.put(RoleUtil.getModifierName(modifier), modifier);
         return modifier;
     }
     private static void initHiddenList(){
@@ -341,7 +333,6 @@ public class WyspiaExpressRoles {
         ModdedRoleAssigned.EVENT.register((player, role)->{
             if(!role.equals(COPYCAT))return;
 
-
             player.removeStatusEffect(StatusEffects.NIGHT_VISION);
             if (KinsWatheConfig.HANDLER.instance().EnableWatheModify) {
                 ShopUtil.addCoin(player, - (KinsWatheConfig.HANDLER.instance().InitialKillerIncome - 100));
@@ -351,35 +342,21 @@ public class WyspiaExpressRoles {
             while(roleIDs.size() < WyspiaExpress.ROLES_CONFIG.pickRoles()){
                 String roleID;
                 if(COPYCAT_ROLES.isEmpty()){
-                    ArrayList<Role> killerRoles = getKillerRoles();
+                    ArrayList<Role> killerRoles = RoleUtil.getKillerRoles();
                     if (killerRoles.isEmpty()) {
-                        roleIDs.add(getRoleName(WatheRoles.KILLER));
+                        roleIDs.add(RoleUtil.getRoleName(WatheRoles.KILLER));
                         break;
                     }
                     COPYCAT_ROLES.addAll(killerRoles);
                     Collections.shuffle(COPYCAT_ROLES);
                 }
-                roleID = getRoleName(COPYCAT_ROLES.getFirst());
+                roleID = RoleUtil.getRoleName(COPYCAT_ROLES.getFirst());
                 COPYCAT_ROLES.removeFirst();
                 roleIDs.add(roleID);
             }
             PlayerRolePickingComponent component = PlayerRolePickingComponent.KEY.get(player);
             component.set(new ArrayList<>(roleIDs), GameConstants.getInTicks(0,WyspiaExpress.ROLES_CONFIG.randomRoleTime()));
         });
-    }
-
-    private static @NotNull ArrayList<Role> getKillerRoles() {
-        ArrayList<Role> killerRoles = new ArrayList<>(WatheRoles.ROLES);
-
-        killerRoles.removeIf(r -> (
-                (
-                    !roleMeetPlayerRequirement(r)||
-                    Harpymodloader.VANNILA_ROLES.contains(r) ||
-                    !r.canUseKiller() ||
-                    HarpyModLoaderConfig.HANDLER.instance().disabled.contains(getRoleId(r))
-                )
-        ));
-        return killerRoles;
     }
 
     private static void registerRoleEffect(){
@@ -414,10 +391,10 @@ public class WyspiaExpressRoles {
     }
     private static void registerStringRoleMap(){
         WatheRoles.ROLES.forEach((r) -> {
-            STRING_ROLES.put(getRoleName(r), r);
+            STRING_ROLES.put(RoleUtil.getRoleName(r), r);
         });
         HMLModifiers.MODIFIERS.forEach((m) -> {
-            STRING_MODIFIERS.put(getModifierName(m), m);
+            STRING_MODIFIERS.put(RoleUtil.getModifierName(m), m);
         });
     }
     private static void registerRoleLimit(){
@@ -426,95 +403,7 @@ public class WyspiaExpressRoles {
             Harpymodloader.setRoleMaximum(role,config.maximumSpawn());
         }
     }
-    public static boolean roleMeetPlayerRequirement(Role role){
-        return roleMeetPlayerRequirement(role, ROUND_PLAYER_COUNT);
-    }
-    public static boolean roleMeetPlayerRequirement(Role role, int playerCount){
-        var config = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role);
-        if(config == null) return true;
-        return playerCount >= config.minimumPlayerSpawn()
-                && playerCount <= config.maximumPlayerSpawn();
-    }
-    public static int getRoleSpawnLimit(Role role) {
-        int limit = Harpymodloader.ROLE_MAX.getOrDefault(role.identifier(), Integer.MAX_VALUE);
-        var config = ROLES_BASIC_CONFIG.get(role);
-        if (config == null) return limit;
-        if (!roleMeetPlayerRequirement(role)) return 0;
 
-        limit = Math.min(limit, config.maximumSpawn());
-        int interval = config.playersPerAdditionalSpawn();
-        if (interval > 0) {
-            long allowed = 1 + ((long) ROUND_PLAYER_COUNT - config.minimumPlayerSpawn()) / interval;
-            limit = (int) Math.min(limit, allowed);
-        }
-        return Math.max(0, limit);
-    }
-    public static int getRemainingRoleSpawnLimit(Role role, GameWorldComponent gameWorld) {
-        long assignedCount = gameWorld.getRoles().values().stream().filter(role::equals).count();
-        return (int) Math.max(0, getRoleSpawnLimit(role) - assignedCount);
-    }
-    public static List<ServerPlayerEntity> selectPlayersByRoleHistory(List<ServerPlayerEntity> candidates,
-            List<Role> roles, int count, boolean useWeights, Random random) {
-        List<ServerPlayerEntity> selected = new ArrayList<>();
-        if (roles.isEmpty() || count <= 0) return selected;
-        List<ServerPlayerEntity> remaining = new ArrayList<>(candidates);
-        for (int draw = 0; draw < count && !remaining.isEmpty(); draw++) {
-            int minimumHistory = Integer.MAX_VALUE;
-            if (useWeights) {
-                for (Role role : roles) {
-                    for (ServerPlayerEntity player : remaining) {
-                        minimumHistory = Math.min(minimumHistory, getRoleHistoryCount(role, player));
-                    }
-                }
-            }
-
-            double[] weights = new double[remaining.size()];
-            double totalWeight = 0;
-            for (int index = 0; index < remaining.size(); index++) {
-                if (useWeights) {
-                    for (Role role : roles) {
-                        long relativeHistory = (long) getRoleHistoryCount(role, remaining.get(index)) - minimumHistory;
-                        weights[index] += Math.exp(-4.0 * relativeHistory);
-                    }
-                } else {
-                    weights[index] = 1;
-                }
-                totalWeight += weights[index];
-            }
-
-            double threshold = random.nextDouble() * totalWeight;
-            int selectedIndex = 0;
-            for (int index = 0; index < weights.length; index++) {
-                if (weights[index] <= 0) continue;
-                selectedIndex = index; // Last positive entry also handles rounding at the end of the sum.
-                threshold -= weights[index];
-                if (threshold <= 0) break;
-            }
-            selected.add(remaining.remove(selectedIndex));
-            // Recompute the baseline after removal so even large history gaps cannot empty the next draw.
-        }
-        return selected;
-    }
-    private static int getRoleHistoryCount(Role role, PlayerEntity player) {
-        var counts = ModdedWeights.roleRounds.get(role);
-        return counts == null ? 1 : counts.getOrDefault(player.getUuid(), 1);
-    }
-    public static String getRoleName(Role role){
-        if(role == null) return "Unknown role";
-        return role.identifier().getPath().toLowerCase();
-    }
-    public static String getRoleId(Role role){
-        if(role == null) return "Unknown role";
-        return role.identifier().toString();
-    }
-    public static String getModifierId(Modifier modifier){
-        if(modifier == null) return "Unknown role";
-        return modifier.identifier().toString();
-    }
-    public static String getModifierName(Modifier modifier){
-        if(modifier == null) return "Unknown modifier";
-        return modifier.identifier().getPath().toLowerCase();
-    }
     private static void registerRoleConfigs(){
         // mine
         registerRoleBasicConfig(COPYCAT, WyspiaExpress.ROLES_CONFIG.roleConfig.copycatConfig.basic);

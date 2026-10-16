@@ -26,6 +26,7 @@ import org.aussiebox.starexpress.cca.SilenceComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
+import org.cat.express.wyspiaexpress.util.RoleUtil;
 import pro.fazeclan.river.stupid_express.StupidExpress;
 import pro.fazeclan.river.stupid_express.constants.SERoles;
 import pro.fazeclan.river.stupid_express.role.avaricious.AvariciousGoldHandler;
@@ -184,7 +185,7 @@ public final class WyspiaExpressModdedGameMode extends GameMode {
             if (kinVillain) finishCustom(world, gameWorld, alive, role, "licensed_villain", true);
             else if (eddie) finishCustom(world, gameWorld, alive, role, "eddie_waffles", true);
             else if (wyspiaVillain) finishCustom(world, gameWorld, alive, role, "villain_licensed", true);
-            else if (arsonist || thief) finishCustom(world, gameWorld, alive, role, WyspiaExpressRoles.getRoleName(role), false);
+            else if (arsonist || thief) finishCustom(world, gameWorld, alive, role, RoleUtil.getRoleName(role), false);
         }
         if (cult && onlyCult) finishCustom(world, gameWorld, alive, WyspiaExpressRoles.CULT_LEADER, "cult", true);
         boolean teamEnding = result == GameFunctions.WinStatus.KILLERS || result == GameFunctions.WinStatus.PASSENGERS;

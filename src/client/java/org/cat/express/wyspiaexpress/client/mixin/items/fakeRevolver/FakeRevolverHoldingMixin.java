@@ -1,13 +1,12 @@
 package org.cat.express.wyspiaexpress.client.mixin.items.fakeRevolver;
 
-import dev.doctor4t.wathe.cca.PlayerMoodComponent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
+import org.cat.express.wyspiaexpress.util.ItemUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -46,10 +45,7 @@ public class FakeRevolverHoldingMixin <T extends LivingEntity> {
 
         @Unique
         private boolean isHoldingGun(T entity) {
-            ItemStack psychosisItemStack = PlayerMoodComponent.KEY.get(MinecraftClient.getInstance().player).getPsychosisItems().get(entity.getUuid());
-            if (psychosisItemStack != null) {
-                return psychosisItemStack.isOf(WyspiaExpressItems.FAKE_REVOLVER);
-            } else return entity.getMainHandStack().isOf(WyspiaExpressItems.FAKE_REVOLVER);
+            return ItemUtil.isHoldingItem(MinecraftClient.getInstance().player, entity, WyspiaExpressItems.FAKE_REVOLVER);
         }
         @Unique
         private static void holdGun(ModelPart holdingArm, ModelPart otherArm, ModelPart head, boolean rightArmed) {

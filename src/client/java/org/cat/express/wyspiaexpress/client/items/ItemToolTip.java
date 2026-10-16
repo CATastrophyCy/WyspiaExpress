@@ -1,27 +1,19 @@
 package org.cat.express.wyspiaexpress.client.items;
 
-
 import dev.doctor4t.ratatouille.util.TextUtils;
 import dev.doctor4t.wathe.client.util.WatheItemTooltips;
-import dev.doctor4t.wathe.game.GameConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import org.cat.express.wyspiaexpress.WyspiaExpressItems;
+import org.cat.express.wyspiaexpress.util.ItemUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class ItemToolTip {
-
-    public static int getItemCooldownTicks(@NotNull Item item) {
-        Integer seconds = WyspiaExpressItems.configuredCooldowns().get(item);
-        return seconds != null && seconds >= 0 ? GameConstants.getInTicks(0, seconds)
-                : GameConstants.ITEM_COOLDOWNS.getOrDefault(item, 0);
-    }
 
     public static void addItemtip(@NotNull Item item, @NotNull ItemStack itemStack, @NotNull List<Text> list) {
         if (itemStack.isOf(item)) {
@@ -42,7 +34,7 @@ public class ItemToolTip {
             ItemCooldownManager itemCooldown = MinecraftClient.getInstance().player.getItemCooldownManager();
             if (itemCooldown != null && itemCooldown.isCoolingDown(item)) {
                 float progress = itemCooldown.getCooldownProgress(item, 0);
-                int totalTicks = getItemCooldownTicks(item);
+                int totalTicks = ItemUtil.getItemCooldownTicks(item);
                 if (totalTicks > 0) {
                     int remainingTicks = (int) (totalTicks * progress) + 19;
                     int totalSeconds = remainingTicks / 20;

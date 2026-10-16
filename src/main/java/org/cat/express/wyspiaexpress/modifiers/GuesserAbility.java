@@ -19,6 +19,7 @@ import org.agmas.noellesroles.config.NoellesRolesConfig;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.GuesserComponent;
+import org.cat.express.wyspiaexpress.util.RoleUtil;
 
 import java.util.List;
 import java.util.UUID;
@@ -49,7 +50,7 @@ public final class GuesserAbility {
     public static Guess resolve(String input) {
         String text = input == null ? "" : input.strip();
         List<Role> matches = WatheRoles.ROLES.stream().filter(role ->
-                WyspiaExpressRoles.getRoleId(role).equalsIgnoreCase(text) || WyspiaExpressRoles.getRoleName(role).equalsIgnoreCase(text)).toList();
+                RoleUtil.getRoleId(role).equalsIgnoreCase(text) || RoleUtil.getRoleName(role).equalsIgnoreCase(text)).toList();
         if (matches.size() != 1) return new Guess(null, false);
         Role role = matches.getFirst();
         return new Guess(role, !civilian(role));

@@ -2,8 +2,8 @@ package org.cat.express.wyspiaexpress.client.guidebook;
 
 import net.minecraft.client.MinecraftClient;
 import org.BsXinQin.kinswathe.component.ConfigWorldComponent;
-import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.guidebook.KinsGuideConfig;
+import org.cat.express.wyspiaexpress.util.RoleUtil;
 
 import java.util.function.Function;
 
@@ -21,7 +21,7 @@ public final class GuidebookSources {
         GuidebookValues.registerDerived("noelles.swapCooldown", () -> 60);
         GuidebookValues.registerDerived("noelles.vultureCooldown", () -> 20);
         dev.doctor4t.wathe.api.WatheRoles.ROLES.forEach(role ->
-                GuidebookValues.registerDerived("role." + WyspiaExpressRoles.getRoleId(role) + ".sprint", role::getMaxSprintTime));
+                GuidebookValues.registerDerived("role." + RoleUtil.getRoleId(role) + ".sprint", role::getMaxSprintTime));
         kins("BellringerAbilityPrice", config -> config.BellringerAbilityPrice);
         kins("BodymakerAbilityFakeRole", config -> config.BodymakerAbilityFakeRole);
         kins("CleanerAbilityPrice", config -> config.CleanerAbilityPrice);

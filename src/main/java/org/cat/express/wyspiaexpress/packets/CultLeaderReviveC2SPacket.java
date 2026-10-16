@@ -18,13 +18,13 @@ import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
-import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
 import org.cat.express.wyspiaexpress.components.PlayerBodyEntityComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -88,11 +88,11 @@ public record CultLeaderReviveC2SPacket(UUID playerBody) implements CustomPayloa
                     revived.teleportTo(target);
                     body.remove(Entity.RemovalReason.DISCARDED);
 
-                    WyspiaExpressGameFunctions.revivePlayer(gameWorldComponent, world_component, revived, WyspiaExpressRoles.CULTIST,
+                    GameUtil.revivePlayer(gameWorldComponent, world_component, revived, WyspiaExpressRoles.CULTIST,
                             List.of(WatheItems.KEY));
                     ShopUtil.setCoin(revived, WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.startingCoin());
 
-                    WyspiaExpressGameFunctions.sendRevivedMessage(world, gameWorldComponent, player, revived);
+                    GameUtil.sendRevivedMessage(world, gameWorldComponent, player, revived);
                 }
             }
         });

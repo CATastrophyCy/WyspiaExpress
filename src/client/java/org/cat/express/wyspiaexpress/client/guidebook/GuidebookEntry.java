@@ -6,6 +6,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Language;
 import org.agmas.harpymodloader.modifiers.Modifier;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.util.RoleUtil;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -28,8 +29,8 @@ public record GuidebookEntry(Identifier id, Role role, Modifier modifier, Catego
     }
 
     public String key() {
-        return role != null ? "role:" + WyspiaExpressRoles.getRoleId(role)
-                : "modifier:" + WyspiaExpressRoles.getModifierId(modifier);
+        return role != null ? "role:" + RoleUtil.getRoleId(role)
+                : "modifier:" + RoleUtil.getModifierId(modifier);
     }
     public GuidebookDefinition definition() { return GuidebookDefinitions.INSTANCE.get(this); }
 

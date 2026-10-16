@@ -23,8 +23,8 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.client.roles.TargetAbilityUtil;
 import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
-import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
 import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -40,13 +40,11 @@ public abstract class InstinctMixin {
     // apparently they replaced fake poison's poisoner to this uuid, and in PlayerPoisonComponent they used a mixin to guarantee that delusion_maker won't kill
     @Unique private static final UUID DELUSION_MARKER = UUID.fromString("00000000-0000-0000-dead-c0de00000000"); // unique string used by Kinswathe
 
-
     @WrapMethod(method = "getInstinctHighlight")
     private static int wyspiaexpress$hideSmokedInstinct(Entity target, Operation<Integer> original) {
         PlayerEntity player = MinecraftClient.getInstance().player;
         if(WatheClient.isPlayerSpectatingOrCreative()) return original.call(target);
-        if ( (player != null && PlayerMovementComponent.KEY.get(player).isRestricted())
-                || (target instanceof PlayerEntity targetPlayer && PlayerMovementComponent.KEY.get(targetPlayer).isRestricted())) {
+        if (GameUtil.isObscuredBySmoke(player, target)) {
             return -1;
         }
         return original.call(target);

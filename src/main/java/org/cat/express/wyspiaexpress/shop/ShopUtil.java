@@ -30,6 +30,7 @@ import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
 import org.cat.express.wyspiaexpress.components.GuesserComponent;
 import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.cat.express.wyspiaexpress.config.ShopConfig;
+import org.cat.express.wyspiaexpress.util.ItemUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -52,7 +53,7 @@ public class ShopUtil {
     }
     public static void refreshAllCooldowns(@NotNull ServerPlayerEntity player) {
         var itemCooldowns = player.getItemCooldownManager();
-        for (Item item : WyspiaExpressItems.configuredCooldowns().keySet()) {
+        for (Item item : ItemUtil.configuredCooldowns().keySet()) {
             itemCooldowns.set(item, GameConstants.getInTicks(0,0));
         }
 
@@ -224,7 +225,7 @@ public class ShopUtil {
         } else if (item == WyspiaExpressItems.SENSE_DEAD) {
             PlayerSenseDeadComponent senseDeadComponent = PlayerSenseDeadComponent.KEY.get(player);
             senseDeadComponent.addDuration(GameConstants.getInTicks(0,WyspiaExpress.ITEMS_CONFIG.itemConfig.senseDeadConfig.duration()));
-            WyspiaExpressItems.setItemCooldown(player, item, null);
+            ItemUtil.setItemCooldown(player, item, null);
         } else {
             player.giveItemStack(item.getDefaultStack());
         }

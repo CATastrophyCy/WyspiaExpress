@@ -11,13 +11,13 @@ import org.BsXinQin.kinswathe.KinsWatheConfig;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.agmas.noellesroles.Noellesroles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
-import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
 import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
 import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
 import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,7 +32,6 @@ public abstract class PlayerDeathMixin {
         private static void wyspiaexpress$addKillStat(PlayerEntity victim, boolean spawnBody, PlayerEntity killer, Identifier deathReason, CallbackInfo ci) {
             var world = victim.getWorld();
 
-
             if(world instanceof ServerWorld serverWorld) {
                 var component = GameWorldComponent.KEY.get(serverWorld);
                 if (component.canUseKillerFeatures(victim)) {
@@ -45,7 +44,7 @@ public abstract class PlayerDeathMixin {
                 var world_component = WorldComponent.KEY.get(serverWorld);
                 world_component.addPlayerDead(victim.getUuid());
 
-                WyspiaExpressGameFunctions.sendPlayerDeathMessage(serverWorld, component, victim, killer, deathReason);
+                GameUtil.sendPlayerDeathMessage(serverWorld, component, victim, killer, deathReason);
 
                 if (killer == null) return;
                 // remove phantom invisibility depending on the config

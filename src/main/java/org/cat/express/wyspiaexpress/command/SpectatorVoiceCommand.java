@@ -12,7 +12,6 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
-import org.cat.express.wyspiaexpress.WyspiaExpressCommands;
 import org.cat.express.wyspiaexpress.voicechat.SpectatorVoiceService;
 
 public final class SpectatorVoiceCommand {
@@ -28,7 +27,7 @@ public final class SpectatorVoiceCommand {
                 .then(CommandManager.literal("leave")
                         .executes(SpectatorVoiceCommand::leave))
                 .then(CommandManager.literal("drag")
-                        .requires(WyspiaExpressCommands::isOperator)
+                        .requires(source -> source.hasPermissionLevel(2))
                         .then(CommandManager.argument("player", EntityArgumentType.player())
                                 .executes(context -> drag(context, null))
                                 .then(CommandManager.argument("index", IntegerArgumentType.integer(0))

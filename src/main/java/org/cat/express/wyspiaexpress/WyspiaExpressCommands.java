@@ -1,7 +1,6 @@
 package org.cat.express.wyspiaexpress;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.minecraft.server.command.ServerCommandSource;
 import org.cat.express.wyspiaexpress.command.ModifierCommand;
 import org.cat.express.wyspiaexpress.command.ReviveCommand;
 import org.cat.express.wyspiaexpress.command.RoundTimeCommand;
@@ -28,9 +27,5 @@ public final class WyspiaExpressCommands {
     public static void init() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 COMMANDS.forEach(command -> command.register(dispatcher, registryAccess, environment)));
-    }
-
-    public static boolean isOperator(ServerCommandSource source) {
-        return source.hasPermissionLevel(2);
     }
 }

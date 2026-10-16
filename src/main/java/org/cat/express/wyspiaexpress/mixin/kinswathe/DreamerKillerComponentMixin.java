@@ -8,12 +8,11 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import org.BsXinQin.kinswathe.KinsWatheRoles;
 import org.BsXinQin.kinswathe.roles.dreamer.DreamerKillerComponent;
-import org.agmas.harpymodloader.Harpymodloader;
-import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
-import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.util.GameUtil;
+import org.cat.express.wyspiaexpress.util.RoleUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +25,6 @@ import java.util.function.Predicate;
 
 @Mixin(DreamerKillerComponent.class)
 public abstract class DreamerKillerComponentMixin {
-
 
     @Shadow(remap = false)
     public int dreamerRequired;
@@ -54,16 +52,7 @@ public abstract class DreamerKillerComponentMixin {
             remap = false)
     )
     private static boolean wyspiaexpress$replaceRoles(ArrayList<Role> instance, Predicate<? super Role> originalPredicate) {
-        if(WyspiaExpress.ROLES_CONFIG.enableRolePicking()) {
-            instance.clear();
-            return instance.add(WyspiaExpressRoles.COPYCAT);
-        }
-        return instance.removeIf(role ->
-                Harpymodloader.VANNILA_ROLES.contains(role) ||
-                        !role.canUseKiller() ||
-                        HarpyModLoaderConfig.HANDLER.instance().disabled.contains(WyspiaExpressRoles.getRoleId(role))
-                        || !WyspiaExpressRoles.roleMeetPlayerRequirement(role)
-        );
+        return RoleUtil.filterKillerPromotionRoles(instance);
     }
 
     @WrapOperation(method = "triggerBecomeKiller", at = @At(value = "INVOKE",
@@ -71,7 +60,7 @@ public abstract class DreamerKillerComponentMixin {
     private void wyspiaexpress$announcePromotion(ModdedRoleAssigned event, PlayerEntity player, Role role,
                                                  Operation<Void> original) {
         original.call(event, player, role);
-        WyspiaExpressGameFunctions.sendRoleChangedMessage(((ServerPlayerEntity) player).getServerWorld(),
+        GameUtil.sendRoleChangedMessage(((ServerPlayerEntity) player).getServerWorld(),
                 player, KinsWatheRoles.DREAMER, role);
     }
 }
