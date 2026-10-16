@@ -109,6 +109,18 @@ public class WyspiaExpressGameFunctions {
         if(role == null) return Text.literal("Unknown role");
         return Text.translatable(role.identifier().toTranslationKey("announcement.role")).setStyle(Style.EMPTY.withItalic(true).withColor(role.color()));
     }
+    public static String formatRoundTime(long ticks) {
+        long seconds = Math.max(0, ticks) / 20;
+        return String.format(Locale.ROOT, "%02d:%02d", seconds / 60, seconds % 60);
+    }
+
+    public static MutableText withRoundTime(Text message) {
+        if (WyspiaExpress.ROUND_TICKS < 0) return message.copy();
+        return Text.empty()
+                .append(Text.literal("[" + formatRoundTime(WyspiaExpress.ROUND_TICKS) + "] ").formatted(Formatting.GRAY))
+                .append(message);
+    }
+
     public static void sendPlayerDeathMessage(@NotNull ServerWorld world, @NotNull GameWorldComponent gameWorldComponent,
                                               @NotNull PlayerEntity victim, @Nullable PlayerEntity killer, @Nullable Identifier deathReason) {
 
@@ -140,7 +152,7 @@ public class WyspiaExpressGameFunctions {
         if(gameHasAliveRole(world, gameWorldComponent, WyspiaExpressRoles.CULT_LEADER) && PlayerCultistComponent.KEY.get(victim).isConverted()) {
             message.append(Text.literal("You are fortunate enough to be converted by a Cult Leader\n").setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE)));
         }
-        victim.sendMessage(message, false);
+        victim.sendMessage(withRoundTime(message), false);
 
         MutableText deathMessage = Text.literal("").append(victimName)
             .append(" [").append(victimRole).append("] has died to ").append(reason);
@@ -196,19 +208,21 @@ public class WyspiaExpressGameFunctions {
         sendMessageDeadPlayers(world, message, (PlayerEntity) null);
     }
     public static void sendMessageDeadPlayers(@NotNull ServerWorld world, @NotNull Text message, @Nullable PlayerEntity excluded) {
+        Text timedMessage = withRoundTime(message);
         for(ServerPlayerEntity player: world.getPlayers()){
             if(player == excluded || GameFunctions.isPlayerAliveAndSurvival(player)){
                 continue;
             }
-            player.sendMessage(message, false);
+            player.sendMessage(timedMessage, false);
         }
     }
     public static void sendMessageDeadPlayers(@NotNull ServerWorld world, @NotNull Text message, @NotNull List<PlayerEntity> excluded) {
+        Text timedMessage = withRoundTime(message);
         for(ServerPlayerEntity player: world.getPlayers()){
             if(excluded.contains(player) || GameFunctions.isPlayerAliveAndSurvival(player)){
                 continue;
             }
-            player.sendMessage(message, false);
+            player.sendMessage(timedMessage, false);
         }
     }
     private static void registerOnJoin(){

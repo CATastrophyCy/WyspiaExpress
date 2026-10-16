@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress;
 
 
 import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.api.event.GameEvents;
 import dev.doctor4t.wathe.index.WatheItems;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
@@ -42,6 +43,7 @@ public class WyspiaExpress implements ModInitializer {
              ModItems.MASTER_KEY, WatheItems.REVOLVER
     );
     public static int TICK = 0;
+    public static long ROUND_TICKS = -1;
     @Override
     public void onInitialize() {
         LOGGER.info("WyspiaExpress is initializing...");
@@ -59,11 +61,21 @@ public class WyspiaExpress implements ModInitializer {
         ParticleManager.init();
         registerVersionCheck();
         registerPackets();
+        ServerLifecycleEvents.SERVER_STARTING.register(server -> ROUND_TICKS = -1);
+        GameEvents.ON_GAME_START.register(gameMode -> ROUND_TICKS = 0);
+        GameEvents.ON_GAME_STOP.register(gameMode -> {
+            if (ROUND_TICKS >= 0) {
+                LOGGER.info("A round has finished after {}.", WyspiaExpressGameFunctions.formatRoundTime(ROUND_TICKS));
+            }
+        });
         ServerLifecycleEvents.SERVER_STARTING.register(RoleStatisticsManager::init);
         ServerLifecycleEvents.SERVER_STARTING.register(RoleCategoryStatisticsManager::init);
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> RoleStatisticsManager.shutdown());
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> RoleCategoryStatisticsManager.shutdown());
         ServerTickEvents.START_SERVER_TICK.register(server -> {
+            if (GameWorldComponent.KEY.get(server.getOverworld()).getGameStatus() == GameWorldComponent.GameStatus.ACTIVE) {
+                ++ROUND_TICKS;
+            }
             if(TICK >= 1200)
                 TICK = 0;
             else{
