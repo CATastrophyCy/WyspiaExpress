@@ -12,14 +12,18 @@ import dev.doctor4t.wathe.index.WatheEntities;
 import dev.doctor4t.wathe.util.AnnounceWelcomePayload;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.s2c.play.EntityStatusEffectS2CPacket;
+import net.minecraft.network.packet.s2c.play.RemoveEntityStatusEffectS2CPacket;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -58,16 +62,31 @@ public class WyspiaExpressGameFunctions {
     public static void init(){
         registerEndWorldTick();
         registerOnJoin();
-        registerPoisonSync();
+        registerSpectatorSync();
     }
 
-    private static void registerPoisonSync() {
+    private static void registerSpectatorSync() {
         ServerTickEvents.END_WORLD_TICK.register(world -> {
             if (world.getTime() % 20 != 0) return;
             // Remote entities may stop ticking on the client. Correct their poison countdown
             for (ServerPlayerEntity player : world.getPlayers()) {
                 PlayerPoisonComponent poison = PlayerPoisonComponent.KEY.get(player);
                 if (poison.poisonTicks > 0) poison.sync();
+                if (!GameWorldComponent.KEY.get(world).isRunning()
+                        || !GameFunctions.isPlayerAliveAndSurvival(player)) continue;
+                // Vanilla sends effect durations to the affected player, not other observers.
+                // Reuse its packets for spectators; also clear effects removed before expiry.
+                for (ServerPlayerEntity observer : PlayerLookup.tracking(player)) {
+                    if (!GameFunctions.isPlayerSpectatingOrCreative(observer)) continue;
+                    for (var type : List.of(StatusEffects.GLOWING, StatusEffects.NIGHT_VISION)) {
+                        var effect = player.getStatusEffect(type);
+                        if (effect != null && !effect.isInfinite() && effect.getDuration() > 0) {
+                            observer.networkHandler.sendPacket(new EntityStatusEffectS2CPacket(player.getId(), effect, false));
+                        } else {
+                            observer.networkHandler.sendPacket(new RemoveEntityStatusEffectS2CPacket(player.getId(), type));
+                        }
+                    }
+                }
             }
         });
     }
@@ -181,6 +200,15 @@ public class WyspiaExpressGameFunctions {
                 .append(" has been forcefully converted by ")
                 .append(playerName).append("");
         sendMessageDeadPlayers(world, convertedMessage);
+    }
+
+    public static void sendRoleChangedMessage(@NotNull ServerWorld world, @NotNull PlayerEntity player,
+                                             @NotNull Role previousRole, @NotNull Role role) {
+        Text message = Text.empty().append(player.getDisplayName().copy().formatted(Formatting.ITALIC))
+                .append(" [").append(getRoleAnnouncement(previousRole)).append("]")
+                .append(previousRole == WyspiaExpressRoles.COPYCAT ? " selected " : " has become ")
+                .append(getRoleAnnouncement(role));
+        sendMessageDeadPlayers(world, message);
     }
     public static boolean gameHasAliveRole(@NotNull ServerWorld world,@NotNull GameWorldComponent component,@NotNull Role role) {
         for(ServerPlayerEntity player : world.getPlayers()){
