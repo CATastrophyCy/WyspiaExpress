@@ -6,6 +6,11 @@
   "commands.roundtime.current": "Current round elapsed time: %s.",
   "commands.roundtime.previous": "Previous round duration: %s.",
 
+  "commands.settask.not_running": "The game must be running to use this command!",
+  "commands.settask.invalid_task": "Unknown task. Use sleep, outside, eat, or drink.",
+  "commands.settask.task_set": "Set %1$s's task to %2$s.",
+  "commands.settask.active_task": "%s has an active task. Complete it before changing the next-task timer.",
+  "commands.settask.timer_set": "Set %1$s's next-task timer to %2$s seconds.",
 
   "commands.modifier.not_running": "The game must be running to use this command!",
   "commands.modifier.already_assigned": "%s already has the %s modifier.",
@@ -28,6 +33,15 @@
   "hud.wyspiaexpress.duration.robot": "Night vision",
   "hud.wyspiaexpress.duration.seconds": "%ss",
   "hud.wyspiaexpress.duration.starstruck": "Starstruck",
+
+
+  "hud.wyspiaexpress.task.current": "Task: %s",
+  "hud.wyspiaexpress.task.waiting": "Next task: %ss",
+
+  "task.wyspiaexpress.sleep": "Sleep",
+  "task.wyspiaexpress.outside": "Fresh air",
+  "task.wyspiaexpress.eat": "Eat",
+  "task.wyspiaexpress.drink": "Drink",
 
   "hud.wyspiaexpress.lich.revive": "Press %s to revive",
 

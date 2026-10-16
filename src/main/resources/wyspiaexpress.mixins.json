@@ -16,6 +16,7 @@
     "generic.KeepGameGoingMixin",
     "generic.PassiveIncomeMixin",
     "generic.PlayerDeathMixin",
+    "generic.PlayerMoodMixin",
     "generic.PlayerShieldMixin",
     "generic.PlayerSpeedMixin",
     "generic.ShopMixin",

@@ -13,6 +13,31 @@ import java.util.List;
 @Sync(Option.SyncMode.OVERRIDE_CLIENT)
 @Config(name = "wyspiaexpress/general", wrapperName = "WyspiaExpressServerConfig")
 public class ServerConfig {
+    @Comment("Config options for mood and tasks")
+    @Nest public MoodTasks moodTasks = new MoodTasks();
+
+    public static class MoodTasks {
+        @Comment("Seconds before the first task after a reset")
+        @RangeConstraint(min = 0, max = 107374182)
+        public int firstTaskDelaySeconds = 30;
+        @Comment("Minimum seconds to wait for a new task after completion.")
+        @RangeConstraint(min = 0, max = 107374182)
+        public int minTaskDelaySeconds = 30;
+        @Comment("Maximum seconds to wait for a new task after completion.")
+        @RangeConstraint(min = 0, max = 107374182)
+        public int maxTaskDelaySeconds = 45;
+        @Comment("Fraction of full mood drained per second. Default: a full bar in 240 seconds, is a drain of '0.00416666666' ")
+        @RangeConstraint(min = 0, max = 1)
+        public double passiveDrainPerSecond = 1.0 / 240.0;
+        @Comment("Enable mood drain while no active task.")
+        public boolean passiveMoodDrain = false;
+        @Comment("Prevent rolling the same task twice in a row.")
+        public boolean preventConsecutiveTasks = true;
+        @Comment("Amount of mood restored per completed task.")
+        @RangeConstraint(min = 0, max = 1)
+        public float completionRestoration = 0.5F;
+    }
+
     @Comment("Hide StarryExpress's old inventory guidebook button. The new guide remains available through its keybind.")
     public boolean suppressOldGuidebook = true;
     @Comment("Use custom weighted assignment")

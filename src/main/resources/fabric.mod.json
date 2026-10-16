@@ -27,6 +27,7 @@
     "cardinal-components": [
       "wyspiaexpress:ability_cooldown",
       "wyspiaexpress:guesser",
+      "wyspiaexpress:tasks",
       "wyspiaexpress:player_depressed_component",
       "wyspiaexpress:player_freeze_component",
       "wyspiaexpress:lich_revive_component",

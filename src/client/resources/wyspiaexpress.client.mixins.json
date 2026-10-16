@@ -26,6 +26,7 @@
     "ui.GuideBookScreenMixin",
     "ui.HudRendererMixin",
     "ui.LegacyGuidebookButtonMixin",
+    "ui.MoodRendererMixin",
     "ui.RolePickerWidgetMixin",
     "ui.ScreenAccessor",
     "ui.ShopMixin"

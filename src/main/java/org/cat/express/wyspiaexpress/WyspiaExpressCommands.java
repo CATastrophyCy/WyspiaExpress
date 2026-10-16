@@ -17,9 +17,9 @@ public final class WyspiaExpressCommands {
             SpectatorVoiceCommand::register,
             SetRoleCommand::register,
             ReviveCommand::register,
-            SetMoodCommand::register
             SetMoodCommand::register,
             ModifierCommand::register,
+            SetTaskCommand::register,
             RoundTimeCommand::register
     );
 
