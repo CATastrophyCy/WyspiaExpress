@@ -4,6 +4,8 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import dev.doctor4t.wathe.api.GameMode;
+import dev.doctor4t.wathe.api.WatheGameModes;
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
 import dev.doctor4t.wathe.client.gui.MoodRenderer;
 import net.minecraft.client.font.TextRenderer;
@@ -24,6 +26,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MoodRendererMixin {
     @Unique private static float wyspiaexpress$timerAlpha = 0.075f;
     @Unique private static float wyspiaexpress$timerOffset = -1;
+
+    @ModifyExpressionValue(method = "renderHud", at = @At(value = "INVOKE",
+            target = "Ldev/doctor4t/wathe/cca/GameWorldComponent;getGameMode()Ldev/doctor4t/wathe/api/GameMode;"))
+    private static GameMode wyspiaexpress$allowModdedMoodHud(GameMode mode) {
+        return mode == WyspiaExpress.MODDED_GAMEMODE ? WatheGameModes.MURDER : mode;
+    }
 
     @ModifyExpressionValue(method = "renderHud", at = @At(value = "INVOKE", target = "Ljava/util/Map;isEmpty()Z"))
     private static boolean wyspiaexpress$keepDrainingMoodVisible(boolean empty,

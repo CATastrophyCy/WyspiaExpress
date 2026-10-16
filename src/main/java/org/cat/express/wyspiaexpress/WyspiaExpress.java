@@ -2,6 +2,8 @@ package org.cat.express.wyspiaexpress;
 
 
 import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.api.WatheGameModes;
+import dev.doctor4t.wathe.api.WatheMapEffects;
 import dev.doctor4t.wathe.api.event.GameEvents;
 import dev.doctor4t.wathe.index.WatheItems;
 import net.fabricmc.api.ModInitializer;
@@ -16,12 +18,15 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.agmas.noellesroles.ModItems;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressModifiersConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
 import org.cat.express.wyspiaexpress.config.WyspiaExpressServerConfig;
 import org.cat.express.wyspiaexpress.items.InvisibleArmor;
+import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressModdedGameMode;
+import org.cat.express.wyspiaexpress.game.mapeffect.WyspiaExpressMapEffect;
 import org.cat.express.wyspiaexpress.packets.*;
 import org.cat.express.wyspiaexpress.particles.ParticleManager;
 import org.slf4j.Logger;
@@ -38,6 +43,10 @@ public class WyspiaExpress implements ModInitializer {
     public static final WyspiaExpressModifiersConfig MODIFIERS_CONFIG = WyspiaExpressModifiersConfig.createAndLoad();
     public static final WyspiaExpressItemsConfig ITEMS_CONFIG = WyspiaExpressItemsConfig.createAndLoad();
     public static final WyspiaExpressServerConfig SERVER_CONFIG = WyspiaExpressServerConfig.createAndLoad();
+    public static final WyspiaExpressModdedGameMode MODDED_GAMEMODE =
+            new WyspiaExpressModdedGameMode(Identifier.of(MOD_ID, "modded"));
+    public static final WyspiaExpressMapEffect MAP_EFFECT =
+            new WyspiaExpressMapEffect(Identifier.of(MOD_ID, "train"));
 
     public final List<Item> NO_DESPAWN_ITEMS = List.of(
              ModItems.MASTER_KEY, WatheItems.REVOLVER
@@ -51,6 +60,8 @@ public class WyspiaExpress implements ModInitializer {
         MODIFIERS_CONFIG.save();
         ITEMS_CONFIG.save();
         SERVER_CONFIG.save();
+        WatheGameModes.registerGameMode(MODDED_GAMEMODE.identifier, MODDED_GAMEMODE);
+        WatheMapEffects.registerMapEffect(MAP_EFFECT.identifier, MAP_EFFECT);
         WyspiaExpressRoles.init();
         WyspiaExpressItems.init();
         InvisibleArmor.initialize();
