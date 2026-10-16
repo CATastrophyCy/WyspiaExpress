@@ -10,7 +10,6 @@ import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
 import org.BsXinQin.kinswathe.KinsWatheRoles;
 import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
@@ -19,12 +18,12 @@ import org.aussiebox.starexpress.cca.StarstruckComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.BlackoutDuration;
 
-/** Active durations below the round clock, with separate rows for ability, glowing and blackout. */
+import java.util.ArrayList;
+
 public final class DurationHud {
-    private static final int TOP = 28;
+    private static final int MIN_TOP = 28;
     private static final int GAP = 4;
     private static final int TEXT_HEIGHT = 20;
-    private static final int BAR_HEIGHT = 27;
     private static final int BACKGROUND = 0xE6101520;
     private static final int BORDER = 0xFF667085;
     private static final int NUMBER_COLOR = 0xFFFFFFFF;
@@ -39,13 +38,12 @@ public final class DurationHud {
         GameWorldComponent gameWorld = GameWorldComponent.KEY.get(player.getWorld());
         if (!gameWorld.isRunning()) return;
         Role role = gameWorld.getRole(player);
-        int y = TOP;
+        var panels = new ArrayList<DurationPanel>(3);
         AbilityDuration ability = GameFunctions.isPlayerAliveAndSurvival(player) ? getAbilityDuration(client, role) : null;
         if (ability != null && (ability.infinite() || ability.ticks() > 0)) {
             Text countdown = ability.infinite() ? Text.literal("∞")
                     : Text.translatable("hud.wyspiaexpress.duration.seconds", seconds(ability.ticks()));
-            drawPanel(context, client, y, ability.label(), countdown, ability.color(), ability.color(), -1);
-            y += TEXT_HEIGHT + GAP;
+            panels.add(new DurationPanel(ability.label(), countdown, ability.color(), ability.color()));
         }
 
         AbilityDuration glowing = GameFunctions.isPlayerAliveAndSurvival(player)
@@ -53,21 +51,33 @@ public final class DurationHud {
         if (glowing != null && (glowing.infinite() || glowing.ticks() > 0)) {
             Text countdown = glowing.infinite() ? Text.literal("∞")
                     : Text.translatable("hud.wyspiaexpress.duration.seconds", seconds(glowing.ticks()));
-            drawPanel(context, client, y, glowing.label(), countdown, glowing.color(), glowing.color(), -1);
-            y += TEXT_HEIGHT + GAP;
+            panels.add(new DurationPanel(glowing.label(), countdown, glowing.color(), glowing.color()));
         }
 
         if (GameFunctions.isPlayerSpectatingOrCreative(player) || gameWorld.canUseKillerFeatures(player)
                 || WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)) {
             BlackoutDuration blackout = (BlackoutDuration) WorldBlackoutComponent.KEY.get(player.getWorld());
             if (blackout.getBlackoutRemainingTicks() > 0) {
-                float remaining = Math.max(0, blackout.getBlackoutRemainingTicks() - tickCounter.getTickDelta(false));
-                float fraction = remaining / Math.max(1, blackout.getBlackoutDurationTicks());
-                Text countdown = Text.translatable("hud.wyspiaexpress.duration.blackout_range",
-                        seconds(blackout.getBlackoutMinimumRemainingTicks()), seconds(blackout.getBlackoutRemainingTicks()));
-                drawPanel(context, client, y, Text.translatable("hud.wyspiaexpress.duration.blackout"),
-                        countdown, 0xFFFFDA75, NUMBER_COLOR, fraction);
+                int minimum = blackout.getBlackoutMinimumRemainingTicks();
+                // Once lights begin returning, count down until the remaining blackout ends.
+                int remaining = minimum > 0 ? minimum : blackout.getBlackoutRemainingTicks();
+                Text countdown = Text.translatable("hud.wyspiaexpress.duration.seconds", seconds(remaining));
+                panels.add(new DurationPanel(Text.translatable("hud.wyspiaexpress.duration.blackout"),
+                        countdown, minimum > 0 ? 0xFFFFDA75 : 0xFF8FCEFF,
+                        minimum > 0 ? NUMBER_COLOR : 0xFF8FCEFF));
             }
+        }
+
+        int width = 0;
+        for (DurationPanel panel : panels) {
+            width = Math.max(width, client.textRenderer.getWidth(panel.label())
+                    + client.textRenderer.getWidth(panel.countdown()) + 24);
+        }
+        width = Math.min(width, context.getScaledWindowWidth() - 16);
+        int y = Math.max(MIN_TOP, context.getScaledWindowHeight() / 4);
+        for (DurationPanel panel : panels) {
+            drawPanel(context, client, y, panel.label(), panel.countdown(), panel.accent(), panel.numberColor(), width);
+            y += TEXT_HEIGHT + GAP;
         }
     }
 
@@ -103,29 +113,25 @@ public final class DurationHud {
     }
 
     private static void drawPanel(DrawContext context, MinecraftClient client, int y, Text label,
-                                  Text countdown, int accent, int numberColor, float fraction) {
+                                  Text countdown, int accent, int numberColor, int width) {
         var renderer = client.textRenderer;
-        countdown = countdown.copy().styled(style -> style.withBold(true).withColor(numberColor));
         int numberWidth = renderer.getWidth(countdown);
-        int availableWidth = context.getScaledWindowWidth() - 16;
-        int width = Math.clamp(renderer.getWidth(label) + numberWidth + 28, 160, availableWidth);
-        int x = (context.getScaledWindowWidth() - width) / 2;
-        int height = fraction < 0 ? TEXT_HEIGHT : BAR_HEIGHT;
+        int x = context.getScaledWindowWidth() - width;
+        int height = TEXT_HEIGHT;
 
         context.fill(x - 1, y - 1, x + width + 1, y + height + 1, BORDER);
         context.fill(x, y, x + width, y + height, BACKGROUND);
         context.fill(x, y, x + 2, y + height, accent);
         Text visibleLabel = Text.literal(renderer.trimToWidth(label, Math.max(0, width - numberWidth - 24)).getString());
-        context.drawTextWithShadow(renderer, visibleLabel, x + 8, y + 5, accent);
-        context.drawTextWithShadow(renderer, countdown, x + width - numberWidth - 8, y + 5, numberColor);
-
-        if (fraction >= 0) {
-            int barWidth = width - 16;
-            context.fill(x + 8, y + 19, x + width - 8, y + 23, 0xFF30394A);
-            int fillWidth = MathHelper.ceil(barWidth * MathHelper.clamp(fraction, 0, 1));
-            if (fillWidth > 0) context.fill(x + 8, y + 19, x + 8 + fillWidth, y + 23, accent);
-        }
+        context.drawTextWithShadow(renderer, countdown, x + 8, y + 5, numberColor);
+        context.drawTextWithShadow(renderer, visibleLabel, x + width - renderer.getWidth(visibleLabel) - 8, y + 5, accent);
     }
 
     private record AbilityDuration(Text label, int ticks, boolean infinite, int color) {}
+
+    private record DurationPanel(Text label, Text countdown, int accent, int numberColor) {
+        private DurationPanel {
+            countdown = countdown.copy().styled(style -> style.withBold(true).withColor(numberColor));
+        }
+    }
 }

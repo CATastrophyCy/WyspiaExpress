@@ -2,6 +2,17 @@
   "commands.setrole.fail": "The game must be running to use this command!",
   "commands.setrole.success": "Set player %s to role %s",
 
+  "commands.roundtime.not_started": "No round has started yet.",
+  "commands.roundtime.current": "Current round elapsed time: %s.",
+  "commands.roundtime.previous": "Previous round duration: %s.",
+
+
+  "commands.modifier.not_running": "The game must be running to use this command!",
+  "commands.modifier.already_assigned": "%s already has the %s modifier.",
+  "commands.modifier.not_assigned": "%s does not have the %s modifier.",
+  "commands.modifier.added": "Added the %2$s modifier to %1$s.",
+  "commands.modifier.removed": "Removed the %2$s modifier from %1$s.",
+
   "key.wyspiaexpress.ability": "Ability",
   "key.wyspiaexpress.guidebook": "Guidebook",
 
