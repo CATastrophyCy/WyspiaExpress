@@ -37,6 +37,7 @@ import org.cat.express.wyspiaexpress.client.items.ItemToolTip;
 import org.cat.express.wyspiaexpress.client.roles.NoTargetAbilityUtil;
 import org.cat.express.wyspiaexpress.client.roles.TargetAbilityUtil;
 import org.cat.express.wyspiaexpress.client.ui.InventoryAbilityPanel;
+import org.cat.express.wyspiaexpress.client.ui.PlayerConfigButtons;
 import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
 import org.cat.express.wyspiaexpress.util.VersionUtil;
 import org.lwjgl.glfw.GLFW;
@@ -50,6 +51,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
     public static PlayerEntity TARGET_PLAYER = null;
     @Override
     public void onInitializeClient() {
+        PlayerConfigButtons.register();
         registerGuidebook();
         registerInventoryFocus();
         registerCooldownRefresh();

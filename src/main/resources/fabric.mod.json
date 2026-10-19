@@ -12,6 +12,7 @@
   "icon": "assets/wyspiaexpress/icon.png",
 
   "environment": "*",
+  "accessWidener": "wyspiaexpress.accesswidener",
   "entrypoints": {
     "fabric-datagen": ["org.cat.express.wyspiaexpress.client.WyspiaexpressDataGenerator"],
     "client": ["org.cat.express.wyspiaexpress.client.WyspiaexpressClient"],
@@ -27,6 +28,8 @@
     "cardinal-components": [
       "wyspiaexpress:ability_cooldown",
       "wyspiaexpress:guesser",
+      "wyspiaexpress:player_config",
+      "wyspiaexpress:item_cooldowns",
       "wyspiaexpress:tasks",
       "wyspiaexpress:player_depressed_component",
       "wyspiaexpress:player_freeze_component",
@@ -53,7 +56,14 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
-    "minecraft": "${minecraft_version}"
+    "minecraft": "${minecraft_version}",
+    "wathe": "*",
+    "harpymodloader": "*",
+    "noellesroles": "*",
+    "kinswathe": "*",
+    "starexpress": "*",
+    "stupid_express": "*",
+    "owo": "*"
   },
   "suggests": {
     "controlify": "*"

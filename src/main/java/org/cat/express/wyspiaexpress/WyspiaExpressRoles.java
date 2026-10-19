@@ -381,6 +381,7 @@ public class WyspiaExpressRoles {
             PlayerDepressedComponent.KEY.get(playerEntity).reset();
             PlayerFreezeComponent.KEY.get(playerEntity).reset();
             AbilityCooldownComponent.KEY.get(playerEntity).reset();
+            ItemCooldownComponent.KEY.get(playerEntity).reset();
             PlayerRolePickingComponent.KEY.get(playerEntity).reset();
             PlayerSenseDeadComponent.KEY.get(playerEntity).reset();
             PlayerHearDeadComponent.KEY.get(playerEntity).reset();

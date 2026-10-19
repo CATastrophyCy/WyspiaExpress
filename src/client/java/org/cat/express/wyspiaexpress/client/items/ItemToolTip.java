@@ -33,11 +33,10 @@ public class ItemToolTip {
         if (itemStack.isOf(item)) {
             ItemCooldownManager itemCooldown = MinecraftClient.getInstance().player.getItemCooldownManager();
             if (itemCooldown != null && itemCooldown.isCoolingDown(item)) {
-                float progress = itemCooldown.getCooldownProgress(item, 0);
                 int totalTicks = ItemUtil.getItemCooldownTicks(item);
                 if (totalTicks > 0) {
-                    int remainingTicks = (int) (totalTicks * progress) + 19;
-                    int totalSeconds = remainingTicks / 20;
+                    int remainingTicks = itemCooldown.entries.get(item).endTick - itemCooldown.tick;
+                    int totalSeconds = (remainingTicks + 19) / 20;
                     int minutes = totalSeconds / 60;
                     int seconds = totalSeconds % 60;
                     String countdown = (minutes > 0 ? minutes + "m" : "") + (seconds > 0 ? seconds + "s" : "");

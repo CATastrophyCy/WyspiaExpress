@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public final class RoleUtil {
     private RoleUtil() {}
@@ -154,5 +155,12 @@ public final class RoleUtil {
             return roles.add(WyspiaExpressRoles.COPYCAT);
         }
         return roles.removeIf(role -> !isEligibleKillerRole(role));
+    }
+
+    /** Opt-outs re-enter the existing lottery only when the willing pool cannot fill the slots. */
+    public static List<ServerPlayerEntity> preferRoleCandidates(List<ServerPlayerEntity> candidates, int slots,
+                                                               Predicate<ServerPlayerEntity> willing) {
+        List<ServerPlayerEntity> preferred = candidates.stream().filter(willing).toList();
+        return new ArrayList<>(preferred.size() >= Math.max(0, slots) ? preferred : candidates);
     }
 }

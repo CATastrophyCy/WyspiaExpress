@@ -26,6 +26,7 @@ public class WorldComponent implements AutoSyncedComponent {
     @NotNull
     private final World world;
     private final Set<UUID> playerDead = new HashSet<UUID>();
+    private UUID roundId = UUID.randomUUID();
 
     public WorldComponent(@NotNull World world) {
         this.world = world;
@@ -36,7 +37,15 @@ public class WorldComponent implements AutoSyncedComponent {
 
     public void reset() {
         playerDead.clear();
+        startRound();
         sync();
+    }
+
+    public UUID roundId() { return roundId; }
+
+    public void startRound() {
+        // Invalidates cooldown snapshots for players who stayed offline across a round boundary.
+        roundId = UUID.randomUUID();
     }
 
    public void addPlayerDead(UUID uuid) {
@@ -57,11 +66,13 @@ public class WorldComponent implements AutoSyncedComponent {
             list.add(NbtHelper.fromUuid(uuid));
         }
         tag.put("DeadPlayers", list);
+        tag.putUuid("RoundId", roundId);
     }
 
     @Override
     public void readFromNbt(@NotNull NbtCompound tag, RegistryWrapper.@NotNull WrapperLookup registryLookup) {
         this.playerDead.clear();
+        if (tag.containsUuid("RoundId")) roundId = tag.getUuid("RoundId");
         if (tag.contains("DeadPlayers", NbtElement.LIST_TYPE)) {
             NbtList list = tag.getList("DeadPlayers", NbtElement.INT_ARRAY_TYPE);
             for (net.minecraft.nbt.NbtElement nbtElement : list) {

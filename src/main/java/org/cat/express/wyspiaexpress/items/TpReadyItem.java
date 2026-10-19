@@ -9,10 +9,8 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
-import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class TpReadyItem extends Item{
@@ -43,11 +41,7 @@ public class TpReadyItem extends Item{
         }
 
 
-        TeleportTarget target = new TeleportTarget(serverPlayer.getServerWorld(),
-                new Vec3d(WyspiaExpress.SERVER_CONFIG.readyTrainTp.x(), WyspiaExpress.SERVER_CONFIG.readyTrainTp.y(), WyspiaExpress.SERVER_CONFIG.readyTrainTp.z()),
-                Vec3d.ZERO, WyspiaExpress.SERVER_CONFIG.readyTrainTp.yaw(), WyspiaExpress.SERVER_CONFIG.readyTrainTp.pitch(), TeleportTarget.NO_OP);
-
-        serverPlayer.teleportTo(target);
+        GameUtil.teleportToReadyArea(serverPlayer);
         return TypedActionResult.success(stack);
     }
 }

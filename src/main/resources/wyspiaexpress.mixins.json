@@ -19,6 +19,7 @@
     "generic.PlayerMoodMixin",
     "generic.PlayerShieldMixin",
     "generic.PlayerSpeedMixin",
+    "generic.ReadyPlayersMixin",
     "generic.ShopMixin",
     "generic.TaskIncomeMixin",
     "items.GrenadeMixin",

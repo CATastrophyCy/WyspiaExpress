@@ -1,4 +1,13 @@
 {
+  "gui.wyspiaexpress.player_config.avoid_killer": "Don't want killer",
+  "gui.wyspiaexpress.player_config.avoid_killer.tooltip": "Avoid getting assigned killer when possible. You are not to tell others you chose this!",
+
+  "gui.wyspiaexpress.player_config.avoid_neutral": "Don't want neutral",
+  "gui.wyspiaexpress.player_config.avoid_neutral.tooltip": "Avoid getting assigned neutral roles when possible. You are not to tell others you chose this!",
+
+  "gui.wyspiaexpress.player_config.auto_join": "Auto Join",
+  "gui.wyspiaexpress.player_config.auto_join.tooltip": "Automatically join the round when it starts. Remember to tick this off if you are afk!",
+
   "commands.setrole.fail": "The game must be running to use this command!",
   "commands.setrole.success": "Set player %s to role %s",
 

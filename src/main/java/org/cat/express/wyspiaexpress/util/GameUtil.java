@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress.util;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.cca.MapVariablesWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
 import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.wathe.compat.TrainVoicePlugin;
@@ -23,7 +24,11 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
+import net.minecraft.world.TeleportTarget;
+import net.minecraft.world.World;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
@@ -31,6 +36,7 @@ import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
+import org.cat.express.wyspiaexpress.components.PlayerConfigComponent;
 import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
 import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
@@ -224,5 +230,18 @@ public final class GameUtil {
 
     public static boolean isObscuredBySmoke(@Nullable PlayerEntity viewer, @Nullable Entity target) {
         return isUnderSmokeEffect(viewer) || isUnderSmokeEffect(target);
+    }
+
+    public static long countAutoJoinPlayersOutsideReadyArea(World world) {
+        Box readyArea = MapVariablesWorldComponent.KEY.get(world).getReadyArea();
+        return world.getPlayers().stream().filter(player -> PlayerConfigComponent.KEY.get(player).autoJoin()
+                && (readyArea == null || !readyArea.contains(player.getPos()))).count();
+    }
+
+    public static void teleportToReadyArea(ServerPlayerEntity player) {
+        var target = WyspiaExpress.SERVER_CONFIG.readyTrainTp;
+        player.teleportTo(new TeleportTarget(player.getServerWorld(),
+                new Vec3d(target.x(), target.y(), target.z()), Vec3d.ZERO,
+                target.yaw(), target.pitch(), TeleportTarget.NO_OP));
     }
 }

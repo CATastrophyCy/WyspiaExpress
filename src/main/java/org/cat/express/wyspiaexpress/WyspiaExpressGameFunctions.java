@@ -16,24 +16,23 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.EntityStatusEffectS2CPacket;
 import net.minecraft.network.packet.s2c.play.RemoveEntityStatusEffectS2CPacket;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.TeleportTarget;
-import net.minecraft.world.World;
 import org.cat.express.wyspiaexpress.components.RoleComponent;
+import org.cat.express.wyspiaexpress.components.ItemCooldownComponent;
+import org.cat.express.wyspiaexpress.components.PlayerConfigComponent;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.config.ServerConfig;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class WyspiaExpressGameFunctions {
 
-    private static final Map<RegistryKey<World>, Boolean> prevStarting = new ConcurrentHashMap<>();
     public static void init(){
         registerEndWorldTick();
         registerOnJoin();
@@ -69,6 +68,7 @@ public class WyspiaExpressGameFunctions {
     private static void registerOnJoin(){
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             ServerPlayerEntity joining = handler.player;
+            ItemCooldownComponent.KEY.get(joining).restore();
             server.execute(() -> {
                 ServerWorld overworld = server.getOverworld();
                 GameWorldComponent gwc = GameWorldComponent.KEY.get(overworld);
@@ -96,14 +96,6 @@ public class WyspiaExpressGameFunctions {
             boolean gameRunning = status == GameWorldComponent.GameStatus.ACTIVE
                     || status == GameWorldComponent.GameStatus.STARTING
                     || status == GameWorldComponent.GameStatus.STOPPING;
-            boolean isStarting = status == GameWorldComponent.GameStatus.STARTING;
-            boolean wasStarting = prevStarting.getOrDefault(world.getRegistryKey(), false);
-            if (isStarting && !wasStarting) {
-
-                performRtp(serverWorld);
-            }
-            prevStarting.put(world.getRegistryKey(), isStarting);
-
             Box readyArea = MapVariablesWorldComponent.KEY.get(world).getReadyArea();
             for (net.minecraft.entity.player.PlayerEntity player : world.getPlayers()) {
                 if (!(player instanceof ServerPlayerEntity serverPlayer)) continue;
@@ -120,9 +112,17 @@ public class WyspiaExpressGameFunctions {
         });
     }
 
-    private static void performRtp(ServerWorld world) {
-        if(!WyspiaExpress.SERVER_CONFIG.enableRandomStartTp())
-            return;
+    // Prepare the captured roster immediately before native round initialization.
+    public static void prepareRoundPlayers(ServerWorld world, List<ServerPlayerEntity> participants) {
+        Box readyArea = MapVariablesWorldComponent.KEY.get(world).getReadyArea();
+        List<ServerPlayerEntity> eligiblePlayers = new ArrayList<>(participants);
+        for (ServerPlayerEntity player : eligiblePlayers) {
+        if (PlayerConfigComponent.KEY.get(player).autoJoin()
+                    && (readyArea == null || !readyArea.contains(player.getPos()))) {
+                GameUtil.teleportToReadyArea(player);
+            }
+        }
+        if (!WyspiaExpress.SERVER_CONFIG.enableRandomStartTp()) return;
         List<ServerConfig.TpTargetPosition> slots = new ArrayList<>();
         for (String entry : WyspiaExpress.SERVER_CONFIG.randomStartTp()) {
             String[] parts = entry.split(",");
@@ -141,14 +141,6 @@ public class WyspiaExpressGameFunctions {
         }
         if (slots.isEmpty()) return;
 
-        List<ServerPlayerEntity> eligiblePlayers = new ArrayList<>();
-        MapVariablesWorldComponent mvc = MapVariablesWorldComponent.KEY.get(world);
-
-        Box readyArea = mvc.getReadyArea();
-        for (net.minecraft.entity.player.PlayerEntity player : world.getPlayers()) {
-            if (!(player instanceof ServerPlayerEntity sp) || ! readyArea.contains(sp.getPos())) continue;
-            eligiblePlayers.add(sp);
-        }
         if (eligiblePlayers.isEmpty()) return;
         Collections.shuffle(eligiblePlayers);
         Collections.shuffle(slots);
