@@ -1,0 +1,1168 @@
+{
+	// Enable role picking for killers
+	"enableRolePicking": true,
+	// Number of roles to pick
+	"pickRoles": 3,
+	// Amount of time, in seconds before a random role is assigned instead
+	"randomRoleTime": 60,
+	/*  === ROLE CONFIGURATION GUIDE ===
+	    Inside each role's 'basic' config, you can configure:
+	    - enableShop: Whether this role has access to the shop, as well as rendering the money hud
+	    - passiveIncome: Whether they generate passive income. Has no effect on other mod's role that has passive income
+	    - taskIncome: Amount of income from tasks. Know that civilian and some roles have default 50 income, and this adds on top of that
+	    - items & itemAmount: Starting items and their quantities
+	    - minimumPlayerSpawn : Min players required to spawn this role
+	    - maximumPlayerSpawn : Max players that allows this role to spawn
+	    - maximumSpawn (0-20): Max number of this role allowed
+	    - seePoison: Whether this role can see poison, only affects roles that couldn't see it by default
+	    
+	    Valid shop entries:
+	        Format: ITEM_NAME;PRICE;PURCHASE_LIMIT;TYPE
+	        Example: ["KNIFE;50;-1;WEAPON", "POISON_VIAL;100;-1;POISON"]
+	        Type can take values from: WEAPON, TOOL, POISON; it only affects the ui in shop
+	        PURCHASE_LIMIT is still WIP, not implemented yet
+	   
+	    Valid items: 
+	        KNIFE, REVOLVER, GRENADE, PSYCHO_MODE, POISON_VIAL, SCORPION, FIRECRACKER, LOCKPICK,
+	        CROWBAR, BODY_BAG, BLACKOUT, NOTE, TAPE, FAKE_KNIFE, DELUSION_VIAL, DEFENSE_VIAL, 
+	        ROLE_MINE, MASTER_KEY, FAKE_REVOLVER, PAN, COOKED_PORKCHOP, COOKED_CHIKEN, 
+	        COOKED_BEEF, PILL, MEDICAL_KIT, ACID_BARREL, HUNTING_KNIFE, KNOCKOUT_DRUG, 
+	        DREAM_IMPRINT, BLOWGUN, POISON_INJECTOR, WRENCH, CAPTURE_DEVICE, 
+	        ICON_POWER_RESTORATION, ICON_WEAPON_COOLDOWN_REFRESH, ICON_ABILITY_COOLDOWN_REFRESH, ICON_POTION_EFFECT_REFRESH,
+	        FUN_BOX, MEGAPHONE, OUTLAW_REVOLVER, RITUAL_DAGGER, SENSE_DEAD, SMOKE_BOMB
+	    
+	*/
+	"roleConfig": {
+		// Config options for COPYCAT
+		"copycatConfig": {
+			// Basic role configuration
+			"basic": {
+				"enableShop": false,
+				"shopEntries": [],
+				"passiveIncome": true,
+				"taskIncome": 0,
+				"items": [],
+				"itemAmount": [],
+				"minimumPlayerSpawn": 6,
+				"maximumPlayerSpawn": 99,
+				"maximumSpawn": 0,
+				"seePoison": false
+			}
+		},
+		// Config options for NOTE_TAKER
+		"noteTakerConfig": {
+			// Basic role configuration
+			"basic": {
+				"enableShop": true,
+				"shopEntries": [
+					"NOTE;50;-1;TOOL",
+					"MEGAPHONE;50;-1;TOOL"
+				],
+				"passiveIncome": false,
+				"taskIncome": 0,
+				"items": [
+					"NOTE"
+				],
+				"itemAmount": [
+					4
+				],
+				"minimumPlayerSpawn": 6,
+				"maximumPlayerSpawn": 99,
+				"maximumSpawn": 1,
+				"seePoison": false
+			}
+		},
+		// Config options for OUTLAW
+		"outlawConfig": {
+			// Basic role configuration
+			"basic": {
+				"enableShop": true,
+				"shopEntries": [
+					"OUTLAW_REVOLVER;125;-1;WEAPON",
+					"SCORPION;40;-1;POISON",
+					"FAKE_REVOLVER;100;-1;TOOL",
+					"CROWBAR;50;-1;TOOL",
+					"CAPTURE_DEVICE;100;-1;TOOL",
+					"BODY_BAG;125;-1;TOOL",
+					"FIRECRACKER;5;-1;TOOL",
+					"NOTE;10;-1;TOOL",
+					"MEGAPHONE;10;-1;TOOL"
+				],
+				"passiveIncome": true,
+				"taskIncome": 15,
+				"items": [],
+				"itemAmount": [],
+				"minimumPlayerSpawn": 15,
+				"maximumPlayerSpawn": 99,
+				"maximumSpawn": 1,
+				"seePoison": true
+			},
+			// Ability cooldown, in seconds
+			"cooldown": 120,
+			// Enable ability sound effect. If disabled, only the Outlaw can hear it
+			"enableAbilitySound": true,
+			// Ability sound effect volumen
+			"volume": 1.350000023841858,
+			// Ability cost, in coins
+			"cost": 200,
+			// Ability self stun duration, in ticks
+			"selfStunDuration": 60
+		},
+		// Config options for EDGE_LORD
+		"edgeLordConfig": {
+			// Basic role configuration
+			"basic": {
+				"enableShop": true,
+				"shopEntries": [
+					"KNIFE;125;-1;WEAPON",
+					"REVOLVER;225;-1;WEAPON",
+					"POISON_INJECTOR;150;-1;WEAPON",
+					"POISON_VIAL;80;-1;POISON",
+					"SCORPION;40;-1;POISON",
+					"PAN;150;-1;TOOL",
+					"TAPE;75;-1;TOOL",
+					"LOCKPICK;50;-1;TOOL",
+					"CROWBAR;25;-1;TOOL",
+					"BODY_BAG;100;-1;TOOL",
+					"BLACKOUT;0;-1;TOOL",
+					"FIRECRACKER;5;-1;TOOL",
+					"NOTE;10;-1;TOOL",
+					"MEGAPHONE;10;-1;TOOL"
+				],
+				"passiveIncome": true,
+				"taskIncome": 15,
+				"items": [],
+				"itemAmount": [],
+				"minimumPlayerSpawn": 1,
+				"maximumPlayerSpawn": 99,
+				"maximumSpawn": 1,
+				"seePoison": true
+			}
+		},
+		// Config options for GAMBLER
+		"gamblerConfig": {
+			// Basic role configuration
+			"basic": {
+				"enableShop": true,
+				"shopEntries": [
+					"FUN_BOX;75;-1;TOOL"
+				],
+				"passiveIncome": false,
+				"taskIncome": 0,
+				"items": [],
+				"itemAmount": [],
+				"minimumPlayerSpawn": 9,
+				"maximumPlayerSpawn": 99,
+				"maximumSpawn": 2,
+				"seePoison": false
+			},
+			// Miss chance
+			"missChance": 0.25,
+			// Good pool chance
+			"goodPoolChance": 0.35,
+			// Good pool
+			"goodPool": [
+				"KNIFE",
+				"MEDICAL_KIT",
+				"FAKE_REVOLVER",
+				"LOCKPICK",
+				"PAN",
+				"WRENCH",
+				"SMOKE_BOMB"
+			],
+			// Bad pool
+			"badPool": [
+				"NOTE",
+				"FIRECRACKER",
+				"MEGAPHONE"
+			],
+			// Miss compensation coin
+			"missCompensationCoin": 25
+		},
+		// Config options for LICH
+		"lichConfig": {
+			// Basic role configuration
+			"basic": {
+				"enableShop": true,
+				"shopEntries": [
+					"SENSE_DEAD;50;-1;TOOL",
+					"FAKE_KNIFE;75;-1;WEAPON",
+					"FAKE_REVOLVER;50;-1;TOOL",
+					"CAPTURE_DEVICE;50;-1;TOOL",
+					"SMOKE_BOMB;150;-1;TOOL",
+					"WRENCH;75;-1;TOOL",
+					"LOCKPICK;150;-1;TOOL",
+					"CROWBAR;75;-1;TOOL",
+					"PAN;150;-1;TOOL",
+					"FIRECRACKER;5;-1;TOOL",
+					"NOTE;10;-1;TOOL",
+					"MEGAPHONE;10;-1;TOOL"
+				],
+				"passiveIncome": true,
+				"taskIncome": 30,
+				"items": [],
+				"itemAmount": [],
+				"minimumPlayerSpawn": 12,
+				"maximumPlayerSpawn": 99,
+				"maximumSpawn": 1,
+				"seePoison": true
+			},
+			// Additional revive. Note the LICH can't revive when the number of alive killers is greater or equal to {Starting killer amount + this number}
+			"additionalRevive": 1,
+			// Cooldown for the ability, in seconds
+			"cooldown": 90,
+			// Cooldown for the ability at game start, in seconds
+			"startingCooldown": 90,
+			// Range to activate ability
+			"range": 3.0,
+			// Revive stun duration, in ticks
+			"stun": 100,
+			// The amount of coin revived player starts with
+			"startingCoin": 100,
+			// Configuration for their GHOUL
+			"ghoulConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"KNIFE;75;-1;WEAPON",
+						"POISON_VIAL;80;-1;POISON",
+						"SCORPION;40;-1;POISON",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 5,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 0,
+					"seePoison": false
+				}
+			}
+		},
+		// Config options for CULT_LEADER
+		"cultLeaderConfig": {
+			// Basic role configuration
+			"basic": {
+				"enableShop": true,
+				"shopEntries": [
+					"RITUAL_DAGGER;175;-1;WEAPON",
+					"SMOKE_BOMB;125;-1;TOOL",
+					"PAN;100;-1;TOOL",
+					"FAKE_REVOLVER;50;-1;TOOL",
+					"LOCKPICK;125;-1;TOOL",
+					"WRENCH;75;-1;TOOL",
+					"ICON_POWER_RESTORATION;200;-1;TOOL",
+					"FIRECRACKER;5;-1;TOOL",
+					"NOTE;10;-1;TOOL",
+					"MEGAPHONE;10;-1;TOOL"
+				],
+				"passiveIncome": true,
+				"taskIncome": 30,
+				"items": [],
+				"itemAmount": [],
+				"minimumPlayerSpawn": 12,
+				"maximumPlayerSpawn": 99,
+				"maximumSpawn": 1,
+				"seePoison": true
+			},
+			// Enable conversion by staying close at players
+			"enableConversion": true,
+			// Cooldown for the revive ability, in seconds
+			"cooldown": 150,
+			// Amount of cumulative time, in ticks, it takes to convert a player
+			"conversionTime": 440,
+			// Conversion range, in blocks
+			"conversionRange": 2.3,
+			// Revive stun duration, in ticks
+			"stun": 100,
+			// The amount of coin rewarded when you convert a player
+			"convertionReward": 35,
+			// The amount of coin converted player starts with
+			"startingCoin": 75,
+			// Configuration for their CULTIST
+			"cultistConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"KNIFE;75;-1;WEAPON",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": false,
+					"taskIncome": 15,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 1,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 0,
+					"seePoison": false
+				}
+			}
+		},
+		// Config options for EDDIE_WAFFLES
+		"eddieWafflesConfig": {
+			// Basic role configuration
+			"basic": {
+				"enableShop": true,
+				"shopEntries": [
+					"KNIFE;175;-1;WEAPON",
+					"PSYCHO_MODE;400;-1;POISON",
+					"PAN;100;-1;TOOL",
+					"LOCKPICK;100;-1;TOOL",
+					"CROWBAR;25;-1;TOOL",
+					"BODY_BAG;50;-1;TOOL",
+					"FAKE_REVOLVER;50;-1;TOOL",
+					"FIRECRACKER;5;-1;TOOL",
+					"NOTE;10;-1;TOOL",
+					"MEGAPHONE;10;-1;TOOL"
+				],
+				"passiveIncome": true,
+				"taskIncome": 50,
+				"items": [],
+				"itemAmount": [],
+				"minimumPlayerSpawn": 12,
+				"maximumPlayerSpawn": 99,
+				"maximumSpawn": 1,
+				"seePoison": true
+			},
+			// Cooldown for the ability, in seconds
+			"cooldown": 2,
+			// Whether spectator last voicechat group for their ability. Setting this to false will keep the default behaviour of just hearing nearby spectators
+			"useSpectatorVoicechat": true
+		},
+		// Config options for VIGILANTE
+		"vigilanteConfig": {
+			// Basic role configuration
+			"basic": {
+				"enableShop": true,
+				"shopEntries": [
+					"NOTE;75;-1;TOOL",
+					"MEGAPHONE;75;-1;TOOL"
+				],
+				"passiveIncome": false,
+				"taskIncome": 0,
+				"items": [],
+				"itemAmount": [],
+				"minimumPlayerSpawn": 1,
+				"maximumPlayerSpawn": 99,
+				"maximumSpawn": 1,
+				"seePoison": false
+			}
+		},
+		"starryExpress": {
+			// Config options for MUZZLER
+			"muzzlerConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"KNIFE;125;-1;WEAPON",
+						"REVOLVER;225;-1;WEAPON",
+						"TAPE;25;-1;TOOL",
+						"PSYCHO_MODE;400;-1;WEAPON",
+						"POISON_VIAL;80;-1;POISON",
+						"SCORPION;40;-1;POISON",
+						"LOCKPICK;50;-1;TOOL",
+						"CROWBAR;25;-1;TOOL",
+						"BODY_BAG;100;-1;TOOL",
+						"BLACKOUT;100;-1;TOOL",
+						"NOTE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 15,
+					"items": [
+						"TAPE"
+					],
+					"itemAmount": [
+						6
+					],
+					"minimumPlayerSpawn": 1,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				},
+				// Enable payout per muzzled players. Morphling share this config value
+				"enablePayout": true,
+				// Amount of coin Muzzled player add to Muzler every 10 seconds. Morphlinh share this config value
+				"muzzledPayout": 10
+			},
+			// Config options for STARSTRUCK
+			"starstruckConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": false,
+					"shopEntries": [],
+					"passiveIncome": false,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 12,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 2,
+					"seePoison": false
+				},
+				// Enable ability sound
+				"enableAbilitySound": false,
+				// Enable ability particle effects
+				"enableAbilityParticleEffects": false,
+				// Enable persistent particle effects during ability
+				"enablePersistentParticleEffects": false
+			}
+		},
+		"stupidExpress": {
+			// Config options for NECROMANCER, from Stupid Express
+			"necromancerConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"FAKE_KNIFE;100;-1;WEAPON",
+						"FAKE_REVOLVER;200;-1;TOOL",
+						"KNOCKOUT_DRUG;200;-1;POISON",
+						"MASTER_KEY;175;-1;TOOL",
+						"BLACKOUT;200;-1;TOOL",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 15,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 12,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				}
+			},
+			// Config options for AVARICIOUS
+			"avariciousConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"KNIFE;125;-1;WEAPON",
+						"REVOLVER;275;-1;WEAPON",
+						"GRENADE;350;-1;WEAPON",
+						"POISON_VIAL;100;-1;POISON",
+						"SCORPION;50;-1;POISON",
+						"LOCKPICK;50;-1;TOOL",
+						"CROWBAR;25;-1;TOOL",
+						"BODY_BAG;125;-1;TOOL",
+						"BLACKOUT;150;-1;TOOL",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 15,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 12,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				}
+			},
+			// Config options for AMNESIAC
+			"amnesiacConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"SENSE_DEAD;50;-1;TOOL",
+						"CROWBAR;100;-1;TOOL",
+						"NOTE;25;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 12,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": false
+				}
+			},
+			// Config options for THIEF
+			"thiefConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": false,
+					"shopEntries": [],
+					"passiveIncome": false,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 12,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": false
+				},
+				// Cooldown, in seconds, when failing a steal (target has no stealable item)
+				"failCooldown": 30,
+				// Cooldown, in seconds, when stealing an item
+				"cooldown": 60,
+				// Distance, for client, to start rendering thief crosshair
+				"clientDistance": 1.2,
+				// Distance, for server, to validate a steal
+				"serverDistance": 1.5
+			},
+			// Config options for ARSONIST
+			"arsonistConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"CROWBAR;100;-1;TOOL",
+						"SMOKE_BOMB;125;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 15,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 1,
+					"maximumPlayerSpawn": 14,
+					"maximumSpawn": 1,
+					"seePoison": false
+				}
+			}
+		},
+		"noellesRoles": {
+			// Config options for MORPHLING
+			"morphlingConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"KNIFE;125;-1;WEAPON",
+						"REVOLVER;225;-1;WEAPON",
+						"TAPE;25;-1;TOOL",
+						"PSYCHO_MODE;400;-1;WEAPON",
+						"POISON_VIAL;80;-1;POISON",
+						"SCORPION;40;-1;POISON",
+						"PAN;150;-1;TOOL",
+						"LOCKPICK;50;-1;TOOL",
+						"CROWBAR;25;-1;TOOL",
+						"BODY_BAG;125;-1;TOOL",
+						"BLACKOUT;150;-1;TOOL",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 15,
+					"items": [
+						"TAPE"
+					],
+					"itemAmount": [
+						4
+					],
+					"minimumPlayerSpawn": 1,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				}
+			},
+			// Config options for PHANTOM
+			"phantomConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"KNIFE;125;-1;WEAPON",
+						"REVOLVER;275;-1;WEAPON",
+						"POISON_INJECTOR;125;-1;WEAPON",
+						"KNOCKOUT_DRUG;125;-1;TOOL",
+						"POISON_VIAL;80;-1;POISON",
+						"SCORPION;40;-1;POISON",
+						"LOCKPICK;50;-1;TOOL",
+						"CROWBAR;25;-1;TOOL",
+						"BLACKOUT;150;-1;TOOL",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 15,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 12,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				},
+				// Ability cooldown, in seconds
+				"cooldown": 135,
+				// Ability duration, in seconds
+				"duration": 30,
+				// Whether phantom would lose invisibility after killing (poison won't trigger)
+				"loseInvisibilityWhenKill": true
+			},
+			// Config options for SWAPPER
+			"swapperConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"KNIFE;125;-1;WEAPON",
+						"REVOLVER;225;-1;WEAPON",
+						"GRENADE;350;-1;WEAPON",
+						"POISON_VIAL;100;-1;POISON",
+						"SCORPION;50;-1;POISON",
+						"LOCKPICK;50;-1;TOOL",
+						"CROWBAR;25;-1;TOOL",
+						"BODY_BAG;125;-1;TOOL",
+						"BLACKOUT;150;-1;TOOL",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 15,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 6,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				}
+			},
+			// Config options for NOISE_MAKER
+			"noiseMakerConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"FAKE_REVOLVER;150;-1;TOOL",
+						"SMOKE_BOMB;150;-1;TOOL",
+						"FIRECRACKER;25;-1;TOOL",
+						"NOTE;75;-1;TOOL",
+						"MEGAPHONE;50;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 15,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": false
+				}
+			},
+			// Config options for CORONER
+			"coronerConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"SENSE_DEAD;25;-1;TOOL",
+						"NOTE;50;-1;TOOL",
+						"MEGAPHONE;50;-1;TOOL",
+						"BODY_BAG;75;-1;TOOL"
+					],
+					"passiveIncome": false,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 9,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 2,
+					"seePoison": false
+				}
+			},
+			// Config options for CONDUCTOR
+			"conductorConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"NOTE;50;-1;TOOL",
+						"MEGAPHONE;50;-1;TOOL"
+					],
+					"passiveIncome": false,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 6,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": false
+				}
+			},
+			// Config options for TRAPPER
+			"trapperConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"ROLE_MINE;300;-1;TOOL",
+						"CAPTURE_DEVICE;100;-1;TOOL",
+						"NOTE;50;-1;TOOL",
+						"MEGAPHONE;50;-1;TOOL"
+					],
+					"passiveIncome": false,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 18,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": false
+				}
+			},
+			// Config options for MIMIC
+			"mimicConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"FAKE_REVOLVER;75;-1;TOOL",
+						"LOCKPICK;175;-1;TOOL",
+						"CROWBAR;50;-1;POISON",
+						"FIRECRACKER;15;-1;TOOL",
+						"NOTE;15;-1;TOOL",
+						"MEGAPHONE;15;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 15,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 15,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": false
+				}
+			},
+			// Config options for VULTURE
+			"vultureConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"CROWBAR;50;-1;TOOL",
+						"SMOKE_BOMB;125;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL",
+						"SENSE_DEAD;25;-1;TOOL",
+						"BODY_BAG;100;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 30,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 6,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				}
+			},
+			// Config options for EXECUTIONER
+			"executionerConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"CAPTURE_DEVICE;75;-1;TOOL",
+						"SMOKE_BOMB;125;-1;TOOL",
+						"FAKE_REVOLVER;50;-1;TOOL",
+						"DELUSION_VIAL;15;-1;TOOL",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 15,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 12,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				},
+				// Executioner coin reward after their target dies from revolver by non killer
+				"reward": 150
+			}
+		},
+		"kinsWatheRoles": {
+			// Config options for BODYMAKER
+			"bodymakerConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"KNIFE;125;-1;WEAPON",
+						"REVOLVER;225;-1;WEAPON",
+						"PSYCHO_MODE;400;-1;WEAPON",
+						"POISON_VIAL;100;-1;POISON",
+						"SCORPION;50;-1;POISON",
+						"LOCKPICK;50;-1;TOOL",
+						"CROWBAR;25;-1;TOOL",
+						"ACID_BARREL;225;-1;TOOL",
+						"BLACKOUT;150;-1;TOOL",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 15,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 1,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				}
+			},
+			// Config options for CLEANER
+			"cleanerConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"KNIFE;125;-1;WEAPON",
+						"REVOLVER;225;-1;WEAPON",
+						"GRENADE;350;-1;WEAPON",
+						"POISON_VIAL;100;-1;POISON",
+						"SCORPION;50;-1;POISON",
+						"LOCKPICK;50;-1;TOOL",
+						"CROWBAR;25;-1;TOOL",
+						"BODY_BAG;50;-1;TOOL",
+						"BLACKOUT;150;-1;TOOL",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 15,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 15,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				}
+			},
+			// Config options for HUNTER
+			"hunterConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"HUNTING_KNIFE;125;-1;WEAPON",
+						"REVOLVER;225;-1;WEAPON",
+						"PSYCHO_MODE;400;-1;WEAPON",
+						"POISON_VIAL;100;-1;POISON",
+						"SCORPION;50;-1;POISON",
+						"LOCKPICK;50;-1;TOOL",
+						"CROWBAR;25;-1;TOOL",
+						"BODY_BAG;150;-1;TOOL",
+						"BLACKOUT;150;-1;TOOL",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 15,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 12,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				}
+			},
+			// Config options for KIDNAPPER
+			"kidnapperConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"KNIFE;125;-1;WEAPON",
+						"REVOLVER;225;-1;WEAPON",
+						"PSYCHO_MODE;400;-1;WEAPON",
+						"CAPTURE_DEVICE;125;-1;TOOL",
+						"KNOCKOUT_DRUG;50;-1;POISON",
+						"POISON_VIAL;100;-1;POISON",
+						"SCORPION;50;-1;POISON",
+						"LOCKPICK;50;-1;TOOL",
+						"CROWBAR;25;-1;TOOL",
+						"BODY_BAG;150;-1;TOOL",
+						"BLACKOUT;150;-1;TOOL",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 15,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 6,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				}
+			},
+			// Config options for DRUGMAKER
+			"drugmakerConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"POISON_INJECTOR;125;-1;WEAPON",
+						"BLOWGUN;225;-1;WEAPON",
+						"KNIFE;175;-1;WEAPON",
+						"REVOLVER;275;-1;WEAPON",
+						"KNOCKOUT_DRUG;125;-1;POISON",
+						"POISON_VIAL;50;-1;POISON",
+						"SCORPION;35;-1;POISON",
+						"PAN;150;-1;TOOL",
+						"SMOKE_BOMB;100;-1;TOOL",
+						"LOCKPICK;50;-1;TOOL",
+						"ACID_BARREL;175;-1;TOOL",
+						"BLACKOUT;150;-1;TOOL",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 15,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 15,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				}
+			},
+			// Config options for DETECTIVE
+			"detectiveConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"NOTE;50;-1;TOOL",
+						"MEGAPHONE;50;-1;TOOL"
+					],
+					"passiveIncome": false,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 15,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": false
+				}
+			},
+			// Config options for JUDGE
+			"judgeConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [],
+					"passiveIncome": false,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 1,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": false
+				}
+			},
+			// Config options for BELLRINGER
+			"bellringerConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [],
+					"passiveIncome": false,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 15,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": false
+				}
+			},
+			// Config options for ROBOT
+			"robotConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": false,
+					"shopEntries": [],
+					"passiveIncome": false,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 1,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": false
+				}
+			},
+			// Config options for PHYSICIAN
+			"physicianConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"PILL;350;-1;TOOL",
+						"NOTE;50;-1;TOOL",
+						"MEGAPHONE;50;-1;TOOL"
+					],
+					"passiveIncome": false,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 12,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": false
+				}
+			},
+			// Config options for TECHNICIAN
+			"technicianConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"WRENCH;75;-1;TOOL",
+						"LOCKPICK;175;-1;TOOL",
+						"CAPTURE_DEVICE;50;-1;TOOL",
+						"ICON_POWER_RESTORATION;200;-1;TOOL",
+						"NOTE;50;-1;TOOL",
+						"MEGAPHONE;50;-1;TOOL"
+					],
+					"passiveIncome": false,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 9,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 2,
+					"seePoison": false
+				}
+			},
+			// Config options for COOK
+			"cookConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"PAN;250;-1;TOOL",
+						"COOKED_PORKCHOP;75;-1;TOOL",
+						"COOKED_CHIKEN;75;-1;TOOL",
+						"COOKED_BEEF;75;-1;TOOL",
+						"NOTE;50;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 1,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": false
+				}
+			},
+			// Config options for HACKER
+			"hackerConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"FAKE_REVOLVER;75;-1;TOOL",
+						"CAPTURE_DEVICE;100;-1;TOOL",
+						"SMOKE_BOMB;125;-1;TOOL",
+						"PAN;125;-1;TOOL",
+						"ICON_WEAPON_COOLDOWN_REFRESH;300;-1;TOOL",
+						"ICON_ABILITY_COOLDOWN_REFRESH;250;-1;TOOL",
+						"ICON_POTION_EFFECT_REFRESH;200;-1;TOOL",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 30,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 12,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				},
+				// Enable instinct
+				"enableInstinct": true
+			},
+			// Config options for DREAMER
+			"dreamerConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"DREAM_IMPRINT;250;-1;TOOL",
+						"SMOKE_BOMB;125;-1;TOOL",
+						"LOCKPICK;125;-1;TOOL",
+						"DELUSION_VIAL;30;-1;TOOL",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 30,
+					"items": [
+						"DELUSION_VIAL",
+						"DREAM_IMPRINT"
+					],
+					"itemAmount": [
+						1,
+						1
+					],
+					"minimumPlayerSpawn": 6,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				},
+				// Enable dream imprint tp to its applier
+				"enableDreamImprintTeleport": false,
+				// Minimum delusion requirement
+				"minimumRequirement": 2,
+				// Maximum delusion requirement
+				"maximumRequirement": 4,
+				// Enable instinct
+				"enableInstinct": false
+			},
+			// Config options for LICENSED_VILLAIN
+			"licensedVillainConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"REVOLVER;450;-1;WEAPON",
+						"SMOKE_BOMB;100;-1;TOOL",
+						"LOCKPICK;125;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 50,
+					"items": [
+						"LOCKPICK"
+					],
+					"itemAmount": [
+						1
+					],
+					"minimumPlayerSpawn": 12,
+					"maximumPlayerSpawn": 99,
+					"maximumSpawn": 1,
+					"seePoison": true
+				}
+			}
+		}
+	}
+}

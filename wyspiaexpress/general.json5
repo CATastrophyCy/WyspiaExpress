@@ -1,0 +1,71 @@
+{
+	// Hide StarryExpress's old inventory guidebook button. The new guide remains available through its keybind.
+	"suppressOldGuidebook": true,
+	// Use custom weighted assignment
+	"useCustomWeightedAssignment": true,
+	// Base weight value used for customWeight assigment. The lower the value the more balanced the system is. High values add more variance (it is not recommended to go above 0.01!).Don't change this value unless you know what you are doing!
+	"baseWeight": 4.0E-4,
+	// Neutral role dividend
+	"neutralDividend": 6,
+	// Number of extra spectator voicechats, minimum 5
+	"extraSpectatorsVoicechat": 5,
+	// Enable spectator special instinct showing more information
+	"spectatorSpecialInstinct": true,
+	// Enable spectator special hud showing more information
+	"spectatorSpecialHud": true,
+	// Enable killer having role color instinct on killer-aligned neutrals
+	"killerSpecialInstinct": false,
+	// Multiply to crawling speed. i.e. 1.5 means crawling is 50% faster
+	"crawlSpeedMultiplier": 2.2,
+	// By setting this to true shooting a protected player won't drop your revolver regardless if they are innocent or not
+	"disableProtectionGunDrop": true,
+	// Player stun tick after blocking damage
+	"blockStunTicks": 50,
+	// Player stun tick after blocking damage with psycho mode
+	"psychoStunTicks": 20,
+	// Enable freezing
+	"freeze": true,
+	// The time, in seconds, it takes for a player to die when staying outside for too long
+	"freezeTimer": 75,
+	// Enable depression killing
+	"depressionKilling": true,
+	// The time, in seconds, it takes for a player to die when staying depressed for too long
+	"depressedTimer": 90,
+	// Whether to enable item bound checking, this will make out of bound item tp to closest dead body
+	"enableItemBoundChecking": true,
+	// Whether to enable random start tp
+	"enableRandomStartTp": true,
+	// The starting positions to tp player to, must be inside the ready area
+	"randomStartTp": [
+		"-978.5,1.25,-358.5,-175,0",
+		"-939.5,1.25,-363.5,175,0",
+		"-900.5,1.25,-359.5,90,0",
+		"-893.5,1.25,-364.5,0,15",
+		"-944.5,1.25,-358.5,-120,0",
+		"-875.5,1.25,-359.5,-15,0",
+		"-880.5,1.5,-360.5,150,30",
+		"-869.5,1.25,-364.5,0,0",
+		"-825.5,1.25,-363.5,0,0",
+		"-830.5,1.75,-358.5,-180,0",
+		"-817.5,1.25,-361.5,135,15",
+		"-857.5,7.5,-362.5,0,0",
+		"-846.5,7.5,-360.5,-180,0",
+		"-841.5,7.5,-360.5,-180,0",
+		"-962.5,7.5,-358.5,90,0",
+		"-977.5,7.5,-364.5,-90,0",
+		"-867.5,7.5,-363.5,45,0",
+		"-873.5,7.5,-358.5,180,0",
+		"-924.5,7.5,-364.5,-40,5",
+		"-915.5,7.5,-358.5,-3.6,7.2",
+		"-917.5,7.5,-362.5,-2,6",
+		"-925.15,7.5,-359.5,0,0"
+	],
+	// The position the TP item tps player to
+	"readyTrainTp": {
+		"x": -1002.5,
+		"y": 2.0,
+		"z": -361.5,
+		"yaw": -90.0,
+		"pitch": 0.0
+	}
+}

@@ -1,0 +1,18 @@
+# Only selected server configs belong in this branch.
+/*
+!/.gitignore
+!/README.md
+!/wyspiaexpress/
+/wyspiaexpress/*
+!/stupid_express/
+/stupid_express/*
+!/wyspiaexpress/general.json5
+!/wyspiaexpress/roles.json5
+!/wyspiaexpress/items.json5
+!/wyspiaexpress/modifiers.json5
+!/harpymodloader.json5
+!/noellesroles.json5
+!/kinswathe.json5
+!/starexpress-server.json5
+!/stupid_express/config.json5
+!/wathe.json

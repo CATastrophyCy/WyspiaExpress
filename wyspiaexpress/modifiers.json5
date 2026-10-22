@@ -1,0 +1,38 @@
+{
+	// Config options for GUESSER
+	"guesserConfig": {
+		// Wheter killer role will always have guesser added. With this enabled it is recommended to have guesser disabled
+		"killerAlwaysGuesser": true,
+		// Maximum amount of guessers when killerAlwaysGuesser is enabled
+		"maximumGuessers": 1,
+		// Minimum amount of living civilian players for guesser to be able to guess
+		"minPlayer": 4,
+		// Guesser cooldown after a valid civilian role guess, in seconds. Zero disables the cooldown
+		"cooldown": 120,
+		// Guesser cooldown after unknown, misspelled or non-civilian input, in seconds. Zero disables the cooldown
+		"invalidGuessCooldown": 5
+	},
+	// Config options for PROFESIONAL_VENT_CRAWLER
+	"ventCrawlerConfig": {
+		// Crawling speed boost. Is multiplicative with general crawl speed boost
+		"crawlSpeedModifier": 1.4
+	},
+	// Config options for BOMBER
+	"bomberConfig": {
+		// Enable bomber
+		"enabled": true,
+		// 1 out of chance of bomber appearing on a random civilian
+		"chance": 1000,
+		// Amount of grenade to give to player
+		"grenadeAmount": 0,
+		// Amount of smoke bomb to give to player
+		"smokeBombAmount": 5
+	},
+	// Config options for ELUSIVE
+	"elusiveConfig": {
+		// Minimum distance to start hiding from instinct
+		"minimumDistance": 25,
+		// Maximum distance to hide from instinct
+		"maximumDistance": 60
+	}
+}

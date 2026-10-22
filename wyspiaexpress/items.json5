@@ -1,0 +1,318 @@
+{
+	/* === ITEM CONFIGURATION GUIDE ===
+	   - renderItemOnHand: Render Item on hand?
+	   - canPunchPlayers: Can punch players
+	   - dropOnDeath: Should drop on death
+	*/
+	"itemConfig": {
+		// Cooldown for PSYCHO_MODE, in seconds
+		"psychoModeCooldown": 300,
+		// Cooldown for BLACKOUT, in seconds
+		"blackOutCooldown": 150,
+		// Cooldown for POWER_RESTORE, in seconds
+		"powerRestoreCooldown": 240,
+		// Configuration for FAKE_REVOLVER
+		"fakeRevolverConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Enable muzzle flash particles and recoil when firing
+			"enableShotEffects": true,
+			// Cooldown, in seconds, minimum 0
+			"cooldown": 12
+		},
+		// Configuration for MEGAPHONE
+		"megaphoneConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds, minimum 0
+			"cooldown": 5,
+			// Duration, in seconds, of the glowing effect on the reported body
+			"duration": 90,
+			// Reporting sound volume
+			"volume": 0.5
+		},
+		// Configuration for TAPE
+		"tapeConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": false,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds, minimum 0
+			"cooldown": 7,
+			// Enable sound
+			"enableSound": false,
+			// Countdown, in ticks, before you can remove the tape
+			"removeCountdown": 5,
+			// Enable passive mood lost
+			"enableMoodLost": false,
+			// Mood lost amount
+			"moodLostAmount": 0.03999999910593033
+		},
+		// Configuration for OUTLAW_REVOLVER
+		"outlawRevolverConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds, minimum 0
+			"cooldown": 90,
+			// Cooldown when hitting nothing, in seconds, minimum 0
+			"missCooldown": 12
+		},
+		// Configuration for RITUAL_DAGGER
+		"ritualDaggerConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": true,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds, minimum 0
+			"cooldown": 360,
+			// Duration of the stun, in ticks
+			"duration": 100
+		},
+		// Configuration for SENSE_DEAD
+		"senseDeadConfig": {
+			// Cooldown, in seconds, minimum 0
+			"cooldown": 75,
+			// Duration, in seconds, of seeing dead bodies
+			"duration": 15
+		},
+		// Configuration for SMOKE_BOMB
+		"smokeBombConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds, minimum 0
+			"cooldown": 30,
+			// Radius of the explosion
+			"radius": 3.0,
+			// Radius of the explosion to the owner.
+			"ownerRadius": 2.1,
+			// Duration of the effect, in ticks
+			"duration": 100,
+			"smokeRadius": 3.3,
+			// Duration of the effect, in ticks
+			"smokeDuration": 160,
+			// Enable smoke apply linger effect
+			"linger": true,
+			// Duration of the lingering effects, in ticks, after entering the smoke
+			"lingerDuration": 40,
+			// Player movement speed slowdown percent
+			"slowness": 0.5,
+			// Amount of particles to be spawned per tick frequency
+			"particles": 1800
+		},
+		// Configuration for REVOLVER
+		"revolverConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds, minimum 0
+			"cooldown": 12
+		},
+		// Configuration for KNIFE
+		"knifeConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": true,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds, minimum 0
+			"cooldown": 60
+		},
+		// Configuration for LOCK_PICK
+		"lockPickConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds, minimum 0
+			"cooldown": 90
+		},
+		// Configuration for BODY_BAG
+		"bodyBagConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": false,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds, minimum 0
+			"cooldown": 30
+		},
+		// Configuration for GRENADE
+		"grenadeConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds, minimum 0
+			"cooldown": 120,
+			// Radius of the explosion
+			"radius": 3.0,
+			// Radius of the explosion to the owner.
+			"ownerRadius": 2.1
+		},
+		// Configuration for DERRINGER
+		"derringerConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds, minimum 0
+			"cooldown": 12
+		},
+		// Configuration for FAKE_KNIFE
+		"fakeKnifeConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": true,
+				"dropOnDeath": false
+			}
+		},
+		// Configuration for HUNTING_KNIFE
+		"huntingKnifeConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": true,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds
+			"cooldown": 60
+		},
+		// Configuration for POISON_INJECTOR
+		"poisonInjectorConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds
+			"cooldown": 60
+		},
+		// Configuration for BLOWGUN
+		"blowgunConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds
+			"cooldown": 60
+		},
+		// Configuration for KNOCKOUT_DRUG
+		"knockoutDrugConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds
+			"cooldown": 90
+		},
+		// Configuration for CAPTURE_DEVICE
+		"captureDeviceConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": false,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds
+			"cooldown": 45
+		},
+		// Configuration for PAN
+		"panConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": true,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds
+			"cooldown": 30
+		},
+		// Configuration for PILL
+		"pillConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": false,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds
+			"cooldown": 480
+		},
+		// Configuration for ACID_BARREL
+		"acidBarrelConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": false,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds
+			"cooldown": 60
+		},
+		// Configuration for MEDICAL_KIT
+		"medicalKitConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": false,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds
+			"cooldown": 90
+		},
+		// Configuration for WRENCH
+		"wrenchConfig": {
+			// Basic item configuration
+			"basic": {
+				"renderItemOnHand": false,
+				"canPunchPlayers": false,
+				"dropOnDeath": false
+			},
+			// Cooldown, in seconds
+			"cooldown": 60,
+			// Whether to enable light restoration function
+			"lightRestoration": true,
+			// Radius of light restoration
+			"radius": 18,
+			// Cooldown of light restoration
+			"lightRestorationCooldown": 120
+		}
+	}
+}
