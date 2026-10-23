@@ -56,20 +56,22 @@ public class WyspiaExpressModdedGameMode extends GameMode {
         int passiveIncome = GameConstants.PASSIVE_MONEY_TICKER.apply(world.getTime());
         payPassiveIncome(world, gameWorld, passiveIncome);
 
-        // Preserve Murder's precedence: no civilians overrides TIME, then check for surviving killers.
+        // Timeout always awards passengers the win, before any team or neutral ending checks.
         GameFunctions.WinStatus result = GameTimeComponent.KEY.get(world).hasTime()
                 ? GameFunctions.WinStatus.NONE : GameFunctions.WinStatus.TIME;
-        boolean civilianAlive = world.getPlayers().stream()
-                .anyMatch(player -> gameWorld.isInnocent(player) && !GameFunctions.isPlayerEliminated(player));
-        if (!civilianAlive) result = GameFunctions.WinStatus.KILLERS;
-        if (result == GameFunctions.WinStatus.NONE && gameWorld.getAllKillerTeamPlayers().stream()
-                .noneMatch(uuid -> !GameFunctions.isPlayerEliminated(world.getPlayerByUuid(uuid)))) {
-            result = GameFunctions.WinStatus.PASSENGERS;
-        }
+        if (result == GameFunctions.WinStatus.NONE) {
+            boolean civilianAlive = world.getPlayers().stream()
+                    .anyMatch(player -> gameWorld.isInnocent(player) && !GameFunctions.isPlayerEliminated(player));
+            if (!civilianAlive) result = GameFunctions.WinStatus.KILLERS;
+            if (result == GameFunctions.WinStatus.NONE && gameWorld.getAllKillerTeamPlayers().stream()
+                    .noneMatch(uuid -> !GameFunctions.isPlayerEliminated(world.getPlayerByUuid(uuid)))) {
+                result = GameFunctions.WinStatus.PASSENGERS;
+            }
 
-        List<ServerPlayerEntity> alive = world.getPlayers().stream()
-                .filter(GameFunctions::isPlayerAliveAndSurvival).toList();
-        if (applyNeutralConditions(world, gameWorld, alive, result)) return;
+            List<ServerPlayerEntity> alive = world.getPlayers().stream()
+                    .filter(GameFunctions::isPlayerAliveAndSurvival).toList();
+            if (applyNeutralConditions(world, gameWorld, alive, result)) return;
+        }
         if (result != GameFunctions.WinStatus.NONE && gameWorld.getGameStatus() == GameWorldComponent.GameStatus.ACTIVE) {
             GameRoundEndComponent.KEY.get(world).setRoundEndData(world.getPlayers(), result);
             GameFunctions.stopGame(world);
