@@ -41,13 +41,20 @@ public abstract class InstinctMixin {
     @Unique private static final UUID DELUSION_MARKER = UUID.fromString("00000000-0000-0000-dead-c0de00000000"); // unique string used by Kinswathe
 
     @WrapMethod(method = "getInstinctHighlight")
-    private static int wyspiaexpress$hideSmokedInstinct(Entity target, Operation<Integer> original) {
+    private static int wyspiaexpress$filterInstinctHighlights(Entity target, Operation<Integer> original) {
         PlayerEntity player = MinecraftClient.getInstance().player;
         if(WatheClient.isPlayerSpectatingOrCreative()) return original.call(target);
         if (GameUtil.isObscuredBySmoke(player, target)) {
             return -1;
         }
-        return original.call(target);
+        int highlight = original.call(target);
+        if (highlight == Color.RED.getRGB() && GameFunctions.isPlayerAliveAndSurvival(player)
+                && target instanceof PlayerEntity targetPlayer
+                && GameWorldComponent.KEY.get(player.getWorld()).isRole(player, KinsWatheRoles.PHYSICIAN)
+                && PlayerPoisonComponent.KEY.get(targetPlayer).poisonTicks > 0) {
+            return -1;
+        }
+        return highlight;
     }
 
     @Inject(method = "isInstinctEnabled", at = @At("HEAD"), cancellable = true)
