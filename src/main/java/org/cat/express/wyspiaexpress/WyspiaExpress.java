@@ -81,9 +81,12 @@ public class WyspiaExpress implements ModInitializer {
         registerPackets();
         ServerLifecycleEvents.SERVER_STARTING.register(server -> ROUND_TICKS = -1);
         GameEvents.ON_GAME_START.register(gameMode -> ROUND_TICKS = 0);
+        GameEvents.ON_FINISH_INITIALIZE.register((world, gameWorld) ->
+                LOGGER.info("Round started: gamemode {} and map effect {}.",
+                        gameWorld.getGameMode().identifier, gameWorld.getMapEffect().identifier));
         GameEvents.ON_GAME_STOP.register(gameMode -> {
             if (ROUND_TICKS >= 0) {
-                LOGGER.info("A round has finished after {}.", GameUtil.formatRoundTime(ROUND_TICKS));
+                LOGGER.info("Round has finished after {}.", GameUtil.formatRoundTime(ROUND_TICKS));
             }
         });
         ServerLifecycleEvents.SERVER_STARTING.register(RoleStatisticsManager::init);

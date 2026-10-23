@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 
-/** Reads authored JSON5 without saving resolved profiles back over sparse overrides. */
+/** Normalizes shared JSON5 while leaving authored mode overrides sparse and untouched. */
 final class ConfigFiles {
     private static final Jankson JSON5 = Jankson.builder().build();
     private static final Set<String> OVERRIDABLE = Set.of("rules", "tasks", "roles", "items", "modifiers", "mode");
@@ -19,10 +19,16 @@ final class ConfigFiles {
             Files.createDirectories(directory);
             Map<String, JsonElement> defaults = schema.defaults();
             var shared = new TreeMap<>(defaults);
+            var authoredShared = new HashMap<String, blue.endless.jankson.JsonObject>();
             for (String domain : schema.domains()) {
                 if (domain.equals("mode")) continue;
                 Path file = directory.resolve(domain + ".json5");
-                if (Files.exists(file)) schema.overlay(domain, read(file), shared, file.toString());
+                if (Files.exists(file)) {
+                    var authored = readJson5(file);
+                    authoredShared.put(domain, authored);
+                    schema.overlay(domain, JsonParser.parseString(authored.toJson(JsonGrammar.STRICT)).getAsJsonObject(),
+                            shared, file.toString());
+                }
             }
             // Validate the current format before generating missing files.
             var profiles = new TreeMap<String, Map<String, Object>>();
@@ -58,7 +64,9 @@ final class ConfigFiles {
             for (String domain : schema.domains()) {
                 if (domain.equals("mode")) continue;
                 Path file = directory.resolve(domain + ".json5");
-                if (!Files.exists(file)) Files.writeString(file, JSON5.toJson(schema.root(domain)).toJson(JsonGrammar.JANKSON), StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW);
+                var normalized = (blue.endless.jankson.JsonObject) JSON5.toJson(schema.root(domain));
+                if (authoredShared.containsKey(domain)) mergeShared(normalized, authoredShared.get(domain));
+                saveShared(file, normalized);
             }
             for (String mode : modeIds) {
                 Path folder = modes.resolve(mode.replace(':', '/')); Files.createDirectories(folder);
@@ -74,9 +82,43 @@ final class ConfigFiles {
     }
 
     static JsonObject read(Path file) {
+        return JsonParser.parseString(readJson5(file).toJson(JsonGrammar.STRICT)).getAsJsonObject();
+    }
+
+    private static blue.endless.jankson.JsonObject readJson5(Path file) {
         try {
-            return JsonParser.parseString(JSON5.load(file.toFile()).toJson(JsonGrammar.STRICT)).getAsJsonObject();
+            return JSON5.load(file.toFile());
         } catch (Exception e) { throw new IllegalArgumentException("Invalid JSON5 in " + file + ": " + e.getMessage(), e); }
+    }
+
+    private static void mergeShared(blue.endless.jankson.JsonObject defaults, blue.endless.jankson.JsonObject authored) {
+        for (var entry : authored.entrySet()) {
+            if (defaults.get(entry.getKey()) instanceof blue.endless.jankson.JsonObject nested
+                    && entry.getValue() instanceof blue.endless.jankson.JsonObject supplied) {
+                mergeShared(nested, supplied);
+            } else defaults.put(entry.getKey(), entry.getValue().clone());
+            String comment = authored.getComment(entry.getKey());
+            if (comment != null && !comment.isBlank()
+                    && !commentText(comment).equals(commentText(defaults.getComment(entry.getKey())))) {
+                defaults.setComment(entry.getKey(), comment);
+            }
+        }
+    }
+
+    private static String commentText(String comment) {
+        return comment == null ? "" : String.join("\n", comment.lines().map(String::strip).toList()).strip();
+    }
+
+    private static void saveShared(Path file, blue.endless.jankson.JsonObject normalized) throws IOException {
+        Path temporary = Files.createTempFile(file.getParent(), file.getFileName().toString(), ".tmp");
+        try {
+            Files.writeString(temporary, normalized.toJson(JsonGrammar.JANKSON) + "\n", StandardCharsets.UTF_8);
+            try {
+                Files.move(temporary, file, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+            } catch (AtomicMoveNotSupportedException e) {
+                Files.move(temporary, file, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } finally { Files.deleteIfExists(temporary); }
     }
 
     /** Local client files are disposable across releases; server files never use this reset path. */

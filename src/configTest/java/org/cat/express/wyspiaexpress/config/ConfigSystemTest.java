@@ -81,11 +81,21 @@ public final class ConfigSystemTest {
         check(mode.get("roles.roleConfig.outlawConfig.cooldown").equals(0),"zero cooldown");
         check(((List<?>)mode.get("roles.roleConfig.outlawConfig.basic.items")).isEmpty(),"empty replaces list");
         check(Files.readString(dir.resolve("gamemodes/wyspiaexpress/killer_modded/roles.json5")).equals(authored),"sparse file never expanded");
+        String normalizedRules = Files.readString(dir.resolve("rules.json5"));
+        check(ConfigFiles.read(dir.resolve("rules.json5")).has("depressedTimer"),"shared files save missing defaults");
+        check(normalizedRules.contains("shared"),"authored shared field comment retained");
+        check(normalizedRules.contains("The time, in seconds"),"generated field documentation retained");
+        check(ConfigFiles.read(dir.resolve("roles.json5")).getAsJsonObject("roleConfig")
+                .getAsJsonObject("outlawConfig").has("basic"),"nested shared settings serialized");
+        String nestedShared = Files.readString(dir.resolve("roles.json5"));
         check(ConfigFiles.load(dir,schema).equals(profiles),"restart stable");
+        check(Files.readString(dir.resolve("rules.json5")).equals(normalizedRules),"normalized shared file stable across loads");
+        check(Files.readString(dir.resolve("roles.json5")).equals(nestedShared),"nested defaults and comments stable across loads");
         write(dir,"gamemodes/wyspiaexpress/killer_modded/roles.json5","{}");
         check(ConfigFiles.load(dir,schema).get("wyspiaexpress:killer_modded").get("roles.roleConfig.outlawConfig.cooldown").equals(81),"removing override restores inheritance");
         write(dir,"gamemodes/wyspiaexpress/killer_modded/rules.json5","{typo:1}");
         rejects(()->ConfigFiles.load(dir,schema),"invalid mode startup");
+        check(Files.readString(dir.resolve("rules.json5")).equals(normalizedRules),"invalid override does not rewrite shared files");
         var bundle=ConfigBundle.fromProfiles(profiles,schema);
         var roundtrip=ConfigBundle.decode(bundle.compressed(),bundle.digest(),schema);
         for(String name:profiles.keySet())check(roundtrip.profile(name).equals(profiles.get(name)),"network equality "+name);

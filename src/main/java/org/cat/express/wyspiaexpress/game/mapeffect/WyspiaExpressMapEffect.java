@@ -1,9 +1,9 @@
 package org.cat.express.wyspiaexpress.game.mapeffect;
 
-import dev.doctor4t.wathe.api.MapEffect;
 import dev.doctor4t.wathe.api.WatheMapEffects;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.TrainWorldComponent;
+import dev.doctor4t.wathe.game.mapeffect.HarpyExpressNightTrainMapEffect;
 import dev.doctor4t.wathe.index.WatheItems;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.LoreComponent;
@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 /** The current night-train setup, with Wyspia's armor and letter patches applied directly. */
-public final class WyspiaExpressMapEffect extends MapEffect {
+public final class WyspiaExpressMapEffect extends HarpyExpressNightTrainMapEffect {
     public WyspiaExpressMapEffect(Identifier identifier) {
         super(identifier);
     }

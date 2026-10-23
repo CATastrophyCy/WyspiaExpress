@@ -13,6 +13,7 @@
     "generic.BlackoutDetailsAccessor",
     "generic.BlackoutDurationMixin",
     "generic.GunShootPayloadMixin",
+    "generic.HornStartMixin",
     "generic.KeepGameGoingMixin",
     "generic.PassiveIncomeMixin",
     "generic.PlayerDeathMixin",
