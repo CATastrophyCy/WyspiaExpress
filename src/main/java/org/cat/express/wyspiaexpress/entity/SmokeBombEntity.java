@@ -24,7 +24,9 @@ import net.minecraft.world.explosion.Explosion;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressEntities;
 import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
-import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
+import org.cat.express.wyspiaexpress.config.ItemsConfig;
+import org.cat.express.wyspiaexpress.config.ItemsConfig.ItemBasicConfig;
+import org.cat.express.wyspiaexpress.config.ItemConfig;
 import org.cat.express.wyspiaexpress.particles.ParticleManager;
 import org.cat.express.wyspiaexpress.particles.SmokeBombEffect;
 
@@ -49,7 +51,7 @@ public class SmokeBombEntity extends ThrownItemEntity {
 
             Vec3d origin = this.getBoundingBox().getCenter(); // center of grenade
             PlayerEntity owner = (PlayerEntity) this.getOwner();
-            WyspiaExpressItemsConfig.SmokeBombConfig config = WyspiaExpress.ITEMS_CONFIG.itemConfig.smokeBombConfig;
+            ItemsConfig.SmokeBombConfig config = WyspiaExpress.ITEMS_CONFIG.itemConfig.smokeBombConfig;
             for (ServerPlayerEntity player : PlayerLookup.around(world, origin, config.radius())) {
                 if (!GameFunctions.isPlayerAliveAndSurvival(player)) continue;
                 // more mercy towards the owner

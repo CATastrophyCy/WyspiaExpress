@@ -21,7 +21,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressEntities;
-import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
+import org.cat.express.wyspiaexpress.config.ItemsConfig;
+import org.cat.express.wyspiaexpress.config.ItemsConfig.ItemBasicConfig;
+import org.cat.express.wyspiaexpress.config.ItemConfig;
 
 public class GrenadeEntity extends ThrownItemEntity {
     public GrenadeEntity(EntityType<?> ignored, World world) {
@@ -44,7 +46,7 @@ public class GrenadeEntity extends ThrownItemEntity {
 
             Vec3d origin = this.getBoundingBox().getCenter(); // center of grenade
             PlayerEntity owner = (PlayerEntity) this.getOwner();
-            WyspiaExpressItemsConfig.GrenadeConfig config = WyspiaExpress.ITEMS_CONFIG.itemConfig.grenadeConfig;
+            ItemsConfig.GrenadeConfig config = WyspiaExpress.ITEMS_CONFIG.itemConfig.grenadeConfig;
             for (ServerPlayerEntity player : PlayerLookup.around(world, origin, config.radius())) {
                 if (!GameFunctions.isPlayerAliveAndSurvival(player)) {
                     continue;

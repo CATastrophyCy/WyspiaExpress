@@ -1,11 +1,9 @@
 package org.cat.express.wyspiaexpress.client.guidebook;
 
 import com.google.gson.JsonObject;
-import io.wispforest.owo.config.ConfigWrapper;
-import io.wispforest.owo.config.Option;
 import net.minecraft.text.Text;
 import org.aussiebox.starexpress.StarryExpress;
-import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.config.GameConfigs;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 
@@ -16,18 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-/** Reads option mirrors, including server overrides; never accesses backing fields or setters. */
+/** Reads resolved settings, including server overrides; never accesses backing models or setters. */
 public final class GuidebookValues {
-    private static final Map<String, ConfigWrapper<?>> CONFIGS = new HashMap<>();
     private static final Map<String, Supplier<?>> DERIVED = new HashMap<>();
-
-    static {
-        CONFIGS.put("roles", WyspiaExpress.ROLES_CONFIG);
-        CONFIGS.put("items", WyspiaExpress.ITEMS_CONFIG);
-        CONFIGS.put("modifiers", WyspiaExpress.MODIFIERS_CONFIG);
-        CONFIGS.put("general", WyspiaExpress.SERVER_CONFIG);
-        CONFIGS.put("starexpress", StarryExpress.CONFIG);
-    }
 
     private GuidebookValues() {}
 
@@ -42,12 +31,12 @@ public final class GuidebookValues {
         if (source.equals("derived")) {
             getter = DERIVED.get(path);
             if (getter == null) throw new IllegalArgumentException("Unknown derived value: " + path);
+        } else if (!source.equals("starexpress")) {
+            String key = source + "." + path;
+            if (!GameConfigs.schema().contains(key)) throw new IllegalArgumentException("Unknown option: " + source + ":" + path);
+            getter = () -> GameConfigs.value(key);
         } else {
-            var config = CONFIGS.get(source);
-            if (config == null) throw new IllegalArgumentException("Unknown config source: " + source);
-            Option<?> option = config.optionForKey(new Option.Key(path));
-            if (option == null) throw new IllegalArgumentException("Unknown option: " + source + ":" + path);
-            getter = option::value;
+            getter = bindStarryValue(path);
         }
         String format = string(spec, "format", "number");
         String unit = string(spec, "unit", "");
@@ -58,6 +47,28 @@ public final class GuidebookValues {
             throw new IllegalArgumentException("Duration requires unit seconds or ticks");
         }
         return new Binding(getter, format, unit);
+    }
+
+    /** Starry owns its config implementation; bind its public accessors without importing that library. */
+    private static Supplier<?> bindStarryValue(String path) {
+        try {
+            String[] parts = path.split("\\.", -1);
+            Object section = StarryExpress.class.getField("CONFIG").get(null);
+            for (int i = 0; i < parts.length - 1; i++) {
+                section = section.getClass().getField(parts[i]).get(section);
+            }
+            Object target = section;
+            var getter = target.getClass().getMethod(parts[parts.length - 1]);
+            return () -> {
+                try {
+                    return getter.invoke(target);
+                } catch (ReflectiveOperationException exception) {
+                    throw new IllegalStateException("Cannot read StarryExpress guidebook value: " + path, exception);
+                }
+            };
+        } catch (ReflectiveOperationException exception) {
+            throw new IllegalArgumentException("Unknown StarryExpress guidebook value: " + path, exception);
+        }
     }
 
     public record Binding(Supplier<?> getter, String format, String unit) {

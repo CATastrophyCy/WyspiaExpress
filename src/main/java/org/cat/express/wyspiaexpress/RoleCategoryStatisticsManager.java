@@ -93,7 +93,7 @@ public class RoleCategoryStatisticsManager {
             case CIVILIAN -> stats.civilianPercentage;
         };
         double deficit = Math.max(target - percentage / 100.0, 0.0);
-        return WyspiaExpress.SERVER_CONFIG.baseWeight() + deficit;
+        return WyspiaExpress.GAMEMODES_CONFIG.baseWeight() + deficit;
     }
     private File getFile() {
         String fileName = String.format("player_role_category_stats_%s.json", currentDate.toString());

@@ -56,10 +56,6 @@ repositories {
         }
     }
     maven {
-        name = "Wisp Forest"
-        url = "https://maven.wispforest.io/releases/"
-    }
-    maven {
         name = "QuiltMC"
         url = "https://maven.quiltmc.org/repository/release/"
     }
@@ -71,7 +67,11 @@ repositories {
     }
 }
 
+def configProcessor = sourceSets.create('configProcessor')
+tasks.named('compileJava') { dependsOn configProcessor.classesTaskName }
+
 dependencies {
+    annotationProcessor configProcessor.output
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -97,9 +97,8 @@ dependencies {
     modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-scoreboard:${project.cca_version}"
 
 
-    modCompileOnly "io.wispforest:owo-lib:${project.owo_version}"
-    annotationProcessor "io.wispforest:owo-lib:${project.owo_version}"
-    include "io.wispforest:owo-sentinel:${project.owo_version}"
+    implementation "blue.endless:jankson:1.2.2"
+    include "blue.endless:jankson:1.2.2"
 
 
     implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
@@ -171,3 +170,18 @@ publishing {
         // retrieving dependencies.
     }
 }
+
+// Config parsing, inheritance, migration and transfer integrity are testable without a game instance.
+def configTest = sourceSets.create('configTest') {
+    compileClasspath = sourceSets.main.output + sourceSets.main.compileClasspath
+    runtimeClasspath = output + compileClasspath + sourceSets.main.runtimeClasspath
+}
+dependencies { configTestAnnotationProcessor configProcessor.output }
+tasks.named('compileConfigTestJava') { dependsOn classes, configProcessor.classesTaskName }
+tasks.register('verifyConfig', JavaExec) {
+    dependsOn configTest.classesTaskName
+    classpath = configTest.runtimeClasspath
+    mainClass = 'org.cat.express.wyspiaexpress.config.ConfigSystemTest'
+    systemProperty 'wyspia.configProcessorPath', configProcessor.runtimeClasspath.asPath
+}
+tasks.named('check') { dependsOn 'verifyConfig' }

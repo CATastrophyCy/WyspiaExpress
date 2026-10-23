@@ -38,12 +38,12 @@ public final class SurvivalHud {
                 || !GameWorldComponent.KEY.get(player.getWorld()).isRunning()) return;
 
         int freezeTicks = PlayerFreezeComponent.KEY.get(player).getFreezeTick();
-        if (WyspiaExpress.SERVER_CONFIG.freeze() && freezeTicks > 0) {
-            renderFreezing(context, client, meter(freezeTicks, WyspiaExpress.SERVER_CONFIG.freezeTimer()));
+        if (WyspiaExpress.RULES_CONFIG.freeze() && freezeTicks > 0) {
+            renderFreezing(context, client, meter(freezeTicks, WyspiaExpress.RULES_CONFIG.freezeTimer()));
         }
         int depressionTicks = PlayerDepressedComponent.KEY.get(player).getDepressionTick();
-        if (WyspiaExpress.SERVER_CONFIG.depressionKilling() && depressionTicks > 0) {
-            renderDepression(context, client, meter(depressionTicks, WyspiaExpress.SERVER_CONFIG.depressedTimer()));
+        if (WyspiaExpress.RULES_CONFIG.depressionKilling() && depressionTicks > 0) {
+            renderDepression(context, client, meter(depressionTicks, WyspiaExpress.RULES_CONFIG.depressedTimer()));
         }
     }
 

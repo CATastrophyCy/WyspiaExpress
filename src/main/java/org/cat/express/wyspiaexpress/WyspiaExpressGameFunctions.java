@@ -27,7 +27,7 @@ import org.cat.express.wyspiaexpress.components.ItemCooldownComponent;
 import org.cat.express.wyspiaexpress.components.PlayerConfigComponent;
 import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
-import org.cat.express.wyspiaexpress.config.ServerConfig;
+import org.cat.express.wyspiaexpress.config.ServerConfigModel;
 
 import java.util.*;
 
@@ -106,7 +106,7 @@ public class WyspiaExpressGameFunctions {
 
                 }
             }
-            if (status == GameWorldComponent.GameStatus.ACTIVE && WyspiaExpress.SERVER_CONFIG.enableItemBoundChecking())
+            if (status == GameWorldComponent.GameStatus.ACTIVE && WyspiaExpress.RULES_CONFIG.enableItemBoundChecking())
                 itemBoundsCheck(serverWorld);
 
         });
@@ -123,12 +123,12 @@ public class WyspiaExpressGameFunctions {
             }
         }
         if (!WyspiaExpress.SERVER_CONFIG.enableRandomStartTp()) return;
-        List<ServerConfig.TpTargetPosition> slots = new ArrayList<>();
+        List<ServerConfigModel.TpTargetPosition> slots = new ArrayList<>();
         for (String entry : WyspiaExpress.SERVER_CONFIG.randomStartTp()) {
             String[] parts = entry.split(",");
             if (parts.length >= 5) {
                 try {
-                    slots.add(new ServerConfig.TpTargetPosition(
+                    slots.add(new ServerConfigModel.TpTargetPosition(
                             Double.parseDouble(parts[0].trim()),
                             Double.parseDouble(parts[1].trim()),
                             Double.parseDouble(parts[2].trim()),
@@ -147,7 +147,7 @@ public class WyspiaExpressGameFunctions {
         int count = Math.min(eligiblePlayers.size(), slots.size());
         for (int i = 0; i < count; i++) {
             ServerPlayerEntity player = eligiblePlayers.get(i);
-            ServerConfig.TpTargetPosition slot = slots.get(i);
+            ServerConfigModel.TpTargetPosition slot = slots.get(i);
             TeleportTarget target = new TeleportTarget(world, new Vec3d(slot.x, slot.y, slot.z), Vec3d.ZERO, slot.yaw, slot.pitch, TeleportTarget.NO_OP);
             player.teleportTo(target);
         }

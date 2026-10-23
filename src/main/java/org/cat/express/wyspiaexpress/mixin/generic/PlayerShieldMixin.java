@@ -25,8 +25,8 @@ public class PlayerShieldMixin {
         PlayerEffectComponent effectComponent = PlayerEffectComponent.KEY.get(victim);
         if (!AllowPlayerDeath.EVENT.invoker().allowDeath(victim, killer, deathReason)) {
 
-            if(WyspiaExpress.SERVER_CONFIG.blockStunTicks() > effectComponent.stunTicks)
-                effectComponent.setStunTicks(WyspiaExpress.SERVER_CONFIG.blockStunTicks());
+            if(WyspiaExpress.RULES_CONFIG.blockStunTicks() > effectComponent.stunTicks)
+                effectComponent.setStunTicks(WyspiaExpress.RULES_CONFIG.blockStunTicks());
             Text message = Text.literal("Your protection saved you from ").append(GameUtil.getDeathReason(deathReason));
             victim.sendMessage(message, true);
             ci.cancel();
@@ -38,8 +38,8 @@ public class PlayerShieldMixin {
             // they still have psycho protection
             if (component.getArmour() > 0) {
 
-                if(WyspiaExpress.SERVER_CONFIG.psychoStunTicks()> effectComponent.stunTicks)
-                    effectComponent.setStunTicks(WyspiaExpress.SERVER_CONFIG.psychoStunTicks()); // use a different stun duration
+                if(WyspiaExpress.RULES_CONFIG.psychoStunTicks()> effectComponent.stunTicks)
+                    effectComponent.setStunTicks(WyspiaExpress.RULES_CONFIG.psychoStunTicks()); // use a different stun duration
                 component.setArmour(component.getArmour() - 1);
 
                 victim.playSoundToPlayer(WatheSounds.ITEM_PSYCHO_ARMOUR, SoundCategory.MASTER, 5F, 1F);

@@ -49,6 +49,7 @@ final class WyspiaExpressRoleAssignment {
             GameWorldComponent gameWorld,
             List<ServerPlayerEntity> participants
     ) {
+        org.cat.express.wyspiaexpress.config.GameConfigs.refreshDerivedValues();
         // Reset participants before selecting base teams.
         Harpymodloader.refreshRoles();
         HarpyModLoaderConfig.HANDLER.load();
@@ -62,8 +63,8 @@ final class WyspiaExpressRoleAssignment {
         }
 
         // Category budgets and the actual number of selected base killers are distinct.
-        int targetKillerCount = participants.size() / gameWorld.getKillerDividend();
-        int targetNeutralCount = participants.size() /  WyspiaExpress.SERVER_CONFIG.neutralDividend();
+        int targetKillerCount = participants.size() / org.cat.express.wyspiaexpress.config.GameConfigs.killerDividend(gameWorld);
+        int targetNeutralCount = participants.size() /  WyspiaExpress.GAMEMODES_CONFIG.neutralDividend();
         int assignedKillerCount = assignBaseTeams(world, gameWorld, participants);
 
         List<ServerPlayerEntity> killerPlayers = new ArrayList<>(participants);
@@ -176,8 +177,8 @@ final class WyspiaExpressRoleAssignment {
         ScoreboardRoleSelectorComponent roleSelector =
                 ScoreboardRoleSelectorComponent.KEY.get(world.getScoreboard());
 
-        int killerSlots =  participants.size() /  gameWorld.getKillerDividend();
-        int vigilanteSlots = participants.size() /  gameWorld.getVigilanteDividend();
+        int killerSlots =  participants.size() /  org.cat.express.wyspiaexpress.config.GameConfigs.killerDividend(gameWorld);
+        int vigilanteSlots = participants.size() /  org.cat.express.wyspiaexpress.config.GameConfigs.vigilanteDividend(gameWorld);
 
         List<ServerPlayerEntity> vigilanteCandidates = new ArrayList<>(participants);
         vigilanteCandidates.removeIf(player ->
@@ -202,7 +203,7 @@ final class WyspiaExpressRoleAssignment {
                     player -> !PlayerConfigComponent.KEY.get(player).avoidKiller());
         }
         int assignedKillerCount;
-        if(WyspiaExpress.SERVER_CONFIG.useCustomWeightedAssignment()){
+        if(WyspiaExpress.GAMEMODES_CONFIG.useCustomWeightedAssignment()){
             assignedKillerCount = assignKillersUsingCategoryHistory(world, roleSelector, gameWorld, killerCandidates, killerSlots);
             vigilanteCandidates.removeIf(gameWorld::canUseKillerFeatures);
             assignVigilantesUsingCategoryHistory(world, roleSelector, gameWorld, vigilanteCandidates, vigilanteSlots);
@@ -235,7 +236,7 @@ final class WyspiaExpressRoleAssignment {
             for (ServerPlayerEntity player : eligiblePlayers) {
                 if (selectedKillerIds.contains(player.getUuid())) continue;
                 if (Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())) continue;
-                double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(gameWorld.getKillerDividend(), player.getUuid(),
+                double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(org.cat.express.wyspiaexpress.config.GameConfigs.killerDividend(gameWorld), player.getUuid(),
                         RoleCategoryStatisticsManager.RoleCategory.KILLER);
                 playerWeights.put(player.getUuid(), weight);
                 totalWeight += weight;
@@ -281,7 +282,7 @@ final class WyspiaExpressRoleAssignment {
             for (ServerPlayerEntity player : candidatePlayers) {
                 if (selectedVigilanteIds.contains(player.getUuid())) continue;
                 if (Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())) continue;
-                double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(gameWorld.getVigilanteDividend(), player.getUuid(),
+                double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(org.cat.express.wyspiaexpress.config.GameConfigs.vigilanteDividend(gameWorld), player.getUuid(),
                         RoleCategoryStatisticsManager.RoleCategory.VIGILANTE);
                 playerWeights.put(player.getUuid(), weight);
                 totalWeight += weight;
@@ -325,7 +326,7 @@ final class WyspiaExpressRoleAssignment {
         for (ServerPlayerEntity player : eligiblePlayers) {
             if (Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())) continue;
             if (!Harpymodloader.OVERWRITE_ROLES.contains(gameWorld.getRole(player))) continue;
-            double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(WyspiaExpress.SERVER_CONFIG.neutralDividend(), player.getUuid(),
+            double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(WyspiaExpress.GAMEMODES_CONFIG.neutralDividend(), player.getUuid(),
                     RoleCategoryStatisticsManager.RoleCategory.NEUTRAL);
             playerWeights.put(player.getUuid(), weight);
             totalWeight += weight;
@@ -397,7 +398,7 @@ final class WyspiaExpressRoleAssignment {
         int killerAlignedNeutralSlots = maxKillerAlignedNeutralSlots <= 0 ? 0 : world.getRandom().nextInt(maxKillerAlignedNeutralSlots + 1);
         int trueNeutralSlots = Math.max(0, remainingNeutralSlots - killerAlignedNeutralSlots);
 
-        List<ServerPlayerEntity> neutralCandidates = WyspiaExpress.SERVER_CONFIG.useCustomWeightedAssignment()?
+        List<ServerPlayerEntity> neutralCandidates = WyspiaExpress.GAMEMODES_CONFIG.useCustomWeightedAssignment()?
                 selectNeutralsUsingCategoryHistory(world, gameWorld, civilianCandidates, remainingNeutralSlots)
                 :
                 selectNeutralsUsingRoleHistory(
@@ -575,7 +576,7 @@ final class WyspiaExpressRoleAssignment {
             if (modifier.killerOnly && killerModifierTypes > 0) {
                 modifierCap = Math.max(1,
                         (int) Math.floor(
-                                (participants.size() / (double) gameWorld.getKillerDividend()) / killerModifierTypes
+                                (participants.size() / (double) org.cat.express.wyspiaexpress.config.GameConfigs.killerDividend(gameWorld)) / killerModifierTypes
                         )
                 );
             }

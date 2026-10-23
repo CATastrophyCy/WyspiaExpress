@@ -1,23 +1,21 @@
 package org.cat.express.wyspiaexpress.config;
 
 import blue.endless.jankson.Comment;
-import io.wispforest.owo.config.Option;
-import io.wispforest.owo.config.annotation.Config;
-import io.wispforest.owo.config.annotation.Nest;
-import io.wispforest.owo.config.annotation.Sync;
 
 
 
-@Sync(Option.SyncMode.OVERRIDE_CLIENT)
-@Config(name = "wyspiaexpress/roles", wrapperName = "WyspiaExpressRolesConfig")
+@ConfigModel("RolesConfig")
 public class RolesConfigModel {
 
     @Comment("Enable role picking for killers")
     public boolean enableRolePicking = true;
+
     @Comment("Number of roles to pick")
     public int pickRoles = 3;
+
     @Comment("Amount of time, in seconds before a random role is assigned instead")
     public int randomRoleTime = 60;
+
 
     @Comment("""
     === ROLE CONFIGURATION GUIDE ===
@@ -47,5 +45,5 @@ public class RolesConfigModel {
         ICON_POWER_RESTORATION, ICON_WEAPON_COOLDOWN_REFRESH, ICON_ABILITY_COOLDOWN_REFRESH, ICON_POTION_EFFECT_REFRESH,
         FUN_BOX, MEGAPHONE, OUTLAW_REVOLVER, RITUAL_DAGGER, SENSE_DEAD, SMOKE_BOMB
    \s""")
-    @Nest public RoleConfig roleConfig = new RoleConfig();
+    public RoleConfig roleConfig = new RoleConfig();
 }

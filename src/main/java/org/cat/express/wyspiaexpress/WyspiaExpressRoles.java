@@ -27,7 +27,8 @@ import org.agmas.noellesroles.Noellesroles;
 import org.aussiebox.starexpress.StarryExpressModifiers;
 import org.cat.express.wyspiaexpress.components.*;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
-import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
+import org.cat.express.wyspiaexpress.config.RolesConfig;
+import org.cat.express.wyspiaexpress.config.RolesConfig.RoleBasicConfig;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.cat.express.wyspiaexpress.util.RoleUtil;
 import pro.fazeclan.river.stupid_express.constants.SEModifiers;
@@ -91,7 +92,7 @@ public class WyspiaExpressRoles {
     public static Set<Role> HIDDEN_ROLES = new HashSet<>();
     public static Set<Modifier> HIDDEN_MODIFIERS = new HashSet<>();
 
-    public static final HashMap<Role, WyspiaExpressRolesConfig.RoleBasicConfig> ROLES_BASIC_CONFIG = new HashMap<>();
+    public static final HashMap<Role, RoleBasicConfig> ROLES_BASIC_CONFIG = new HashMap<>();
 
     public static final List<Role> COPYCAT_ROLES = new ArrayList<>();
 
@@ -231,7 +232,7 @@ public class WyspiaExpressRoles {
             null,null,
             false,true));
 
-    private static void registerRoleBasicConfig(Role role, WyspiaExpressRolesConfig.RoleBasicConfig config) {
+    private static void registerRoleBasicConfig(Role role, RoleBasicConfig config) {
         ROLES_BASIC_CONFIG.put(role, config);
     }
     private static void registerAnnouncements(){
@@ -398,7 +399,7 @@ public class WyspiaExpressRoles {
             STRING_MODIFIERS.put(RoleUtil.getModifierName(m), m);
         });
     }
-    private static void registerRoleLimit(){
+    public static void registerRoleLimit(){
         for( Role role : ROLES_BASIC_CONFIG.keySet()){
             var config = ROLES_BASIC_CONFIG.get(role);
             Harpymodloader.setRoleMaximum(role,config.maximumSpawn());

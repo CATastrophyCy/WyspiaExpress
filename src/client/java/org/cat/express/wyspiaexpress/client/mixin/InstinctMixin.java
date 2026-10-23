@@ -88,7 +88,7 @@ public abstract class InstinctMixin {
             if (GameFunctions.isPlayerSpectatingOrCreative(player)
                     && (GameFunctions.isPlayerAliveAndSurvival(targetPlayer) || targetPlayer.equals(player))
                     && WatheClient.isInstinctEnabled()
-                    && WyspiaExpress.SERVER_CONFIG.spectatorSpecialInstinct()) {
+                    && WyspiaExpress.GENERAL_CONFIG.spectatorSpecialInstinct()) {
                 int color = handleSpectatorInstinct(targetPlayer, gameWorldComponent);
                 if (color != -1) {
                     cir.setReturnValue(color);
@@ -138,7 +138,7 @@ public abstract class InstinctMixin {
                                 cir.cancel();
                                 return;
                             } else if (WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)) {
-                                if (WyspiaExpress.SERVER_CONFIG.killerSpecialInstinct()) {
+                                if (WyspiaExpress.RULES_CONFIG.killerSpecialInstinct()) {
                                     // role specific color instinct
                                     cir.setReturnValue(role.color());
                                     cir.cancel();
@@ -152,7 +152,7 @@ public abstract class InstinctMixin {
                         }
                         if(gameWorldComponent.isRole(player, KinsWatheRoles.HACKER)){
                             if (WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)) {
-                                if (WyspiaExpress.SERVER_CONFIG.killerSpecialInstinct()) {
+                                if (WyspiaExpress.RULES_CONFIG.killerSpecialInstinct()) {
                                     // role specific color instinct
                                     cir.setReturnValue(role.color());
                                     cir.cancel();

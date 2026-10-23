@@ -62,8 +62,7 @@
     "noellesroles": "*",
     "kinswathe": "*",
     "starexpress": "*",
-    "stupid_express": "*",
-    "owo": "*"
+    "stupid_express": "*"
   },
   "suggests": {
     "controlify": "*"

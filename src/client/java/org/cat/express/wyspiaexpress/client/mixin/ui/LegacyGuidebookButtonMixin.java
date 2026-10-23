@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LegacyGuidebookButtonMixin {
     @Inject(method = "addDrawableChild", at = @At("HEAD"), cancellable = true)
     private void wyspiaexpress$suppressLegacyGuide(Element element, CallbackInfoReturnable<Element> cir) {
-        if (element instanceof GuidebookButtonWidget button && WyspiaExpress.SERVER_CONFIG.suppressOldGuidebook()) {
+        if (element instanceof GuidebookButtonWidget button && WyspiaExpress.GENERAL_CONFIG.suppressOldGuidebook()) {
             button.visible = false;
             button.active = false;
             // Do not register a drawable, click target, focus target or narrated element.

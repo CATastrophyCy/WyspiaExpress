@@ -28,7 +28,7 @@ public final class PlayerTaskComponent implements AutoSyncedComponent, ClientTic
             Identifier.of(WyspiaExpress.MOD_ID, "tasks"), PlayerTaskComponent.class);
     private final PlayerEntity player;
     private PlayerMoodComponent.Task lastTask;
-    private int nextTaskTicks = GameConstants.getInTicks(0, WyspiaExpress.SERVER_CONFIG.moodTasks.firstTaskDelaySeconds());
+    private int nextTaskTicks = GameConstants.getInTicks(0, WyspiaExpress.TASKS_CONFIG.firstTaskDelaySeconds());
     private boolean clientWaiting = true;
 
     public PlayerTaskComponent(PlayerEntity player) { this.player = player; }
@@ -52,7 +52,7 @@ public final class PlayerTaskComponent implements AutoSyncedComponent, ClientTic
     public void reset() {
         lastTask = null;
         clientWaiting = true;
-        nextTaskTicks = GameConstants.getInTicks(0, WyspiaExpress.SERVER_CONFIG.moodTasks.firstTaskDelaySeconds());
+        nextTaskTicks = GameConstants.getInTicks(0, WyspiaExpress.TASKS_CONFIG.firstTaskDelaySeconds());
         sync();
     }
     public void tickTasks(PlayerMoodComponent component) {
@@ -70,7 +70,7 @@ public final class PlayerTaskComponent implements AutoSyncedComponent, ClientTic
             task.tick(player);
             if (!task.isFulfilled(player)) continue;
             ((TaskCompletionAccess) component).wyspiaexpress$restoreTaskMood(
-                    WyspiaExpress.SERVER_CONFIG.moodTasks.completionRestoration());
+                    WyspiaExpress.TASKS_CONFIG.completionRestoration());
             if (player instanceof ServerPlayerEntity serverPlayer)
                 ServerPlayNetworking.send(serverPlayer, new TaskCompletePayload());
             component.tasks.remove(task.getType());
@@ -79,9 +79,9 @@ public final class PlayerTaskComponent implements AutoSyncedComponent, ClientTic
 
         if (completed) {
             if (component.tasks.isEmpty()) {
-                int minimum = GameConstants.getInTicks(0, WyspiaExpress.SERVER_CONFIG.moodTasks.minTaskDelaySeconds());
+                int minimum = GameConstants.getInTicks(0, WyspiaExpress.TASKS_CONFIG.minTaskDelaySeconds());
                 int maximum = Math.max(minimum,
-                        GameConstants.getInTicks(0, WyspiaExpress.SERVER_CONFIG.moodTasks.maxTaskDelaySeconds()));
+                        GameConstants.getInTicks(0, WyspiaExpress.TASKS_CONFIG.maxTaskDelaySeconds()));
                 nextTaskTicks = minimum + player.getRandom().nextInt(maximum - minimum + 1);
             }
             component.sync();
@@ -95,15 +95,15 @@ public final class PlayerTaskComponent implements AutoSyncedComponent, ClientTic
     }
     public void drainMood(PlayerMoodComponent component) {
         if (!canTick()) return;
-        if (component.tasks.isEmpty() && !WyspiaExpress.SERVER_CONFIG.moodTasks.passiveMoodDrain()) return;
-        float drain = (float) (WyspiaExpress.SERVER_CONFIG.moodTasks.passiveDrainPerSecond() / 20.0);
+        if (component.tasks.isEmpty() && !WyspiaExpress.TASKS_CONFIG.passiveMoodDrain()) return;
+        float drain = (float) (WyspiaExpress.TASKS_CONFIG.passiveDrainPerSecond() / 20.0);
         if (drain > 0) component.setMood(component.getMood() - Math.max(1, component.tasks.size()) * drain);
     }
     private PlayerMoodComponent.Task chooseTaskType() {
         var candidates = new ArrayList<PlayerMoodComponent.Task>();
         double totalWeight = 0;
         for (PlayerMoodComponent.Task type : PlayerMoodComponent.Task.values()) {
-            if (WyspiaExpress.SERVER_CONFIG.moodTasks.preventConsecutiveTasks() && type == lastTask) continue;
+            if (WyspiaExpress.TASKS_CONFIG.preventConsecutiveTasks() && type == lastTask) continue;
             candidates.add(type);
             totalWeight += taskWeight(type);
         }

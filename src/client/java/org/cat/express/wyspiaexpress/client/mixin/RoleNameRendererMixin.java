@@ -94,9 +94,9 @@ public abstract class RoleNameRendererMixin {
             float rawMood = mood.getMood();
             int coinAmount = shop.balance;
             int moodPercentage = (int)(rawMood * 100);
-            float rawFreeze = ((float)freeze.getFreezeTick()) / (2 * GameConstants.getInTicks(0, WyspiaExpress.SERVER_CONFIG.freezeTimer()));
+            float rawFreeze = ((float)freeze.getFreezeTick()) / (2 * GameConstants.getInTicks(0, WyspiaExpress.RULES_CONFIG.freezeTimer()));
             int freezePercentage = 100 - (int)(rawFreeze * 100);
-            float rawDepression = ((float)depressed.getDepressionTick()) / (2 * GameConstants.getInTicks(0, WyspiaExpress.SERVER_CONFIG.depressedTimer()));
+            float rawDepression = ((float)depressed.getDepressionTick()) / (2 * GameConstants.getInTicks(0, WyspiaExpress.RULES_CONFIG.depressedTimer()));
             int depressionPercentage = 100 - (int)(rawDepression * 100);
             int alpha = (int)(nametagAlpha * 255.0F);
             int white = (alpha << 24) | 0xFFFFFF;
@@ -125,7 +125,7 @@ public abstract class RoleNameRendererMixin {
                         .append(Text.literal(( (hacker.hackingTime * 100) / (KinsWatheConfig.HANDLER.instance().HackerHackingTime * 20))
                                 + "%").setStyle(Style.EMPTY.withColor( (alpha << 24) | KinsWatheRoles.HACKER.color())));
             }
-            if (WyspiaExpress.SERVER_CONFIG.spectatorSpecialHud()) {
+            if (WyspiaExpress.GENERAL_CONFIG.spectatorSpecialHud()) {
                 hudText.append(Text.literal(" || ").withColor(white))
                         .append(PlayerTaskComponent.KEY.get(targetPlayer).hudText());
             }

@@ -36,7 +36,7 @@ public abstract class MoodRendererMixin {
     @ModifyExpressionValue(method = "renderHud", at = @At(value = "INVOKE", target = "Ljava/util/Map;isEmpty()Z"))
     private static boolean wyspiaexpress$keepDrainingMoodVisible(boolean empty,
                                                                @Local(argsOnly = true) PlayerEntity player) {
-        return empty && !(WyspiaExpress.SERVER_CONFIG.moodTasks.passiveMoodDrain()
+        return empty && !(WyspiaExpress.TASKS_CONFIG.passiveMoodDrain()
                 && PlayerMoodComponent.KEY.get(player).getMood() < 1);
     }
 
@@ -59,7 +59,7 @@ public abstract class MoodRendererMixin {
             wyspiaexpress$timerOffset = -1;
             return;
         }
-        if (WyspiaExpress.SERVER_CONFIG.moodTasks.passiveMoodDrain()
+        if (WyspiaExpress.TASKS_CONFIG.passiveMoodDrain()
                 && PlayerMoodComponent.KEY.get(player).getMood() < 1) {
             // An idle client may never have rendered a task from which to obtain a bar width.
             MoodRenderer.moodTextWidth = Math.max(MoodRenderer.moodTextWidth, 80);

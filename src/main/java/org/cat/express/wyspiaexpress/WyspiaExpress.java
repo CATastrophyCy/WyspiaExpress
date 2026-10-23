@@ -18,10 +18,13 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.agmas.noellesroles.ModItems;
-import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
-import org.cat.express.wyspiaexpress.config.WyspiaExpressModifiersConfig;
-import org.cat.express.wyspiaexpress.config.WyspiaExpressRolesConfig;
-import org.cat.express.wyspiaexpress.config.WyspiaExpressServerConfig;
+import org.cat.express.wyspiaexpress.config.ItemsConfig;
+import org.cat.express.wyspiaexpress.config.ItemsConfig.ItemBasicConfig;
+import org.cat.express.wyspiaexpress.config.ItemConfig;
+import org.cat.express.wyspiaexpress.config.ModifiersConfig;
+import org.cat.express.wyspiaexpress.config.RolesConfig;
+import org.cat.express.wyspiaexpress.config.RolesConfig.RoleBasicConfig;
+import org.cat.express.wyspiaexpress.config.*;
 import org.cat.express.wyspiaexpress.items.InvisibleArmor;
 import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressModdedGameMode;
 import org.cat.express.wyspiaexpress.game.mapeffect.WyspiaExpressMapEffect;
@@ -39,10 +42,15 @@ public class WyspiaExpress implements ModInitializer {
 
     // Create the global logger
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static final WyspiaExpressRolesConfig ROLES_CONFIG = WyspiaExpressRolesConfig.createAndLoad();
-    public static final WyspiaExpressModifiersConfig MODIFIERS_CONFIG = WyspiaExpressModifiersConfig.createAndLoad();
-    public static final WyspiaExpressItemsConfig ITEMS_CONFIG = WyspiaExpressItemsConfig.createAndLoad();
-    public static final WyspiaExpressServerConfig SERVER_CONFIG = WyspiaExpressServerConfig.createAndLoad();
+    public static final RolesConfig ROLES_CONFIG = new RolesConfig();
+    public static final ModifiersConfig MODIFIERS_CONFIG = new ModifiersConfig();
+    public static final ItemsConfig ITEMS_CONFIG = new ItemsConfig();
+    public static final ServerConfig SERVER_CONFIG = new ServerConfig();
+    public static final GeneralConfig GENERAL_CONFIG = new GeneralConfig();
+    public static final RulesConfig RULES_CONFIG = new RulesConfig();
+    public static final TasksConfig TASKS_CONFIG = new TasksConfig();
+    public static final GamemodesConfig GAMEMODES_CONFIG = new GamemodesConfig();
+    public static final ModeConfig MODE_CONFIG = new ModeConfig();
     public static final WyspiaExpressModdedGameMode MODDED_GAMEMODE =
             new WyspiaExpressModdedGameMode(Identifier.of(MOD_ID, "modded"));
     public static final WyspiaExpressMapEffect MAP_EFFECT =
@@ -56,10 +64,8 @@ public class WyspiaExpress implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("WyspiaExpress is initializing...");
-        ROLES_CONFIG.save();
-        MODIFIERS_CONFIG.save();
-        ITEMS_CONFIG.save();
-        SERVER_CONFIG.save();
+        GameConfigs.initialize();
+        ConfigSync.initializeServer();
         WatheGameModes.registerGameMode(MODDED_GAMEMODE.identifier, MODDED_GAMEMODE);
         WatheMapEffects.registerMapEffect(MAP_EFFECT.identifier, MAP_EFFECT);
         WyspiaExpressRoles.init();

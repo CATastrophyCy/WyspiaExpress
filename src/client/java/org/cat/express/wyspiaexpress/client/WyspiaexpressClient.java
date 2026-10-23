@@ -54,7 +54,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
         PlayerConfigButtons.register();
         registerGuidebook();
         registerInventoryFocus();
-        registerCooldownRefresh();
+        ClientConfigSync.initialize();
         registerItemToolTips();
         registerItemsBlood();
         registerAbilityKey();
@@ -92,16 +92,6 @@ public class WyspiaexpressClient implements ClientModInitializer {
                 }
             });
         });
-    }
-    private static void registerCooldownRefresh() {
-        // Cooldown tables used to refresh from item hovers. Keep them current when config mirrors
-        // change or a connection is established, so tooltips and guide previews stay read-only.
-        WyspiaExpress.ITEMS_CONFIG.forEachOption(option -> {
-            if (option.key().name().toLowerCase(java.util.Locale.ROOT).endsWith("cooldown")) {
-                option.observe(ignored -> MinecraftClient.getInstance().execute(WyspiaExpressItems::registerItemsCooldown));
-            }
-        });
-        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> WyspiaExpressItems.registerItemsCooldown());
     }
     private static void registerGuidebook() {
         GuidebookSources.init();

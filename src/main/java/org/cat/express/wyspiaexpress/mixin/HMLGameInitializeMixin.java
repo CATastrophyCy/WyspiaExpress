@@ -79,7 +79,7 @@ public abstract class HMLGameInitializeMixin {
 
         // Category budgets and the actual number of selected base killers are distinct.
         int targetKillerCount = participants.size() / gameWorld.getKillerDividend();
-        int targetNeutralCount = participants.size() /  WyspiaExpress.SERVER_CONFIG.neutralDividend();
+        int targetNeutralCount = participants.size() /  WyspiaExpress.GAMEMODES_CONFIG.neutralDividend();
         int assignedKillerCount = wyspiaexpress$assignBaseTeams(world, gameWorld, participants);
 
         hasAssignedHacker = false;
@@ -222,7 +222,7 @@ public abstract class HMLGameInitializeMixin {
                     player -> !PlayerConfigComponent.KEY.get(player).avoidKiller());
         }
         int assignedKillerCount;
-        if(WyspiaExpress.SERVER_CONFIG.useCustomWeightedAssignment()){
+        if(WyspiaExpress.GAMEMODES_CONFIG.useCustomWeightedAssignment()){
             assignedKillerCount = wyspiaexpress$assignKillersUsingCategoryHistory(world, roleSelector, gameWorld, killerCandidates, killerSlots);
             vigilanteCandidates.removeIf(gameWorld::canUseKillerFeatures);
             wyspiaexpress$assignVigilantesUsingCategoryHistory(world, roleSelector, gameWorld, vigilanteCandidates, vigilanteSlots);
@@ -344,7 +344,7 @@ public abstract class HMLGameInitializeMixin {
         for (ServerPlayerEntity player : eligiblePlayers) {
             if (Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())) continue;
             if (!Harpymodloader.OVERWRITE_ROLES.contains(gameWorld.getRole(player))) continue;
-            double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(WyspiaExpress.SERVER_CONFIG.neutralDividend(), player.getUuid(),
+            double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(WyspiaExpress.GAMEMODES_CONFIG.neutralDividend(), player.getUuid(),
                     RoleCategoryStatisticsManager.RoleCategory.NEUTRAL);
             playerWeights.put(player.getUuid(), weight);
             totalWeight += weight;
@@ -418,7 +418,7 @@ public abstract class HMLGameInitializeMixin {
         int killerAlignedNeutralSlots = maxKillerAlignedNeutralSlots <= 0 ? 0 : world.getRandom().nextInt(maxKillerAlignedNeutralSlots + 1);
         int trueNeutralSlots = Math.max(0, remainingNeutralSlots - killerAlignedNeutralSlots);
 
-        List<ServerPlayerEntity> neutralCandidates = WyspiaExpress.SERVER_CONFIG.useCustomWeightedAssignment()?
+        List<ServerPlayerEntity> neutralCandidates = WyspiaExpress.GAMEMODES_CONFIG.useCustomWeightedAssignment()?
                 wyspiaexpress$selectNeutralsUsingCategoryHistory(world, gameWorld, civilianCandidates, remainingNeutralSlots)
                 :
                 wyspiaexpress$selectNeutralsUsingRoleHistory(

@@ -25,13 +25,13 @@ public class PlayerDepressedComponent implements AutoSyncedComponent, ServerTick
     }
     @Override
     public void serverTick() {
-        if(WyspiaExpress.SERVER_CONFIG.depressionKilling() ) {
+        if(WyspiaExpress.RULES_CONFIG.depressionKilling() ) {
             PlayerMoodComponent component = PlayerMoodComponent.KEY.get(this.player);
             GameWorldComponent gameWorld = GameWorldComponent.KEY.get(this.player.getWorld());
             if (component.getMood() <= 0.01f && GameFunctions.isPlayerAliveAndSurvival(this.player)  && gameWorld.isRunning() ) {
                 depressionTick += 2;
                 this.sync();
-                if (depressionTick >= 2 * GameConstants.getInTicks(0, WyspiaExpress.SERVER_CONFIG.depressedTimer()) ) {
+                if (depressionTick >= 2 * GameConstants.getInTicks(0, WyspiaExpress.RULES_CONFIG.depressedTimer()) ) {
                     GameFunctions.killPlayer(this.player,true,null, Identifier.of(WyspiaExpress.MOD_ID, "player_depressed"));
                     forceSync();
                 }

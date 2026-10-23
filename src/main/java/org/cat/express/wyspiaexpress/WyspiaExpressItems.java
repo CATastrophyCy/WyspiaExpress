@@ -20,7 +20,9 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.agmas.noellesroles.ModItems;
-import org.cat.express.wyspiaexpress.config.WyspiaExpressItemsConfig;
+import org.cat.express.wyspiaexpress.config.ItemsConfig;
+import org.cat.express.wyspiaexpress.config.ItemsConfig.ItemBasicConfig;
+import org.cat.express.wyspiaexpress.config.ItemConfig;
 import org.cat.express.wyspiaexpress.items.*;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.cat.express.wyspiaexpress.util.ItemUtil;
@@ -30,7 +32,7 @@ import java.util.List;
 
 public class WyspiaExpressItems {
 
-    public static final HashMap<Item, WyspiaExpressItemsConfig.ItemBasicConfig> ITEMS_BASIC_CONFIG = new HashMap<>();
+    public static final HashMap<Item, ItemBasicConfig> ITEMS_BASIC_CONFIG = new HashMap<>();
 
     public static void init(){
         registerItemConfig();
@@ -135,6 +137,6 @@ public class WyspiaExpressItems {
     }
 
     public static void registerItemsCooldown() {
-        ItemUtil.configuredCooldowns().forEach(ItemUtil::registerItemCooldown);
+        ItemUtil.refreshConfiguredCooldowns();
     }
 }

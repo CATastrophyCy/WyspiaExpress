@@ -54,7 +54,7 @@ public abstract class GunShootPayloadMixin {
         Entity targetEntity = original.call(world, id);
         PlayerEffectComponent stunComponent = PlayerEffectComponent.KEY.get(player);
         if(stunComponent.stunTicks > 0) return null;
-        if (WyspiaExpress.SERVER_CONFIG.disableProtectionGunDrop()) {
+        if (WyspiaExpress.RULES_CONFIG.disableProtectionGunDrop()) {
             if (targetEntity instanceof PlayerEntity target && target.distanceTo(player) < 65.0) {
                 GameWorldComponent game = GameWorldComponent.KEY.get(player.getWorld());
                 boolean backfire = false;

@@ -15,19 +15,36 @@ import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.HashMap;
 
 public final class ItemUtil {
+    private static Map<Item, Integer> nativeCooldowns;
     private ItemUtil() {}
+
+    public static void captureNativeCooldowns() {
+        if (nativeCooldowns == null) nativeCooldowns = new HashMap<>(GameConstants.ITEM_COOLDOWNS);
+    }
+
+    public static int nativeCooldownTicks(Item item) {
+        captureNativeCooldowns();
+        return nativeCooldowns.getOrDefault(item, 0);
+    }
+
+    public static void refreshConfiguredCooldowns() {
+        captureNativeCooldowns();
+        configuredCooldowns().forEach((item, seconds) -> GameConstants.ITEM_COOLDOWNS.put(item,
+                seconds < 0 ? nativeCooldownTicks(item) : GameConstants.getInTicks(0, seconds)));
+    }
 
     public static int getItemCooldownTicks(@NotNull Item item) {
         Integer seconds = configuredCooldowns().get(item);
         return seconds != null && seconds >= 0 ? GameConstants.getInTicks(0, seconds)
-                : GameConstants.ITEM_COOLDOWNS.getOrDefault(item, 0);
+                : nativeCooldownTicks(item);
     }
 
     public static void setItemCooldown(@NotNull PlayerEntity player, @NotNull Item item, Hand hand) {
         if (GameFunctions.isPlayerAliveAndSurvival(player)) {
-            player.getItemCooldownManager().set(item, GameConstants.ITEM_COOLDOWNS.get(item));
+            player.getItemCooldownManager().set(item, getItemCooldownTicks(item));
             if (hand != null) player.getStackInHand(hand).decrement(1);
         }
     }
