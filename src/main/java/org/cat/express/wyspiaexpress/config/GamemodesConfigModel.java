@@ -7,8 +7,7 @@ public class GamemodesConfigModel {
     @Comment("Use category-statistics weighting in HML and the legacy Wyspia mode. New modes use separate draft histories whenever game weights are enabled.")
     public boolean useCustomWeightedAssignment = true;
 
-    @Comment("Base weight value used for customWeight assigment. The lower the value the more balanced the system is. High values add more variance (it is not recommended to go above 0.01!)." +
-            "Don't change this value unless you know what you are doing!")
+    @Comment("Positive minimum lottery weight. New Wyspia modes add accumulated assignment credit; HML/legacy modes add their frequency deficit. Lower values favor balancing more strongly.")
     public double baseWeight = 0.002;
 
     @Comment("Neutral role dividend")

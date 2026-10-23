@@ -108,6 +108,11 @@ public final class ConfigSystemTest {
         var zeroDivisor = new TreeMap<>(defaults);
         zeroDivisor.put("mode.killerDividend", new JsonPrimitive(0));
         rejects(() -> schema.decodeComplete(zeroDivisor, "zero dividend"), "zero dividend");
+        for (double weight : new double[]{0, -0.001}) {
+            var invalidWeight = new TreeMap<>(defaults);
+            invalidWeight.put("gamemodes.baseWeight", new JsonPrimitive(weight));
+            rejects(() -> schema.decodeComplete(invalidWeight, "invalid base weight"), "nonpositive base weight");
+        }
         var zeroTimer = new TreeMap<>(defaults);
         zeroTimer.put("rules.freezeTimer", new JsonPrimitive(0));
         rejects(() -> schema.decodeComplete(zeroTimer, "zero timer"), "zero freeze timer");

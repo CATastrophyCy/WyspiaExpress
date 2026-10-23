@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress.mixin;
 
 import dev.doctor4t.wathe.cca.ScoreboardRoleSelectorComponent;
 import org.agmas.harpymodloader.modded_murder.ModdedWeights;
+import org.cat.express.wyspiaexpress.RoleDraftStatisticsManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,5 +15,6 @@ public class WeightsResetMixin {
     public void wyspiaexpress$reset(CallbackInfoReturnable<Integer> cir) {
         ModdedWeights.roleRounds.clear();
         ModdedWeights.roleWeights.clear();
+        if (RoleDraftStatisticsManager.getInstance() != null) RoleDraftStatisticsManager.getInstance().reset();
     }
 }

@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress.components;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
+import dev.doctor4t.wathe.cca.GameWorldComponent;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -12,6 +13,7 @@ import net.minecraft.world.World;
 import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.util.RoleUtil;
+import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressKillerModdedGameMode;
 import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
@@ -54,10 +56,12 @@ public class RoleComponent implements AutoSyncedComponent {
     public void sync() {
         KEY.sync(this.world);
     }
-    private static boolean isValidRole(Role role) {
+    private boolean isValidRole(Role role) {
         String roleId = RoleUtil.getRoleId(role);
 
-        return !HarpyModLoaderConfig.HANDLER.instance().disabled.contains(roleId)
+        return (GameWorldComponent.KEY.get(world).getGameMode() != WyspiaExpress.KILLER_MODDED_GAMEMODE
+                || WyspiaExpressKillerModdedGameMode.allowsRole(role))
+                && !HarpyModLoaderConfig.HANDLER.instance().disabled.contains(roleId)
                 && RoleUtil.roleMeetPlayerRequirement(role);
     }
     @Override

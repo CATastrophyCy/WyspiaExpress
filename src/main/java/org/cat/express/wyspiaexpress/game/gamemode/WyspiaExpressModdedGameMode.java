@@ -35,7 +35,7 @@ import pro.fazeclan.river.stupid_express.role.thief.ThiefItemTracker;
 import java.util.List;
 
 /** HML-style modded Murder with the pack's assignment, economy and victory patches owned here. */
-public final class WyspiaExpressModdedGameMode extends GameMode {
+public class WyspiaExpressModdedGameMode extends GameMode {
     public WyspiaExpressModdedGameMode(Identifier identifier) {
         super(identifier, 10, 6);
     }

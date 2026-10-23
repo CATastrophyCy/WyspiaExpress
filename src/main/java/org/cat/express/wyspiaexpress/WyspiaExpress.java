@@ -19,14 +19,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.agmas.noellesroles.ModItems;
 import org.cat.express.wyspiaexpress.config.ItemsConfig;
-import org.cat.express.wyspiaexpress.config.ItemsConfig.ItemBasicConfig;
-import org.cat.express.wyspiaexpress.config.ItemConfig;
 import org.cat.express.wyspiaexpress.config.ModifiersConfig;
 import org.cat.express.wyspiaexpress.config.RolesConfig;
-import org.cat.express.wyspiaexpress.config.RolesConfig.RoleBasicConfig;
 import org.cat.express.wyspiaexpress.config.*;
 import org.cat.express.wyspiaexpress.items.InvisibleArmor;
 import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressModdedGameMode;
+import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressKillerModdedGameMode;
 import org.cat.express.wyspiaexpress.game.mapeffect.WyspiaExpressMapEffect;
 import org.cat.express.wyspiaexpress.packets.*;
 import org.cat.express.wyspiaexpress.particles.ParticleManager;
@@ -53,6 +51,8 @@ public class WyspiaExpress implements ModInitializer {
     public static final ModeConfig MODE_CONFIG = new ModeConfig();
     public static final WyspiaExpressModdedGameMode MODDED_GAMEMODE =
             new WyspiaExpressModdedGameMode(Identifier.of(MOD_ID, "modded"));
+    public static final WyspiaExpressKillerModdedGameMode KILLER_MODDED_GAMEMODE =
+            new WyspiaExpressKillerModdedGameMode(Identifier.of(MOD_ID, "killer_modded"));
     public static final WyspiaExpressMapEffect MAP_EFFECT =
             new WyspiaExpressMapEffect(Identifier.of(MOD_ID, "train"));
 
@@ -67,6 +67,7 @@ public class WyspiaExpress implements ModInitializer {
         GameConfigs.initialize();
         ConfigSync.initializeServer();
         WatheGameModes.registerGameMode(MODDED_GAMEMODE.identifier, MODDED_GAMEMODE);
+        WatheGameModes.registerGameMode(KILLER_MODDED_GAMEMODE.identifier, KILLER_MODDED_GAMEMODE);
         WatheMapEffects.registerMapEffect(MAP_EFFECT.identifier, MAP_EFFECT);
         WyspiaExpressRoles.init();
         WyspiaExpressItems.init();
@@ -87,8 +88,10 @@ public class WyspiaExpress implements ModInitializer {
         });
         ServerLifecycleEvents.SERVER_STARTING.register(RoleStatisticsManager::init);
         ServerLifecycleEvents.SERVER_STARTING.register(RoleCategoryStatisticsManager::init);
+        ServerLifecycleEvents.SERVER_STARTING.register(RoleDraftStatisticsManager::init);
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> RoleStatisticsManager.shutdown());
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> RoleCategoryStatisticsManager.shutdown());
+        ServerLifecycleEvents.SERVER_STOPPING.register(server -> RoleDraftStatisticsManager.shutdown());
         ServerTickEvents.START_SERVER_TICK.register(server -> {
             if (GameWorldComponent.KEY.get(server.getOverworld()).getGameStatus() == GameWorldComponent.GameStatus.ACTIVE) {
                 ++ROUND_TICKS;

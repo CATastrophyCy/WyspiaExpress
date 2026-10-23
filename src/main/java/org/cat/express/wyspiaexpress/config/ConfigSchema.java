@@ -158,6 +158,9 @@ public final class ConfigSchema {
     }
 
     private void validateRelationships(Map<String, Object> values, String source) {
+        if (((Number) values.get("gamemodes.baseWeight")).doubleValue() <= 0) {
+            throw invalid(source, "gamemodes.baseWeight", "expected a positive weight");
+        }
         ordered(values, source, "tasks.minTaskDelaySeconds", "tasks.maxTaskDelaySeconds");
         for (String key : leaves.keySet()) {
             if (key.endsWith(".minimumPlayerSpawn")) ordered(values, source, key, key.replace(".minimumPlayerSpawn", ".maximumPlayerSpawn"));

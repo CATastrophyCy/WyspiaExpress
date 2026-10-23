@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
+import java.util.function.ToDoubleFunction;
 
 public final class RoleUtil {
     private RoleUtil() {}
@@ -107,6 +108,31 @@ public final class RoleUtil {
     private static int getRoleHistoryCount(Role role, PlayerEntity player) {
         var counts = ModdedWeights.roleRounds.get(role);
         return counts == null ? 1 : counts.getOrDefault(player.getUuid(), 1);
+    }
+
+    /** Draw distinct recipients using fixed weights for this draft. */
+    public static List<ServerPlayerEntity> selectPlayersByWeight(List<ServerPlayerEntity> candidates,
+            int count, ToDoubleFunction<ServerPlayerEntity> weight, Random random) {
+        List<ServerPlayerEntity> remaining = new ArrayList<>(candidates);
+        List<ServerPlayerEntity> selected = new ArrayList<>();
+        double[] weights = new double[remaining.size()];
+        for (int i = 0; i < remaining.size(); i++) weights[i] = weight.applyAsDouble(remaining.get(i));
+        for (int draw = 0; draw < count && draw < remaining.size(); draw++) {
+            double total = 0;
+            for (double value : weights) total += value;
+            double threshold = random.nextDouble() * total;
+            int chosen = -1;
+            for (int i = 0; i < weights.length; i++) {
+                if (weights[i] <= 0) continue;
+                chosen = i;
+                threshold -= weights[i];
+                if (threshold <= 0) break;
+            }
+            if (chosen < 0) break;
+            selected.add(remaining.get(chosen));
+            weights[chosen] = 0;
+        }
+        return selected;
     }
 
     public static String getRoleName(Role role) {

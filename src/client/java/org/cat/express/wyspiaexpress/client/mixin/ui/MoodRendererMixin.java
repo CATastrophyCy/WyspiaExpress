@@ -16,6 +16,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.components.PlayerTaskComponent;
+import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressModdedGameMode;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,7 +31,7 @@ public abstract class MoodRendererMixin {
     @ModifyExpressionValue(method = "renderHud", at = @At(value = "INVOKE",
             target = "Ldev/doctor4t/wathe/cca/GameWorldComponent;getGameMode()Ldev/doctor4t/wathe/api/GameMode;"))
     private static GameMode wyspiaexpress$allowModdedMoodHud(GameMode mode) {
-        return mode == WyspiaExpress.MODDED_GAMEMODE ? WatheGameModes.MURDER : mode;
+        return mode instanceof WyspiaExpressModdedGameMode ? WatheGameModes.MURDER : mode;
     }
 
     @ModifyExpressionValue(method = "renderHud", at = @At(value = "INVOKE", target = "Ljava/util/Map;isEmpty()Z"))

@@ -29,6 +29,7 @@ import org.cat.express.wyspiaexpress.components.*;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.cat.express.wyspiaexpress.config.RolesConfig;
 import org.cat.express.wyspiaexpress.config.RolesConfig.RoleBasicConfig;
+import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressKillerModdedGameMode;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.cat.express.wyspiaexpress.util.RoleUtil;
 import pro.fazeclan.river.stupid_express.constants.SEModifiers;
@@ -340,10 +341,17 @@ public class WyspiaExpressRoles {
             }
 
             Set<String> roleIDs = new HashSet<>();
-            while(roleIDs.size() < WyspiaExpress.ROLES_CONFIG.pickRoles()){
+            boolean killerMode = GameWorldComponent.KEY.get(player.getWorld()).getGameMode() == WyspiaExpress.KILLER_MODDED_GAMEMODE;
+            ArrayList<Role> allowedKillerRoles = RoleUtil.getKillerRoles();
+            if (killerMode) allowedKillerRoles.removeIf(candidate -> HIDDEN_ROLES.contains(candidate)
+                    || Harpymodloader.NON_MURDER_ROLES.contains(candidate)
+                    || !WyspiaExpressKillerModdedGameMode.allowsRole(candidate));
+            int choices = killerMode ? Math.max(1, Math.min(WyspiaExpress.ROLES_CONFIG.pickRoles(), allowedKillerRoles.size()))
+                    : WyspiaExpress.ROLES_CONFIG.pickRoles();
+            while(roleIDs.size() < choices){
                 String roleID;
                 if(COPYCAT_ROLES.isEmpty()){
-                    ArrayList<Role> killerRoles = RoleUtil.getKillerRoles();
+                    ArrayList<Role> killerRoles = killerMode ? new ArrayList<>(allowedKillerRoles) : RoleUtil.getKillerRoles();
                     if (killerRoles.isEmpty()) {
                         roleIDs.add(RoleUtil.getRoleName(WatheRoles.KILLER));
                         break;
