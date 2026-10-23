@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.doctor4t.wathe.api.Role;
 import net.minecraft.client.MinecraftClient;
 import org.agmas.harpymodloader.modifiers.Modifier;
-import org.aussiebox.starexpress.client.gui.screen.GuidebookScreen;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.RoleComponent;
 import org.cat.express.wyspiaexpress.util.RoleUtil;
@@ -15,7 +14,8 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.ArrayList;
 
-@Mixin(GuidebookScreen.class)
+// Keep the upstream owo-based screen out of our compile-time type graph.
+@Mixin(targets = "org.aussiebox.starexpress.client.gui.screen.GuidebookScreen", remap = false)
 public abstract class GuideBookScreenMixin {
 
     @ModifyExpressionValue(
