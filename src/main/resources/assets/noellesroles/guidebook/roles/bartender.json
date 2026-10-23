@@ -3,6 +3,7 @@
   "summary": {
     "translate": "guidebook.wyspiaexpress.roles.noellesroles.bartender.summary"
   },
+  "image": "wyspiaexpress:textures/guidebook/roles/bartender.png",
   "values": {
     "maximum": {
       "config": "derived",

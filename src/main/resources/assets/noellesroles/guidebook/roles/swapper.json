@@ -3,6 +3,7 @@
   "summary": {
     "translate": "guidebook.wyspiaexpress.roles.noellesroles.swapper.summary"
   },
+  "image": "wyspiaexpress:textures/guidebook/roles/swapper.png",
   "abilities": [
     {
       "text": {
