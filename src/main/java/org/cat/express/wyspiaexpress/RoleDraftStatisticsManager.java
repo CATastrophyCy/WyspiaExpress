@@ -68,7 +68,7 @@ public final class RoleDraftStatisticsManager {
 
     public double computeWeight(UUID playerId, Pool pool) {
         History history = getHistory(playerId, pool);
-        if (WyspiaExpress.GAMEMODES_CONFIG.combineKillerAndTrueNeutralHistory()
+        if (WyspiaExpress.GAMEMODES_CONFIG.shareKillerNeutralWeights()
                 && (pool == Pool.KILLER || pool == Pool.TRUE_NEUTRAL)) {
             history = getHistory(playerId, Pool.KILLER).plus(getHistory(playerId, Pool.TRUE_NEUTRAL));
         }

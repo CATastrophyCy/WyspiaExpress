@@ -70,7 +70,7 @@ public final class PlayerTaskComponent implements AutoSyncedComponent, ClientTic
             task.tick(player);
             if (!task.isFulfilled(player)) continue;
             ((TaskCompletionAccess) component).wyspiaexpress$restoreTaskMood(
-                    WyspiaExpress.TASKS_CONFIG.completionRestoration());
+                    WyspiaExpress.TASKS_CONFIG.taskMoodReward());
             if (player instanceof ServerPlayerEntity serverPlayer)
                 ServerPlayNetworking.send(serverPlayer, new TaskCompletePayload());
             component.tasks.remove(task.getType());
@@ -95,15 +95,15 @@ public final class PlayerTaskComponent implements AutoSyncedComponent, ClientTic
     }
     public void drainMood(PlayerMoodComponent component) {
         if (!canTick()) return;
-        if (component.tasks.isEmpty() && !WyspiaExpress.TASKS_CONFIG.passiveMoodDrain()) return;
-        float drain = (float) (WyspiaExpress.TASKS_CONFIG.passiveDrainPerSecond() / 20.0);
+        if (component.tasks.isEmpty() && !WyspiaExpress.TASKS_CONFIG.drainMoodWithoutTask()) return;
+        float drain = (float) (WyspiaExpress.TASKS_CONFIG.moodDrainPerSecond() / 20.0);
         if (drain > 0) component.setMood(component.getMood() - Math.max(1, component.tasks.size()) * drain);
     }
     private PlayerMoodComponent.Task chooseTaskType() {
         var candidates = new ArrayList<PlayerMoodComponent.Task>();
         double totalWeight = 0;
         for (PlayerMoodComponent.Task type : PlayerMoodComponent.Task.values()) {
-            if (WyspiaExpress.TASKS_CONFIG.preventConsecutiveTasks() && type == lastTask) continue;
+            if (WyspiaExpress.TASKS_CONFIG.preventRepeatedTasks() && type == lastTask) continue;
             candidates.add(type);
             totalWeight += taskWeight(type);
         }

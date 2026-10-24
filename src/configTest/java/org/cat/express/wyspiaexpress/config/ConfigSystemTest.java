@@ -51,6 +51,7 @@ public final class ConfigSystemTest {
         var decoded=schema.decodeComplete(defaults,"defaults");
         check(decoded.size()>500,"complete schema collected");
         check(decoded.get("tasks.minTaskDelaySeconds").equals(30),"typed int");
+        check(decoded.get("rules.maxTimeForDeathBonus").equals(-1),"civilian death time limit disabled by default");
         check(decoded.get("roles.roleConfig.gamblerConfig.goodPool") instanceof List<?>,"typed enum list");
         for(var entry:defaults.entrySet()){
             var changed=new TreeMap<>(defaults);changed.put(entry.getKey(),JsonNull.INSTANCE);
@@ -62,7 +63,9 @@ public final class ConfigSystemTest {
         rejects(()->schema.overlay("rules",JsonParser.parseString("{\"freeez\":true}").getAsJsonObject(),values,"typo"),"unknown field");
         rejects(()->schema.overlay("rules",JsonParser.parseString("{\"freeze\":\"false\"}").getAsJsonObject(),values,"type"),"string boolean");
         rejects(()->schema.overlay("rules",JsonParser.parseString("{\"freezeTimer\":2.5}").getAsJsonObject(),values,"fraction"),"fractional integer");
-        rejects(()->schema.overlay("tasks",JsonParser.parseString("{\"completionRestoration\":2}").getAsJsonObject(),values,"range"),"range constraint");
+        rejects(()->schema.overlay("tasks",JsonParser.parseString("{\"taskMoodReward\":2}").getAsJsonObject(),values,"range"),"range constraint");
+        rejects(()->schema.overlay("rules",JsonParser.parseString("{\"maxTimeForDeathBonus\":-2}").getAsJsonObject(),values,"death bonus limit"),"death bonus limit below disabled sentinel");
+        rejects(()->schema.overlay("rules",JsonParser.parseString("{\"maxTimeForDeathBonus\":1789570}").getAsJsonObject(),values,"death bonus limit overflow"),"death bonus limit must fit timer ticks");
         var crossed=new TreeMap<>(defaults);crossed.put("tasks.minTaskDelaySeconds",new JsonPrimitive(100));
         rejects(()->schema.decodeComplete(crossed,"cross-field"),"min above max");
         var missing=new TreeMap<>(defaults);missing.remove("rules.freeze");rejects(()->schema.decodeComplete(missing,"missing"),"incomplete snapshot");
@@ -70,16 +73,51 @@ public final class ConfigSystemTest {
         Path dir=Files.createTempDirectory("wyspia-config-checks");
         write(dir,"rules.json5","// shared\n{freeze:true,freezeTimer:73}");
         write(dir,"roles.json5","{roleConfig:{outlawConfig:{cooldown:81,basic:{items:[\"KNIFE\"],itemAmount:[2]}}}}");
-        write(dir,"gamemodes/wyspiaexpress/killer_modded/rules.json5","{freeze:false}");
+        write(dir,"gamemodes/wyspiaexpress/killer_modded/rules.json5","{freeze:false,maxTimeForDeathBonus:6}");
         write(dir,"gamemodes/wyspiaexpress/killer_modded/roles.json5","{roleConfig:{outlawConfig:{cooldown:0,basic:{items:[]}}}}");
         String authored=Files.readString(dir.resolve("gamemodes/wyspiaexpress/killer_modded/roles.json5"));
         var profiles=ConfigFiles.load(dir,schema);
         check(profiles.get("shared").get("rules.freeze").equals(true),"shared value");
         var mode=profiles.get("wyspiaexpress:killer_modded");
         check(mode.get("rules.freeze").equals(false),"false override");
+        check(mode.get("rules.maxTimeForDeathBonus").equals(6),"mode overrides civilian death time limit");
+        check(profiles.get("shared").get("rules.maxTimeForDeathBonus").equals(-1),"mode death bonus limit does not change shared default");
         check(mode.get("rules.freezeTimer").equals(73),"nested inheritance");
         check(mode.get("roles.roleConfig.outlawConfig.cooldown").equals(0),"zero cooldown");
         check(((List<?>)mode.get("roles.roleConfig.outlawConfig.basic.items")).isEmpty(),"empty replaces list");
+        var sharedRoleValues = new TreeMap<>(defaults);
+        schema.overlay("roles",JsonParser.parseString("""
+                {"roleConfig":{"kinsWatheRoles":{"licensedVillainConfig":{"basic":{
+                  "minimumPlayerSpawn":12,"maximumSpawn":2,"enableShop":true,"items":["KNIFE"],"itemAmount":[2]
+                }}}}}
+                """).getAsJsonObject(),sharedRoleValues,"nested shared role");
+        var nestedOverride = new TreeMap<>(sharedRoleValues);
+        schema.overlay("roles",JsonParser.parseString("""
+                {"roleConfig":{"kinsWatheRoles":{
+                  "licensedVillainConfig":{"basic":{"playersPerAdditionalSpawn":6,"maximumSpawn":3}},
+                  "hackerConfig":{"basic":{"minimumPlayerSpawn":99,"maximumSpawn":0}}
+                }}}
+                """).getAsJsonObject(),nestedOverride,"nested role override");
+        var resolvedNested = schema.decodeComplete(nestedOverride,"nested role override");
+        check(resolvedNested.get("roles.roleConfig.kinsWatheRoles.licensedVillainConfig.basic.playersPerAdditionalSpawn").equals(6),"one nested role field overridden");
+        Set<String> changedRoleFields = Set.of(
+                "roles.roleConfig.kinsWatheRoles.licensedVillainConfig.basic.playersPerAdditionalSpawn",
+                "roles.roleConfig.kinsWatheRoles.licensedVillainConfig.basic.maximumSpawn",
+                "roles.roleConfig.kinsWatheRoles.hackerConfig.basic.minimumPlayerSpawn",
+                "roles.roleConfig.kinsWatheRoles.hackerConfig.basic.maximumSpawn");
+        check(sharedRoleValues.entrySet().stream().filter(entry -> !changedRoleFields.contains(entry.getKey()))
+                .allMatch(entry -> entry.getValue().equals(nestedOverride.get(entry.getKey()))),"all omitted nested fields and other roles inherited unchanged");
+        var reorderedOverride = new TreeMap<>(sharedRoleValues);
+        schema.overlay("roles",JsonParser.parseString("""
+                {"roleConfig":{"kinsWatheRoles":{
+                  "hackerConfig":{"basic":{"maximumSpawn":0,"minimumPlayerSpawn":99}},
+                  "licensedVillainConfig":{"basic":{"maximumSpawn":3,"playersPerAdditionalSpawn":6}}
+                }}}
+                """).getAsJsonObject(),reorderedOverride,"reordered role override");
+        check(schema.decodeComplete(reorderedOverride,"reordered role override").equals(resolvedNested),"role order and nested field order do not affect overrides");
+        var emptyOverride = new TreeMap<>(sharedRoleValues);
+        schema.overlay("roles",JsonParser.parseString("{\"roleConfig\":{\"kinsWatheRoles\":{\"licensedVillainConfig\":{\"basic\":{}}}}}").getAsJsonObject(),emptyOverride,"empty role override");
+        check(emptyOverride.equals(sharedRoleValues),"empty nested objects preserve every inherited field");
         check(Files.readString(dir.resolve("gamemodes/wyspiaexpress/killer_modded/roles.json5")).equals(authored),"sparse file never expanded");
         String normalizedRules = Files.readString(dir.resolve("rules.json5"));
         check(ConfigFiles.read(dir.resolve("rules.json5")).has("depressedTimer"),"shared files save missing defaults");

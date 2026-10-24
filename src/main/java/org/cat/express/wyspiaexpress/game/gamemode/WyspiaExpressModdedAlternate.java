@@ -15,8 +15,8 @@ public final class WyspiaExpressModdedAlternate extends WyspiaExpressModdedGameM
 
     public void selectRound(ServerWorld world, GameWorldComponent gameWorld, int participantCount) {
         boolean neutral = participantCount >= Math.max(WyspiaExpress.TRUE_NEUTRAL_MODDED_GAMEMODE.minPlayerCount,
-                WyspiaExpress.GAMEMODES_CONFIG.trueNeutralMinimumPlayers())
-                && world.getRandom().nextDouble() < WyspiaExpress.GAMEMODES_CONFIG.trueNeutralChance();
+                WyspiaExpress.GAMEMODES_CONFIG.minimumPlayersForNeutralMode())
+                && world.getRandom().nextDouble() < WyspiaExpress.GAMEMODES_CONFIG.neutralModeChance();
         gameWorld.setGameMode(neutral ? WyspiaExpress.TRUE_NEUTRAL_MODDED_GAMEMODE
                 : WyspiaExpress.KILLER_MODDED_GAMEMODE);
         GameConfigs.refreshDerivedValues();

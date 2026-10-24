@@ -4,19 +4,19 @@ import blue.endless.jankson.Comment;
 
 @ConfigModel("ModeConfig")
 public class ModeConfigModel {
-    @Comment("Players per killer. -1 inherits Wathe's native setting. Used by the Wyspia assignment implementation.")
+    @Comment("Amount of players needed for each killer. -1 uses Wathe's setting")
     @ConfigRange(min = -1, max = 99)
     public int killerDividend = -1;
 
-    @Comment("Players per vigilante. -1 inherits Wathe's native setting.")
+    @Comment("Amount of players needed for each vigilante. -1 uses Wathe's setting")
     @ConfigRange(min = -1, max = 99)
     public int vigilanteDividend = -1;
 
-    @Comment("Players per killer-aligned neutral, independently of true-neutral slots.")
+    @Comment("Amount of players needed for each killer sided neutral")
     @ConfigRange(min = 3, max = 99)
     public int killerAlignedNeutralDividend = 9;
 
-    @Comment("Players per main true-neutral slot in the true-neutral mode.")
+    @Comment("Amount of players needed for each true neutral in true neutral mode")
     @ConfigRange(min = 3, max = 99)
     public int trueNeutralDividend = 6;
 

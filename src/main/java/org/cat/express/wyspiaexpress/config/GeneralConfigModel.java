@@ -4,8 +4,8 @@ import blue.endless.jankson.Comment;
 
 @ConfigModel("GeneralConfig")
 public class GeneralConfigModel {
-    @Comment("Hide StarryExpress's old inventory guidebook button. The new guide remains available through its keybind.")
-    public boolean suppressOldGuidebook = true;
+    @Comment("Disable the old StarryExpress guidebook button")
+    public boolean disableOldGuidebook = true;
 
     @Comment("Enable spectator special instinct showing more information")
     public boolean spectatorSpecialInstinct = true;

@@ -73,7 +73,7 @@ final class ConfigFiles {
                 for (String domain : OVERRIDABLE) {
                     Path file = folder.resolve(domain + ".json5");
                     if (!Files.exists(file)) {
-                        Files.writeString(file, "// Omitted settings inherit the shared configuration.\n{}\n", StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW);
+                        Files.writeString(file, "// Settings not listed here use the main config.\n{}\n", StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW);
                     }
                 }
             }

@@ -18,7 +18,7 @@ public class ModifiersConfigModel {
     public ElusiveConfig elusiveConfig = new ElusiveConfig();
 
     public static class GuesserConfig{
-        @Comment("Automatically give Guesser to killers, or main true neutrals in the true-neutral mode. With this enabled it is recommended to have Guesser disabled in the random modifier pool.")
+        @Comment("Enable giving guesser to killers, or true neutrals in true neutral mode. With this enabled it is recommended to have guesser disabled in the random modifier pool")
         public boolean killerAlwaysGuesser = true;
 
         @Comment("Maximum amount of guessers when killerAlwaysGuesser is enabled")
@@ -27,10 +27,10 @@ public class ModifiersConfigModel {
         @Comment("Minimum amount of living civilian players for guesser to be able to guess")
         public int minPlayer = 3;
 
-        @Comment("Guesser cooldown after a valid civilian role guess, in seconds. Zero disables the cooldown")
+        @Comment("Cooldown, in seconds, after guessing a civilian role. 0 disables cooldown")
         public int cooldown = 120;
 
-        @Comment("Guesser cooldown after unknown, misspelled or non-civilian input, in seconds. Zero disables the cooldown")
+        @Comment("Cooldown, in seconds, when entering an invalid or non civilian role. 0 disables cooldown")
         public int invalidGuessCooldown = 5;
 
     }

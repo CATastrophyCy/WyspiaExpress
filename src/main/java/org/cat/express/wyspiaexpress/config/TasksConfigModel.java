@@ -9,26 +9,26 @@ public class TasksConfigModel {
         @ConfigRange(min = 0, max = 107374182)
         public int firstTaskDelaySeconds = 30;
 
-        @Comment("Minimum seconds to wait for a new task after completion.")
+        @Comment("Minimum time, in seconds, to get a new task after completing one")
         @ConfigRange(min = 0, max = 107374182)
         public int minTaskDelaySeconds = 30;
 
-        @Comment("Maximum seconds to wait for a new task after completion.")
+        @Comment("Maximum time, in seconds, to get a new task after completing one")
         @ConfigRange(min = 0, max = 107374182)
         public int maxTaskDelaySeconds = 45;
 
         @Comment("Fraction of full mood drained per second. Default: a full bar in 240 seconds, is a drain of '0.00416666666' ")
         @ConfigRange(min = 0, max = 1)
-        public double passiveDrainPerSecond = 1.0 / 240.0;
+        public double moodDrainPerSecond = 1.0 / 240.0;
 
-        @Comment("Enable mood drain while no active task.")
-        public boolean passiveMoodDrain = false;
+        @Comment("Enable passive mood drain when the player doesn't have a task")
+        public boolean drainMoodWithoutTask = false;
 
-        @Comment("Prevent rolling the same task twice in a row.")
-        public boolean preventConsecutiveTasks = true;
+        @Comment("Prevent players from getting the same task twice in a row")
+        public boolean preventRepeatedTasks = true;
 
-        @Comment("Amount of mood restored per completed task.")
+        @Comment("Amount of mood restored when completing a task, from 0.0 to 1.0")
         @ConfigRange(min = 0, max = 1)
-        public float completionRestoration = 0.5F;
+        public float taskMoodReward = 0.5F;
 
 }
