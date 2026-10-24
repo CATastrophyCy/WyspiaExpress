@@ -18,6 +18,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Noellesroles.class)
 public abstract class NoellesRolesMixin {
+    @Inject(method = "lambda$registerPackets$9", at = @At("HEAD"), cancellable = true, remap = false)
+    private static void wyspiaexpress$savedMorph(org.agmas.noellesroles.packet.MorphC2SPacket packet,
+                                                ServerPlayNetworking.Context context, CallbackInfo ci) {
+        if (!dev.doctor4t.wathe.cca.GameWorldComponent.KEY.get(context.player().getWorld())
+                .isRole(context.player(), Noellesroles.MORPHLING)) return;
+        context.server().execute(() -> org.agmas.noellesroles.morphling.MorphlingPlayerComponent.KEY
+                .get(context.player()).startMorph(packet.player()));
+        ci.cancel();
+    }
+
     // Old payloads must obey the same validation as the replacement interface.
     @Inject(method = "lambda$registerPackets$15", at = @At("HEAD"), cancellable = true, remap = false)
     private static void wyspiaexpress$validateGuess(org.agmas.noellesroles.packet.GuessC2SPacket packet,

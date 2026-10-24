@@ -33,6 +33,7 @@
     "noellesroles.DefenseVialEffectMixin",
     "noellesroles.ExecutionerRoleMixin",
     "noellesroles.NoellesRolesMixin",
+    "noellesroles.MorphlingComponentMixin",
     "noellesroles.VultureRoleMixin",
     "roles.CaptureDeviceMixin",
     "roles.ConvertedDeadBodyMixin",

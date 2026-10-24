@@ -18,6 +18,10 @@ import org.agmas.noellesroles.client.ui.guesser.GuesserPlayerWidget;
 import org.agmas.noellesroles.client.ui.guesser.GuesserRoleWidget;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.client.ui.GuesserWidgets;
+import org.cat.express.wyspiaexpress.client.ui.MorphlingWidgets;
+import org.agmas.noellesroles.Noellesroles;
+import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.game.GameFunctions;
 import org.cat.express.wyspiaexpress.client.ui.InventoryAbilityPanel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -40,14 +44,20 @@ public abstract class GuesserScreenMixin extends Screen {
         var groups = new LinkedHashMap<String, List<ClickableWidget>>();
         for (Element child : List.copyOf(children())) {
             if (child instanceof GuesserPlayerWidget || child instanceof GuesserRoleWidget) { remove(child); continue; }
-            String id = child instanceof MorphlingPlayerWidget ? "morphling"
-                    : child instanceof SwapperPlayerWidget ? "swapper"
+            if (child instanceof MorphlingPlayerWidget) { remove(child); continue; }
+            String id = child instanceof SwapperPlayerWidget ? "swapper"
                     : child instanceof JudgePlayerWidget ? "judge"
                     : child instanceof BodymakerPlayerWidget || child instanceof BodymakerDeathReasonWidget || child instanceof BodymakerRoleWidget ? "bodymaker" : null;
             if (id != null && child instanceof ClickableWidget widget) {
                 groups.computeIfAbsent(id, key -> new ArrayList<>()).add(widget);
                 remove(child);
             }
+        }
+        var game = GameWorldComponent.KEY.get(screen.player.getWorld());
+        if (game.isRunning() && game.isRole(screen.player, Noellesroles.MORPHLING)
+                && GameFunctions.isPlayerAliveAndSurvival(screen.player)) {
+            var widgets = MorphlingWidgets.create(screen);
+            if (!widgets.isEmpty()) groups.put("morphling", widgets);
         }
         var modifier = WorldModifierComponent.KEY.get(screen.player.getWorld());
         GuesserWidgets guesser = modifier.isModifier(screen.player, WyspiaExpressRoles.GUESSER) ? new GuesserWidgets(screen) : null;

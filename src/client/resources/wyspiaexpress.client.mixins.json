@@ -18,6 +18,7 @@
     "modifiers.guesser.GuesserScreenMixin",
     "modifiers.lover.LoverCrashMixin",
     "roles.NoTargetAbilityHudMixin",
+    "roles.MorphlingRendererMixin",
     "roles.cult.CultLeaderAbilityHudMixin",
     "roles.phantom.PhantomPsychosisMixin",
     "roles.villain_licensed.VillainLicensedInstinctMixin",
