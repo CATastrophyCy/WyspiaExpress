@@ -19,7 +19,7 @@
 				"canPunchPlayers": false,
 				"dropOnDeath": false
 			},
-			// Enable muzzle flash particles and recoil when firing
+			// Enable fake revolver particles and recoil
 			"enableShotEffects": true,
 			// Cooldown, in seconds, minimum 0
 			"cooldown": 12
@@ -80,9 +80,9 @@
 				"dropOnDeath": false
 			},
 			// Cooldown, in seconds, minimum 0
-			"cooldown": 360,
+			"cooldown": 240,
 			// Duration of the stun, in ticks
-			"duration": 100
+			"duration": 80
 		},
 		// Configuration for SENSE_DEAD
 		"senseDeadConfig": {

@@ -1,0 +1,24 @@
+{
+	// Multiply to crawling speed. i.e. 1.5 means crawling is 50% faster
+	"crawlSpeedMultiplier": 2.2,
+	// By setting this to true shooting a protected player won't drop your revolver regardless if they are innocent or not
+	"disableProtectionGunDrop": true,
+	// Maximum time left, in minutes, for a civilian death or conversion to add time. -1 disables the limit
+	"maxTimeForDeathBonus": -1,
+	// Player stun tick after blocking damage
+	"blockStunTicks": 50,
+	// Player stun tick after blocking damage with psycho mode
+	"psychoStunTicks": 20,
+	// Enable freezing
+	"freeze": true,
+	// The time, in seconds, it takes for a player to die when staying outside for too long
+	"freezeTimer": 75,
+	// Enable depression killing
+	"depressionKilling": true,
+	// The time, in seconds, it takes for a player to die when staying depressed for too long
+	"depressedTimer": 90,
+	// Whether to enable item bound checking, this will make out of bound item tp to closest dead body
+	"enableItemBoundChecking": true,
+	// Enable killer having role color instinct on killer-aligned neutrals
+	"killerSpecialInstinct": false
+}

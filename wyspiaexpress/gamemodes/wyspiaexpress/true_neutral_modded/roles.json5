@@ -1,0 +1,34 @@
+{
+  "roleConfig": {
+    "lichConfig": {
+      "basic": {
+        "minimumPlayerSpawn": 99
+      },
+
+    },
+    "kinsWatheRoles": {
+      "hackerConfig": {
+        "basic": {
+          "minimumPlayerSpawn": 99,
+          "maximumSpawn": 0
+        }
+      },
+      "licensedVillainConfig": {
+        "basic": {
+          "playersPerAdditionalSpawn": 12,
+          "maximumSpawn": 3
+        }
+      }
+    },
+    "stupidExpress": {
+      "thiefConfig": {
+        "basic": {
+          "minimumPlayerSpawn": 12,
+          "maximumPlayerSpawn": 99,
+          "playersPerAdditionalSpawn": 12,
+          "maximumSpawn": 3,
+        }
+      }
+    }
+  }
+}

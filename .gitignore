@@ -10,6 +10,11 @@
 !/wyspiaexpress/roles.json5
 !/wyspiaexpress/items.json5
 !/wyspiaexpress/modifiers.json5
+!/wyspiaexpress/server.json5
+!/wyspiaexpress/rules.json5
+!/wyspiaexpress/tasks.json5
+!/wyspiaexpress/gamemodes.json5
+!/wyspiaexpress/gamemodes/
 !/harpymodloader.json5
 !/noellesroles.json5
 !/kinswathe.json5

@@ -1,0 +1,7 @@
+{
+    hideGamemode: true,
+    // Amount of players needed for each killer
+    killerDividend: 6,
+    // Amount of players needed for each killer sided neutral
+    killerAlignedNeutralDividend: 9
+}

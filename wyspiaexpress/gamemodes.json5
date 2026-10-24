@@ -1,0 +1,14 @@
+{
+	// Use custom weighted assignment
+	"useCustomWeightedAssignment": true,
+	// Base weight value used for customWeight assigment. The lower the value the more balanced the system is. High values add more variance (it is not recommended to go above 0.01!).Don't change this value unless you know what you are doing!
+	"baseWeight": 4.0E-4,
+	// Neutral role dividend
+	"neutralDividend": 6,
+	// Use the same weights for killer and true neutral roles. Killer sided neutrals still have separate weights
+	"shareKillerNeutralWeights": false,
+	// Minimum amount of players for alternate mode to start a true neutral round. At least 12 players are still needed
+	"minimumPlayersForNeutralMode": 12,
+	// Chance of alternate mode starting a true neutral round. 0.5 means 50%
+	"neutralModeChance": 0.5
+}

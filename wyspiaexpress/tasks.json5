@@ -1,0 +1,16 @@
+{
+	// Seconds before the first task after a reset
+	"firstTaskDelaySeconds": 30,
+	// Minimum time, in seconds, to get a new task after completing one
+	"minTaskDelaySeconds": 30,
+	// Maximum time, in seconds, to get a new task after completing one
+	"maxTaskDelaySeconds": 45,
+	// Fraction of full mood drained per second. Default: a full bar in 240 seconds, is a drain of '0.00416666666' 
+	"moodDrainPerSecond": 0.004166666666666667,
+	// Enable passive mood drain when the player doesn't have a task
+	"drainMoodWithoutTask": false,
+	// Prevent players from getting the same task twice in a row
+	"preventRepeatedTasks": true,
+	// Amount of mood restored when completing a task, from 0.0 to 1.0
+	"taskMoodReward": 0.5
+}

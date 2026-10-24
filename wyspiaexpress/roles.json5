@@ -13,6 +13,7 @@
 	    - items & itemAmount: Starting items and their quantities
 	    - minimumPlayerSpawn : Min players required to spawn this role
 	    - maximumPlayerSpawn : Max players that allows this role to spawn
+	    - playersPerAdditionalSpawn : Extra players above minimumPlayerSpawn needed to allow another copy (0 disables scaling)
 	    - maximumSpawn (0-20): Max number of this role allowed
 	    - seePoison: Whether this role can see poison, only affects roles that couldn't see it by default
 	    
@@ -45,6 +46,7 @@
 				"itemAmount": [],
 				"minimumPlayerSpawn": 6,
 				"maximumPlayerSpawn": 99,
+				"playersPerAdditionalSpawn": 0,
 				"maximumSpawn": 0,
 				"seePoison": false
 			}
@@ -68,6 +70,7 @@
 				],
 				"minimumPlayerSpawn": 6,
 				"maximumPlayerSpawn": 99,
+				"playersPerAdditionalSpawn": 0,
 				"maximumSpawn": 1,
 				"seePoison": false
 			}
@@ -94,6 +97,7 @@
 				"itemAmount": [],
 				"minimumPlayerSpawn": 15,
 				"maximumPlayerSpawn": 99,
+				"playersPerAdditionalSpawn": 0,
 				"maximumSpawn": 1,
 				"seePoison": true
 			},
@@ -135,6 +139,7 @@
 				"itemAmount": [],
 				"minimumPlayerSpawn": 1,
 				"maximumPlayerSpawn": 99,
+				"playersPerAdditionalSpawn": 0,
 				"maximumSpawn": 1,
 				"seePoison": true
 			}
@@ -153,6 +158,7 @@
 				"itemAmount": [],
 				"minimumPlayerSpawn": 9,
 				"maximumPlayerSpawn": 99,
+				"playersPerAdditionalSpawn": 0,
 				"maximumSpawn": 2,
 				"seePoison": false
 			},
@@ -204,6 +210,7 @@
 				"itemAmount": [],
 				"minimumPlayerSpawn": 12,
 				"maximumPlayerSpawn": 99,
+				"playersPerAdditionalSpawn": 0,
 				"maximumSpawn": 1,
 				"seePoison": true
 			},
@@ -216,7 +223,7 @@
 			// Range to activate ability
 			"range": 3.0,
 			// Revive stun duration, in ticks
-			"stun": 100,
+			"stun": 80,
 			// The amount of coin revived player starts with
 			"startingCoin": 100,
 			// Configuration for their GHOUL
@@ -238,8 +245,9 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 5,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 0,
-					"seePoison": false
+					"seePoison": true
 				}
 			}
 		},
@@ -250,7 +258,7 @@
 				"enableShop": true,
 				"shopEntries": [
 					"RITUAL_DAGGER;175;-1;WEAPON",
-					"SMOKE_BOMB;125;-1;TOOL",
+					"SMOKE_BOMB;100;-1;TOOL",
 					"PAN;100;-1;TOOL",
 					"FAKE_REVOLVER;50;-1;TOOL",
 					"LOCKPICK;125;-1;TOOL",
@@ -266,6 +274,7 @@
 				"itemAmount": [],
 				"minimumPlayerSpawn": 12,
 				"maximumPlayerSpawn": 99,
+				"playersPerAdditionalSpawn": 0,
 				"maximumSpawn": 1,
 				"seePoison": true
 			},
@@ -278,7 +287,7 @@
 			// Conversion range, in blocks
 			"conversionRange": 2.3,
 			// Revive stun duration, in ticks
-			"stun": 100,
+			"stun": 80,
 			// The amount of coin rewarded when you convert a player
 			"convertionReward": 35,
 			// The amount of coin converted player starts with
@@ -294,14 +303,15 @@
 						"NOTE;10;-1;TOOL",
 						"MEGAPHONE;10;-1;TOOL"
 					],
-					"passiveIncome": false,
-					"taskIncome": 15,
+					"passiveIncome": true,
+					"taskIncome": 0,
 					"items": [],
 					"itemAmount": [],
 					"minimumPlayerSpawn": 1,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 0,
-					"seePoison": false
+					"seePoison": true
 				}
 			}
 		},
@@ -328,6 +338,7 @@
 				"itemAmount": [],
 				"minimumPlayerSpawn": 12,
 				"maximumPlayerSpawn": 99,
+				"playersPerAdditionalSpawn": 0,
 				"maximumSpawn": 1,
 				"seePoison": true
 			},
@@ -351,6 +362,7 @@
 				"itemAmount": [],
 				"minimumPlayerSpawn": 1,
 				"maximumPlayerSpawn": 99,
+				"playersPerAdditionalSpawn": 0,
 				"maximumSpawn": 1,
 				"seePoison": false
 			}
@@ -384,6 +396,7 @@
 					],
 					"minimumPlayerSpawn": 1,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				},
@@ -404,6 +417,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 2,
 					"seePoison": false
 				},
@@ -437,6 +451,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				}
@@ -466,6 +481,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				}
@@ -486,6 +502,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": false
 				}
@@ -494,16 +511,17 @@
 			"thiefConfig": {
 				// Basic role configuration
 				"basic": {
-					"enableShop": false,
-					"shopEntries": [],
-					"passiveIncome": false,
-					"taskIncome": 0,
+					"enableShop": true,
+					"shopEntries": ["SMOKE_BOMB;50;-1;TOOL"],
+					"passiveIncome": true,
+					"taskIncome": 15,
 					"items": [],
 					"itemAmount": [],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
-					"seePoison": false
+					"seePoison": true
 				},
 				// Cooldown, in seconds, when failing a steal (target has no stealable item)
 				"failCooldown": 30,
@@ -529,6 +547,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 1,
 					"maximumPlayerSpawn": 14,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": false
 				}
@@ -566,6 +585,7 @@
 					],
 					"minimumPlayerSpawn": 1,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				}
@@ -595,6 +615,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				},
@@ -630,6 +651,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 6,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				}
@@ -652,6 +674,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 15,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": false
 				}
@@ -673,6 +696,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 9,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 2,
 					"seePoison": false
 				}
@@ -692,6 +716,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 6,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": false
 				}
@@ -713,6 +738,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 18,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": false
 				}
@@ -736,6 +762,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 15,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": false
 				}
@@ -758,6 +785,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 6,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				}
@@ -782,6 +810,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				},
@@ -815,6 +844,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 1,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				}
@@ -844,6 +874,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 15,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				}
@@ -873,6 +904,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				}
@@ -904,6 +936,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 6,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				}
@@ -936,6 +969,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 15,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				}
@@ -955,6 +989,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 15,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": false
 				}
@@ -971,6 +1006,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 1,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": false
 				}
@@ -987,6 +1023,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 15,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": false
 				}
@@ -1003,6 +1040,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 1,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": false
 				}
@@ -1023,6 +1061,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": false
 				}
@@ -1046,6 +1085,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 9,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 2,
 					"seePoison": false
 				}
@@ -1068,6 +1108,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 1,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": false
 				}
@@ -1095,6 +1136,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				},
@@ -1127,6 +1169,7 @@
 					],
 					"minimumPlayerSpawn": 6,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				},
@@ -1159,6 +1202,7 @@
 					],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
 				}

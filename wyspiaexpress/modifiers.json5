@@ -7,9 +7,9 @@
 		"maximumGuessers": 1,
 		// Minimum amount of living civilian players for guesser to be able to guess
 		"minPlayer": 4,
-		// Guesser cooldown after a valid civilian role guess, in seconds. Zero disables the cooldown
+		// Cooldown, in seconds, after guessing a civilian role. 0 disables cooldown
 		"cooldown": 120,
-		// Guesser cooldown after unknown, misspelled or non-civilian input, in seconds. Zero disables the cooldown
+		// Cooldown, in seconds, when entering an invalid or non civilian role. 0 disables cooldown
 		"invalidGuessCooldown": 5
 	},
 	// Config options for PROFESIONAL_VENT_CRAWLER
