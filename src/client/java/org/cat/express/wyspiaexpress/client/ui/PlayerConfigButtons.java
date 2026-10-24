@@ -21,8 +21,8 @@ public final class PlayerConfigButtons extends ButtonWidget {
     private final Tooltip description;
     private Boolean displayedState;
 
-    private PlayerConfigButtons(int x, int width, PlayerConfigComponent.Option option) {
-        super(x, 4, width, 20, Text.empty(), button -> {
+    private PlayerConfigButtons(int x, int y, int width, PlayerConfigComponent.Option option) {
+        super(x, y, width, 20, Text.empty(), button -> {
             var player = MinecraftClient.getInstance().player;
             if (player != null && PlayerConfigComponent.canEdit(player)) {
                 ClientPlayNetworking.send(new PlayerConfigC2SPacket(option.ordinal()));
@@ -40,8 +40,13 @@ public final class PlayerConfigButtons extends ButtonWidget {
             if (client.player == null || !PlayerConfigComponent.canEdit(client.player)) return;
             int buttonWidth = Math.clamp((width - 24) / 3, 1, 164);
             int x = (width - buttonWidth * 3 - 8) / 2;
+            int inventoryHeight = screen instanceof LimitedInventoryScreen ? 32
+                    : screen instanceof CreativeInventoryScreen ? 136 : 166;
+            int inventoryBottom = (height - inventoryHeight) / 2 + inventoryHeight;
+            if (screen instanceof CreativeInventoryScreen) inventoryBottom += 28; // Bottom creative tabs.
+            int y = Math.max(0, Math.min(height - 24, inventoryBottom + 4));
             for (var option : PlayerConfigComponent.Option.values()) {
-                Screens.getButtons(screen).add(new PlayerConfigButtons(x, buttonWidth, option));
+                Screens.getButtons(screen).add(new PlayerConfigButtons(x, y, buttonWidth, option));
                 x += buttonWidth + 4;
             }
             ScreenEvents.afterRender(screen).register((current, context, mouseX, mouseY, delta) -> {
