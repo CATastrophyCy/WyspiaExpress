@@ -81,7 +81,7 @@ final class RoundBuilder {
     }
 
     RoundBuilder prepareRound() {
-        RoundResultComponent.KEY.get(world).reset();
+        RoundResultComponent.KEY.get(world).startRound(participants);
         GameConfigs.refreshDerivedValues();
         Harpymodloader.refreshRoles();
         HarpyModLoaderConfig.HANDLER.load();

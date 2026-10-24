@@ -12,6 +12,8 @@ import net.minecraft.world.World;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
 import org.cat.express.wyspiaexpress.components.PlayerConfigComponent;
+import org.cat.express.wyspiaexpress.components.RoundResultComponent;
+import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressModdedGameMode;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.spongepowered.asm.mixin.Mixin;
@@ -51,6 +53,9 @@ public abstract class ReadyPlayersMixin {
             WyspiaExpress.ALTERNATE_GAMEMODE.selectRound(world, game, participants.size());
         }
         WorldComponent.KEY.get(world).startRound();
+        if (!(game.getGameMode() instanceof WyspiaExpressModdedGameMode)) {
+            RoundResultComponent.KEY.get(world).startRound(participants);
+        }
         // Capture first: configured destinations need not be inside the ready-area box.
         WyspiaExpressGameFunctions.prepareRoundPlayers(world, participants);
         return participants;

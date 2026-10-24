@@ -1,5 +1,8 @@
 package org.cat.express.wyspiaexpress.components;
 
+import com.mojang.authlib.GameProfile;
+import net.minecraft.component.type.ProfileComponent;
+import net.minecraft.nbt.NbtOps;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
@@ -15,6 +18,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.util.RoleUtil;
 import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressModdedGameMode;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
@@ -24,12 +28,14 @@ import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Collections;
 import java.util.Map;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-/** Captured result, retained through lobby/reset rendering; never resolves UUIDs into live player entities. */
+/** Participating profiles captured at round start, then final roles/winners retained through lobby rendering. */
 public final class RoundResultComponent implements AutoSyncedComponent {
     public static final ComponentKey<RoundResultComponent> KEY = ComponentRegistry.getOrCreate(
             Identifier.of(WyspiaExpress.MOD_ID, "round_result"), RoundResultComponent.class);
@@ -55,6 +61,10 @@ public final class RoundResultComponent implements AutoSyncedComponent {
     private int color;
     private Set<UUID> winners = Set.of();
     private Map<UUID, Role> roles = Map.of();
+    private Map<UUID, GameProfile> profiles = Map.of();
+    private Set<UUID> eliminated = Set.of();
+
+    public record Player(GameProfile player, Role role, boolean wasDead) {}
 
     public RoundResultComponent(World world) { this.world = world; }
 
@@ -63,7 +73,13 @@ public final class RoundResultComponent implements AutoSyncedComponent {
         return hasResult() && GameWorldComponent.KEY.get(world).getGameMode() instanceof WyspiaExpressModdedGameMode;
     }
     public boolean didWin(UUID player) { return winners.contains(player); }
-    public boolean participated(UUID player) { return roles.containsKey(player); }
+    public boolean participated(UUID player) { return profiles.containsKey(player); }
+    public GameProfile profile(UUID player) { return profiles.get(player); }
+    public Map<UUID, GameProfile> profiles() { return profiles; }
+    public List<Player> players() {
+        return profiles.values().stream().filter(profile -> roles.containsKey(profile.getId()))
+                .map(profile -> new Player(profile, roles.get(profile.getId()), eliminated.contains(profile.getId()))).toList();
+    }
     public Role role(UUID player) { return roles.get(player); }
     public Outcome outcome() { return outcome; }
     public int color() { return color; }
@@ -75,11 +91,30 @@ public final class RoundResultComponent implements AutoSyncedComponent {
         return Text.translatable("game.win." + outcome.explanation);
     }
 
-    public void reset() {
+    /** Capture only the actual round participants, never the world's spectator/late-join list. */
+    public void startRound(List<ServerPlayerEntity> participants) {
+        clearResult();
+        Map<UUID, GameProfile> captured = new LinkedHashMap<>();
+        for (ServerPlayerEntity player : participants) {
+            GameProfile profile = new GameProfile(player.getUuid(), player.getGameProfile().getName());
+            profile.getProperties().putAll(player.getGameProfile().getProperties());
+            captured.put(profile.getId(), profile);
+        }
+        profiles = Collections.unmodifiableMap(captured);
+        KEY.sync(world);
+    }
+
+    private void clearResult() {
         outcome = null;
         color = 0;
         winners = Set.of();
         roles = Map.of();
+        eliminated = Set.of();
+    }
+
+    public void reset() {
+        clearResult();
+        profiles = Map.of();
         KEY.sync(world);
     }
 
@@ -88,13 +123,23 @@ public final class RoundResultComponent implements AutoSyncedComponent {
         if (hasResult()) return;
         this.outcome = outcome;
         this.color = color;
-        this.roles = Map.copyOf(GameWorldComponent.KEY.get(world).getRoles());
+        GameWorldComponent game = GameWorldComponent.KEY.get(world);
+        Map<UUID, Role> capturedRoles = new HashMap<>();
+        Set<UUID> capturedEliminated = new HashSet<>();
+        for (UUID player : profiles.keySet()) {
+            Role role = game.getRole(player);
+            if (role == null) continue;
+            capturedRoles.put(player, role);
+            if (GameFunctions.isPlayerEliminated(world.getPlayerByUuid(player))) capturedEliminated.add(player);
+        }
+        this.roles = Map.copyOf(capturedRoles);
+        this.eliminated = Set.copyOf(capturedEliminated);
         this.winners = Set.copyOf(winners.stream().filter(roles::containsKey).toList());
         KEY.sync(world);
     }
 
     /** Called before Wathe snapshots/syncs its player profiles, while final roles still exist. */
-    public void capture(List<ServerPlayerEntity> players, GameFunctions.WinStatus status) {
+    public void capture(GameFunctions.WinStatus status) {
         if (hasResult()) return;
         var kin = org.BsXinQin.kinswathe.component.CustomWinnerComponent.KEY.get(world);
         var stupid = pro.fazeclan.river.stupid_express.cca.CustomWinnerComponent.KEY.get(world);
@@ -112,8 +157,11 @@ public final class RoundResultComponent implements AutoSyncedComponent {
             Outcome outcome = killerVictory ? Outcome.KILLERS
                     : status == GameFunctions.WinStatus.TIME ? Outcome.TIMEOUT : Outcome.CIVILIANS;
             setVictory(outcome, killerVictory ? 0xD23C3C : 0x4EDD35,
-                    players.stream().filter(player -> killerVictory ? game.canUseKillerFeatures(player) : game.isInnocent(player))
-                            .map(ServerPlayerEntity::getUuid).toList());
+                    game.getRoles().entrySet().stream()
+                            .filter(entry -> killerVictory
+                                    ? entry.getValue().canUseKiller() || WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(entry.getValue())
+                                    : entry.getValue().isInnocent())
+                            .map(Map.Entry::getKey).toList());
         }
     }
 
@@ -135,6 +183,12 @@ public final class RoundResultComponent implements AutoSyncedComponent {
         if (outcome != null) tag.putString("Outcome", outcome.name());
         tag.putInt("Color", color);
         tag.put("Winners", toNbt(winners));
+        tag.put("Eliminated", toNbt(eliminated));
+        NbtList profileTags = new NbtList();
+        for (GameProfile profile : profiles.values()) {
+            profileTags.add(ProfileComponent.CODEC.encodeStart(NbtOps.INSTANCE, new ProfileComponent(profile)).getOrThrow());
+        }
+        tag.put("Profiles", profileTags);
         NbtCompound roleTags = new NbtCompound();
         roles.forEach((player, role) -> roleTags.putString(player.toString(), RoleUtil.getRoleId(role)));
         tag.put("Roles", roleTags);
@@ -144,6 +198,13 @@ public final class RoundResultComponent implements AutoSyncedComponent {
     public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup lookup) {
         outcome = tag.contains("Outcome", NbtElement.STRING_TYPE) ? Outcome.valueOf(tag.getString("Outcome")) : null;
         color = tag.getInt("Color");
+        Map<UUID, GameProfile> capturedProfiles = new LinkedHashMap<>();
+        for (NbtElement entry : tag.getList("Profiles", NbtElement.COMPOUND_TYPE)) {
+            GameProfile profile = ProfileComponent.CODEC.parse(NbtOps.INSTANCE, entry).getOrThrow().gameProfile();
+            capturedProfiles.put(profile.getId(), profile);
+        }
+        profiles = Collections.unmodifiableMap(capturedProfiles);
+        eliminated = fromNbt(tag.getList("Eliminated", NbtElement.INT_ARRAY_TYPE));
         winners = fromNbt(tag.getList("Winners", NbtElement.INT_ARRAY_TYPE));
         NbtCompound roleTags = tag.getCompound("Roles");
         Map<UUID, Role> capturedRoles = new HashMap<>();

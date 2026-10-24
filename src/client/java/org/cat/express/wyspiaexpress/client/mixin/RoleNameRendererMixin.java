@@ -43,6 +43,7 @@ import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
 import org.cat.express.wyspiaexpress.components.PlayerTaskComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.cat.express.wyspiaexpress.util.GameUtil;
+import org.cat.express.wyspiaexpress.client.util.PlayerProfileUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -57,7 +58,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Mixin(RoleNameRenderer.class)
+// Wrap Noelle's live-player name lookup so disconnected disguises use the saved profile first.
+@Mixin(value = RoleNameRenderer.class, priority = 1100)
 public abstract class RoleNameRendererMixin {
     @Shadow private static float nametagAlpha;
     @Unique private static final UUID DELUSION_MARKER = UUID.fromString("00000000-0000-0000-dead-c0de00000000"); // unique string used by Kinswathe
@@ -80,6 +82,13 @@ public abstract class RoleNameRendererMixin {
                 && GameUtil.isUnderSmokeEffect(target)) return 0;
 
         return original.call(world, type, pos);
+    }
+
+    @WrapOperation(method = "renderHud", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/entity/player/PlayerEntity;getDisplayName()Lnet/minecraft/text/Text;"))
+    private static Text wyspiaexpress$savedMorphName(PlayerEntity player, Operation<Text> original) {
+        var profile = PlayerProfileUtil.morph(player);
+        return profile != null && !player.isInvisible() ? Text.literal(profile.getName()) : original.call(player);
     }
 
     @Inject(method = "renderHud", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I", ordinal = 0))

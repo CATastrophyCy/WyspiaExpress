@@ -2,7 +2,6 @@ package org.cat.express.wyspiaexpress.client.mixin.ui;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import dev.doctor4t.wathe.cca.GameRoundEndComponent;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.client.gui.RoundTextRenderer;
 import dev.doctor4t.wathe.game.GameConstants;
@@ -31,7 +30,7 @@ public abstract class RoundResultHudMixin {
             return;
         }
         if (endTime < END_DURATION - GameConstants.FADE_TIME * 2) {
-            RoundResultRenderer.render(context, font, result, GameRoundEndComponent.KEY.get(player.getWorld()));
+            RoundResultRenderer.render(context, font, result);
         }
     }
 }

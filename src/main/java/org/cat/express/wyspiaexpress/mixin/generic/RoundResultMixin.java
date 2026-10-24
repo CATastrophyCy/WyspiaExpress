@@ -36,7 +36,7 @@ public abstract class RoundResultMixin {
             if (status == GameFunctions.WinStatus.NONE) result.reset();
             else {
                 if (result.hasResult() && game.getGameStatus() == GameWorldComponent.GameStatus.STOPPING) return;
-                result.capture(players, status);
+                result.capture(status);
             }
         }
         original.call(players, status);

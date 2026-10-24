@@ -1,8 +1,8 @@
 package org.cat.express.wyspiaexpress.client.ui;
 
 import dev.doctor4t.wathe.api.Role;
-import dev.doctor4t.wathe.cca.GameRoundEndComponent;
-import dev.doctor4t.wathe.client.WatheClient;
+
+import org.cat.express.wyspiaexpress.client.util.PlayerProfileUtil;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
@@ -39,7 +39,7 @@ public final class RoundResultRenderer {
         }
     }
 
-    private record Group(Text title, int color, List<GameRoundEndComponent.RoundEndData> players) {}
+    private record Group(Text title, int color, List<RoundResultComponent.Player> players) {}
 
     private record CategoryRow(List<Group> groups, int playerColumns, int height) {}
 
@@ -48,13 +48,11 @@ public final class RoundResultRenderer {
 
     private RoundResultRenderer() {}
 
-    public static void render(DrawContext context, TextRenderer font, RoundResultComponent result,
-                              GameRoundEndComponent nativeResult) {
+    public static void render(DrawContext context, TextRenderer font, RoundResultComponent result) {
         context.fillGradient(0, 0, context.getScaledWindowWidth(), context.getScaledWindowHeight(),
                 0xA60D1118, 0xD00D1118);
-        List<GameRoundEndComponent.RoundEndData> participants = nativeResult.getPlayers().stream()
-                .filter(entry -> result.participated(entry.player().getId())).toList();
-        List<GameRoundEndComponent.RoundEndData> winners = participants.stream()
+        List<RoundResultComponent.Player> participants = result.players();
+        List<RoundResultComponent.Player> winners = participants.stream()
                 .filter(entry -> result.didWin(entry.player().getId())).toList();
         List<Group> categories = new ArrayList<>();
         for (Category category : Category.values()) {
@@ -97,11 +95,11 @@ public final class RoundResultRenderer {
 
     /** Choose the arrangement that gives heads, names and roles the largest shared scale. */
     private static Layout planLayout(TextRenderer font, RoundResultComponent result,
-                                     List<GameRoundEndComponent.RoundEndData> winners, List<Group> categories,
+                                     List<RoundResultComponent.Player> winners, List<Group> categories,
                                      int participants, int screenWidth, int screenHeight) {
         Layout best = null;
         // Up to 24 players: test four to twelve columns instead of committing to a narrow canvas.
-        for (int columns = 4; columns <= Math.min(12, Math.max(4, participants)); columns++) {
+        for (int columns = 4; columns <= Math.clamp(participants, 4, 12); columns++) {
             int width = columns * CELL_WIDTH + CATEGORY_GAP;
             List<CategoryRow> rows = arrangeCategories(categories, columns, width);
             var description = font.wrapLines(result.description(), width);
@@ -160,17 +158,10 @@ public final class RoundResultRenderer {
             int rowSize = Math.min(columns, group.players().size() - row * columns);
             int x = centerX + (i % columns) * CELL_WIDTH - rowSize * CELL_WIDTH / 2 + CELL_WIDTH / 2;
             int top = headY + row * ROW_HEIGHT;
-            var cached = WatheClient.PLAYER_ENTRIES_CACHE.get(entry.player().getId());
-            if (cached != null) {
-                float tint = entry.wasDead() ? 0.5f : 1f;
-                context.setShaderColor(tint, tint, tint, 1);
-                PlayerSkinDrawer.draw(context, cached.getSkinTextures().texture(), x - 10, top, 20);
-                context.setShaderColor(1, 1, 1, 1);
-            } else {
-                context.fill(x - 10, top, x + 10, top + 20, 0xFF454545);
-                String initial = entry.player().getName().substring(0, 1);
-                context.drawCenteredTextWithShadow(font, initial, x, top + 6, 0xE0E0E0);
-            }
+            float tint = entry.wasDead() ? 0.5f : 1f;
+            context.setShaderColor(tint, tint, tint, 1);
+            PlayerSkinDrawer.draw(context, PlayerProfileUtil.skin(entry.player()).texture(), x - 10, top, 20);
+            context.setShaderColor(1, 1, 1, 1);
             if (entry.wasDead()) context.drawTextWithShadow(font, "×", x + 4, top + 12, 0xFF7777);
             String name = font.trimToWidth(entry.player().getName(), CELL_WIDTH - 4);
             context.drawCenteredTextWithShadow(font, name, x, top + 23, entry.wasDead() ? 0x999999 : 0xE4E4E4);
