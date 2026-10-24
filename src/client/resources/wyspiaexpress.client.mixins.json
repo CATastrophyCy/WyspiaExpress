@@ -27,6 +27,7 @@
     "ui.GuideBookScreenMixin",
     "ui.HudRendererMixin",
     "ui.LegacyGuidebookButtonMixin",
+    "ui.LobbyPlayersRendererMixin",
     "ui.MoodRendererMixin",
     "ui.RolePickerWidgetMixin",
     "ui.RoundResultHudMixin",
