@@ -274,6 +274,9 @@ public class RoleConfig {
         @Comment("Config options for CONDUCTOR")
         public ConductorConfig conductorConfig = new ConductorConfig();
 
+        @Comment("Config options for RECALLER")
+        public RecallerConfig recallerConfig = new RecallerConfig();
+
         @Comment("Config options for TRAPPER")
         public TrapperConfig trapperConfig = new TrapperConfig();
 
@@ -322,6 +325,11 @@ public class RoleConfig {
         }
 
         public static class ConductorConfig{
+            @Comment("Basic role configuration")
+            public RoleBasicConfig basic = new RoleBasicConfig();
+        }
+
+        public static class RecallerConfig {
             @Comment("Basic role configuration")
             public RoleBasicConfig basic = new RoleBasicConfig();
         }
