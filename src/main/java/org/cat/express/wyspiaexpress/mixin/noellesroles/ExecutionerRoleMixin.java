@@ -50,7 +50,7 @@ public abstract class ExecutionerRoleMixin {
                 if(WyspiaExpress.ROLES_CONFIG.enableRolePicking()) {
                     shuffledKillerRoles = Lists.newArrayList(WyspiaExpressRoles.COPYCAT);
                 }else {
-                    shuffledKillerRoles = RoleUtil.getKillerRoles();
+                    shuffledKillerRoles = RoleUtil.getKillerRoles(gameWorldComponent);
                     if (shuffledKillerRoles.isEmpty()) shuffledKillerRoles.add(WatheRoles.KILLER);
                     Collections.shuffle(shuffledKillerRoles);
                 }

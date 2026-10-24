@@ -3,6 +3,7 @@ package org.cat.express.wyspiaexpress.mixin.kinswathe;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.doctor4t.wathe.api.Role;
+import dev.doctor4t.wathe.cca.GameWorldComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.MathHelper;
@@ -14,6 +15,7 @@ import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.cat.express.wyspiaexpress.util.RoleUtil;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,6 +27,7 @@ import java.util.function.Predicate;
 
 @Mixin(DreamerKillerComponent.class)
 public abstract class DreamerKillerComponentMixin {
+    @Shadow @Final private PlayerEntity player;
 
     @Shadow(remap = false)
     public int dreamerRequired;
@@ -51,8 +54,8 @@ public abstract class DreamerKillerComponentMixin {
             target = "Ljava/util/ArrayList;removeIf(Ljava/util/function/Predicate;)Z",
             remap = false)
     )
-    private static boolean wyspiaexpress$replaceRoles(ArrayList<Role> instance, Predicate<? super Role> originalPredicate) {
-        return RoleUtil.filterKillerPromotionRoles(instance);
+    private boolean wyspiaexpress$replaceRoles(ArrayList<Role> instance, Predicate<? super Role> originalPredicate) {
+        return RoleUtil.filterKillerPromotionRoles(instance, GameWorldComponent.KEY.get(player.getWorld()));
     }
 
     @WrapOperation(method = "triggerBecomeKiller", at = @At(value = "INVOKE",

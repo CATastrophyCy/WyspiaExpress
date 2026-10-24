@@ -12,8 +12,10 @@ import net.minecraft.util.math.MathHelper;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.RoundResultComponent;
+import org.cat.express.wyspiaexpress.util.RoleUtil;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -51,7 +53,12 @@ public final class RoundResultRenderer {
     public static void render(DrawContext context, TextRenderer font, RoundResultComponent result) {
         context.fillGradient(0, 0, context.getScaledWindowWidth(), context.getScaledWindowHeight(),
                 0xA60D1118, 0xD00D1118);
-        List<RoundResultComponent.Player> participants = result.players();
+        List<RoundResultComponent.Player> participants = result.players().stream()
+                .sorted(Comparator.comparing((RoundResultComponent.Player entry) -> roleName(entry.role()).getString(),
+                                String.CASE_INSENSITIVE_ORDER)
+                        .thenComparing(entry -> entry.role() == null ? "" : RoleUtil.getRoleId(entry.role()))
+                        .thenComparing(entry -> entry.player().getName(), String.CASE_INSENSITIVE_ORDER))
+                .toList();
         List<RoundResultComponent.Player> winners = participants.stream()
                 .filter(entry -> result.didWin(entry.player().getId())).toList();
         List<Group> categories = new ArrayList<>();
@@ -166,7 +173,7 @@ public final class RoundResultRenderer {
             String name = font.trimToWidth(entry.player().getName(), CELL_WIDTH - 4);
             context.drawCenteredTextWithShadow(font, name, x, top + 23, entry.wasDead() ? 0x999999 : 0xE4E4E4);
             Role role = result.role(entry.player().getId());
-            Text roleName = role == null ? Text.translatable("gui.wyspiaexpress.results.unknown_role") : Harpymodloader.getRoleName(role);
+            Text roleName = roleName(role);
             var roleLines = font.wrapLines(roleName, (int) ((CELL_WIDTH - 6) / ROLE_SCALE));
             context.getMatrices().push();
             context.getMatrices().translate(x, top + 35, 0);
@@ -178,6 +185,10 @@ public final class RoundResultRenderer {
             }
             context.getMatrices().pop();
         }
+    }
+
+    private static Text roleName(Role role) {
+        return role == null ? Text.translatable("gui.wyspiaexpress.results.unknown_role") : Harpymodloader.getRoleName(role);
     }
 
     private static int readableColor(int color) {

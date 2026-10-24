@@ -6,6 +6,7 @@ import dev.doctor4t.wathe.cca.ScoreboardRoleSelectorComponent;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import org.BsXinQin.kinswathe.KinsWatheRoles;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.RoleDraftStatisticsManager;
@@ -24,13 +25,17 @@ public final class WyspiaExpressTrueNeutralModdedGameMode extends WyspiaExpressM
     }
 
     public static boolean allowsRole(Role role) {
-        return role != null && (isMainRole(role) || role == SERoles.AMNESIAC
+        return role != null && role != KinsWatheRoles.HACKER && role != WyspiaExpressRoles.LICH
+                && (isMainRole(role) || role == SERoles.AMNESIAC
                 || WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)
                 || (role.isInnocent() && !role.canUseKiller()));
     }
 
     @Override
     public boolean isRoleAllowed(Role role) { return allowsRole(role); }
+
+    @Override
+    public boolean isKillerRoleAllowed(Role role) { return role != WyspiaExpressRoles.LICH; }
 
     @Override
     public void initializeGame(ServerWorld world, GameWorldComponent gameWorld, List<ServerPlayerEntity> players) {

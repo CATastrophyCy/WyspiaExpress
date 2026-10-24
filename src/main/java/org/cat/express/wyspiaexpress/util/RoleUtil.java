@@ -12,6 +12,7 @@ import org.agmas.harpymodloader.modded_murder.ModdedWeights;
 import org.agmas.harpymodloader.modifiers.Modifier;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressModdedGameMode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -29,6 +30,14 @@ public final class RoleUtil {
 
         killerRoles.removeIf(role -> !isEligibleKillerRole(role));
         return killerRoles;
+    }
+
+    public static @NotNull ArrayList<Role> getKillerRoles(GameWorldComponent game) {
+        var roles = getKillerRoles();
+        if (game.getGameMode() instanceof WyspiaExpressModdedGameMode mode) {
+            roles.removeIf(role -> !mode.isKillerRoleAllowed(role));
+        }
+        return roles;
     }
 
     public static boolean roleMeetPlayerRequirement(Role role) {
@@ -175,12 +184,12 @@ public final class RoleUtil {
     }
 
     /** Replaces promotion choices with Copycat when role picking is enabled. */
-    public static boolean filterKillerPromotionRoles(List<Role> roles) {
+    public static boolean filterKillerPromotionRoles(List<Role> roles, GameWorldComponent game) {
         if (WyspiaExpress.ROLES_CONFIG.enableRolePicking()) {
             roles.clear();
             return roles.add(WyspiaExpressRoles.COPYCAT);
         }
-        return roles.removeIf(role -> !isEligibleKillerRole(role));
+        return roles.retainAll(getKillerRoles(game));
     }
 
     /** Opt-outs re-enter the existing lottery only when the willing pool cannot fill the slots. */

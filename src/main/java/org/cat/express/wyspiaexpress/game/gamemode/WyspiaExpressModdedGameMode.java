@@ -50,6 +50,8 @@ public class WyspiaExpressModdedGameMode extends GameMode {
 
     public boolean isRoleAllowed(Role role) { return true; }
 
+    public boolean isKillerRoleAllowed(Role role) { return true; }
+
     @Override
     public void initializeGame(ServerWorld world, GameWorldComponent gameWorld, List<ServerPlayerEntity> players) {
         RoundBuilder round = createLegacyRoundBuilder(world, gameWorld, players).prepareRound();

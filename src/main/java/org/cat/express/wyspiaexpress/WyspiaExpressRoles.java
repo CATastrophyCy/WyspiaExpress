@@ -341,17 +341,20 @@ public class WyspiaExpressRoles {
             }
 
             Set<String> roleIDs = new HashSet<>();
-            boolean killerMode = GameWorldComponent.KEY.get(player.getWorld()).getGameMode() == WyspiaExpress.KILLER_MODDED_GAMEMODE;
-            ArrayList<Role> allowedKillerRoles = RoleUtil.getKillerRoles();
+            var game = GameWorldComponent.KEY.get(player.getWorld());
+            boolean killerMode = game.getGameMode() == WyspiaExpress.KILLER_MODDED_GAMEMODE;
+            boolean neutralMode = game.getGameMode() == WyspiaExpress.TRUE_NEUTRAL_MODDED_GAMEMODE;
+            ArrayList<Role> allowedKillerRoles = RoleUtil.getKillerRoles(game);
             if (killerMode) allowedKillerRoles.removeIf(candidate -> HIDDEN_ROLES.contains(candidate)
                     || Harpymodloader.NON_MURDER_ROLES.contains(candidate)
                     || !WyspiaExpressKillerModdedGameMode.allowsRole(candidate));
-            int choices = killerMode ? Math.max(1, Math.min(WyspiaExpress.ROLES_CONFIG.pickRoles(), allowedKillerRoles.size()))
+            if (neutralMode) COPYCAT_ROLES.removeIf(candidate -> !allowedKillerRoles.contains(candidate));
+            int choices = killerMode || neutralMode ? Math.max(1, Math.min(WyspiaExpress.ROLES_CONFIG.pickRoles(), allowedKillerRoles.size()))
                     : WyspiaExpress.ROLES_CONFIG.pickRoles();
             while(roleIDs.size() < choices){
                 String roleID;
                 if(COPYCAT_ROLES.isEmpty()){
-                    ArrayList<Role> killerRoles = killerMode ? new ArrayList<>(allowedKillerRoles) : RoleUtil.getKillerRoles();
+                    ArrayList<Role> killerRoles = killerMode || neutralMode ? new ArrayList<>(allowedKillerRoles) : RoleUtil.getKillerRoles();
                     if (killerRoles.isEmpty()) {
                         roleIDs.add(RoleUtil.getRoleName(WatheRoles.KILLER));
                         break;

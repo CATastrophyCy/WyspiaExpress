@@ -572,7 +572,7 @@
 
   "gui.wyspiaexpress.results.category.killer": "Killers",
   "gui.wyspiaexpress.results.category.killer_neutral": "Killer-aligned Neutrals",
-  "gui.wyspiaexpress.results.category.true_neutral": "True Neutrals",
+  "gui.wyspiaexpress.results.category.true_neutral": "Neutral",
   "gui.wyspiaexpress.results.category.civilian": "Civilians",
 
   "announcement.win.civilian": "The Civilians Win!",
