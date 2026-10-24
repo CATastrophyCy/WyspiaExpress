@@ -158,8 +158,8 @@
 				"itemAmount": [],
 				"minimumPlayerSpawn": 9,
 				"maximumPlayerSpawn": 99,
-				"playersPerAdditionalSpawn": 0,
-				"maximumSpawn": 2,
+				"playersPerAdditionalSpawn": 6,
+				"maximumSpawn": 4,
 				"seePoison": false
 			},
 			// Miss chance
@@ -417,7 +417,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
-					"playersPerAdditionalSpawn": 0,
+					"playersPerAdditionalSpawn": 6,
 					"maximumSpawn": 2,
 					"seePoison": false
 				},
@@ -674,8 +674,8 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 15,
 					"maximumPlayerSpawn": 99,
-					"playersPerAdditionalSpawn": 0,
-					"maximumSpawn": 1,
+					"playersPerAdditionalSpawn": 9,
+					"maximumSpawn": 2,
 					"seePoison": false
 				}
 			},
@@ -696,7 +696,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 9,
 					"maximumPlayerSpawn": 99,
-					"playersPerAdditionalSpawn": 0,
+					"playersPerAdditionalSpawn": 6,
 					"maximumSpawn": 2,
 					"seePoison": false
 				}
@@ -718,6 +718,23 @@
 					"maximumPlayerSpawn": 99,
 					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
+					"seePoison": false
+				}
+			},
+			// Config options for RECALLER
+			"recallerConfig": {
+				// Basic role configuration
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [],
+					"passiveIncome": true,
+					"taskIncome": 0,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 12,
+					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 12,
+					"maximumSpawn": 3,
 					"seePoison": false
 				}
 			},
@@ -1038,10 +1055,10 @@
 					"taskIncome": 0,
 					"items": [],
 					"itemAmount": [],
-					"minimumPlayerSpawn": 1,
+					"minimumPlayerSpawn": 6,
 					"maximumPlayerSpawn": 99,
-					"playersPerAdditionalSpawn": 0,
-					"maximumSpawn": 1,
+					"playersPerAdditionalSpawn": 18,
+					"maximumSpawn": 2,
 					"seePoison": false
 				}
 			},
@@ -1085,7 +1102,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 9,
 					"maximumPlayerSpawn": 99,
-					"playersPerAdditionalSpawn": 0,
+					"playersPerAdditionalSpawn": 6,
 					"maximumSpawn": 2,
 					"seePoison": false
 				}
@@ -1106,10 +1123,10 @@
 					"taskIncome": 0,
 					"items": [],
 					"itemAmount": [],
-					"minimumPlayerSpawn": 1,
+					"minimumPlayerSpawn": 6,
 					"maximumPlayerSpawn": 99,
-					"playersPerAdditionalSpawn": 0,
-					"maximumSpawn": 1,
+					"playersPerAdditionalSpawn": 18,
+					"maximumSpawn": 2,
 					"seePoison": false
 				}
 			},

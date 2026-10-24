@@ -4,7 +4,7 @@
 	// By setting this to true shooting a protected player won't drop your revolver regardless if they are innocent or not
 	"disableProtectionGunDrop": true,
 	// Maximum time left, in minutes, for a civilian death or conversion to add time. -1 disables the limit
-	"maxTimeForDeathBonus": -1,
+	"maxTimeForDeathBonus": 7,
 	// Player stun tick after blocking damage
 	"blockStunTicks": 50,
 	// Player stun tick after blocking damage with psycho mode

@@ -1,18 +1,6 @@
 {
   "roleConfig": {
-    "lichConfig": {
-      "basic": {
-        "minimumPlayerSpawn": 99
-      },
-
-    },
     "kinsWatheRoles": {
-      "hackerConfig": {
-        "basic": {
-          "minimumPlayerSpawn": 99,
-          "maximumSpawn": 0
-        }
-      },
       "licensedVillainConfig": {
         "basic": {
           "playersPerAdditionalSpawn": 12,
