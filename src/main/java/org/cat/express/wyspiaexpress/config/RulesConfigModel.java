@@ -11,6 +11,10 @@ public class RulesConfigModel {
     @Comment("By setting this to true shooting a protected player won't drop your revolver regardless if they are innocent or not")
     public boolean disableProtectionGunDrop = true;
 
+    @Comment("Maximum time left, in minutes, for a civilian death or conversion to add time. -1 disables the limit")
+    @ConfigRange(min = -1, max = 1789569)
+    public int maxTimeForDeathBonus = -1;
+
     @Comment("Player stun tick after blocking damage")
     @ConfigRange(min = 0, max = 2147483647)
     public int blockStunTicks = 60;

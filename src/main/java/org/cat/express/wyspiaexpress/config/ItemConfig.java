@@ -95,7 +95,7 @@ public class ItemConfig {
     public static class FakeRevolverConfig{
         @Comment("Basic item configuration")
         public ItemBasicConfig basic = new ItemBasicConfig();
-        @Comment("Enable muzzle flash particles and recoil when firing")
+        @Comment("Enable fake revolver particles and recoil")
         public boolean enableShotEffects = true;
 
         @Comment("Cooldown, in seconds, minimum 0")

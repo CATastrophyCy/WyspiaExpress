@@ -1,5 +1,8 @@
 package org.cat.express.wyspiaexpress.mixin.generic;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import dev.doctor4t.wathe.cca.GameTimeComponent;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
@@ -25,6 +28,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameFunctions.class)
 public abstract class PlayerDeathMixin {
+        @WrapOperation(
+                method = "killPlayer(Lnet/minecraft/entity/player/PlayerEntity;ZLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)V",
+                at = @At(value = "INVOKE", target = "Ldev/doctor4t/wathe/cca/GameTimeComponent;addTime(I)V")
+        )
+        private static void wyspiaexpress$limitCivilianDeathTimeBonus(GameTimeComponent timer, int amount, Operation<Void> original) {
+            if (amount > 0 && !GameUtil.canAddCivilianDeathTime(timer)) return;
+            original.call(timer, amount);
+        }
+
         @Inject(
                 method = "killPlayer(Lnet/minecraft/entity/player/PlayerEntity;ZLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)V",
                 at = @At("TAIL")

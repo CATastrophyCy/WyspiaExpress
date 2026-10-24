@@ -73,7 +73,8 @@ public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
             //  only convert if the game is actually running and they are not already cultist
             if (gameWorldComponent.isRunning() && !gameWorldComponent.isRole(target, WyspiaExpressRoles.CULTIST)) {
                 // add time if a civilian is converted
-                if (gameWorldComponent.isInnocent(target)) {
+                if (gameWorldComponent.isInnocent(target)
+                        && GameUtil.canAddCivilianDeathTime(GameTimeComponent.KEY.get(world))) {
                     GameTimeComponent.KEY.get(target.getWorld()).addTime(GameConstants.TIME_ON_CIVILIAN_KILL);
                 }
                 // add counts revive to lich in case its a killer

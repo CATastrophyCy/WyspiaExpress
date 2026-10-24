@@ -2,11 +2,13 @@ package org.cat.express.wyspiaexpress.util;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.cca.GameTimeComponent;
 import dev.doctor4t.wathe.cca.MapVariablesWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
 import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.wathe.compat.TrainVoicePlugin;
 import dev.doctor4t.wathe.game.GameFunctions;
+import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.util.AnnounceWelcomePayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
@@ -50,6 +52,11 @@ import java.util.Objects;
 
 public final class GameUtil {
     private GameUtil() {}
+
+    public static boolean canAddCivilianDeathTime(GameTimeComponent timer) {
+        int limitMinutes = WyspiaExpress.RULES_CONFIG.maxTimeForDeathBonus();
+        return limitMinutes < 0 || timer.getTime() <= GameConstants.getInTicks(limitMinutes, 0);
+    }
 
     public static void revivePlayer(@NotNull GameWorldComponent gameWorldComponent, @NotNull WorldComponent worldComponent,
                                     @NotNull ServerPlayerEntity player, @NotNull Role role, @NotNull List<Item> keptItems) {
