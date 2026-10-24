@@ -4,10 +4,12 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.game.GameFunctions;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
+import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressGameFunctions;
 import org.cat.express.wyspiaexpress.components.PlayerConfigComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
@@ -44,6 +46,10 @@ public abstract class ReadyPlayersMixin {
     private static List<ServerPlayerEntity> wyspiaexpress$preparePlayers(ServerWorld world,
                                                                        Operation<List<ServerPlayerEntity>> original) {
         List<ServerPlayerEntity> participants = original.call(world);
+        GameWorldComponent game = GameWorldComponent.KEY.get(world);
+        if (game.getGameMode() == WyspiaExpress.ALTERNATE_GAMEMODE) {
+            WyspiaExpress.ALTERNATE_GAMEMODE.selectRound(world, game, participants.size());
+        }
         WorldComponent.KEY.get(world).startRound();
         // Capture first: configured destinations need not be inside the ready-area box.
         WyspiaExpressGameFunctions.prepareRoundPlayers(world, participants);

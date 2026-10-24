@@ -18,31 +18,94 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.KinsWatheConfig;
 import org.BsXinQin.kinswathe.KinsWatheRoles;
-import org.BsXinQin.kinswathe.component.CustomWinnerComponent;
+import org.cat.express.wyspiaexpress.components.RoundResultComponent;
+import org.cat.express.wyspiaexpress.components.RoundResultComponent.Outcome;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.noellesroles.Noellesroles;
 import org.aussiebox.starexpress.StarryExpressRoles;
 import org.aussiebox.starexpress.cca.SilenceComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.RoleCategoryStatisticsManager;
+import org.cat.express.wyspiaexpress.RoleDraftStatisticsManager.Pool;
+import org.cat.express.wyspiaexpress.config.GameConfigs;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
-import org.cat.express.wyspiaexpress.util.RoleUtil;
 import pro.fazeclan.river.stupid_express.StupidExpress;
 import pro.fazeclan.river.stupid_express.constants.SERoles;
 import pro.fazeclan.river.stupid_express.role.avaricious.AvariciousGoldHandler;
 import pro.fazeclan.river.stupid_express.role.thief.ThiefItemTracker;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /** HML-style modded Murder with the pack's assignment, economy and victory patches owned here. */
 public class WyspiaExpressModdedGameMode extends GameMode {
     public WyspiaExpressModdedGameMode(Identifier identifier) {
-        super(identifier, 10, 6);
+        this(identifier, 6);
     }
+
+    protected WyspiaExpressModdedGameMode(Identifier identifier, int minimumPlayers) {
+        super(identifier, 10, minimumPlayers);
+    }
+
+    public boolean isRoleAllowed(Role role) { return true; }
 
     @Override
     public void initializeGame(ServerWorld world, GameWorldComponent gameWorld, List<ServerPlayerEntity> players) {
-        new WyspiaExpressRoleAssignment().initializeRound(world, gameWorld, players);
+        RoundBuilder round = createLegacyRoundBuilder(world, gameWorld, players).prepareRound();
+        int killerQuota = players.size() / GameConfigs.killerDividend(gameWorld);
+        if (!WyspiaExpress.GAMEMODES_CONFIG.useCustomWeightedAssignment()) round.useNativeTeamSelection();
+        int assignedKillerCount = round.assignBaseKillers(killerQuota);
+        round.assignVigilantes(players.size() / GameConfigs.vigilanteDividend(gameWorld));
+        if (WyspiaExpress.ROLES_CONFIG.enableRolePicking()) round.assignCopycatRoles();
+        else round.assignKillerReplacements(role -> true);
+
+        assignLegacyNeutrals(world, gameWorld, round, players.size() / WyspiaExpress.GAMEMODES_CONFIG.neutralDividend());
+        round.assignCivilianReplacements(round.eligibleRoles(role -> role.isInnocent() && !role.canUseKiller()
+                && !WyspiaExpressRoles.TRUE_NEUTRALS.contains(role) && !WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)))
+                .assignAmnesiacFallback()
+                .configureLichRevives(killerQuota);
+        round.completeAssignments(assignedKillerCount);
+    }
+
+    // Legacy Wyspia keeps its category-frequency weighting and randomized neutral split.
+    private RoundBuilder createLegacyRoundBuilder(ServerWorld world, GameWorldComponent gameWorld,
+                                                List<ServerPlayerEntity> players) {
+        return new RoundBuilder(world, gameWorld, players, (pool, player) -> {
+            int dividend = switch (pool) {
+                case KILLER -> GameConfigs.killerDividend(gameWorld);
+                case VIGILANTE -> GameConfigs.vigilanteDividend(gameWorld);
+                default -> WyspiaExpress.GAMEMODES_CONFIG.neutralDividend();
+            };
+            var category = switch (pool) {
+                case KILLER -> RoleCategoryStatisticsManager.RoleCategory.KILLER;
+                case VIGILANTE -> RoleCategoryStatisticsManager.RoleCategory.VIGILANTE;
+                default -> RoleCategoryStatisticsManager.RoleCategory.NEUTRAL;
+            };
+            return RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(dividend, player.getUuid(), category);
+        });
+    }
+
+    private void assignLegacyNeutrals(ServerWorld world, GameWorldComponent gameWorld,
+                                      RoundBuilder round, int neutralQuota) {
+        List<Role> eligibleRoles = round.eligibleRoles(role -> true);
+        List<Role> trueNeutralRoles = eligibleRoles.stream().filter(WyspiaExpressRoles.TRUE_NEUTRALS::contains).toList();
+        List<Role> killerAlignedNeutralRoles = eligibleRoles.stream().filter(WyspiaExpressRoles.KILLER_SIDED_NEUTRALS::contains).toList();
+        List<Role> neutralRolePool = new ArrayList<>(trueNeutralRoles);
+        neutralRolePool.addAll(killerAlignedNeutralRoles);
+        List<ServerPlayerEntity> candidates = round.unassignedCivilians();
+        int forcedNeutralCount = round.assignForcedRoles(candidates, neutralRolePool);
+        int remainingNeutralQuota = Math.max(0, neutralQuota - forcedNeutralCount);
+        int alignedQuotaLimit = (remainingNeutralQuota + 1) / 2;
+        int alignedQuota = alignedQuotaLimit == 0 ? 0 : world.getRandom().nextInt(alignedQuotaLimit + 1);
+        List<ServerPlayerEntity> selectedNeutralPlayers = WyspiaExpress.GAMEMODES_CONFIG.useCustomWeightedAssignment()
+                ? round.selectPlayersForNeutralPool(candidates, remainingNeutralQuota, Pool.KILLER_ALIGNED_NEUTRAL)
+                : round.selectNeutralPlayersByRoleHistory(candidates, neutralRolePool, remainingNeutralQuota);
+        round.assignNeutralRoleCopies(selectedNeutralPlayers, trueNeutralRoles, remainingNeutralQuota - alignedQuota);
+        List<ServerPlayerEntity> alignedCandidates = new ArrayList<>(selectedNeutralPlayers);
+        alignedCandidates.removeIf(player -> !org.agmas.harpymodloader.Harpymodloader.OVERWRITE_ROLES.contains(gameWorld.getRole(player)));
+        round.assignNeutralRoleCopies(alignedCandidates, killerAlignedNeutralRoles, alignedQuota);
+        round.assignAmnesiacFallback(selectedNeutralPlayers);
     }
 
     @Override
@@ -184,36 +247,26 @@ public class WyspiaExpressModdedGameMode extends GameMode {
         // All custom claims use the same positions as the old keep-alive patches, before ordinary endings.
         if (alive.size() == 1) {
             Role role = gameWorld.getRole(alive.getFirst());
-            if (kinVillain) finishCustom(world, gameWorld, alive, role, "licensed_villain", true);
-            else if (eddie) finishCustom(world, gameWorld, alive, role, "eddie_waffles", true);
-            else if (wyspiaVillain) finishCustom(world, gameWorld, alive, role, "villain_licensed", true);
-            else if (arsonist || thief) finishCustom(world, gameWorld, alive, role, RoleUtil.getRoleName(role), false);
+            if (kinVillain) finishCustom(world, gameWorld, alive, role, Outcome.LICENSED_VILLAIN);
+            else if (eddie) finishCustom(world, gameWorld, alive, role, Outcome.EDDIE_WAFFLES);
+            else if (wyspiaVillain) finishCustom(world, gameWorld, alive, role, Outcome.LICENSED_VILLAIN);
+            else if (arsonist) finishCustom(world, gameWorld, alive, role, Outcome.ARSONIST);
+            else if (thief) finishCustom(world, gameWorld, alive, role, Outcome.THIEF);
         }
-        if (cult && onlyCult) finishCustom(world, gameWorld, alive, WyspiaExpressRoles.CULT_LEADER, "cult", true);
+        if (cult && onlyCult) finishCustom(world, gameWorld, alive, WyspiaExpressRoles.CULT_LEADER, Outcome.CULT);
         boolean teamEnding = result == GameFunctions.WinStatus.KILLERS || result == GameFunctions.WinStatus.PASSENGERS;
         return teamEnding && (kinVillain || eddie || wyspiaVillain || cult || arsonist
                 || (thief && ThiefItemTracker.isWeaponAvailable()));
     }
 
     private void finishCustom(ServerWorld world, GameWorldComponent gameWorld, List<ServerPlayerEntity> winners,
-                              Role role, String textId, boolean kinWinner) {
+                              Role role, Outcome outcome) {
         // An item or another rule may already have ended this round; keep its result stable during STOPPING.
         if (gameWorld.getGameStatus() != GameWorldComponent.GameStatus.ACTIVE) return;
-        if (kinWinner) {
-            pro.fazeclan.river.stupid_express.cca.CustomWinnerComponent.KEY.get(world).reset();
-            CustomWinnerComponent winner = CustomWinnerComponent.KEY.get(world);
-            winner.setWinningTextId(textId);
-            winner.setWinners(winners);
-            winner.setColor(role.color());
-            winner.sync();
-        } else {
-            CustomWinnerComponent.KEY.get(world).reset();
-            var winner = pro.fazeclan.river.stupid_express.cca.CustomWinnerComponent.KEY.get(world);
-            winner.setWinningTextId(textId);
-            winner.setWinners(List.copyOf(winners));
-            winner.setColor(role.color());
-            winner.sync();
-        }
+        org.BsXinQin.kinswathe.component.CustomWinnerComponent.KEY.get(world).reset();
+        pro.fazeclan.river.stupid_express.cca.CustomWinnerComponent.KEY.get(world).reset();
+        RoundResultComponent.KEY.get(world).setVictory(outcome, role.color(),
+                winners.stream().map(ServerPlayerEntity::getUuid).toList());
         GameRoundEndComponent.KEY.get(world).setRoundEndData(world.getPlayers(), GameFunctions.WinStatus.KILLERS);
         GameFunctions.stopGame(world);
     }

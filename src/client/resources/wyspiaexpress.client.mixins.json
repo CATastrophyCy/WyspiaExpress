@@ -28,6 +28,7 @@
     "ui.LegacyGuidebookButtonMixin",
     "ui.MoodRendererMixin",
     "ui.RolePickerWidgetMixin",
+    "ui.RoundResultHudMixin",
     "ui.ScreenAccessor",
     "ui.ShopMixin"
   ],

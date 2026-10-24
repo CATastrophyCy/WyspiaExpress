@@ -16,7 +16,7 @@ public class ModeConfigModel {
     @ConfigRange(min = 3, max = 99)
     public int killerAlignedNeutralDividend = 9;
 
-    @Comment("Players per true-neutral slot. Available for the planned true-neutral mode.")
+    @Comment("Players per main true-neutral slot in the true-neutral mode.")
     @ConfigRange(min = 3, max = 99)
     public int trueNeutralDividend = 6;
 

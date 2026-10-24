@@ -18,7 +18,7 @@ public class ModifiersConfigModel {
     public ElusiveConfig elusiveConfig = new ElusiveConfig();
 
     public static class GuesserConfig{
-        @Comment("Wheter killer role will always have guesser added. With this enabled it is recommended to have guesser disabled")
+        @Comment("Automatically give Guesser to killers, or main true neutrals in the true-neutral mode. With this enabled it is recommended to have Guesser disabled in the random modifier pool.")
         public boolean killerAlwaysGuesser = true;
 
         @Comment("Maximum amount of guessers when killerAlwaysGuesser is enabled")

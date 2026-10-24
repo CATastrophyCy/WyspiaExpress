@@ -9,6 +9,7 @@ import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.game.GameConstants;
 import net.minecraft.server.world.ServerWorld;
 import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressModdedGameMode;
+import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressModdedAlternate;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -20,7 +21,8 @@ public abstract class HornStartMixin {
                                                int time, Operation<Void> original) {
         GameWorldComponent game = GameWorldComponent.KEY.get(world);
         if (game.getGameMode() instanceof WyspiaExpressModdedGameMode selected) {
-            original.call(world, selected, game.getMapEffect(), GameConstants.getInTicks(selected.defaultStartTime, 0));
+            GameMode nextMode = WyspiaExpressModdedAlternate.automaticStartMode(selected);
+            original.call(world, nextMode, game.getMapEffect(), GameConstants.getInTicks(nextMode.defaultStartTime, 0));
         } else {
             original.call(world, mode, effect, time);
         }

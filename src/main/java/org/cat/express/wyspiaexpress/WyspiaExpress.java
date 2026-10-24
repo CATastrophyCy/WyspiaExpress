@@ -25,6 +25,8 @@ import org.cat.express.wyspiaexpress.config.*;
 import org.cat.express.wyspiaexpress.items.InvisibleArmor;
 import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressModdedGameMode;
 import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressKillerModdedGameMode;
+import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressTrueNeutralModdedGameMode;
+import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressModdedAlternate;
 import org.cat.express.wyspiaexpress.game.mapeffect.WyspiaExpressMapEffect;
 import org.cat.express.wyspiaexpress.packets.*;
 import org.cat.express.wyspiaexpress.particles.ParticleManager;
@@ -53,6 +55,10 @@ public class WyspiaExpress implements ModInitializer {
             new WyspiaExpressModdedGameMode(Identifier.of(MOD_ID, "modded"));
     public static final WyspiaExpressKillerModdedGameMode KILLER_MODDED_GAMEMODE =
             new WyspiaExpressKillerModdedGameMode(Identifier.of(MOD_ID, "killer_modded"));
+    public static final WyspiaExpressTrueNeutralModdedGameMode TRUE_NEUTRAL_MODDED_GAMEMODE =
+            new WyspiaExpressTrueNeutralModdedGameMode(Identifier.of(MOD_ID, "true_neutral_modded"));
+    public static final WyspiaExpressModdedAlternate ALTERNATE_GAMEMODE =
+            new WyspiaExpressModdedAlternate(Identifier.of(MOD_ID, "modded_alternate"));
     public static final WyspiaExpressMapEffect MAP_EFFECT =
             new WyspiaExpressMapEffect(Identifier.of(MOD_ID, "train"));
 
@@ -68,6 +74,8 @@ public class WyspiaExpress implements ModInitializer {
         ConfigSync.initializeServer();
         WatheGameModes.registerGameMode(MODDED_GAMEMODE.identifier, MODDED_GAMEMODE);
         WatheGameModes.registerGameMode(KILLER_MODDED_GAMEMODE.identifier, KILLER_MODDED_GAMEMODE);
+        WatheGameModes.registerGameMode(TRUE_NEUTRAL_MODDED_GAMEMODE.identifier, TRUE_NEUTRAL_MODDED_GAMEMODE);
+        WatheGameModes.registerGameMode(ALTERNATE_GAMEMODE.identifier, ALTERNATE_GAMEMODE);
         WatheMapEffects.registerMapEffect(MAP_EFFECT.identifier, MAP_EFFECT);
         WyspiaExpressRoles.init();
         WyspiaExpressItems.init();

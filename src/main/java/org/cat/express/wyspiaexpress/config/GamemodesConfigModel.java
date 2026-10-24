@@ -18,11 +18,11 @@ public class GamemodesConfigModel {
     @Comment("Combine killer and true-neutral assignment histories. Killer-aligned history remains separate.")
     public boolean combineKillerAndTrueNeutralHistory = false;
 
-    @Comment("Minimum participants for choosing a true-neutral round once that mode is implemented.")
+    @Comment("Minimum participants for an Alternate launcher round to choose true neutrals. The neutral mode's twelve-player minimum also applies.")
     @ConfigRange(min = 1, max = 99)
     public int trueNeutralMinimumPlayers = 12;
 
-    @Comment("Chance of choosing a true-neutral round once that mode is implemented. Does not enable the mode.")
+    @Comment("Chance of choosing a true-neutral round through the Alternate launcher when its player requirement is met.")
     @ConfigRange(min = 0, max = 1)
     public double trueNeutralChance = 0.5;
 

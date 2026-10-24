@@ -163,6 +163,8 @@
   "announcement.goals.wyspiaexpress.villain_licensed": "You might still retain a shred of conscience...",
   "announcement.win.kinswathe.villain_licensed": "Licensed Villain Win!",
   "game.win.kinswathe.villain_licensed": "The licensed villain ended everyone's life!",
+  "announcement.win.kinswathe.licensed_villain": "Licensed Villain Win!",
+  "game.win.kinswathe.licensed_villain": "The licensed villain ended everyone's life!",
 
   "gui.wyspiaexpress.guesser.civilian_only": "Only civilian roles can be guessed.",
   "gui.wyspiaexpress.guesser.role": "Civilian role",
@@ -320,7 +322,7 @@
   "guidebook.wyspiaexpress.roles.kinswathe.kidnapper.lore": "The Kidnapper prefers obedient puppets to open confrontation. No one knows where those passengers are taken, and no one wants to know.",
 
   "guidebook.wyspiaexpress.roles.kinswathe.physician.summary": "Treat poison and investigate the cause of a passenger’s death.",
-  "guidebook.wyspiaexpress.roles.kinswathe.physician.ability.1": "You can see poisoned players. Use your Medical Kit on a poisoned passenger to remove poison. Taking a Pill protects you from one extra attack.",
+  "guidebook.wyspiaexpress.roles.kinswathe.physician.ability.1": "Use your Medical Kit on a poisoned passenger to remove poison. Taking a Pill protects you from one extra attack.",
   "guidebook.wyspiaexpress.roles.kinswathe.physician.ability.2": "Inspect a body to learn its cause of death. Your sprint stamina lasts 15s",
   "guidebook.wyspiaexpress.roles.kinswathe.physician.lore": "Sworn to heal the wounded and save the dying, the Physician is someone the passengers hope they can trust.",
 
@@ -432,6 +434,10 @@
   "guidebook.wyspiaexpress.roles.stupid_express.thief.ability.2": "A successful steal has a %1$s cooldown. An unsuccessful steal has a %2$s cooldown.",
   "guidebook.wyspiaexpress.roles.stupid_express.thief.ability.3": "Instinct helps you locate players and useful dropped equipment. Only eligible items can be stolen; choose targets who may carry the tools you need.",
   "guidebook.wyspiaexpress.roles.stupid_express.thief.lore": "Empty pockets leave the Thief vulnerable. Someone else’s equipment may be the key to their survival.",
+  "announcement.win.kinswathe.thief": "The Thief Wins!",
+  "game.win.kinswathe.thief": "The Thief is the last passenger standing!",
+  "announcement.win.stupid_express.thief": "The Thief Wins!",
+  "game.win.stupid_express.thief": "The Thief is the last passenger standing!",
 
   "guidebook.wyspiaexpress.roles.wathe.vigilante.summary": "Protect the passengers with your revolver.",
   "guidebook.wyspiaexpress.roles.wathe.vigilante.ability.1": "Shoot killers carefully. Shooting an innocent will remove your mood and drop the revolver. You cannot pick up revolvers dropped by yourself, but you can pick up ones dropped by other player's again",
@@ -549,12 +555,39 @@
   "guidebook.wyspiaexpress.modifiers.wyspiaexpress.guesser.ability.1": "You can choose any living participant and guess their role. A correct guess kills the target. A valid but incorrect guess follows the server’s will kill you instead. Ability cooldown: %1$s.",
   "guidebook.wyspiaexpress.modifiers.wyspiaexpress.guesser.ability.2": "Misspelling or inputting a non-civilian role will not kill you, instead it puts the ability on a %1$s cooldown.",
   "guidebook.wyspiaexpress.modifiers.wyspiaexpress.guesser.ability.3": "At least %1$s living civilians must remain for the ability to be active.",
-  "guidebook.wyspiaexpress.modifiers.wyspiaexpress.guesser.ability.4": "Killers receive this modifier automatically, up to %1$s Guessers.",
+  "guidebook.wyspiaexpress.modifiers.wyspiaexpress.guesser.ability.4": "Killers, or true neutrals in the true-neutral mode, receive this modifier automatically, up to %1$s Guessers.",
 
   "guidebook.role.wyspiaexpress:vent_crawler": "Professional Vent Crawler",
   "guidebook.role.title.wyspiaexpress:vent_crawler": "Sus ඞ",
   "guidebook.wyspiaexpress.modifiers.wyspiaexpress.vent_crawler.summary": "Move faster while crawling through the train.",
   "guidebook.wyspiaexpress.modifiers.wyspiaexpress.vent_crawler.ability.1": "Crawling speed multiplier: %1$s, applied alongside the general crawl multiplier.",
   "guidebook.wyspiaexpress.modifiers.wyspiaexpress.vent_crawler.lore": "Many hours in cramped passages have taught this passenger how to move through them.",
-  "guidebook.role.description.wyspiaexpress:vent_crawler": "Why are you venting? \nGUYS RED IS SUS !!!\n\nGain 50% increased speed when crawling"
+  "guidebook.role.description.wyspiaexpress:vent_crawler": "Why are you venting? \nGUYS RED IS SUS !!!\n\nGain 50% increased speed when crawling",
+
+  "gui.wyspiaexpress.results.winners": "Winners",
+  "gui.wyspiaexpress.results.no_winners": "No winners",
+  "gui.wyspiaexpress.results.unknown_role": "Unknown role",
+
+  "gui.wyspiaexpress.results.category.killer": "Killers",
+  "gui.wyspiaexpress.results.category.killer_neutral": "Killer-aligned Neutrals",
+  "gui.wyspiaexpress.results.category.true_neutral": "True Neutrals",
+  "gui.wyspiaexpress.results.category.civilian": "Civilians",
+
+  "announcement.win.civilian": "The Civilians Win!",
+  "announcement.win.vigilante": "The Civilians Win!",
+  "game.win.passengers": "The remaining threats have been eliminated.",
+
+  "announcement.win.killer": "The Killers Win!",
+  "game.win.killers": "The killers have secured their victory!",
+
+  "game.win.time": "Time ran out. The civilians win this round.",
+
+  "announcement.win.stupid_express.arsonist": "The Arsonist Wins!",
+  "game.win.stupid_express.arsonist": "The Arsonist has doused all players and set the train ablaze!",
+
+  "announcement.win.stupid_express.lovers": "The Lovers Win!",
+  "game.win.stupid_express.lovers": "The lovers survived together.",
+
+  "announcement.win.wyspiaexpress.neutral": "A Neutral Victory!",
+  "game.win.wyspiaexpress.neutral": "The winning passengers are shown below."
 }

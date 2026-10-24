@@ -47,11 +47,6 @@ public final class WyspiaExpressMapEffect extends HarpyExpressNightTrainMapEffec
             player.equipStack(EquipmentSlot.CHEST, new ItemStack(InvisibleArmor.INVISIBLE_CHESTPLATE));
             player.equipStack(EquipmentSlot.LEGS, new ItemStack(InvisibleArmor.INVISIBLE_LEGGINGS));
             player.equipStack(EquipmentSlot.FEET, new ItemStack(InvisibleArmor.INVISIBLE_BOOTS));
-            for (int slot = 0; slot < player.getInventory().size(); slot++) {
-                if (player.getInventory().getStack(slot).isOf(WatheItems.LETTER)) {
-                    player.getInventory().setStack(slot, ItemStack.EMPTY);
-                }
-            }
         }
     }
 
