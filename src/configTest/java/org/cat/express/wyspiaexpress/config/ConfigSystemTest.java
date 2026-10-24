@@ -51,6 +51,7 @@ public final class ConfigSystemTest {
         var decoded=schema.decodeComplete(defaults,"defaults");
         check(decoded.size()>500,"complete schema collected");
         check(decoded.get("tasks.minTaskDelaySeconds").equals(30),"typed int");
+        check(decoded.get("mode.hideGamemode").equals(false),"gamemode role restrictions visible by default");
         check(decoded.get("rules.maxTimeForDeathBonus").equals(-1),"civilian death time limit disabled by default");
         check(decoded.get("roles.roleConfig.gamblerConfig.goodPool") instanceof List<?>,"typed enum list");
         for(var entry:defaults.entrySet()){
@@ -74,11 +75,15 @@ public final class ConfigSystemTest {
         write(dir,"rules.json5","// shared\n{freeze:true,freezeTimer:73}");
         write(dir,"roles.json5","{roleConfig:{outlawConfig:{cooldown:81,basic:{items:[\"KNIFE\"],itemAmount:[2]}}}}");
         write(dir,"gamemodes/wyspiaexpress/killer_modded/rules.json5","{freeze:false,maxTimeForDeathBonus:6}");
+        write(dir,"gamemodes/wyspiaexpress/killer_modded/mode.json5","{hideGamemode:true}");
         write(dir,"gamemodes/wyspiaexpress/killer_modded/roles.json5","{roleConfig:{outlawConfig:{cooldown:0,basic:{items:[]}}}}");
         String authored=Files.readString(dir.resolve("gamemodes/wyspiaexpress/killer_modded/roles.json5"));
         var profiles=ConfigFiles.load(dir,schema);
         check(profiles.get("shared").get("rules.freeze").equals(true),"shared value");
         var mode=profiles.get("wyspiaexpress:killer_modded");
+        check(mode.get("mode.hideGamemode").equals(true),"gamemode visibility overridden per mode");
+        check(profiles.get("shared").get("mode.hideGamemode").equals(false),"mode visibility override leaves shared default intact");
+        check(mode.get("mode.killerDividend").equals(profiles.get("shared").get("mode.killerDividend")),"visibility override inherits other mode settings");
         check(mode.get("rules.freeze").equals(false),"false override");
         check(mode.get("rules.maxTimeForDeathBonus").equals(6),"mode overrides civilian death time limit");
         check(profiles.get("shared").get("rules.maxTimeForDeathBonus").equals(-1),"mode death bonus limit does not change shared default");

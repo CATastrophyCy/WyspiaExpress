@@ -59,7 +59,8 @@ public class RoleComponent implements AutoSyncedComponent {
     private boolean isValidRole(Role role) {
         String roleId = RoleUtil.getRoleId(role);
 
-        return (!(GameWorldComponent.KEY.get(world).getGameMode() instanceof WyspiaExpressModdedGameMode mode)
+        return (WyspiaExpress.MODE_CONFIG.hideGamemode()
+                || !(GameWorldComponent.KEY.get(world).getGameMode() instanceof WyspiaExpressModdedGameMode mode)
                 || mode.isRoleAllowed(role))
                 && !HarpyModLoaderConfig.HANDLER.instance().disabled.contains(roleId)
                 && RoleUtil.roleMeetPlayerRequirement(role);
