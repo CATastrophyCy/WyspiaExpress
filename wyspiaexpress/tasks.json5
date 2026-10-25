@@ -1,8 +1,8 @@
 {
 	// Seconds before the first task after a reset
-	"firstTaskDelaySeconds": 30,
+	"firstTaskDelaySeconds": 45,
 	// Minimum time, in seconds, to get a new task after completing one
-	"minTaskDelaySeconds": 30,
+	"minTaskDelaySeconds": 45,
 	// Maximum time, in seconds, to get a new task after completing one
 	"maxTaskDelaySeconds": 45,
 	// Fraction of full mood drained per second. Default: a full bar in 240 seconds, is a drain of '0.00416666666' 
