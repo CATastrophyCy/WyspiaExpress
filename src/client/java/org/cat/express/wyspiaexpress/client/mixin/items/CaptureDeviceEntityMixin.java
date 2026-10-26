@@ -29,7 +29,7 @@ public abstract class CaptureDeviceEntityMixin {
         if (clientPlayer != null) {
             CaptureDeviceEntityComponent ownerComponent = CaptureDeviceEntityComponent.KEY.get(entity);
 
-            return ownerComponent.getOwner().equals(clientPlayer.getUuid());
+            return clientPlayer.getUuid().equals(ownerComponent.getOwner());
         }
         return false;
     }
