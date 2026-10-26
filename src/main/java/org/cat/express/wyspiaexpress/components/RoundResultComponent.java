@@ -134,7 +134,11 @@ public final class RoundResultComponent implements AutoSyncedComponent {
         }
         this.roles = Map.copyOf(capturedRoles);
         this.eliminated = Set.copyOf(capturedEliminated);
-        this.winners = Set.copyOf(winners.stream().filter(roles::containsKey).toList());
+        this.winners = Set.copyOf(roles.entrySet().stream()
+                .filter(entry -> winners.contains(entry.getKey()) || (outcome == Outcome.CULT
+                        && (entry.getValue() == WyspiaExpressRoles.CULT_LEADER
+                        || entry.getValue() == WyspiaExpressRoles.CULTIST)))
+                .map(Map.Entry::getKey).toList());
         KEY.sync(world);
     }
 
