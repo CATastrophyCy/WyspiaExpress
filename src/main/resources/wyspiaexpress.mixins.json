@@ -45,6 +45,7 @@
     "roles.ThiefItemRuleMixin",
     "roles.ThiefPacketC2SMixin",
     "starryexpress.StarryExpressMixin",
+    "starryexpress.AllergicSyncMixin",
     "starryexpress.SilenceSyncMixin",
     "starryexpress.StarstruckComponentMixin"
   ],
