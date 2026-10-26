@@ -35,6 +35,8 @@
     "noellesroles.NoellesRolesMixin",
     "noellesroles.MorphlingComponentMixin",
     "noellesroles.VultureRoleMixin",
+    "noellesroles.BartenderSyncMixin",
+    "noellesroles.ChameleonSyncMixin",
     "noellesroles.RecallerSyncMixin",
     "noellesroles.VultureSyncMixin",
     "roles.CaptureDeviceMixin",
