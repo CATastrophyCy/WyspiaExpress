@@ -35,6 +35,8 @@
     "noellesroles.NoellesRolesMixin",
     "noellesroles.MorphlingComponentMixin",
     "noellesroles.VultureRoleMixin",
+    "noellesroles.RecallerSyncMixin",
+    "noellesroles.VultureSyncMixin",
     "roles.CaptureDeviceMixin",
     "roles.ConvertedDeadBodyMixin",
     "roles.EddieHearDeadPeopleMixin",
