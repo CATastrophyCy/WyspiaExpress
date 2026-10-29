@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import org.cat.express.wyspiaexpress.command.ModifierCommand;
+import org.cat.express.wyspiaexpress.command.NotReadyCommand;
 import org.cat.express.wyspiaexpress.command.ReviveCommand;
 import org.cat.express.wyspiaexpress.command.RoundTimeCommand;
 import org.cat.express.wyspiaexpress.command.SetMoodCommand;
@@ -19,7 +20,8 @@ public final class WyspiaExpressCommands {
             SetMoodCommand::register,
             ModifierCommand::register,
             SetTaskCommand::register,
-            RoundTimeCommand::register
+            RoundTimeCommand::register,
+            NotReadyCommand::register
     );
 
     private WyspiaExpressCommands() {}

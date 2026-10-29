@@ -15,6 +15,11 @@
   "commands.roundtime.current": "Current round elapsed time: %s.",
   "commands.roundtime.previous": "Previous round duration: %s.",
 
+  "commands.notready.not_in_lobby": "This command can only be used while waiting in the lobby.",
+  "commands.notready.everyone_ready": "Everyone in this world is ready to join the next round.",
+  "commands.notready.players": "Players not joining the next round (%s):",
+  "commands.notready.teleport": "Teleport to %s",
+
   "commands.settask.not_running": "The game must be running to use this command!",
   "commands.settask.invalid_task": "Unknown task. Use sleep, outside, eat, or drink.",
   "commands.settask.task_set": "Set %1$s's task to %2$s.",
