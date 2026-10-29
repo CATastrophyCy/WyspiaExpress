@@ -5,7 +5,6 @@ import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheItems;
 import dev.doctor4t.wathe.index.WatheParticles;
 import dev.doctor4t.wathe.index.WatheSounds;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
@@ -22,8 +21,7 @@ import net.minecraft.world.explosion.Explosion;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressEntities;
 import org.cat.express.wyspiaexpress.config.ItemsConfig;
-import org.cat.express.wyspiaexpress.config.ItemsConfig.ItemBasicConfig;
-import org.cat.express.wyspiaexpress.config.ItemConfig;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 
 public class GrenadeEntity extends ThrownItemEntity {
     public GrenadeEntity(EntityType<?> ignored, World world) {
@@ -47,13 +45,14 @@ public class GrenadeEntity extends ThrownItemEntity {
             Vec3d origin = this.getBoundingBox().getCenter(); // center of grenade
             PlayerEntity owner = (PlayerEntity) this.getOwner();
             ItemsConfig.GrenadeConfig config = WyspiaExpress.ITEMS_CONFIG.itemConfig.grenadeConfig;
-            for (ServerPlayerEntity player : PlayerLookup.around(world, origin, config.radius())) {
+            for (ServerPlayerEntity player : world.getPlayers(player ->
+                    GameUtil.isWithinCylinder(player, origin, config.radius(), 3.5))) {
                 if (!GameFunctions.isPlayerAliveAndSurvival(player)) {
                     continue;
                 }
                 // more mercy towards the owner
                 if(owner != null && player.getUuid().equals(owner.getUuid())
-                        && player.squaredDistanceTo(origin) > config.ownerRadius() * config.ownerRadius())
+                        && !GameUtil.isWithinCylinder(player, origin, config.ownerRadius(), 3.5))
                     continue;
 
                 float exposure = Explosion.getExposure(origin, player); // vanilla explosion ray cast

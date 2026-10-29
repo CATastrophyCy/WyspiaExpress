@@ -239,6 +239,13 @@ public final class GameUtil {
         return isUnderSmokeEffect(viewer) || isUnderSmokeEffect(target);
     }
 
+    public static boolean isWithinCylinder(Entity entity, Vec3d origin, double radius, double verticalRange) {
+        double dx = entity.getX() - origin.x;
+        double dz = entity.getZ() - origin.z;
+        return Math.abs(entity.getY() - origin.y) <= verticalRange
+                && dx * dx + dz * dz <= radius * radius;
+    }
+
     public static long countAutoJoinPlayersOutsideReadyArea(World world) {
         Box readyArea = MapVariablesWorldComponent.KEY.get(world).getReadyArea();
         return world.getPlayers().stream().filter(player -> PlayerConfigComponent.KEY.get(player).autoJoin()

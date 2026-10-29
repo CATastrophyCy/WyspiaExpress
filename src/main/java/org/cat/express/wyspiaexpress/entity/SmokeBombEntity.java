@@ -25,10 +25,9 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressEntities;
 import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
 import org.cat.express.wyspiaexpress.config.ItemsConfig;
-import org.cat.express.wyspiaexpress.config.ItemsConfig.ItemBasicConfig;
-import org.cat.express.wyspiaexpress.config.ItemConfig;
 import org.cat.express.wyspiaexpress.particles.ParticleManager;
 import org.cat.express.wyspiaexpress.particles.SmokeBombEffect;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 
 public class SmokeBombEntity extends ThrownItemEntity {
     public SmokeBombEntity(EntityType<?> ignored, World world) {
@@ -52,11 +51,12 @@ public class SmokeBombEntity extends ThrownItemEntity {
             Vec3d origin = this.getBoundingBox().getCenter(); // center of grenade
             PlayerEntity owner = (PlayerEntity) this.getOwner();
             ItemsConfig.SmokeBombConfig config = WyspiaExpress.ITEMS_CONFIG.itemConfig.smokeBombConfig;
-            for (ServerPlayerEntity player : PlayerLookup.around(world, origin, config.radius())) {
+            for (ServerPlayerEntity player : world.getPlayers(player ->
+                    GameUtil.isWithinCylinder(player, origin, config.radius(), 3.5))) {
                 if (!GameFunctions.isPlayerAliveAndSurvival(player)) continue;
                 // more mercy towards the owner
                 if(owner != null && player.getUuid().equals(owner.getUuid())
-                        && player.squaredDistanceTo(origin) > config.ownerRadius() * config.ownerRadius())
+                        && !GameUtil.isWithinCylinder(player, origin, config.ownerRadius(), 3.5))
                     continue;
 
                 float exposure = Explosion.getExposure(origin, player); // vanilla explosion ray cast
