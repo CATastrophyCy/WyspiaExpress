@@ -48,6 +48,10 @@
   "hud.wyspiaexpress.duration.seconds": "%ss",
   "hud.wyspiaexpress.duration.starstruck": "Starstruck",
 
+  "hud.wyspiaexpress.grenade.self_hit": "Warning!",
+
+  "hud.wyspiaexpress.smoke_bomb.self_hit": "Warning!",
+
   "hud.wyspiaexpress.status.glowing": "Glowing %ss",
   "hud.wyspiaexpress.status.night_vision": "Night vision %ss",
   "hud.wyspiaexpress.status.starstruck": "Starstruck %ss",

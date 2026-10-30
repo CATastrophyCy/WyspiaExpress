@@ -164,6 +164,9 @@ public class ItemConfig {
 
     }
     public static class SmokeBombConfig {
+        @Comment("Show the predicted explosion area and highlight affected players while holding a smoke bomb")
+        public boolean showTrajectory = true;
+
         @Comment("Basic item configuration")
         public ItemBasicConfig basic = new ItemBasicConfig();
         @Comment("Cooldown, in seconds, minimum 0")
@@ -233,6 +236,9 @@ public class ItemConfig {
         public ItemBasicConfig basic = new ItemBasicConfig();
         @Comment("Cooldown, in seconds, minimum 0")
         public int cooldown = 120;
+
+        @Comment("Show the predicted explosion area and highlight affected players while holding a grenade")
+        public boolean showTrajectory = true;
 
         @Comment("Radius of the explosion")
         @ConfigRange(min = 0.0, max = 10.0)

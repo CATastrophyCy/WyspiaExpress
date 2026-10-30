@@ -53,12 +53,20 @@ public final class ConfigSystemTest {
         check(decoded.get("tasks.minTaskDelaySeconds").equals(30),"typed int");
         check(decoded.get("mode.hideGamemode").equals(false),"gamemode role restrictions visible by default");
         check(decoded.get("rules.maxTimeForDeathBonus").equals(-1),"civilian death time limit disabled by default");
+        check(decoded.get("items.itemConfig.grenadeConfig.showTrajectory").equals(true),"grenade preview enabled by default");
+        check(decoded.get("items.itemConfig.smokeBombConfig.showTrajectory").equals(true),"smoke bomb preview enabled by default");
         check(decoded.get("roles.roleConfig.gamblerConfig.goodPool") instanceof List<?>,"typed enum list");
         for(var entry:defaults.entrySet()){
             var changed=new TreeMap<>(defaults);changed.put(entry.getKey(),JsonNull.INSTANCE);
             rejects(()->schema.decodeComplete(changed,"null test"),entry.getKey());
         }
         var values=new TreeMap<>(defaults);
+        schema.overlay("items",JsonParser.parseString("{\"itemConfig\":{\"grenadeConfig\":{\"showTrajectory\":false}}}").getAsJsonObject(),values,"grenade preview override");
+        check(schema.decodeComplete(values,"preview disabled").get("items.itemConfig.grenadeConfig.showTrajectory").equals(false),"grenade preview can be disabled independently");
+        check(schema.decodeComplete(values,"smoke preview unchanged").get("items.itemConfig.smokeBombConfig.showTrajectory").equals(true),"grenade toggle leaves smoke bomb preview enabled");
+        schema.overlay("items",JsonParser.parseString("{\"itemConfig\":{\"smokeBombConfig\":{\"showTrajectory\":false}}}").getAsJsonObject(),values,"smoke preview override");
+        check(schema.decodeComplete(values,"smoke preview disabled").get("items.itemConfig.smokeBombConfig.showTrajectory").equals(false),"smoke bomb preview can be disabled independently");
+        check(schema.decodeComplete(values,"preview disabled").get("items.itemConfig.grenadeConfig.radius").equals(decoded.get("items.itemConfig.grenadeConfig.radius")),"preview override retains blast radius");
         schema.overlay("rules",JsonParser.parseString("{\"freeze\":false,\"blockStunTicks\":0}").getAsJsonObject(),values,"explicit false/zero");
         check(schema.decodeComplete(values,"explicit").get("rules.blockStunTicks").equals(0),"zero retained");
         rejects(()->schema.overlay("rules",JsonParser.parseString("{\"freeez\":true}").getAsJsonObject(),values,"typo"),"unknown field");

@@ -27,7 +27,7 @@ public class SmokeBombItem extends Item {
             SmokeBombEntity smokeBomb = new SmokeBombEntity(WyspiaExpressEntities.SMOKE_BOMB, world);
             smokeBomb.setOwner(user);
             smokeBomb.setPos(user.getX(), user.getEyeY() - 0.1, user.getZ());
-            smokeBomb.setVelocity(user, user.getPitch(), user.getYaw(), 0.0F, 0.5F, 1.0F);
+            smokeBomb.setVelocity(user, user.getPitch(), user.getYaw(), 0.0F, 0.5F, 0.0F);
             world.spawnEntity(smokeBomb);
         }
 

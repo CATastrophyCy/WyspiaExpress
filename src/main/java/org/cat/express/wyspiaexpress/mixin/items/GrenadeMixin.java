@@ -41,7 +41,7 @@ public abstract class GrenadeMixin {
 
             grenade.setOwner(user);
             grenade.setPos(user.getX(), user.getEyeY() - 0.1, user.getZ());
-            grenade.setVelocity(user, user.getPitch(), user.getYaw(), 0.0F, 0.5F, 1.0F);
+            grenade.setVelocity(user, user.getPitch(), user.getYaw(), 0.0F, 0.5F, 0.0F);
 
             world.spawnEntity(grenade);
         }

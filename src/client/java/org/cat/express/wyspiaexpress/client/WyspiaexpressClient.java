@@ -34,6 +34,7 @@ import org.cat.express.wyspiaexpress.client.guidebook.GuidebookDefinitions;
 import org.cat.express.wyspiaexpress.client.guidebook.GuidebookSources;
 import org.cat.express.wyspiaexpress.client.guidebook.WyspiaGuidebookScreen;
 import org.cat.express.wyspiaexpress.client.items.ItemToolTip;
+import org.cat.express.wyspiaexpress.client.items.ThrowablePreview;
 import org.cat.express.wyspiaexpress.client.roles.NoTargetAbilityUtil;
 import org.cat.express.wyspiaexpress.client.roles.TargetAbilityUtil;
 import org.cat.express.wyspiaexpress.client.ui.InventoryAbilityPanel;
@@ -60,6 +61,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
         registerAbilityKey();
         registerAbilityPacket();
         registerEntityRenderer();
+        ThrowablePreview.register();
         ClientLoginNetworking.registerGlobalReceiver(
                 VersionCheckNetwork.VERSION_QUERY_ID,
                 (client, handler, buf, listenerAdder) -> {
