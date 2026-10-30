@@ -48,7 +48,8 @@ public abstract class InstinctMixin {
             return -1;
         }
         int highlight = original.call(target);
-        if (highlight == Color.RED.getRGB() && GameFunctions.isPlayerAliveAndSurvival(player)
+        if (!WyspiaExpress.ROLES_CONFIG.roleConfig.kinsWatheRoles.physicianConfig.seePoisonedPlayers()
+                && highlight == Color.RED.getRGB() && GameFunctions.isPlayerAliveAndSurvival(player)
                 && target instanceof PlayerEntity targetPlayer
                 && GameWorldComponent.KEY.get(player.getWorld()).isRole(player, KinsWatheRoles.PHYSICIAN)
                 && PlayerPoisonComponent.KEY.get(targetPlayer).poisonTicks > 0) {

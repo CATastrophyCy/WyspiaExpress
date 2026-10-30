@@ -455,6 +455,8 @@ public class RoleConfig {
         public static class PhysicianConfig{
             @Comment("Basic role configuration")
             public RoleBasicConfig basic = new RoleBasicConfig();
+            @Comment("See poisoned players with instinct")
+            public boolean seePoisonedPlayers = true;
         }
 
         public static class TechnicianConfig{
