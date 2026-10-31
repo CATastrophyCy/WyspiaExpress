@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.client.mixin.roles;
 
+import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerShopComponent;
@@ -37,6 +38,16 @@ public abstract class NoTargetAbilityHudMixin {
         if (role != null && NoTargetAbilityUtil.isValid(role) && WatheClient.isPlayerAliveAndInSurvival()) {
             AbilityCooldownComponent ability = AbilityCooldownComponent.KEY.get(MinecraftClient.getInstance().player);
             PlayerShopComponent playerShop = PlayerShopComponent.KEY.get(MinecraftClient.getInstance().player);
+            if (LoversComponent.isLover(role)) {
+                Text line = ability.isCooldown()
+                        ? Text.translatable("tip.wyspiaexpress.ability.cooldown", ability.cooldown / 20)
+                        : Text.translatable("tip.wyspiaexpress.ability.lovers", WyspiaexpressClient.abilityBind.getBoundKeyLocalizedText());
+                int lives = LoversComponent.KEY.get(MinecraftClient.getInstance().world).getLives(MinecraftClient.getInstance().player.getUuid());
+                line = line.copy().append(Text.translatable("hud.wyspiaexpress.lovers.lives", lives));
+                context.drawTextWithShadow(getTextRenderer(), line,
+                        context.getScaledWindowWidth() - getTextRenderer().getWidth(line),
+                        context.getScaledWindowHeight() - getTextRenderer().fontHeight, role.color());
+            }
             if(role == WyspiaExpressRoles.OUTLAW)
                 drawOutlawHud(context, ability, playerShop);
             if(role == WyspiaExpressRoles.EDDIE_WAFFLES)

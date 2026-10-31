@@ -41,6 +41,7 @@ public class WyspiaExpressItems {
         registerEvents();
     }
 
+    public static final Item LOVERS_PHONE = registerItem(new LoversPhoneItem(new Item.Settings().maxCount(1)), "lovers_phone");
     public static final Item FAKE_REVOLVER = registerItem(new FakeRevolverItem(new Item.Settings().maxCount(1)), "fake_revolver");
     public static final Item FUN_BOX = registerItem( new Item(new Item.Settings()), "fun_box");
     public static final Item SENSE_DEAD = registerItem( new Item(new Item.Settings()), "sense_dead");
@@ -99,6 +100,7 @@ public class WyspiaExpressItems {
     public static void registerItems(){
         registerItemsCooldown();
         // registerItemGroups
+        registerItemGroup(LOVERS_PHONE, WatheItems.EQUIPMENT_GROUP);
         registerItemGroup(FAKE_REVOLVER, WatheItems.EQUIPMENT_GROUP);
         registerItemGroup(MEGAPHONE, WatheItems.EQUIPMENT_GROUP);
         registerItemGroup(OUTLAW_REVOLVER, WatheItems.EQUIPMENT_GROUP);

@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress;
 
+import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import dev.doctor4t.wathe.entity.PlayerBodyEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.BsXinQin.kinswathe.entities.CaptureDeviceEntity;
@@ -34,6 +35,7 @@ public class WyspiaExpressComponents implements EntityComponentInitializer, Worl
     }
     @Override
     public void registerWorldComponentFactories(@NotNull WorldComponentFactoryRegistry registry) {
+        registry.register(LoversComponent.KEY, LoversComponent::new);
         registry.register(LichReviveComponent.KEY, LichReviveComponent::new);
         registry.register(WorldComponent.KEY, WorldComponent::new);
         registry.register(RoleComponent.KEY, RoleComponent::new);

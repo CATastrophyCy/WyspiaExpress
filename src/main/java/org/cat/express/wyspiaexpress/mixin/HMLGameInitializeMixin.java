@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.mixin;
 
+import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameTimeComponent;
@@ -29,7 +30,6 @@ import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.agmas.harpymodloader.events.ModifierAssigned;
 import org.agmas.harpymodloader.events.ResetPlayerEvent;
 import org.agmas.harpymodloader.modded_murder.ModdedMurderGameMode;
-import org.agmas.harpymodloader.modded_murder.ModdedWeights;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
 import org.agmas.harpymodloader.modifiers.Modifier;
 import org.agmas.noellesroles.Noellesroles;
@@ -65,6 +65,7 @@ public abstract class HMLGameInitializeMixin {
             List<ServerPlayerEntity> participants,
             CallbackInfo ci
     ) {
+        LoversComponent.KEY.get(world).reset();
         // init
         Harpymodloader.refreshRoles();
         HarpyModLoaderConfig.HANDLER.load();
@@ -397,6 +398,7 @@ public abstract class HMLGameInitializeMixin {
         List<Role> trueNeutralRoles = new ArrayList<>();
         List<Role> killerAlignedNeutralRoles = new ArrayList<>();
         for (Role role : WatheRoles.ROLES) {
+            if (role == WyspiaExpressRoles.LOVER_2) continue;
             if (Harpymodloader.NON_MURDER_ROLES.contains(role)) continue;
             if (Harpymodloader.VANNILA_ROLES.contains(role)) continue;
             if (HarpyModLoaderConfig.HANDLER.instance().disabled.contains(RoleUtil.getRoleId(role))) continue;
@@ -550,6 +552,9 @@ public abstract class HMLGameInitializeMixin {
             List<ServerPlayerEntity> candidatePlayers,
             GameWorldComponent gameWorld,
             World world) {
+        if (role == WyspiaExpressRoles.LOVER_1) {
+            return LoversComponent.KEY.get(world).assignPairs(requestedAssignments, candidatePlayers);
+        }
         if(hasAssignedHacker && !KinsWatheConfig.HANDLER.instance().HackerGenerateWithMimic && role.equals(Noellesroles.MIMIC)){
             return 0;
         }
@@ -563,10 +568,7 @@ public abstract class HMLGameInitializeMixin {
                         && !assignedPlayers.contains(serverPlayer)) {
                     assignedPlayers.add(serverPlayer);
                     requestedAssignments--;
-                    ModdedWeights.roleRounds
-                            .computeIfAbsent(role, r -> new HashMap<>())
-                            .put(player.getUuid(),
-                                    ModdedWeights.roleRounds.get(role).getOrDefault(player.getUuid(), 1) + 1);
+                    RoleUtil.recordRoleAssignment(player, role);
                 }
             }
         }
@@ -582,9 +584,7 @@ public abstract class HMLGameInitializeMixin {
         for (ServerPlayerEntity player : RoleUtil.selectPlayersByRoleHistory(eligiblePlayers, List.of(role),
                 requestedAssignments, gameWorld.areWeightsEnabled(), world.getRandom())) {
             assignedPlayers.add(player);
-            ModdedWeights.roleRounds
-                    .computeIfAbsent(role, r -> new HashMap<>())
-                    .put(player.getUuid(), ModdedWeights.roleRounds.get(role).getOrDefault(player.getUuid(), 1) + 1);
+            RoleUtil.recordRoleAssignment(player, role);
         }
 
         int assignedCount = assignedPlayers.size();

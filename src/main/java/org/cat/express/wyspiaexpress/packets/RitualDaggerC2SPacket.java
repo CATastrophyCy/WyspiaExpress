@@ -1,10 +1,6 @@
 package org.cat.express.wyspiaexpress.packets;
 
-import dev.doctor4t.wathe.cca.GameTimeComponent;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
-import dev.doctor4t.wathe.compat.TrainVoicePlugin;
-import dev.doctor4t.wathe.game.GameConstants;
-import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheSounds;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -18,14 +14,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
-import org.agmas.harpymodloader.component.WorldModifierComponent;
-import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
-import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
-import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
-import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.cat.express.wyspiaexpress.util.ItemUtil;
 import org.jetbrains.annotations.NotNull;
@@ -72,29 +63,7 @@ public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
 
             //  only convert if the game is actually running and they are not already cultist
             if (gameWorldComponent.isRunning() && !gameWorldComponent.isRole(target, WyspiaExpressRoles.CULTIST)) {
-                // add time if a civilian is converted
-                if (gameWorldComponent.isInnocent(target)
-                        && GameUtil.canAddCivilianDeathTime(GameTimeComponent.KEY.get(world))) {
-                    GameTimeComponent.KEY.get(target.getWorld()).addTime(GameConstants.TIME_ON_CIVILIAN_KILL);
-                }
-                // add counts revive to lich in case its a killer
-                if (gameWorldComponent.canUseKillerFeatures(target)) {
-                    var reviveComponent = LichReviveComponent.KEY.get(target.getWorld());
-                    // count killers that are still alive
-                    if(target.getWorld().getPlayers().stream().filter(gameWorldComponent::canUseKillerFeatures).filter(GameFunctions::isPlayerAliveAndSurvival).count()
-                            + reviveComponent.getAvailableRevives() - 1 < reviveComponent.getMaxRevives())
-                        reviveComponent.incrementAvailableRevives();
-                }
-                WorldModifierComponent.KEY.get(world).getModifiers(target).remove(WyspiaExpressRoles.GUESSER);
-                TrainVoicePlugin.resetPlayer(target.getUuid());
-                GameUtil.sendConvertedMessage(world, gameWorldComponent, player, target);
-                gameWorldComponent.addRole(target, WyspiaExpressRoles.CULTIST);
-                PlayerCultistComponent.KEY.get(target).reset();
-                ShopUtil.setCoin(target, WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.startingCoin());
-
-                GameUtil.sendRoleAnnouncement(target, WyspiaExpressRoles.CULTIST, gameWorldComponent);
-                ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, WyspiaExpressRoles.CULTIST);
-
+                GameUtil.convertToCultist(player, target);
             }
 
             player.swingHand(Hand.MAIN_HAND);

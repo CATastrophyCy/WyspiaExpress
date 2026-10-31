@@ -32,6 +32,7 @@ public final class GuidebookCatalog {
         Set<String> keys = new HashSet<>();
         if (client.world == null || client.player == null) return keys;
         var role = GameWorldComponent.KEY.get(client.world).getRole(client.player);
+        if (role == WyspiaExpressRoles.LOVER_2) role = WyspiaExpressRoles.LOVER_1;
         if (role != null) keys.add("role:" + RoleUtil.getRoleId(role));
         var modifiers = WorldModifierComponent.KEY.get(client.world).getModifiers(client.player);
         if (modifiers != null) modifiers.forEach(mod -> keys.add("modifier:" + RoleUtil.getModifierId(mod)));

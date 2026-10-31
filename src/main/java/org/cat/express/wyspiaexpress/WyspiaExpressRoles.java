@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress;
 
+import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.api.event.AllowPlayerDeath;
@@ -27,7 +28,6 @@ import org.agmas.noellesroles.Noellesroles;
 import org.aussiebox.starexpress.StarryExpressModifiers;
 import org.cat.express.wyspiaexpress.components.*;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
-import org.cat.express.wyspiaexpress.config.RolesConfig;
 import org.cat.express.wyspiaexpress.config.RolesConfig.RoleBasicConfig;
 import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressKillerModdedGameMode;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
@@ -70,8 +70,9 @@ public class WyspiaExpressRoles {
         AllowPlayerDeath.EVENT.register(((victim, killer,identifier) -> {
             GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(victim.getWorld());
 
-            // disallow follower from killing their leader
             if (killer != null) {
+                if (LoversComponent.KEY.get(victim.getWorld()).arePartners(victim.getUuid(), killer.getUuid()))
+                    return false;
                 if (gameWorldComponent.isRole(victim, LICH) && gameWorldComponent.isRole(killer, LICH_GHOUL))
                     return false;
                 if (gameWorldComponent.isRole(victim, CULT_LEADER) && gameWorldComponent.isRole(killer, CULTIST))
@@ -194,6 +195,13 @@ public class WyspiaExpressRoles {
             WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2,
             true
     ));
+    public static final Role LOVER_1 = registerRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "lover_1"), 0xFF82BC, false, false,
+            Role.MoodType.FAKE, WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2, true));
+    public static final Role LOVER_2 = registerRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "lover_2"), 0xFF82BC, false, false,
+            Role.MoodType.FAKE, WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2, true));
+
     public static Role VILLAIN_LICENSED = registerRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "villain_licensed"),
             0x404040,
@@ -263,6 +271,7 @@ public class WyspiaExpressRoles {
         // secondary revive roles
         HIDDEN_ROLES.add(CULTIST);
         HIDDEN_ROLES.add(LICH_GHOUL);
+        HIDDEN_ROLES.add(LOVER_2);
         // obsolete roles
         HIDDEN_ROLES.add(MUZZLER);
         HIDDEN_ROLES.add(BETTER_VIGILANTE);
@@ -293,6 +302,8 @@ public class WyspiaExpressRoles {
         TRUE_NEUTRALS.add(CULT_LEADER);
         TRUE_NEUTRALS.add(CULTIST);
         TRUE_NEUTRALS.add(VILLAIN_LICENSED);
+        TRUE_NEUTRALS.add(LOVER_1);
+        TRUE_NEUTRALS.add(LOVER_2);
 
         KILLER_SIDED_NEUTRALS.add(JESTER);
         KILLER_SIDED_NEUTRALS.add(VULTURE);
@@ -373,12 +384,16 @@ public class WyspiaExpressRoles {
 
     private static void registerRoleEffect(){
         ModdedRoleAssigned.EVENT.register((player, role)->{
+            if (!LoversComponent.isLover(role)) LoversComponent.KEY.get(player.getWorld()).endBond(player.getUuid());
             if(role.equals(EDGE_LORD)){
                 // give edge lord night vision
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, -1 , 0, true, false, false));
             }
             if (role.equals(AVARICIOUS)) {
                 AvariciousGoldHandler.gameStartTime = GAME_START_TIME;
+            }
+            if (LoversComponent.isLover(role)) {
+                player.giveItemStack(WyspiaExpressItems.LOVERS_PHONE.getDefaultStack());
             }
             if(role.equals(LICH)){
                 AbilityCooldownComponent.KEY.get(player).setAbilityCooldown(WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.startingCooldown());
@@ -419,6 +434,8 @@ public class WyspiaExpressRoles {
 
     private static void registerRoleConfigs(){
         // mine
+        registerRoleBasicConfig(LOVER_1, WyspiaExpress.ROLES_CONFIG.roleConfig.loversConfig.basic);
+        registerRoleBasicConfig(LOVER_2, WyspiaExpress.ROLES_CONFIG.roleConfig.loversConfig.basic);
         registerRoleBasicConfig(COPYCAT, WyspiaExpress.ROLES_CONFIG.roleConfig.copycatConfig.basic);
         registerRoleBasicConfig(OUTLAW, WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.basic);
         registerRoleBasicConfig(NOTE_TAKER, WyspiaExpress.ROLES_CONFIG.roleConfig.noteTakerConfig.basic);

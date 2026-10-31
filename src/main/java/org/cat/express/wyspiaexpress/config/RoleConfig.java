@@ -24,6 +24,10 @@ public class RoleConfig {
     @Comment("Config options for EDDIE_WAFFLES")
     public EddieWafflesConfig eddieWafflesConfig = new EddieWafflesConfig();
 
+    @Comment("Config options for LOVERS (one spawn is one pair)")
+    public LoversConfig loversConfig = new LoversConfig();
+
+
     // wathe
     @Comment("Config options for VIGILANTE")
     public VigilanteConfig vigilanteConfig = new VigilanteConfig();
@@ -38,6 +42,13 @@ public class RoleConfig {
     public KinsWatheRoles kinsWatheRoles = new KinsWatheRoles();
 
     // Mine
+    public static class LoversConfig {
+        public RoleBasicConfig basic = new RoleBasicConfig();
+        @Comment("Teleport cooldown, in seconds")
+        @ConfigRange(min = 0, max = 107374182)
+        public int cooldown = 60;
+    }
+
     public static class CopycatConfig {
         @Comment("Basic role configuration")
         public RoleBasicConfig basic = new RoleBasicConfig();

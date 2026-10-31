@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.packets;
 
+import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
@@ -52,6 +53,8 @@ public record NoTargetAbilityC2SPacket() implements CustomPayload {
             GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
             AbilityCooldownComponent abilityPlayerComponent = AbilityCooldownComponent.KEY.get(player);
             if (GameFunctions.isPlayerAliveAndSurvival(player) && !abilityPlayerComponent.isCooldown()){
+                if (LoversComponent.isLover(gameWorldComponent.getRole(player)))
+                    LoversComponent.KEY.get(player.getWorld()).teleport(player);
 
                 if(gameWorldComponent.isRole(player, WyspiaExpressRoles.OUTLAW))
                     handleOutlaw(player, gameWorldComponent, abilityPlayerComponent);

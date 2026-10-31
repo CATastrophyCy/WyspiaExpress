@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.mixin.generic;
 
+import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import com.llamalad7.mixinextras.sugar.Local;
 import dev.doctor4t.wathe.cca.GameRoundEndComponent;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
@@ -9,6 +10,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import org.BsXinQin.kinswathe.component.CustomWinnerComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.components.RoundResultComponent;
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,6 +26,27 @@ public abstract class KeepGameGoingMixin {
     private void keepLicensedvillainGame(@NotNull ServerWorld world, @NotNull GameWorldComponent gameWorld, @NotNull CallbackInfo ci, @Local(name = "winStatus") @NotNull GameFunctions.@NotNull WinStatus winStatus) {
         List<ServerPlayerEntity> players = world.getPlayers();
         List<ServerPlayerEntity> alivePlayers = players.stream().filter(GameFunctions::isPlayerAliveAndSurvival).toList();
+        LoversComponent lovers = LoversComponent.KEY.get(world);
+        var winningPair = lovers.winningPair(alivePlayers);
+        if (winStatus != GameFunctions.WinStatus.TIME && !winningPair.isEmpty()) {
+            RoundResultComponent.KEY.get(world).setVictory(
+                    RoundResultComponent.Outcome.LOVERS,
+                    WyspiaExpressRoles.LOVER_1.color(), winningPair);
+            CustomWinnerComponent winner = CustomWinnerComponent.KEY.get(world);
+            winner.setWinningTextId("lovers");
+            winner.setWinners(alivePlayers);
+            winner.setColor(WyspiaExpressRoles.LOVER_1.color());
+            winner.sync();
+            GameRoundEndComponent.KEY.get(world).setRoundEndData(players, GameFunctions.WinStatus.KILLERS);
+            GameFunctions.stopGame(world);
+            ci.cancel();
+            return;
+        }
+        if (alivePlayers.stream().anyMatch(player -> LoversComponent.isLover(gameWorld.getRole(player)))
+                && (winStatus == GameFunctions.WinStatus.KILLERS || winStatus == GameFunctions.WinStatus.PASSENGERS)) {
+            ci.cancel();
+            return;
+        }
         boolean eddieAlive = false;
         boolean villainLicensedAlive = false;
         boolean onlyCultist = true;

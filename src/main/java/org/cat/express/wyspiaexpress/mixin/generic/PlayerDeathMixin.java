@@ -19,6 +19,7 @@ import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
 import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
+import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.spongepowered.asm.mixin.Mixin;
@@ -58,6 +59,8 @@ public abstract class PlayerDeathMixin {
 
                 GameUtil.sendPlayerDeathMessage(serverWorld, component, victim, killer, deathReason);
 
+                LoversComponent.KEY.get(serverWorld).onDeath(victim);
+
                 if (killer == null) return;
                 // remove phantom invisibility depending on the config
                 if (component.isRole(killer, Noellesroles.PHANTOM) && WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.phantomConfig.loseInvisibilityWhenKill()) {
@@ -94,5 +97,6 @@ public abstract class PlayerDeathMixin {
         private static void wyspiaexpress$resetStat(ServerWorld world, CallbackInfo ci) {
             LichReviveComponent.KEY.get(world).reset();
             WorldComponent.KEY.get(world).reset();
+            LoversComponent.KEY.get(world).reset();
         }
 }

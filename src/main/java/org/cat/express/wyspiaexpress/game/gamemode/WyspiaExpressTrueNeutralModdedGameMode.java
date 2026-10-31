@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.game.gamemode;
 
+import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.ScoreboardRoleSelectorComponent;
@@ -20,7 +21,8 @@ public final class WyspiaExpressTrueNeutralModdedGameMode extends WyspiaExpressM
     public WyspiaExpressTrueNeutralModdedGameMode(Identifier identifier) { super(identifier, 12); }
 
     public static boolean isMainRole(Role role) {
-        return role != null && (role == WyspiaExpressRoles.CULT_LEADER
+        return role != null && (LoversComponent.isLover(role)
+                || role == WyspiaExpressRoles.CULT_LEADER
                 || role == WyspiaExpressRoles.VILLAIN_LICENSED || role == SERoles.THIEF);
     }
 
@@ -55,6 +57,7 @@ public final class WyspiaExpressTrueNeutralModdedGameMode extends WyspiaExpressM
                 .filter(role -> role.isInnocent() && !role.canUseKiller()).toList())
                 .assignAmnesiacFallback();
         RoleDraftStatisticsManager.getInstance().recordRound(players, gameWorld, Pool.TRUE_NEUTRAL, alignedNeutralDraft.hadEligibleCapacity());
-        round.completeAssignments(trueNeutralDraft.assignedCount(), WyspiaExpressTrueNeutralModdedGameMode::isMainRole);
+        round.completeAssignments((int) players.stream().filter(player -> isMainRole(gameWorld.getRole(player))).count(),
+                WyspiaExpressTrueNeutralModdedGameMode::isMainRole);
     }
 }

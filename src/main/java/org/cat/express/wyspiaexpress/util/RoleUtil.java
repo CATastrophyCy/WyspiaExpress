@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -115,8 +116,17 @@ public final class RoleUtil {
     }
 
     private static int getRoleHistoryCount(Role role, PlayerEntity player) {
-        var counts = ModdedWeights.roleRounds.get(role);
+        var counts = ModdedWeights.roleRounds.get(roleHistoryKey(role));
         return counts == null ? 1 : counts.getOrDefault(player.getUuid(), 1);
+    }
+
+    public static Role roleHistoryKey(Role role) {
+        return role == WyspiaExpressRoles.LOVER_2 ? WyspiaExpressRoles.LOVER_1 : role;
+    }
+
+    public static void recordRoleAssignment(PlayerEntity player, Role role) {
+        var history = ModdedWeights.roleRounds.computeIfAbsent(roleHistoryKey(role), ignored -> new HashMap<>());
+        history.put(player.getUuid(), history.getOrDefault(player.getUuid(), 1) + 1);
     }
 
     /** Draw distinct recipients using fixed weights for this draft. */

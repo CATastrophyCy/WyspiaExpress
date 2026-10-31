@@ -43,7 +43,8 @@
       "wyspiaexpress:world_component",
       "wyspiaexpress:movement_component",
       "wyspiaexpress:role_component",
-      "wyspiaexpress:round_result"
+      "wyspiaexpress:round_result",
+      "wyspiaexpress:lovers"
     ]
   },
   "mixins": [

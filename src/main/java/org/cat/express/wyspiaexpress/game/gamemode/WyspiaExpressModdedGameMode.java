@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.game.gamemode;
 
+import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import dev.doctor4t.wathe.api.GameMode;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameRoundEndComponent;
@@ -36,6 +37,7 @@ import pro.fazeclan.river.stupid_express.role.avaricious.AvariciousGoldHandler;
 import pro.fazeclan.river.stupid_express.role.thief.ThiefItemTracker;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.ArrayList;
 
 /** HML-style modded Murder with the pack's assignment, economy and victory patches owned here. */
@@ -228,6 +230,13 @@ public class WyspiaExpressModdedGameMode extends GameMode {
 
     private boolean applyNeutralConditions(ServerWorld world, GameWorldComponent gameWorld,
                                            List<ServerPlayerEntity> alive, GameFunctions.WinStatus result) {
+        LoversComponent lovers = LoversComponent.KEY.get(world);
+        var winningPair = lovers.winningPair(alive);
+        if (!winningPair.isEmpty()) {
+            finishCustomWinners(world, gameWorld, winningPair, WyspiaExpressRoles.LOVER_1, Outcome.LOVERS);
+            return true;
+        }
+        boolean loversAlive = alive.stream().anyMatch(player -> LoversComponent.isLover(gameWorld.getRole(player)));
         boolean kinVillain = false;
         boolean eddie = false;
         boolean wyspiaVillain = false;
@@ -257,18 +266,22 @@ public class WyspiaExpressModdedGameMode extends GameMode {
         }
         if (cult && onlyCult) finishCustom(world, gameWorld, alive, WyspiaExpressRoles.CULT_LEADER, Outcome.CULT);
         boolean teamEnding = result == GameFunctions.WinStatus.KILLERS || result == GameFunctions.WinStatus.PASSENGERS;
-        return teamEnding && (kinVillain || eddie || wyspiaVillain || cult || arsonist
+        return teamEnding && (loversAlive || kinVillain || eddie || wyspiaVillain || cult || arsonist
                 || (thief && ThiefItemTracker.isWeaponAvailable()));
     }
 
     private void finishCustom(ServerWorld world, GameWorldComponent gameWorld, List<ServerPlayerEntity> winners,
                               Role role, Outcome outcome) {
+        finishCustomWinners(world, gameWorld, winners.stream().map(ServerPlayerEntity::getUuid).toList(), role, outcome);
+    }
+
+    private void finishCustomWinners(ServerWorld world, GameWorldComponent gameWorld, List<UUID> winners,
+                                     Role role, Outcome outcome) {
         // An item or another rule may already have ended this round; keep its result stable during STOPPING.
         if (gameWorld.getGameStatus() != GameWorldComponent.GameStatus.ACTIVE) return;
         org.BsXinQin.kinswathe.component.CustomWinnerComponent.KEY.get(world).reset();
         pro.fazeclan.river.stupid_express.cca.CustomWinnerComponent.KEY.get(world).reset();
-        RoundResultComponent.KEY.get(world).setVictory(outcome, role.color(),
-                winners.stream().map(ServerPlayerEntity::getUuid).toList());
+        RoundResultComponent.KEY.get(world).setVictory(outcome, role.color(), winners);
         GameRoundEndComponent.KEY.get(world).setRoundEndData(world.getPlayers(), GameFunctions.WinStatus.KILLERS);
         GameFunctions.stopGame(world);
     }

@@ -33,6 +33,7 @@ public final class GuidebookItems {
         var role = entry.role();
         if (role != null) {
             stacks.addAll(RoleLoadoutResolver.configured(role));
+            if (org.cat.express.wyspiaexpress.components.roles.LoversComponent.isLover(role)) add(stacks, WyspiaExpressItems.LOVERS_PHONE, 1);
             if (role == WatheRoles.VIGILANTE) add(stacks, WatheItems.REVOLVER, 1);
             if (role == Noellesroles.BETTER_VIGILANTE) add(stacks, WatheItems.GRENADE, 1);
             if (role == Noellesroles.MIMIC || role == Noellesroles.JESTER) add(stacks, ModItems.FAKE_KNIFE, 1);

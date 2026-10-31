@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress;
 
+import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.MapVariablesWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerPoisonComponent;
@@ -82,6 +83,7 @@ public class WyspiaExpressGameFunctions {
                 else{
                     joining.changeGameMode(GameMode.ADVENTURE);
                 }
+                LoversComponent.KEY.get(overworld).onJoin(joining);
             });
         });
     }

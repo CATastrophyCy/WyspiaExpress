@@ -70,7 +70,8 @@ public final class RoundResultComponent implements AutoSyncedComponent {
 
     public boolean hasResult() { return outcome != null; }
     public boolean ownsResult() {
-        return hasResult() && GameWorldComponent.KEY.get(world).getGameMode() instanceof WyspiaExpressModdedGameMode;
+        return hasResult() && (outcome == Outcome.LOVERS
+                || GameWorldComponent.KEY.get(world).getGameMode() instanceof WyspiaExpressModdedGameMode);
     }
     public boolean didWin(UUID player) { return winners.contains(player); }
     public boolean participated(UUID player) { return profiles.containsKey(player); }

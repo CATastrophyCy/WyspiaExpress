@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.mixin.generic;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.doctor4t.wathe.api.event.AllowPlayerDeath;
 import dev.doctor4t.wathe.cca.PlayerPsychoComponent;
 import dev.doctor4t.wathe.game.GameFunctions;
@@ -10,45 +11,57 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
+import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.jetbrains.annotations.Nullable;
+
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = GameFunctions.class, priority = 100)
 public class PlayerShieldMixin {
-    // force to check if the player can die first, before running any logic that gets injected
-    @Inject(method = "killPlayer(Lnet/minecraft/entity/player/PlayerEntity;ZLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)V", at = @At("HEAD"), cancellable = true)
-    private static void wyspiaexpress$checkAllowPlayerDeath(PlayerEntity victim, boolean spawnBody, @Nullable PlayerEntity killer, Identifier deathReason, CallbackInfo ci) {
-        PlayerEffectComponent effectComponent = PlayerEffectComponent.KEY.get(victim);
-        if (!AllowPlayerDeath.EVENT.invoker().allowDeath(victim, killer, deathReason)) {
+    @Inject(method = "killPlayer(Lnet/minecraft/entity/player/PlayerEntity;ZLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)V",
+            at = @At("HEAD"), cancellable = true)
+    private static void wyspiaexpress$checkAllowPlayerDeath(PlayerEntity victim, boolean spawnBody,
+            @Nullable PlayerEntity killer, Identifier deathReason, CallbackInfo ci) {
+        LoversComponent lovers = LoversComponent.KEY.get(victim.getWorld());
+        if (lovers.isSharedDeath(victim, deathReason)) return;
 
-            if(WyspiaExpress.RULES_CONFIG.blockStunTicks() > effectComponent.stunTicks)
-                effectComponent.setStunTicks(WyspiaExpress.RULES_CONFIG.blockStunTicks());
-            Text message = Text.literal("Your protection saved you from ").append(GameUtil.getDeathReason(deathReason));
-            victim.sendMessage(message, true);
+        if (!AllowPlayerDeath.EVENT.invoker().allowDeath(victim, killer, deathReason)) {
+            wyspiaexpress$showProtection(victim, deathReason, WyspiaExpress.RULES_CONFIG.blockStunTicks());
             ci.cancel();
             return;
         }
-        // check psycho shield, as that doesn't get checked on AllowPlayerDeath
-        PlayerPsychoComponent component = PlayerPsychoComponent.KEY.get(victim);
-        if (component.getPsychoTicks() > 0) {
-            // they still have psycho protection
-            if (component.getArmour() > 0) {
 
-                if(WyspiaExpress.RULES_CONFIG.psychoStunTicks()> effectComponent.stunTicks)
-                    effectComponent.setStunTicks(WyspiaExpress.RULES_CONFIG.psychoStunTicks()); // use a different stun duration
-                component.setArmour(component.getArmour() - 1);
-
-                victim.playSoundToPlayer(WatheSounds.ITEM_PSYCHO_ARMOUR, SoundCategory.MASTER, 5F, 1F);
-                Text message = Text.literal("Your protection saved you from ").append(GameUtil.getDeathReason(deathReason));;
-                victim.sendMessage(message, true);
-                ci.cancel();
-                return;
-            }
+        PlayerPsychoComponent psycho = PlayerPsychoComponent.KEY.get(victim);
+        if (psycho.getPsychoTicks() > 0 && psycho.getArmour() > 0) {
+            psycho.setArmour(psycho.getArmour() - 1);
+            victim.playSoundToPlayer(WatheSounds.ITEM_PSYCHO_ARMOUR, SoundCategory.MASTER, 5F, 1F);
+            wyspiaexpress$showProtection(victim, deathReason, WyspiaExpress.RULES_CONFIG.psychoStunTicks());
+            ci.cancel();
+            return;
         }
 
+        if (GameFunctions.isPlayerAliveAndSurvival(victim) && lovers.trySurviveLethalHit(victim)) ci.cancel();
+    }
+
+    @Unique
+    private static void wyspiaexpress$showProtection(PlayerEntity victim, Identifier deathReason, int stunTicks) {
+        PlayerEffectComponent effects = PlayerEffectComponent.KEY.get(victim);
+        if (effects.stunTicks < stunTicks) effects.setStunTicks(stunTicks);
+        victim.sendMessage(Text.literal("Your protection saved you from ")
+                .append(GameUtil.getDeathReason(deathReason)), true);
+    }
+
+    @ModifyExpressionValue(
+            method = "killPlayer(Lnet/minecraft/entity/player/PlayerEntity;ZLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)V",
+            at = @At(value = "INVOKE", target = "Ldev/doctor4t/wathe/api/event/AllowPlayerDeath;allowDeath(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)Z"))
+    private static boolean wyspiaexpress$allowSharedDeath(boolean allowed, PlayerEntity victim,
+            boolean spawnBody, PlayerEntity killer, Identifier deathReason) {
+        // Run the callbacks, including their cleanup, before overriding a partner's protection veto.
+        return allowed || LoversComponent.KEY.get(victim.getWorld()).isSharedDeath(victim, deathReason);
     }
 }

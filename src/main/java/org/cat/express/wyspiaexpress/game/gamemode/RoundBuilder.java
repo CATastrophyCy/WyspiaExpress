@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.game.gamemode;
 
+import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameTimeComponent;
@@ -81,6 +82,7 @@ final class RoundBuilder {
     }
 
     RoundBuilder prepareRound() {
+        LoversComponent.KEY.get(world).reset();
         RoundResultComponent.KEY.get(world).startRound(participants);
         GameConfigs.refreshDerivedValues();
         Harpymodloader.refreshRoles();
@@ -150,7 +152,8 @@ final class RoundBuilder {
 
     List<Role> eligibleRoles(Predicate<Role> allowed) {
         return WatheRoles.ROLES.stream().filter(role ->
-                !Harpymodloader.NON_MURDER_ROLES.contains(role)
+                role != WyspiaExpressRoles.LOVER_2
+                        && !Harpymodloader.NON_MURDER_ROLES.contains(role)
                         && !Harpymodloader.VANNILA_ROLES.contains(role)
                         && allowed.test(role)
                         && !HarpyModLoaderConfig.HANDLER.instance().disabled.contains(RoleUtil.getRoleId(role))
@@ -368,6 +371,9 @@ final class RoundBuilder {
 
     private int assignRoleCopies(int requestedCount, Role role,
                                    List<ServerPlayerEntity> candidates) {
+        if (role == WyspiaExpressRoles.LOVER_1) {
+            return LoversComponent.KEY.get(world).assignPairs(requestedCount, candidates);
+        }
         List<ServerPlayerEntity> assignedPlayers = new ArrayList<>();
 
         if (Harpymodloader.FORCED_MODDED_ROLE.containsKey(role)) {
@@ -378,7 +384,7 @@ final class RoundBuilder {
                         && !assignedPlayers.contains(serverPlayer)) {
                     assignedPlayers.add(serverPlayer);
                     requestedCount--;
-                    recordRoleAssignment(serverPlayer, role);
+                    RoleUtil.recordRoleAssignment(serverPlayer, role);
                 }
             }
         }
@@ -394,7 +400,7 @@ final class RoundBuilder {
         for (ServerPlayerEntity player : RoleUtil.selectPlayersByRoleHistory(eligibleCandidates, List.of(role),
                 requestedCount, gameWorld.areWeightsEnabled(), world.getRandom())) {
             assignedPlayers.add(player);
-            recordRoleAssignment(player, role);
+            RoleUtil.recordRoleAssignment(player, role);
         }
 
         int assignedCount = assignedPlayers.size();
@@ -402,11 +408,6 @@ final class RoundBuilder {
             gameWorld.addRole(player, role);
         }
         return assignedCount;
-    }
-
-    private void recordRoleAssignment(ServerPlayerEntity player, Role role) {
-        Map<UUID, Integer> roleRounds = ModdedWeights.roleRounds.computeIfAbsent(role, ignored -> new HashMap<>());
-        roleRounds.put(player.getUuid(), roleRounds.getOrDefault(player.getUuid(), 1) + 1);
     }
 
     private void distributeModifiers(int modifierBudget, Predicate<Role> additionalGuesserRoles) {

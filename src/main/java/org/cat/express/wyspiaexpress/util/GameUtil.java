@@ -42,13 +42,17 @@ import org.cat.express.wyspiaexpress.components.PlayerConfigComponent;
 import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
 import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
+import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
+import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
+import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 
 public final class GameUtil {
     private GameUtil() {}
@@ -84,6 +88,40 @@ public final class GameUtil {
         ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, role);
         sendRoleAnnouncement(player, role, gameWorldComponent);
         TrainVoicePlugin.resetPlayer(player.getUuid());
+    }
+
+    public static void convertToCultist(@Nullable ServerPlayerEntity converter, ServerPlayerEntity target) {
+        ServerWorld world = target.getServerWorld();
+        GameWorldComponent game = GameWorldComponent.KEY.get(world);
+        LoversComponent lovers = LoversComponent.KEY.get(world);
+        UUID partnerId = lovers.endBond(target.getUuid());
+
+        if (game.isInnocent(target) && canAddCivilianDeathTime(GameTimeComponent.KEY.get(world))) {
+            GameTimeComponent.KEY.get(world).addTime(GameConstants.TIME_ON_CIVILIAN_KILL);
+        }
+        if (game.canUseKillerFeatures(target)) {
+            var revives = LichReviveComponent.KEY.get(world);
+            if (world.getPlayers().stream().filter(game::canUseKillerFeatures)
+                    .filter(GameFunctions::isPlayerAliveAndSurvival).count()
+                    + revives.getAvailableRevives() - 1 < revives.getMaxRevives()) {
+                revives.incrementAvailableRevives();
+            }
+        }
+        WorldModifierComponent.KEY.get(world).getModifiers(target).remove(WyspiaExpressRoles.GUESSER);
+        TrainVoicePlugin.resetPlayer(target.getUuid());
+        if (converter != null) sendConvertedMessage(world, game, converter, target);
+        game.addRole(target, WyspiaExpressRoles.CULTIST);
+        PlayerCultistComponent.KEY.get(target).reset();
+        ShopUtil.setCoin(target, WyspiaExpress.ROLES_CONFIG.roleConfig.cultLeaderConfig.startingCoin());
+        sendRoleAnnouncement(target, WyspiaExpressRoles.CULTIST, game);
+        ModdedRoleAssigned.EVENT.invoker().assignModdedRole(target, WyspiaExpressRoles.CULTIST);
+
+        // Removing the bond first prevents the partner's conversion from coming back to this player.
+        if (partnerId != null) {
+            ServerPlayerEntity partner = world.getServer().getPlayerManager().getPlayer(partnerId);
+            if (partner == null) lovers.queueConversion(partnerId);
+            else convertToCultist(converter, partner);
+        }
     }
 
     public static void sendRoleAnnouncement(ServerPlayerEntity player, Role role, GameWorldComponent gameWorld) {
