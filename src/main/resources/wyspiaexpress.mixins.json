@@ -19,6 +19,7 @@
     "generic.PassiveIncomeMixin",
     "generic.PlayerDeathMixin",
     "generic.PlayerMoodMixin",
+    "generic.PlayerPsychoMixin",
     "generic.PlayerShieldMixin",
     "generic.PlayerSpeedMixin",
     "generic.ReadyPlayersMixin",

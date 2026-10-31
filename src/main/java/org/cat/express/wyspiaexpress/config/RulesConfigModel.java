@@ -23,6 +23,45 @@ public class RulesConfigModel {
     @ConfigRange(min = 0, max = 2147483647)
     public int psychoStunTicks = 20;
 
+    public PsychoConfig psycho = new PsychoConfig();
+
+    public static class PsychoConfig {
+        @Comment("Enable infinite psycho shield, slow and time loss from hits. Duration and cooldowns always apply")
+        public boolean rework = true;
+
+        @Comment("Psycho duration, in seconds")
+        @ConfigRange(min = 1, max = 107374182)
+        public int duration = 60;
+
+        @Comment("Blocked hits before the slow and duration penalties start")
+        @ConfigRange(min = 0, max = 2147483647)
+        public int freeHits = 1;
+
+        @Comment("Movement slow per hit after the free hits. 0.15 = 15%")
+        @ConfigRange(min = 0, max = 1)
+        public double slowPerHit = 0.15;
+
+        @Comment("Maximum movement slow. 0.4 = 40%")
+        @ConfigRange(min = 0, max = 1)
+        public double maxSlow = 0.4;
+
+        @Comment("Seconds removed for each hit after the free hits")
+        @ConfigRange(min = 0, max = 107374182)
+        public int timeLostPerHit = 15;
+
+        @Comment("Weapon cooldown after getting hit in psycho, in seconds. Longer cooldowns are kept")
+        @ConfigRange(min = 0, max = 107374182)
+        public int weaponCooldown = 15;
+
+        @Comment("Extra bat recharge time per hit after the free hits, in seconds")
+        @ConfigRange(min = 0, max = 60)
+        public double batDelayPerHit = 0.5;
+
+        @Comment("Maximum extra bat recharge time, in seconds")
+        @ConfigRange(min = 0, max = 60)
+        public double maxBatDelay = 2.5;
+    }
+
     @Comment("Enable freezing")
     public boolean freeze = false;
 
@@ -42,5 +81,9 @@ public class RulesConfigModel {
 
     @Comment("Enable killer having role color instinct on killer-aligned neutrals")
     public boolean killerSpecialInstinct = false;
+
+    @Comment("Killer instinct brightness. 0 keeps normal darkness, 1 matches spectators")
+    @ConfigRange(min = 0, max = 1)
+    public double killerInstinctBrightness = 0.4;
 
 }

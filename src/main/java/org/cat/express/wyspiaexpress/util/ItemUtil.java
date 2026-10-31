@@ -8,7 +8,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
@@ -18,8 +22,19 @@ import java.util.Map;
 import java.util.HashMap;
 
 public final class ItemUtil {
+    private static final TagKey<Item> WEAPONS = TagKey.of(RegistryKeys.ITEM, Identifier.of(WyspiaExpress.MOD_ID, "weapons"));
     private static Map<Item, Integer> nativeCooldowns;
     private ItemUtil() {}
+
+    public static void setWeaponCooldown(PlayerEntity player, int ticks) {
+        if (ticks <= 0) return;
+        var manager = player.getItemCooldownManager();
+        Registries.ITEM.getEntryList(WEAPONS).ifPresent(weapons -> weapons.forEach(entry -> {
+            Item item = entry.value();
+            var current = manager.entries.get(item);
+            if (current == null || current.endTick - manager.tick < ticks) manager.set(item, ticks);
+        }));
+    }
 
     public static void captureNativeCooldowns() {
         if (nativeCooldowns == null) nativeCooldowns = new HashMap<>(GameConstants.ITEM_COOLDOWNS);

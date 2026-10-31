@@ -44,9 +44,12 @@
   "hud.wyspiaexpress.duration.glowing": "Glowing",
   "hud.wyspiaexpress.duration.morphling": "Disguise",
   "hud.wyspiaexpress.duration.phantom": "Invisibility",
+  "hud.wyspiaexpress.duration.psycho": "Psycho",
   "hud.wyspiaexpress.duration.robot": "Night vision",
   "hud.wyspiaexpress.duration.seconds": "%ss",
   "hud.wyspiaexpress.duration.starstruck": "Starstruck",
+
+  "hud.wyspiaexpress.psycho.hits": "%s hits",
 
   "hud.wyspiaexpress.grenade.self_hit": "Warning!",
 

@@ -25,6 +25,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MoodRenderer.class)
 public abstract class MoodRendererMixin {
+    @ModifyExpressionValue(method = "renderPsycho", at = @At(value = "FIELD",
+            target = "Ldev/doctor4t/wathe/game/GameConstants;PSYCHO_TIMER:I"))
+    private static int wyspiaexpress$psychoDuration(int original) {
+        return WyspiaExpress.RULES_CONFIG.psycho.duration() * 20;
+    }
+
     @Unique private static float wyspiaexpress$timerAlpha = 0.075f;
     @Unique private static float wyspiaexpress$timerOffset = -1;
 

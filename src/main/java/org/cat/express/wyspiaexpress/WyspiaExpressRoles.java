@@ -196,10 +196,10 @@ public class WyspiaExpressRoles {
             true
     ));
     public static final Role LOVER_1 = registerRole(new Role(
-            Identifier.of(WyspiaExpress.MOD_ID, "lover_1"), 0xFF82BC, false, false,
+            Identifier.of(WyspiaExpress.MOD_ID, "lover_1"), 0xFFB7C5, false, false,
             Role.MoodType.FAKE, WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2, true));
     public static final Role LOVER_2 = registerRole(new Role(
-            Identifier.of(WyspiaExpress.MOD_ID, "lover_2"), 0xFF82BC, false, false,
+            Identifier.of(WyspiaExpress.MOD_ID, "lover_2"), 0xFFB7C5, false, false,
             Role.MoodType.FAKE, WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2, true));
 
     public static Role VILLAIN_LICENSED = registerRole(new Role(

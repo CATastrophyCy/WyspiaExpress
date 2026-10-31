@@ -15,8 +15,10 @@ import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
 import org.aussiebox.starexpress.StarryExpressRoles;
 import org.aussiebox.starexpress.cca.StarstruckComponent;
+import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.BlackoutDuration;
+import org.cat.express.wyspiaexpress.components.PsychoModeState;
 
 import java.util.ArrayList;
 
@@ -44,6 +46,16 @@ public final class DurationHud {
             Text countdown = ability.infinite() ? Text.literal("∞")
                     : Text.translatable("hud.wyspiaexpress.duration.seconds", seconds(ability.ticks()));
             panels.add(new DurationPanel(ability.label(), countdown, ability.color(), ability.color()));
+        }
+
+        PsychoModeState psycho = PsychoModeState.get(player);
+        if (GameFunctions.isPlayerAliveAndSurvival(player) && psycho.getPsychoTicks() > 0) {
+            var countdown = Text.translatable("hud.wyspiaexpress.duration.seconds", seconds(psycho.getPsychoTicks()));
+            if (WyspiaExpress.RULES_CONFIG.psycho.rework()) {
+                countdown.append(" · ").append(Text.translatable("hud.wyspiaexpress.psycho.hits", psycho.getBlockedHits()));
+            }
+            panels.add(new DurationPanel(Text.translatable("hud.wyspiaexpress.duration.psycho"),
+                    countdown, 0xFFFF6B6B, NUMBER_COLOR));
         }
 
         AbilityDuration glowing = GameFunctions.isPlayerAliveAndSurvival(player)
