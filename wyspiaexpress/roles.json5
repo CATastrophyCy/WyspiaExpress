@@ -119,7 +119,7 @@
 				"enableShop": true,
 				"shopEntries": [
 					"KNIFE;125;-1;WEAPON",
-					"REVOLVER;225;-1;WEAPON",
+					"REVOLVER;300;-1;WEAPON",
 					"POISON_INJECTOR;150;-1;WEAPON",
 					"POISON_VIAL;80;-1;POISON",
 					"SCORPION;40;-1;POISON",
