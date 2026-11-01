@@ -16,6 +16,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.agmas.harpymodloader.Harpymodloader;
+import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
@@ -143,6 +144,10 @@ public final class LoversComponent implements AutoSyncedComponent {
         Pair pair = getPair(victim.getUuid());
         if (pair == null || pair.lives <= 1) return false;
         pair.lives--;
+        PlayerEffectComponent effects = PlayerEffectComponent.KEY.get(victim);
+        if (effects.stunTicks < WyspiaExpress.RULES_CONFIG.blockStunTicks()) {
+            effects.setStunTicks(WyspiaExpress.RULES_CONFIG.blockStunTicks());
+        }
         sync();
         for (UUID member : List.of(pair.first, pair.second)) {
             PlayerEntity player = world.getPlayerByUuid(member);
