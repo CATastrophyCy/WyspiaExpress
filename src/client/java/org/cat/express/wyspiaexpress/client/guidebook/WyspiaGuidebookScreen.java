@@ -11,6 +11,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import org.cat.express.wyspiaexpress.util.ItemUtil;
 import org.lwjgl.glfw.GLFW;
 
@@ -219,7 +220,7 @@ public final class WyspiaGuidebookScreen extends Screen {
         List<Text> abilities = new ArrayList<>(selected.definition().abilities());
         var basic = selected.role() != null ? WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(selected.role()) : null;
         if (basic != null && basic.seePoison()) abilities.add(label("poison"));
-        List<GuidebookItems.Offer> starting = GuidebookItems.starting(selected), shop = GuidebookItems.shop(selected);
+        List<GuidebookItems.Offer> starting = GuidebookItems.starting(selected);
         var status = GuidebookCatalog.status(selected);
         int w = pagePanel.contentWidth(), accent = readable(selected.color());
         int artSize = w >= 180 ? 40 : 32;
@@ -247,10 +248,11 @@ public final class WyspiaGuidebookScreen extends Screen {
             if (starting.isEmpty()) y = paragraph(label(GuidebookItems.startingKnown(selected) ? "starting.none" : "starting.unavailable"), 0, y, w, MUTED, 1) + 5;
             else y = itemGrid(starting, y, w);
         }
-        if (selected.role() != null) {
-            y = heading("shop", y, w, accent);
-            if (shop.isEmpty()) y = paragraph(label(GuidebookItems.shopKnown(selected) ? "shop.none" : "shop.unavailable"), 0, y, w, MUTED, 1) + 5;
-            else y = itemGrid(shop, y, w);
+        if (LoversComponent.isLover(selected.role())) {
+            y = shopSection(GuidebookEntry.role(WyspiaExpressRoles.LOVER_1), "shop.lover_1", y, w, accent);
+            y = shopSection(GuidebookEntry.role(WyspiaExpressRoles.LOVER_2), "shop.lover_2", y, w, accent);
+        } else if (selected.role() != null) {
+            y = shopSection(selected, "shop", y, w, accent);
         }
         if (lore != null && !lore.getString().isBlank()) {
             y = heading("lore", y, w, accent); y = paragraph(lore, 0, y, w, TEXT, 1) + 5;
@@ -261,6 +263,14 @@ public final class WyspiaGuidebookScreen extends Screen {
             parts.add(new LinkPart(y, entry, colored(label("related", entry.name()), readable(entry.color())))); y += 20;
         }
         pagePanel.contentHeight(y + 4);
+    }
+
+    private int shopSection(GuidebookEntry entry, String headingKey, int y, int width, int color) {
+        y = heading(headingKey, y, width, color);
+        List<GuidebookItems.Offer> offers = GuidebookItems.shop(entry);
+        return offers.isEmpty()
+                ? paragraph(label(GuidebookItems.shopKnown(entry) ? "shop.none" : "shop.unavailable"), 0, y, width, MUTED, 1) + 5
+                : itemGrid(offers, y, width);
     }
 
     private int heading(String key, int y, int width, int color) {

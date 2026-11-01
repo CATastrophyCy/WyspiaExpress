@@ -260,6 +260,8 @@
   "gui.wyspiaexpress.guidebook.select": "Select a role or modifier to read its guide.",
 
   "gui.wyspiaexpress.guidebook.shop": "Shop",
+  "gui.wyspiaexpress.guidebook.shop.lover_1": "Shop · Lover 1",
+  "gui.wyspiaexpress.guidebook.shop.lover_2": "Shop · Lover 2",
   "gui.wyspiaexpress.guidebook.shop.none": "No shop",
   "gui.wyspiaexpress.guidebook.shop.unavailable": "Shop information not available",
 
@@ -621,18 +623,18 @@
   "tip.wyspiaexpress.ability.lovers": "Press %s to teleport to your partner",
 
   "announcement.role.wyspiaexpress.lover_1": "Lovers",
-  "announcement.goals.wyspiaexpress.lover_1": "Be the last pair alive",
+  "announcement.goals.wyspiaexpress.lover_1": "Be the last ones alive with your partner.",
   "announcement.role.wyspiaexpress.lover_2": "Lovers",
-  "announcement.goals.wyspiaexpress.lover_2": "Be the last pair alive",
+  "announcement.goals.wyspiaexpress.lover_2": "Be the last ones alive with your partner.",
 
   "announcement.win.kinswathe.lovers": "The Lovers win",
   "game.win.kinswathe.lovers": "Only their bond remains.",
 
   "guidebook.role.wyspiaexpress:lover_1": "Lovers",
   "guidebook.role.title.wyspiaexpress:lover_1": "Two hearts, one fate",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.summary": "Protect your partner and be the last pair alive.",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.1": "Teleport to your partner with your ability. Cooldown: %1$s. There is no coin cost or range limit. An unavailable partner does not spend your cooldown.",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.2": "Your pair shares two lives. The first lethal hit is survived; the second kills both of you. Other protections apply first. An explosion hitting both partners counts as two hits. Disconnecting does not restore lives.",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.3": "Use instinct to see other players. Your partner is also visible through passive instinct and is highlighted pink. Smoke and other instinct concealment still apply.",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.4": "Your phones connect only your own pair. If Ritual Dagger converts either of you, both become ordinary Cultists and lose the bond."
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.summary": "Be the last ones alive with your partner.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.1": "Use your ability to teleport to your partner. Cooldown: %1$s.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.2": "Your pair shares two lives. If Ritual Dagger converts one of you, both of you becomes Cultist",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.3": "Use instinct to see other players.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.4": "Use your phone to join an open private voice chat group"
 }
