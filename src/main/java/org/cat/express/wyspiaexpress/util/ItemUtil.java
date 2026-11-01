@@ -105,6 +105,7 @@ public final class ItemUtil {
                 Map.entry(KinsWatheItems.PAN, WyspiaExpress.ITEMS_CONFIG.itemConfig.panConfig.cooldown()),
                 Map.entry(KinsWatheItems.PILL, WyspiaExpress.ITEMS_CONFIG.itemConfig.pillConfig.cooldown()),
                 Map.entry(KinsWatheItems.SULFURIC_ACID_BARREL, WyspiaExpress.ITEMS_CONFIG.itemConfig.acidBarrelConfig.cooldown()),
+                Map.entry(KinsWatheItems.MEDICAL_KIT, WyspiaExpress.ITEMS_CONFIG.itemConfig.medicalKitConfig.cooldown()),
                 Map.entry(KinsWatheItems.WRENCH, WyspiaExpress.ITEMS_CONFIG.itemConfig.wrenchConfig.cooldown()),
                 Map.entry(KinsWatheItems.ICON_POWER_RESTORATION, WyspiaExpress.ITEMS_CONFIG.itemConfig.powerRestoreCooldown()));
     }
