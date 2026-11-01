@@ -40,9 +40,9 @@ import org.cat.express.wyspiaexpress.client.roles.NoTargetAbilityUtil;
 import org.cat.express.wyspiaexpress.client.roles.TargetAbilityUtil;
 import org.cat.express.wyspiaexpress.client.ui.InventoryAbilityPanel;
 import org.cat.express.wyspiaexpress.client.ui.PlayerConfigButtons;
-import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
-import org.cat.express.wyspiaexpress.packets.StaminaS2CPacket;
 import org.cat.express.wyspiaexpress.mixin.generic.PlayerStaminaAccessor;
+import org.cat.express.wyspiaexpress.packets.StaminaS2CPacket;
+import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
 import org.cat.express.wyspiaexpress.util.VersionUtil;
 import org.lwjgl.glfw.GLFW;
 

@@ -60,9 +60,9 @@ import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
+import org.cat.express.wyspiaexpress.mixin.generic.PlayerStaminaAccessor;
 import org.cat.express.wyspiaexpress.packets.StaminaS2CPacket;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
-import org.cat.express.wyspiaexpress.mixin.generic.PlayerStaminaAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -257,7 +257,7 @@ public final class GameUtil {
         WorldModifierComponent.KEY.get(player.getWorld()).getModifiers(player).remove(WyspiaExpressRoles.GUESSER);
         gameWorldComponent.addRole(player, role);
         ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, role);
-        StaminaS2CPacket.send(player, GameUtil.refillStamina(player));
+        StaminaS2CPacket.send(player, refillStamina(player));
         sendRoleAnnouncement(player, role, gameWorldComponent);
         TrainVoicePlugin.resetPlayer(player.getUuid());
     }
