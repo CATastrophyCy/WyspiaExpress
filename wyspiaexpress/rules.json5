@@ -9,6 +9,26 @@
 	"blockStunTicks": 50,
 	// Player stun tick after blocking damage with psycho mode
 	"psychoStunTicks": 20,
+	"psycho": {
+		// Enable infinite psycho shield, slow and time loss from hits. Duration and cooldowns always apply
+		"rework": true,
+		// Psycho duration, in seconds
+		"duration": 60,
+		// Blocked hits before the slow and duration penalties start
+		"freeHits": 1,
+		// Movement slow per hit after the free hits. 0.15 = 15%
+		"slowPerHit": 0.15,
+		// Maximum movement slow. 0.4 = 40%
+		"maxSlow": 0.4,
+		// Seconds removed for each hit after the free hits
+		"timeLostPerHit": 15,
+		// Weapon cooldown after getting hit in psycho, in seconds. Longer cooldowns are kept
+		"weaponCooldown": 15,
+		// Extra bat recharge time per hit after the free hits, in seconds
+		"batDelayPerHit": 0.5,
+		// Maximum extra bat recharge time, in seconds
+		"maxBatDelay": 2.5
+	},
 	// Enable freezing
 	"freeze": true,
 	// The time, in seconds, it takes for a player to die when staying outside for too long
@@ -20,5 +40,7 @@
 	// Whether to enable item bound checking, this will make out of bound item tp to closest dead body
 	"enableItemBoundChecking": true,
 	// Enable killer having role color instinct on killer-aligned neutrals
-	"killerSpecialInstinct": false
+	"killerSpecialInstinct": false,
+	// Killer instinct brightness. 0 keeps normal darkness, 1 matches spectators
+	"killerInstinctBrightness": 0.4
 }
