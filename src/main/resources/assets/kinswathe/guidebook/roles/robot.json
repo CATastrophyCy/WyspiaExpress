@@ -3,6 +3,7 @@
   "summary": {
     "translate": "guidebook.wyspiaexpress.roles.kinswathe.robot.summary"
   },
+  "image": "wyspiaexpress:textures/guidebook/roles/robot.png",
   "values": {
     "cooldown": {
       "config": "derived",

@@ -3,6 +3,7 @@
   "summary": {
     "translate": "guidebook.wyspiaexpress.roles.noellesroles.morphling.summary"
   },
+  "image": "wyspiaexpress:textures/guidebook/roles/morphling.png",
   "values": {
     "payoutOn": {
       "config": "roles",
