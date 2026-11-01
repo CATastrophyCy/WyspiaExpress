@@ -57,7 +57,7 @@ public final class WyspiaExpressTrueNeutralModdedGameMode extends WyspiaExpressM
                 .filter(role -> role.isInnocent() && !role.canUseKiller()).toList())
                 .assignAmnesiacFallback();
         RoleDraftStatisticsManager.getInstance().recordRound(players, gameWorld, Pool.TRUE_NEUTRAL, alignedNeutralDraft.hadEligibleCapacity());
-        round.completeAssignments((int) players.stream().filter(player -> isMainRole(gameWorld.getRole(player))).count(),
+        round.completeAssignments(trueNeutralDraft.assignedCount(),
                 WyspiaExpressTrueNeutralModdedGameMode::isMainRole);
     }
 }

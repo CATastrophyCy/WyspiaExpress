@@ -1,6 +1,5 @@
 package org.cat.express.wyspiaexpress.mixin.generic;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.doctor4t.wathe.api.event.AllowPlayerDeath;
 import dev.doctor4t.wathe.cca.PlayerPsychoComponent;
 import dev.doctor4t.wathe.game.GameConstants;
@@ -33,9 +32,6 @@ public class PlayerShieldMixin {
                 && PlayerPsychoComponent.KEY.get(killer).getPsychoTicks() > 0) {
             killer.resetLastAttackedTicks();
         }
-        LoversComponent lovers = LoversComponent.KEY.get(victim.getWorld());
-        if (lovers.isSharedDeath(victim, deathReason)) return;
-
         if (!AllowPlayerDeath.EVENT.invoker().allowDeath(victim, killer, deathReason)) {
             wyspiaexpress$showProtection(victim, deathReason, WyspiaExpress.RULES_CONFIG.blockStunTicks());
             ci.cancel();
@@ -62,7 +58,8 @@ public class PlayerShieldMixin {
             psycho.stopPsycho();
         }
 
-        if (GameFunctions.isPlayerAliveAndSurvival(victim) && lovers.trySurviveLethalHit(victim)) ci.cancel();
+        if (GameFunctions.isPlayerAliveAndSurvival(victim)
+                && LoversComponent.KEY.get(victim.getWorld()).trySurviveLethalHit(victim)) ci.cancel();
     }
 
     @Unique
@@ -71,14 +68,5 @@ public class PlayerShieldMixin {
         if (effects.stunTicks < stunTicks) effects.setStunTicks(stunTicks);
         victim.sendMessage(Text.literal("Your protection saved you from ")
                 .append(GameUtil.getDeathReason(deathReason)), true);
-    }
-
-    @ModifyExpressionValue(
-            method = "killPlayer(Lnet/minecraft/entity/player/PlayerEntity;ZLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)V",
-            at = @At(value = "INVOKE", target = "Ldev/doctor4t/wathe/api/event/AllowPlayerDeath;allowDeath(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)Z"))
-    private static boolean wyspiaexpress$allowSharedDeath(boolean allowed, PlayerEntity victim,
-            boolean spawnBody, PlayerEntity killer, Identifier deathReason) {
-        // Run the callbacks, including their cleanup, before overriding a partner's protection veto.
-        return allowed || LoversComponent.KEY.get(victim.getWorld()).isSharedDeath(victim, deathReason);
     }
 }

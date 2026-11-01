@@ -3,7 +3,6 @@ package org.cat.express.wyspiaexpress.components.roles;
 import de.maxhenkel.voicechat.api.Group;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
-import dev.doctor4t.wathe.cca.PlayerPsychoComponent;
 import dev.doctor4t.wathe.compat.TrainVoicePlugin;
 import dev.doctor4t.wathe.game.GameFunctions;
 import net.minecraft.entity.player.PlayerEntity;
@@ -153,11 +152,6 @@ public final class LoversComponent implements AutoSyncedComponent {
         return true;
     }
 
-    public boolean isSharedDeath(PlayerEntity victim, Identifier deathReason) {
-        Pair pair = getPair(victim.getUuid());
-        return pair != null && pair.lives == 0 && BROKEN_HEART.equals(deathReason);
-    }
-
     public void onDeath(PlayerEntity victim) {
         Pair pair = getPair(victim.getUuid());
         if (pair == null || pair.lives == 0) return;
@@ -168,9 +162,8 @@ public final class LoversComponent implements AutoSyncedComponent {
         PlayerEntity partner = world.getPlayerByUuid(partnerId);
         if (partner == null) {
             WorldComponent.KEY.get(world).addPlayerDead(partnerId);
-        } else if (GameFunctions.isPlayerAliveAndSurvival(partner)) {
-            PlayerPsychoComponent.KEY.get(partner).setArmour(0);
-            GameFunctions.killPlayer(partner, true, null, BROKEN_HEART);
+        } else if (partner instanceof ServerPlayerEntity serverPartner && GameFunctions.isPlayerAliveAndSurvival(partner)) {
+            GameUtil.forceDeath(serverPartner, true, BROKEN_HEART);
         }
     }
 

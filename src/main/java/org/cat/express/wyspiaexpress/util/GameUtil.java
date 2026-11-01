@@ -1,17 +1,24 @@
 package org.cat.express.wyspiaexpress.util;
 
 import dev.doctor4t.wathe.api.Role;
-import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameTimeComponent;
+import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.MapVariablesWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
+import dev.doctor4t.wathe.cca.PlayerPoisonComponent;
+import dev.doctor4t.wathe.cca.PlayerPsychoComponent;
 import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.wathe.compat.TrainVoicePlugin;
-import dev.doctor4t.wathe.game.GameFunctions;
+import dev.doctor4t.wathe.entity.PlayerBodyEntity;
 import dev.doctor4t.wathe.game.GameConstants;
+import dev.doctor4t.wathe.game.GameFunctions;
+import dev.doctor4t.wathe.index.WatheEntities;
 import dev.doctor4t.wathe.util.AnnounceWelcomePayload;
+
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
@@ -31,16 +38,24 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
+
+import org.BsXinQin.kinswathe.KinsWatheConfig;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
+import org.agmas.noellesroles.Noellesroles;
+import org.agmas.noellesroles.executioner.ExecutionerPlayerComponent;
+import org.aussiebox.starexpress.cca.SilenceComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
-import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
+import org.cat.express.wyspiaexpress.components.PlayerBodyEntityComponent;
 import org.cat.express.wyspiaexpress.components.PlayerConfigComponent;
+import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
 import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
+import org.cat.express.wyspiaexpress.components.PlayerHearDeadComponent;
 import org.cat.express.wyspiaexpress.components.PlayerMovementComponent;
+import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
@@ -49,6 +64,10 @@ import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import pro.fazeclan.river.stupid_express.role.thief.ThiefItemTracker;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -60,6 +79,149 @@ public final class GameUtil {
     public static boolean canAddCivilianDeathTime(GameTimeComponent timer) {
         int limitMinutes = WyspiaExpress.RULES_CONFIG.maxTimeForDeathBonus();
         return limitMinutes < 0 || timer.getTime() <= GameConstants.getInTicks(limitMinutes, 0);
+    }
+
+    // kills a player with no killers, and bypasses protection
+    public static void forceDeath(ServerPlayerEntity victim, boolean spawnBody, Identifier deathReason) {
+        if (!GameFunctions.isPlayerAliveAndSurvival(victim)) return;
+        ServerWorld world = victim.getServerWorld();
+        GameWorldComponent game = GameWorldComponent.KEY.get(world);
+        PlayerPsychoComponent psycho = PlayerPsychoComponent.KEY.get(victim);
+        if (psycho.getPsychoTicks() > 0) psycho.stopPsycho();
+        victim.changeGameMode(GameMode.SPECTATOR);
+        PlayerMoodComponent.KEY.get(victim).reset();
+
+        if (spawnBody) {
+            PlayerBodyEntity body = WatheEntities.PLAYER_BODY.create(world);
+            if (body != null) {
+                body.setPlayerUuid(victim.getUuid());
+                Vec3d pos = victim.getPos().add(victim.getRotationVector().normalize());
+                body.refreshPositionAndAngles(pos.x, victim.getY(), pos.z, victim.getHeadYaw(), 0);
+                body.setYaw(victim.getHeadYaw());
+                body.setHeadYaw(victim.getHeadYaw());
+                // Preserve the corpse data normally supplied by killPlayer mixins.
+                Role role = game.getRole(victim);
+                if (role != null) {
+                    var coroner = org.agmas.noellesroles.coroner.BodyDeathReasonComponent.KEY.get(body);
+                    coroner.deathReason = deathReason;
+                    coroner.playerRole = role.identifier();
+                    org.BsXinQin.kinswathe.component.BodyDeathReasonComponent.KEY.get(body).deathReason = deathReason;
+                }
+                if (PlayerCultistComponent.KEY.get(victim).isConverted()) {
+                    PlayerBodyEntityComponent.KEY.get(body).setConverted(true);
+                }
+                world.spawnEntity(body);
+            }
+        }
+        PlayerInventory inventory = victim.getInventory();
+        for (int slot = 0; slot < inventory.size(); slot++) {
+            ItemStack stack = inventory.getStack(slot);
+            if (GameFunctions.shouldDropOnDeath(stack, victim)) {
+                victim.dropItem(stack, true, false);
+                inventory.setStack(slot, ItemStack.EMPTY);
+            }
+        }
+        GameTimeComponent timer = GameTimeComponent.KEY.get(world);
+        if (game.isInnocent(victim) && canAddCivilianDeathTime(timer)) {
+            timer.addTime(GameConstants.TIME_ON_CIVILIAN_KILL);
+        }
+        TrainVoicePlugin.addPlayer(victim.getUuid());
+        PlayerPoisonComponent.KEY.get(victim).reset();
+        SilenceComponent.KEY.get(victim).reset();
+        victim.removeStatusEffect(StatusEffects.NIGHT_VISION);
+        victim.removeStatusEffect(StatusEffects.SLOWNESS);
+        victim.removeStatusEffect(StatusEffects.BLINDNESS);
+        PlayerHearDeadComponent.KEY.get(victim).reset();
+        PlayerSenseDeadComponent.KEY.get(victim).reset();
+        PlayerMovementComponent.KEY.get(victim).reset();
+        PlayerEffectComponent.KEY.get(victim).reset();
+        confirmExecutionerTargetDeath(victim, null);
+        onPlayerDeath(victim, null, deathReason);
+        ThiefItemTracker.onKillPlayer(victim);
+    }
+
+    public static void onPlayerDeath(PlayerEntity victim, @Nullable PlayerEntity killer, Identifier deathReason) {
+        var world = victim.getWorld();
+
+        if(world instanceof ServerWorld serverWorld) {
+            var component = GameWorldComponent.KEY.get(serverWorld);
+            if (component.canUseKillerFeatures(victim)) {
+                var reviveComponent = LichReviveComponent.KEY.get(serverWorld);
+                // count killers that are still alive
+                if (serverWorld.getPlayers().stream().filter(component::canUseKillerFeatures).filter(GameFunctions::isPlayerAliveAndSurvival).count()
+                        + reviveComponent.getAvailableRevives() < reviveComponent.getMaxRevives())
+                    reviveComponent.incrementAvailableRevives();
+            }
+            var world_component = WorldComponent.KEY.get(serverWorld);
+            world_component.addPlayerDead(victim.getUuid());
+
+            GameUtil.sendPlayerDeathMessage(serverWorld, component, victim, killer, deathReason);
+
+            LoversComponent.KEY.get(serverWorld).onDeath(victim);
+
+            if (killer == null) return;
+            // remove phantom invisibility depending on the config
+            if (component.isRole(killer, Noellesroles.PHANTOM) && WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.phantomConfig.loseInvisibilityWhenKill()) {
+                if (deathReason != null) {
+                    if (!deathReason.equals(GameConstants.DeathReasons.POISON)) {
+                        killer.removeStatusEffect(StatusEffects.INVISIBILITY);
+                    }
+                }
+
+            }
+         /*
+            FIX: fix neutral roles get punished for killing players with KinsWathe, this happens because kinswathe only checks if the player is not innocent to give them coin
+                , but with IncreaseMoneyWhenKill <= 100 it ends up punishing them. Either way the code doesn't give them correct reward
+         */
+            if (!component.isInnocent(killer) && !component.canUseKillerFeatures(killer) && KinsWatheConfig.HANDLER.instance().EnableWatheModify) {
+                ShopUtil.addCoin(killer, -(KinsWatheConfig.HANDLER.instance().IncreaseMoneyWhenKill - 100));
+            }
+            victim.removeStatusEffect(StatusEffects.NIGHT_VISION);
+            victim.removeStatusEffect(StatusEffects.SLOWNESS);
+            victim.removeStatusEffect(StatusEffects.BLINDNESS);
+
+            PlayerHearDeadComponent.KEY.get(victim).reset();
+            PlayerSenseDeadComponent.KEY.get(victim).reset();
+            PlayerMovementComponent.KEY.get(victim).reset();
+            PlayerEffectComponent.KEY.get(victim).reset();
+
+        }
+    }
+
+    public static void confirmExecutionerTargetDeath(PlayerEntity victim, @Nullable PlayerEntity killer) {
+        GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(victim.getWorld());
+        for (UUID uuid : gameWorldComponent.getAllWithRole(Noellesroles.EXECUTIONER)) {
+            PlayerEntity executioner = victim.getWorld().getPlayerByUuid(uuid);
+            if (executioner == null) continue;
+            boolean invalidKill = false;
+            if (killer != null) {
+                if (gameWorldComponent.getRole(killer).canUseKiller()) invalidKill = true;
+            }
+            ExecutionerPlayerComponent executionerPlayerComponent = ExecutionerPlayerComponent.KEY.get(executioner);
+            if (executionerPlayerComponent.target.equals(victim.getUuid()) && !invalidKill) {
+                executionerPlayerComponent.won = true;
+                ArrayList<Role> shuffledKillerRoles;
+                if(WyspiaExpress.ROLES_CONFIG.enableRolePicking()) {
+                    shuffledKillerRoles = new ArrayList<>(List.of(WyspiaExpressRoles.COPYCAT));
+                }else {
+                    shuffledKillerRoles = RoleUtil.getKillerRoles(gameWorldComponent);
+                    if (shuffledKillerRoles.isEmpty()) shuffledKillerRoles.add(WatheRoles.KILLER);
+                    Collections.shuffle(shuffledKillerRoles);
+                }
+                gameWorldComponent.addRole(executioner,shuffledKillerRoles.getFirst());
+                ModdedRoleAssigned.EVENT.invoker().assignModdedRole(executioner,shuffledKillerRoles.getFirst());
+                GameUtil.sendRoleChangedMessage(((ServerPlayerEntity) executioner).getServerWorld(),
+                        executioner, Noellesroles.EXECUTIONER, shuffledKillerRoles.getFirst());
+                ShopUtil.addCoin(executioner, WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.executionerConfig.reward());
+                PlayerPoisonComponent.KEY.get(executioner).reset();
+                if (Harpymodloader.VANNILA_ROLES.contains(gameWorldComponent.getRole(executioner))) {
+                    ServerPlayNetworking.send((ServerPlayerEntity) executioner, new AnnounceWelcomePayload(RoleAnnouncementTexts.ROLE_ANNOUNCEMENT_TEXTS.indexOf(WatheRoles.KILLER), gameWorldComponent.getAllKillerTeamPlayers().size(), 0));
+                } else {
+                    GameUtil.sendRoleAnnouncement((ServerPlayerEntity) executioner, gameWorldComponent.getRole(executioner), gameWorldComponent);
+                }
+
+            }
+        }
     }
 
     public static void revivePlayer(@NotNull GameWorldComponent gameWorldComponent, @NotNull WorldComponent worldComponent,
