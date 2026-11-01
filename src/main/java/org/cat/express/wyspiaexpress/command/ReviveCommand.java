@@ -20,6 +20,8 @@ import net.minecraft.world.World;
 import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
 import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
+import org.cat.express.wyspiaexpress.packets.StaminaS2CPacket;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.cat.express.wyspiaexpress.voicechat.SpectatorVoiceService;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,6 +57,7 @@ public final class ReviveCommand {
                     player.getYaw(), player.getPitch(), TeleportTarget.NO_OP));
         }
         player.changeGameMode(GameMode.ADVENTURE);
+        StaminaS2CPacket.send(player, GameUtil.refillStamina(player));
         if (player.getServerWorld() != previousWorld) {
             WorldComponent.KEY.get(player.getWorld()).removePlayerDead(player.getUuid());
         }

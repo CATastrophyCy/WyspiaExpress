@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress.mixin.generic;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import dev.doctor4t.wathe.game.GameFunctions;
+import dev.doctor4t.wathe.cca.PlayerPsychoComponent;
 import dev.doctor4t.wathe.index.WatheItems;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -15,6 +16,8 @@ import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = PlayerEntity.class, priority = 2000)
 public abstract class PlayerSpeedMixin extends LivingEntity {
@@ -22,6 +25,14 @@ public abstract class PlayerSpeedMixin extends LivingEntity {
     protected PlayerSpeedMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
+    @Inject(method = "tickMovement", at = @At("TAIL"))
+    private void wyspiaexpress$psychoStamina(CallbackInfo ci) {
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        if (PlayerPsychoComponent.KEY.get(player).getPsychoTicks() > 0) {
+            GameUtil.refillStamina(player);
+        }
+    }
+
     @ModifyReturnValue(method = "getMovementSpeed", at = @At("RETURN"))
     public float wyspiaexpress$overrideMovementSpeed(float original) {
         PlayerEntity self = (PlayerEntity) (Object) this;

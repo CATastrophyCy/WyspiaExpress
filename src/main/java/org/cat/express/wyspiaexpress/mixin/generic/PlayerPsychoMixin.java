@@ -7,6 +7,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.components.PsychoModeState;
+import org.cat.express.wyspiaexpress.util.GameUtil;
+import org.cat.express.wyspiaexpress.packets.StaminaS2CPacket;
 import org.cat.express.wyspiaexpress.util.ItemUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -44,6 +46,7 @@ public abstract class PlayerPsychoMixin implements PsychoModeState {
         if (!cir.getReturnValueZ() || player.getWorld().isClient) return;
         wyspiaexpress$blockedHits = 0;
         psychoTicks = WyspiaExpress.RULES_CONFIG.psycho.duration() * 20;
+        StaminaS2CPacket.send(player, GameUtil.refillStamina(player));
         sync();
     }
 
@@ -54,6 +57,7 @@ public abstract class PlayerPsychoMixin implements PsychoModeState {
             ItemUtil.setWeaponCooldown(player, WyspiaExpress.RULES_CONFIG.psycho.weaponCooldown() * 20);
         }
         wyspiaexpress$blockedHits = 0;
+        StaminaS2CPacket.send(player, GameUtil.refillStamina(player));
         sync();
     }
 

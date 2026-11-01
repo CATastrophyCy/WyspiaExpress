@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
@@ -40,6 +41,8 @@ import org.cat.express.wyspiaexpress.client.roles.TargetAbilityUtil;
 import org.cat.express.wyspiaexpress.client.ui.InventoryAbilityPanel;
 import org.cat.express.wyspiaexpress.client.ui.PlayerConfigButtons;
 import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
+import org.cat.express.wyspiaexpress.packets.StaminaS2CPacket;
+import org.cat.express.wyspiaexpress.mixin.generic.PlayerStaminaAccessor;
 import org.cat.express.wyspiaexpress.util.VersionUtil;
 import org.lwjgl.glfw.GLFW;
 
@@ -56,6 +59,8 @@ public class WyspiaexpressClient implements ClientModInitializer {
         registerGuidebook();
         registerInventoryFocus();
         ClientConfigSync.initialize();
+        ClientPlayNetworking.registerGlobalReceiver(StaminaS2CPacket.ID, (packet, context) ->
+                ((PlayerStaminaAccessor) context.player()).wyspiaexpress$setStamina(packet.ticks()));
         registerItemToolTips();
         registerItemsBlood();
         registerAbilityKey();

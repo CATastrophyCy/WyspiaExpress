@@ -60,7 +60,9 @@ import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
+import org.cat.express.wyspiaexpress.packets.StaminaS2CPacket;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
+import org.cat.express.wyspiaexpress.mixin.generic.PlayerStaminaAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,6 +77,13 @@ import java.util.UUID;
 
 public final class GameUtil {
     private GameUtil() {}
+
+    public static float refillStamina(PlayerEntity player) {
+        var role = GameWorldComponent.KEY.get(player.getWorld()).getRole(player);
+        float stamina = Math.max(0, (role != null ? role : WatheRoles.CIVILIAN).getMaxSprintTime());
+        ((PlayerStaminaAccessor) player).wyspiaexpress$setStamina(stamina);
+        return stamina;
+    }
 
     public static boolean canAddCivilianDeathTime(GameTimeComponent timer) {
         int limitMinutes = WyspiaExpress.RULES_CONFIG.maxTimeForDeathBonus();
@@ -248,6 +257,7 @@ public final class GameUtil {
         WorldModifierComponent.KEY.get(player.getWorld()).getModifiers(player).remove(WyspiaExpressRoles.GUESSER);
         gameWorldComponent.addRole(player, role);
         ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, role);
+        StaminaS2CPacket.send(player, GameUtil.refillStamina(player));
         sendRoleAnnouncement(player, role, gameWorldComponent);
         TrainVoicePlugin.resetPlayer(player.getUuid());
     }

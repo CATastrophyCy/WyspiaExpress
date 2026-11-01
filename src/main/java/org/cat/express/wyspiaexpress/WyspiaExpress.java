@@ -89,9 +89,13 @@ public class WyspiaExpress implements ModInitializer {
         registerPackets();
         ServerLifecycleEvents.SERVER_STARTING.register(server -> ROUND_TICKS = -1);
         GameEvents.ON_GAME_START.register(gameMode -> ROUND_TICKS = 0);
-        GameEvents.ON_FINISH_INITIALIZE.register((world, gameWorld) ->
-                LOGGER.info("Round started: gamemode {} and map effect {}.",
-                        gameWorld.getGameMode().identifier, gameWorld.getMapEffect().identifier));
+        GameEvents.ON_FINISH_INITIALIZE.register((world, gameWorld) -> {
+            for (var player : world.getPlayers()) {
+                if (gameWorld.getRole(player) != null) StaminaS2CPacket.send(player, GameUtil.refillStamina(player));
+            }
+            LOGGER.info("Round started: gamemode {} and map effect {}.",
+                    gameWorld.getGameMode().identifier, gameWorld.getMapEffect().identifier);
+        });
         GameEvents.ON_GAME_STOP.register(gameMode -> {
             if (ROUND_TICKS >= 0) {
                 LOGGER.info("Round has finished after {}.", GameUtil.formatRoundTime(ROUND_TICKS));
@@ -188,6 +192,7 @@ public class WyspiaExpress implements ModInitializer {
 
     }
     private void registerPackets(){
+        StaminaS2CPacket.register();
         PlayerConfigC2SPacket.register();
         LichReviveC2SPacket.register();
         CultLeaderReviveC2SPacket.register();

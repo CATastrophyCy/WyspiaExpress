@@ -31,6 +31,8 @@ import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.cat.express.wyspiaexpress.config.RolesConfig.RoleBasicConfig;
 import org.cat.express.wyspiaexpress.game.gamemode.WyspiaExpressKillerModdedGameMode;
 import org.cat.express.wyspiaexpress.shop.ShopUtil;
+import org.cat.express.wyspiaexpress.packets.StaminaS2CPacket;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.cat.express.wyspiaexpress.util.RoleUtil;
 import pro.fazeclan.river.stupid_express.constants.SEModifiers;
 import pro.fazeclan.river.stupid_express.role.avaricious.AvariciousGoldHandler;
@@ -400,6 +402,7 @@ public class WyspiaExpressRoles {
             }
         });
         ResetPlayerEvent.EVENT.register(((playerEntity) -> {
+            StaminaS2CPacket.send(playerEntity, GameUtil.refillStamina(playerEntity));
 
             playerEntity.removeStatusEffect(StatusEffects.NIGHT_VISION);
             playerEntity.removeStatusEffect(StatusEffects.SLOWNESS);
