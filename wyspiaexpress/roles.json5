@@ -643,7 +643,11 @@
 					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
-				}
+				},
+				// Cooldown after the disguise ends, in seconds
+				"cooldown": 20,
+				// Disguise duration, in seconds
+				"duration": 35
 			},
 			// Config options for PHANTOM
 			"phantomConfig": {
