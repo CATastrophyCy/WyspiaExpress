@@ -295,7 +295,7 @@
 				"dropOnDeath": false
 			},
 			// Cooldown, in seconds
-			"cooldown": 90
+			"cooldown": 120
 		},
 		// Configuration for WRENCH
 		"wrenchConfig": {

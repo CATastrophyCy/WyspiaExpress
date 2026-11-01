@@ -159,7 +159,7 @@
 				"minimumPlayerSpawn": 9,
 				"maximumPlayerSpawn": 99,
 				"playersPerAdditionalSpawn": 6,
-				"maximumSpawn": 4,
+				"maximumSpawn": 3,
 				"seePoison": false
 			},
 			// Miss chance
@@ -347,6 +347,61 @@
 			// Whether spectator last voicechat group for their ability. Setting this to false will keep the default behaviour of just hearing nearby spectators
 			"useSpectatorVoicechat": true
 		},
+		// Config options for LOVERS (one spawn is one pair)
+		"loversConfig": {
+			// Basic role configuration for Lover 1
+			"basic": {
+				"enableShop": true,
+				"shopEntries": [
+					"KNIFE;250;-1;WEAPON",
+					"PSYCHO_MODE;500;-1;WEAPON",
+					"GRENADE;450;-1;WEAPON",
+					"POISON_VIAL;35;-1;POISON",
+					"FIRECRACKER;5;-1;TOOL",
+					"NOTE;10;-1;TOOL",
+					"MEGAPHONE;10;-1;TOOL"
+				],
+				"passiveIncome": true,
+				"taskIncome": 50,
+				"items": [],
+				"itemAmount": [],
+				"minimumPlayerSpawn": 12,
+				"maximumPlayerSpawn": 99,
+				"playersPerAdditionalSpawn": 0,
+				"maximumSpawn": 1,
+				"seePoison": true
+			},
+			// Teleport cooldown, in seconds
+			"cooldown": 60,
+			// Config options for LOVER_2. Pair spawn rules use Lover 1
+			"lover2Config": {
+				// Basic role configuration for Lover 2
+				"basic": {
+					"enableShop": true,
+					"shopEntries": [
+						"CAPTURE_DEVICE;75;-1;TOOL",
+						"SMOKE_BOMB;125;-1;TOOL",
+						"PAN;175;-1;TOOL",
+						"LOCKPICK;200;-1;TOOL",
+						"WRENCH;125;-1;TOOL",
+						"CROWBAR;125;-1;TOOL",
+						"SCORPION;35;-1;POISON",
+						"FIRECRACKER;5;-1;TOOL",
+						"NOTE;10;-1;TOOL",
+						"MEGAPHONE;10;-1;TOOL"
+					],
+					"passiveIncome": true,
+					"taskIncome": 50,
+					"items": [],
+					"itemAmount": [],
+					"minimumPlayerSpawn": 12,
+					"maximumPlayerSpawn": 99,
+					"playersPerAdditionalSpawn": 0,
+					"maximumSpawn": 1,
+					"seePoison": true
+				}
+			}
+		},
 		// Config options for VIGILANTE
 		"vigilanteConfig": {
 			// Basic role configuration
@@ -375,7 +430,7 @@
 					"enableShop": true,
 					"shopEntries": [
 						"KNIFE;125;-1;WEAPON",
-						"REVOLVER;225;-1;WEAPON",
+						"REVOLVER;300;-1;WEAPON",
 						"TAPE;25;-1;TOOL",
 						"PSYCHO_MODE;400;-1;WEAPON",
 						"POISON_VIAL;80;-1;POISON",
@@ -463,7 +518,7 @@
 					"enableShop": true,
 					"shopEntries": [
 						"KNIFE;125;-1;WEAPON",
-						"REVOLVER;275;-1;WEAPON",
+						"REVOLVER;350;-1;WEAPON",
 						"GRENADE;350;-1;WEAPON",
 						"POISON_VIAL;100;-1;POISON",
 						"SCORPION;50;-1;POISON",
@@ -561,7 +616,7 @@
 					"enableShop": true,
 					"shopEntries": [
 						"KNIFE;125;-1;WEAPON",
-						"REVOLVER;225;-1;WEAPON",
+						"REVOLVER;300;-1;WEAPON",
 						"TAPE;25;-1;TOOL",
 						"PSYCHO_MODE;400;-1;WEAPON",
 						"POISON_VIAL;80;-1;POISON",
@@ -597,7 +652,7 @@
 					"enableShop": true,
 					"shopEntries": [
 						"KNIFE;125;-1;WEAPON",
-						"REVOLVER;275;-1;WEAPON",
+						"REVOLVER;300;-1;WEAPON",
 						"POISON_INJECTOR;125;-1;WEAPON",
 						"KNOCKOUT_DRUG;125;-1;TOOL",
 						"POISON_VIAL;80;-1;POISON",
@@ -633,7 +688,7 @@
 					"enableShop": true,
 					"shopEntries": [
 						"KNIFE;125;-1;WEAPON",
-						"REVOLVER;225;-1;WEAPON",
+						"REVOLVER;300;-1;WEAPON",
 						"GRENADE;350;-1;WEAPON",
 						"POISON_VIAL;100;-1;POISON",
 						"SCORPION;50;-1;POISON",
@@ -843,7 +898,7 @@
 					"enableShop": true,
 					"shopEntries": [
 						"KNIFE;125;-1;WEAPON",
-						"REVOLVER;225;-1;WEAPON",
+						"REVOLVER;300;-1;WEAPON",
 						"PSYCHO_MODE;400;-1;WEAPON",
 						"POISON_VIAL;100;-1;POISON",
 						"SCORPION;50;-1;POISON",
@@ -873,7 +928,7 @@
 					"enableShop": true,
 					"shopEntries": [
 						"KNIFE;125;-1;WEAPON",
-						"REVOLVER;225;-1;WEAPON",
+						"REVOLVER;300;-1;WEAPON",
 						"GRENADE;350;-1;WEAPON",
 						"POISON_VIAL;100;-1;POISON",
 						"SCORPION;50;-1;POISON",
@@ -903,7 +958,7 @@
 					"enableShop": true,
 					"shopEntries": [
 						"HUNTING_KNIFE;125;-1;WEAPON",
-						"REVOLVER;225;-1;WEAPON",
+						"REVOLVER;300;-1;WEAPON",
 						"PSYCHO_MODE;400;-1;WEAPON",
 						"POISON_VIAL;100;-1;POISON",
 						"SCORPION;50;-1;POISON",
@@ -933,7 +988,7 @@
 					"enableShop": true,
 					"shopEntries": [
 						"KNIFE;125;-1;WEAPON",
-						"REVOLVER;225;-1;WEAPON",
+						"REVOLVER;300;-1;WEAPON",
 						"PSYCHO_MODE;400;-1;WEAPON",
 						"CAPTURE_DEVICE;125;-1;TOOL",
 						"KNOCKOUT_DRUG;50;-1;POISON",
@@ -967,7 +1022,7 @@
 						"POISON_INJECTOR;125;-1;WEAPON",
 						"BLOWGUN;225;-1;WEAPON",
 						"KNIFE;175;-1;WEAPON",
-						"REVOLVER;275;-1;WEAPON",
+						"REVOLVER;325;-1;WEAPON",
 						"KNOCKOUT_DRUG;125;-1;POISON",
 						"POISON_VIAL;50;-1;POISON",
 						"SCORPION;35;-1;POISON",
@@ -1081,7 +1136,9 @@
 					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": false
-				}
+				},
+				// See poisoned players with instinct
+				"seePoisonedPlayers": true
 			},
 			// Config options for TECHNICIAN
 			"technicianConfig": {
@@ -1166,7 +1223,7 @@
 				"basic": {
 					"enableShop": true,
 					"shopEntries": [
-						"DREAM_IMPRINT;250;-1;TOOL",
+						"DREAM_IMPRINT;225;-1;TOOL",
 						"SMOKE_BOMB;125;-1;TOOL",
 						"LOCKPICK;125;-1;TOOL",
 						"DELUSION_VIAL;30;-1;TOOL",
@@ -1197,7 +1254,7 @@
 				// Maximum delusion requirement
 				"maximumRequirement": 4,
 				// Enable instinct
-				"enableInstinct": false
+				"enableInstinct": true
 			},
 			// Config options for LICENSED_VILLAIN
 			"licensedVillainConfig": {
@@ -1205,7 +1262,7 @@
 				"basic": {
 					"enableShop": true,
 					"shopEntries": [
-						"REVOLVER;450;-1;WEAPON",
+						"REVOLVER;400;-1;WEAPON",
 						"SMOKE_BOMB;100;-1;TOOL",
 						"LOCKPICK;125;-1;TOOL"
 					],
