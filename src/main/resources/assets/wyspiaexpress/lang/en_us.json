@@ -88,6 +88,8 @@
   "tip.wyspiaexpress.ability.lich.no_revive": "There is no available revive",
   "tip.wyspiaexpress.ability.lich.revive": "%s available revives",
 
+  "tip.wyspiaexpress.ability.morphling": "Press %s to cancel disguise",
+
   "tip.wyspiaexpress.items.megaphone": "A body has been reported!",
   "tip.wyspiaexpress.items.megaphone_spectator": "A body has been reported by %s!",
 
@@ -374,8 +376,8 @@
   "guidebook.wyspiaexpress.roles.noellesroles.mimic.ability.1": "Killers see you as an ally. Your fake knife can help sell the disguise, but you are still on the civilian side.",
   "guidebook.wyspiaexpress.roles.noellesroles.mimic.lore": "The Mimic is a spy pretending to be a killer alongside a friend who may or may not be a convicted murderer on the run.",
 
-  "guidebook.wyspiaexpress.roles.noellesroles.morphling.summary": "Disguise yourself as another living passenger.",
-  "guidebook.wyspiaexpress.roles.noellesroles.morphling.ability.1": "Use your ability to copy another living passenger's appearance for %1$s. Your voice stays the same. If the morphed player dies or disconnects, the disguise is ended; afterward, wait %2$s before morphing again.",
+  "guidebook.wyspiaexpress.roles.noellesroles.morphling.summary": "Disguise yourself as another passenger from the current round.",
+  "guidebook.wyspiaexpress.roles.noellesroles.morphling.ability.1": "Open your inventory to copy another round participant's appearance for %1$s. Your voice stays the same, and the disguise persists if they die or disconnect. Press your ability key while disguised to cancel it early. After the disguise ends, wait %2$s before morphing again.",
   "guidebook.wyspiaexpress.roles.noellesroles.morphling.ability.2": "Every silenced civilian provides %1$s every ten seconds.",
   "guidebook.wyspiaexpress.roles.noellesroles.morphling.lore": "The Morphling has mastered the art of imitation. Passengers who cannot speak make especially convincing disguises.",
 

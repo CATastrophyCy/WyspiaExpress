@@ -15,14 +15,14 @@
       "format": "coins"
     },
     "duration": {
-      "config": "derived",
-      "path": "noelles.morphDuration",
+      "config": "roles",
+      "path": "roleConfig.noellesRoles.morphlingConfig.duration",
       "format": "duration",
       "unit": "seconds"
     },
     "recovery": {
-      "config": "derived",
-      "path": "noelles.morphRecovery",
+      "config": "roles",
+      "path": "roleConfig.noellesRoles.morphlingConfig.cooldown",
       "format": "duration",
       "unit": "seconds"
     }

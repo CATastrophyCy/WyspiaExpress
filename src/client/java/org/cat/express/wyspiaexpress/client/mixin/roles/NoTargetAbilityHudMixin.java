@@ -1,6 +1,8 @@
 package org.cat.express.wyspiaexpress.client.mixin.roles;
 
 import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
+import org.agmas.noellesroles.Noellesroles;
+import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerShopComponent;
@@ -38,6 +40,14 @@ public abstract class NoTargetAbilityHudMixin {
         if (role != null && NoTargetAbilityUtil.isValid(role) && WatheClient.isPlayerAliveAndInSurvival()) {
             AbilityCooldownComponent ability = AbilityCooldownComponent.KEY.get(MinecraftClient.getInstance().player);
             PlayerShopComponent playerShop = PlayerShopComponent.KEY.get(MinecraftClient.getInstance().player);
+            if (role == Noellesroles.MORPHLING
+                    && MorphlingPlayerComponent.KEY.get(MinecraftClient.getInstance().player).getMorphTicks() > 0) {
+                Text line = Text.translatable("tip.wyspiaexpress.ability.morphling",
+                        WyspiaexpressClient.abilityBind.getBoundKeyLocalizedText());
+                context.drawTextWithShadow(getTextRenderer(), line,
+                        context.getScaledWindowWidth() - getTextRenderer().getWidth(line),
+                        context.getScaledWindowHeight() - getTextRenderer().fontHeight, role.color());
+            }
             if (LoversComponent.isLover(role)) {
                 Text line = ability.isCooldown()
                         ? Text.translatable("tip.wyspiaexpress.ability.cooldown", ability.cooldown / 20)

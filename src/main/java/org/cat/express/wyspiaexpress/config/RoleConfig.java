@@ -312,6 +312,14 @@ public class RoleConfig {
         public static class MorphlingConfig{
             @Comment("Basic role configuration")
             public RoleBasicConfig basic = new RoleBasicConfig();
+
+            @Comment("Cooldown after the disguise ends, in seconds")
+            @ConfigRange(min = 0, max = 107374182)
+            public int cooldown = 20;
+
+            @Comment("Disguise duration, in seconds")
+            @ConfigRange(min = 1, max = 107374182)
+            public int duration = 35;
         }
 
         public static class PhantomConfig{

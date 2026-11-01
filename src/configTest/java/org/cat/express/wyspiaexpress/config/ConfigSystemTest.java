@@ -57,6 +57,16 @@ public final class ConfigSystemTest {
         check(decoded.get("items.itemConfig.smokeBombConfig.showTrajectory").equals(true),"smoke bomb preview enabled by default");
         check(decoded.get("roles.roleConfig.kinsWatheRoles.physicianConfig.seePoisonedPlayers").equals(true),"physician poison instinct enabled by default");
         check(decoded.get("roles.roleConfig.gamblerConfig.goodPool") instanceof List<?>,"typed enum list");
+        check(decoded.get("roles.roleConfig.noellesRoles.morphlingConfig.cooldown").equals(20), "Morphling defaults to 20-second recovery");
+        check(decoded.get("roles.roleConfig.noellesRoles.morphlingConfig.duration").equals(35), "Morphling defaults to 35-second disguise");
+        var morphConfig = new TreeMap<>(defaults);
+        schema.overlay("roles", JsonParser.parseString("{\"roleConfig\":{\"noellesRoles\":{\"morphlingConfig\":{\"duration\":7,\"cooldown\":0}}}}")
+                .getAsJsonObject(), morphConfig, "Morphling mode overrides");
+        var customMorph = schema.decodeComplete(morphConfig, "Morphling mode overrides");
+        check(customMorph.get("roles.roleConfig.noellesRoles.morphlingConfig.duration").equals(7)
+                && customMorph.get("roles.roleConfig.noellesRoles.morphlingConfig.cooldown").equals(0), "Morphling supports duration override and zero cooldown");
+        check(customMorph.get("roles.roleConfig.noellesRoles.morphlingConfig.basic.maximumSpawn")
+                .equals(decoded.get("roles.roleConfig.noellesRoles.morphlingConfig.basic.maximumSpawn")), "Morphling ability override preserves basic role config");
         var loverConfigs = new TreeMap<>(defaults);
         schema.overlay("roles", JsonParser.parseString("""
                 {"roleConfig":{"loversConfig":{

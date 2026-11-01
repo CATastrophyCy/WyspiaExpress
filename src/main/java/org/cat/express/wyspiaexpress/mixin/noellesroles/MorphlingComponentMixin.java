@@ -7,10 +7,13 @@ import dev.doctor4t.wathe.game.GameFunctions;
 import net.minecraft.entity.player.PlayerEntity;
 import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
+import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.components.RoundResultComponent;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 import java.util.UUID;
 
@@ -21,6 +24,16 @@ public abstract class MorphlingComponentMixin {
     @Shadow public int morphTicks;
     @Shadow public abstract void sync();
     @Shadow public abstract void stopMorph();
+
+    @ModifyConstant(method = "startMorph", constant = @Constant(intValue = 35))
+    private int wyspiaexpress$morphDuration(int original) {
+        return WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.morphlingConfig.duration();
+    }
+
+    @ModifyConstant(method = "stopMorph", constant = @Constant(intValue = 20))
+    private int wyspiaexpress$morphCooldown(int original) {
+        return WyspiaExpress.ROLES_CONFIG.roleConfig.noellesRoles.morphlingConfig.cooldown();
+    }
 
     @WrapMethod(method = "startMorph")
     private boolean wyspiaexpress$participantTarget(UUID target, Operation<Boolean> original) {

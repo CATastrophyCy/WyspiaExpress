@@ -13,8 +13,6 @@ public final class GuidebookSources {
 
     public static void init() {
         // Fixed mechanics in the installed Noelle version; these are not server config options.
-        GuidebookValues.registerDerived("noelles.morphDuration", () -> 35);
-        GuidebookValues.registerDerived("noelles.morphRecovery", () -> 20);
         GuidebookValues.registerDerived("noelles.recallMarkCooldown", () -> 10);
         GuidebookValues.registerDerived("noelles.recallCost", () -> 100);
         GuidebookValues.registerDerived("noelles.recallReturnCooldown", () -> 30);
