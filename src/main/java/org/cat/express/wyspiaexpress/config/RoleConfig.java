@@ -43,10 +43,19 @@ public class RoleConfig {
 
     // Mine
     public static class LoversConfig {
+        @Comment("Basic role configuration for Lover 1")
         public RoleBasicConfig basic = new RoleBasicConfig();
         @Comment("Teleport cooldown, in seconds")
         @ConfigRange(min = 0, max = 107374182)
         public int cooldown = 60;
+
+        @Comment("Config options for LOVER_2. Pair spawn rules use Lover 1")
+        public Lover2Config lover2Config = new Lover2Config();
+
+        public static class Lover2Config {
+            @Comment("Basic role configuration for Lover 2")
+            public RoleBasicConfig basic = new RoleBasicConfig();
+        }
     }
 
     public static class CopycatConfig {

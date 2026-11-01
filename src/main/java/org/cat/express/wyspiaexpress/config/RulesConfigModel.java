@@ -45,9 +45,9 @@ public class RulesConfigModel {
         @ConfigRange(min = 0, max = 1)
         public double maxSlow = 0.4;
 
-        @Comment("Seconds removed for each hit after the free hits")
-        @ConfigRange(min = 0, max = 107374182)
-        public int timeLostPerHit = 15;
+        @Comment("Fraction of remaining psycho time removed per hit after the free hits. 0.35 = 35%")
+        @ConfigRange(min = 0, max = 1)
+        public double timeLostPerHit = 0.35;
 
         @Comment("Weapon cooldown after getting hit in psycho, in seconds. Longer cooldowns are kept")
         @ConfigRange(min = 0, max = 107374182)

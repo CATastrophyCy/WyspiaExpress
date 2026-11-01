@@ -33,7 +33,7 @@ public abstract class PlayerPsychoMixin implements PsychoModeState {
         if (player.getWorld().isClient || psychoTicks <= 0) return;
         wyspiaexpress$blockedHits++;
         if (WyspiaExpress.RULES_CONFIG.psycho.rework() && getPenalizedHits() > 0) {
-            psychoTicks = Math.max(0, psychoTicks - WyspiaExpress.RULES_CONFIG.psycho.timeLostPerHit() * 20);
+            psychoTicks = (int) (psychoTicks * (1 - WyspiaExpress.RULES_CONFIG.psycho.timeLostPerHit()));
         }
         if (psychoTicks == 0) stopPsycho();
         else sync();

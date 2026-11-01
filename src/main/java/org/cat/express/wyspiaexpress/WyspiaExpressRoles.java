@@ -435,7 +435,7 @@ public class WyspiaExpressRoles {
     private static void registerRoleConfigs(){
         // mine
         registerRoleBasicConfig(LOVER_1, WyspiaExpress.ROLES_CONFIG.roleConfig.loversConfig.basic);
-        registerRoleBasicConfig(LOVER_2, WyspiaExpress.ROLES_CONFIG.roleConfig.loversConfig.basic);
+        registerRoleBasicConfig(LOVER_2, WyspiaExpress.ROLES_CONFIG.roleConfig.loversConfig.lover2Config.basic);
         registerRoleBasicConfig(COPYCAT, WyspiaExpress.ROLES_CONFIG.roleConfig.copycatConfig.basic);
         registerRoleBasicConfig(OUTLAW, WyspiaExpress.ROLES_CONFIG.roleConfig.outlawConfig.basic);
         registerRoleBasicConfig(NOTE_TAKER, WyspiaExpress.ROLES_CONFIG.roleConfig.noteTakerConfig.basic);

@@ -57,6 +57,29 @@ public final class ConfigSystemTest {
         check(decoded.get("items.itemConfig.smokeBombConfig.showTrajectory").equals(true),"smoke bomb preview enabled by default");
         check(decoded.get("roles.roleConfig.kinsWatheRoles.physicianConfig.seePoisonedPlayers").equals(true),"physician poison instinct enabled by default");
         check(decoded.get("roles.roleConfig.gamblerConfig.goodPool") instanceof List<?>,"typed enum list");
+        var loverConfigs = new TreeMap<>(defaults);
+        schema.overlay("roles", JsonParser.parseString("""
+                {"roleConfig":{"loversConfig":{
+                  "basic":{"enableShop":true,"shopEntries":["NOTE;20;-1;TOOL"],"taskIncome":11},
+                  "lover2Config":{"basic":{"enableShop":true,"shopEntries":["CROWBAR;35;-1;TOOL"],"taskIncome":23}}
+                }}}
+                """).getAsJsonObject(), loverConfigs, "separate Lover configs");
+        var separateLovers = schema.decodeComplete(loverConfigs, "separate Lover configs");
+        check(separateLovers.get("roles.roleConfig.loversConfig.basic.shopEntries").equals(List.of("NOTE;20;-1;TOOL"))
+                && separateLovers.get("roles.roleConfig.loversConfig.lover2Config.basic.shopEntries").equals(List.of("CROWBAR;35;-1;TOOL")),
+                "Lovers have independent shop entries");
+        check(separateLovers.get("roles.roleConfig.loversConfig.basic.taskIncome").equals(11)
+                && separateLovers.get("roles.roleConfig.loversConfig.lover2Config.basic.taskIncome").equals(23),
+                "Lovers have independent income settings");
+        schema.overlay("roles", JsonParser.parseString("""
+                {"roleConfig":{"loversConfig":{"lover2Config":{"basic":{"taskIncome":31}}}}}
+                """).getAsJsonObject(), loverConfigs, "partial Lover 2 override");
+        var partialLover = schema.decodeComplete(loverConfigs, "partial Lover 2 override");
+        check(partialLover.get("roles.roleConfig.loversConfig.lover2Config.basic.taskIncome").equals(31)
+                && partialLover.get("roles.roleConfig.loversConfig.basic.taskIncome").equals(11)
+                && partialLover.get("roles.roleConfig.loversConfig.lover2Config.basic.shopEntries").equals(List.of("CROWBAR;35;-1;TOOL"))
+                && partialLover.get("roles.roleConfig.loversConfig.cooldown").equals(60),
+                "partial Lover 2 override preserves Lover 1, sibling fields and shared cooldown");
         for(var entry:defaults.entrySet()){
             var changed=new TreeMap<>(defaults);changed.put(entry.getKey(),JsonNull.INSTANCE);
             rejects(()->schema.decodeComplete(changed,"null test"),entry.getKey());
