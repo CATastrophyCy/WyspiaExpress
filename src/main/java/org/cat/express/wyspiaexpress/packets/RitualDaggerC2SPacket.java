@@ -1,6 +1,7 @@
 package org.cat.express.wyspiaexpress.packets;
 
 import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.cca.PlayerPsychoComponent;
 import dev.doctor4t.wathe.index.WatheSounds;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -61,8 +62,9 @@ public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
             ItemUtil.setItemCooldown(player, WyspiaExpressItems.RITUAL_DAGGER, null);
             playerEffectComponent.setStunTicks(WyspiaExpress.ITEMS_CONFIG.itemConfig.ritualDaggerConfig.duration());
 
-            //  only convert if the game is actually running and they are not already cultist
-            if (gameWorldComponent.isRunning() && !gameWorldComponent.isRole(target, WyspiaExpressRoles.CULTIST)) {
+            // Psycho blocks conversion; the dagger still applies its normal stun and cooldown.
+            if (gameWorldComponent.isRunning() && !gameWorldComponent.isRole(target, WyspiaExpressRoles.CULTIST)
+                    && PlayerPsychoComponent.KEY.get(target).getPsychoTicks() <= 0) {
                 GameUtil.convertToCultist(player, target);
             }
 
