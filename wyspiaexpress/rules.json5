@@ -15,19 +15,19 @@
 		// Psycho duration, in seconds
 		"duration": 60,
 		// Blocked hits before the slow and duration penalties start
-		"freeHits": 1,
+		"freeHits": 0,
 		// Movement slow per hit after the free hits. 0.15 = 15%
 		"slowPerHit": 0.15,
 		// Maximum movement slow. 0.4 = 40%
 		"maxSlow": 0.4,
-		// Seconds removed for each hit after the free hits
-		"timeLostPerHit": 15,
+		// Fraction of remaining psycho time removed per hit after the free hits. 0.35 = 35%
+		"timeLostPerHit": 0.25,
 		// Weapon cooldown after getting hit in psycho, in seconds. Longer cooldowns are kept
 		"weaponCooldown": 15,
 		// Extra bat recharge time per hit after the free hits, in seconds
 		"batDelayPerHit": 0.5,
 		// Maximum extra bat recharge time, in seconds
-		"maxBatDelay": 2.5
+		"maxBatDelay": 1.5
 	},
 	// Enable freezing
 	"freeze": true,
