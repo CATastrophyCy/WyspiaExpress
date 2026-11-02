@@ -28,6 +28,7 @@ import net.minecraft.world.World;
 import org.BsXinQin.kinswathe.KinsWatheConfig;
 import org.BsXinQin.kinswathe.KinsWatheRoles;
 import org.BsXinQin.kinswathe.roles.dreamer.DreamerComponent;
+import org.BsXinQin.kinswathe.roles.dreamer.DreamerKillerComponent;
 import org.BsXinQin.kinswathe.roles.hacker.HackerComponent;
 import org.BsXinQin.kinswathe.roles.physician.PhysicianComponent;
 import org.agmas.noellesroles.Noellesroles;
@@ -41,6 +42,8 @@ import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
 import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
 import org.cat.express.wyspiaexpress.components.PlayerTaskComponent;
+import org.cat.express.wyspiaexpress.components.PsychoModeState;
+import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.cat.express.wyspiaexpress.client.util.PlayerProfileUtil;
@@ -138,11 +141,29 @@ public abstract class RoleNameRendererMixin {
                 hudText.append(Text.literal(" || ").withColor(white))
                         .append(PlayerTaskComponent.KEY.get(targetPlayer).hudText());
             }
+            if (LoversComponent.isLover(worldComponent.getRole(targetPlayer))) {
+                hudText.append(Text.literal(" || ").withColor(white))
+                        .append(Text.translatable("hud.wyspiaexpress.spectator.lives").withColor(white))
+                        .append(Text.literal(String.valueOf(LoversComponent.KEY.get(player.getWorld()).getLives(targetPlayer.getUuid())))
+                                .withColor(WyspiaExpressRoles.LOVER_1.color()));
+            }
+            if (worldComponent.isRole(targetPlayer, KinsWatheRoles.DREAMER)) {
+                DreamerKillerComponent dreamer = DreamerKillerComponent.KEY.get(targetPlayer);
+                hudText.append(Text.literal(" || ").withColor(white))
+                        .append(Text.translatable("hud.wyspiaexpress.spectator.deluded").withColor(white))
+                        .append(Text.literal(dreamer.dreamerCounts + " / " + dreamer.dreamerRequired)
+                                .withColor(KinsWatheRoles.DREAMER.color()));
+            }
             int y = renderer.fontHeight / 2 + 1 + OFF_SET;
             context.drawTextWithShadow(renderer, hudText, -renderer.getWidth(hudText) / 2, y, white);
             y += renderer.fontHeight + 1;
 
             List<Text> texts = new ArrayList<>();
+            PsychoModeState psycho = PsychoModeState.get(targetPlayer);
+            if (psycho.getPsychoTicks() > 0) {
+                texts.add(Text.translatable("hud.wyspiaexpress.status.psycho",
+                        (int) Math.ceil(psycho.getPsychoTicks() / 20.0), psycho.getBlockedHits()).withColor(0xFF6B6B));
+            }
             var judged = targetPlayer.getStatusEffect(StatusEffects.GLOWING);
             if (judged != null && !judged.isInfinite() && judged.getDuration() > 0) {
                 texts.add(Text.translatable("hud.wyspiaexpress.status.glowing", (int) Math.ceil(judged.getDuration() / 20.0))

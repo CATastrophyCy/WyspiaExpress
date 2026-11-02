@@ -58,6 +58,10 @@
   "hud.wyspiaexpress.status.glowing": "Glowing %ss",
   "hud.wyspiaexpress.status.night_vision": "Night vision %ss",
   "hud.wyspiaexpress.status.starstruck": "Starstruck %ss",
+  "hud.wyspiaexpress.status.psycho": "Psycho %1$ss · %2$s hits",
+
+  "hud.wyspiaexpress.spectator.lives": "Lives: ",
+  "hud.wyspiaexpress.spectator.deluded": "Deluded: ",
 
   "hud.wyspiaexpress.task.current": "Task: %s",
   "hud.wyspiaexpress.task.waiting": "Next task: %ss",
@@ -622,9 +626,9 @@
   "hud.wyspiaexpress.lovers.lives": " · %s shared lives",
   "tip.wyspiaexpress.ability.lovers": "Press %s to teleport to your partner",
 
-  "announcement.role.wyspiaexpress.lover_1": "Lovers",
+  "announcement.role.wyspiaexpress.lover_1": "Lover 1",
   "announcement.goals.wyspiaexpress.lover_1": "Be the last ones alive with your partner.",
-  "announcement.role.wyspiaexpress.lover_2": "Lovers",
+  "announcement.role.wyspiaexpress.lover_2": "Lover 2",
   "announcement.goals.wyspiaexpress.lover_2": "Be the last ones alive with your partner.",
 
   "announcement.win.kinswathe.lovers": "The Lovers win",
