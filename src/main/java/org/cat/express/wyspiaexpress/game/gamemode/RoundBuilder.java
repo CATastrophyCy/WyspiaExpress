@@ -599,7 +599,7 @@ final class RoundBuilder {
             if (gameWorld.canUseKillerFeatures(player)) {
                 RoleCategoryStatisticsManager.getInstance()
                         .recordRoleCategory(player.getUuid(), player.getName().getString(), RoleCategoryStatisticsManager.RoleCategory.KILLER);
-            } else if (gameWorld.isInnocent(player)) {
+            } else if (gameWorld.isInnocent(player) || role == WyspiaExpressRoles.LOVER_2) {
                 if (gameWorld.isRole(player, WatheRoles.VIGILANTE)) {
                     RoleCategoryStatisticsManager.getInstance()
                             .recordRoleCategory(player.getUuid(), player.getName().getString(), RoleCategoryStatisticsManager.RoleCategory.VIGILANTE);
