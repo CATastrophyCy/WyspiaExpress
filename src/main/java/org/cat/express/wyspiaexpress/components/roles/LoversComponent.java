@@ -119,7 +119,8 @@ public final class LoversComponent implements AutoSyncedComponent {
             // Prefer civilians outside this draft's already-selected neutral recipients.
             List<ServerPlayerEntity> civilians = partners.stream().filter(player -> !primaryCandidates.contains(player)).toList();
             if (!civilians.isEmpty()) partners = new ArrayList<>(civilians);
-            ServerPlayerEntity second = partners.get(world.getRandom().nextInt(partners.size()));
+            ServerPlayerEntity second = RoleUtil.selectPlayersByRoleHistory(partners,
+                    List.of(WyspiaExpressRoles.LOVER_1), 1, game.areWeightsEnabled(), world.getRandom()).getFirst();
             pair(first.getUuid(), second.getUuid());
             game.addRole(first, WyspiaExpressRoles.LOVER_1);
             game.addRole(second, WyspiaExpressRoles.LOVER_2);
@@ -224,14 +225,24 @@ public final class LoversComponent implements AutoSyncedComponent {
         }
         boolean leaving = connection.getGroup() != null && pair.voiceGroup.equals(connection.getGroup().getId());
         if (leaving) connection.setGroup(null);
-        else {
-            Group group = api.getGroups().stream().filter(existing -> pair.voiceGroup.equals(existing.getId())).findFirst().orElse(null);
-            if (group == null) group = api.groupBuilder().setId(pair.voiceGroup).setName("Lovers")
-                    .setHidden(true).setPersistent(true).setType(Group.Type.ISOLATED).build();
-            connection.setGroup(group);
-        }
+        else joinPhone(player);
         player.sendMessage(Text.translatable(leaving ? "message.wyspiaexpress.lovers.phone_off" : "message.wyspiaexpress.lovers.phone_on"), true);
         return true;
+    }
+
+    public void joinPhone(ServerPlayerEntity player) {
+        Pair pair = getPair(player.getUuid());
+        if (pair == null || pair.lives <= 0 || !GameFunctions.isPlayerAliveAndSurvival(player)
+                || !isLover(GameWorldComponent.KEY.get(world).getRole(player))) return;
+        var api = TrainVoicePlugin.SERVER_API;
+        var connection = api == null ? null : api.getConnectionOf(player.getUuid());
+        if (connection == null) return;
+        Group group = api.getGroups().stream().filter(existing -> pair.voiceGroup.equals(existing.getId())).findFirst().orElse(null);
+        if (group == null || group.getType() != Group.Type.OPEN) {
+            group = api.groupBuilder().setId(pair.voiceGroup).setName("Lovers")
+                    .setHidden(true).setPersistent(true).setType(Group.Type.OPEN).build();
+        }
+        connection.setGroup(group);
     }
 
     private void leavePhone(UUID player, Pair pair) {

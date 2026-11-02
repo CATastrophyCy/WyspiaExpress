@@ -14,6 +14,7 @@ import net.minecraft.component.type.LoreComponent;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -396,6 +397,7 @@ public class WyspiaExpressRoles {
             }
             if (LoversComponent.isLover(role)) {
                 player.giveItemStack(WyspiaExpressItems.LOVERS_PHONE.getDefaultStack());
+                LoversComponent.KEY.get(player.getWorld()).joinPhone((ServerPlayerEntity) player);
             }
             if(role.equals(LICH)){
                 AbilityCooldownComponent.KEY.get(player).setAbilityCooldown(WyspiaExpress.ROLES_CONFIG.roleConfig.lichConfig.startingCooldown());
