@@ -25,9 +25,9 @@
 		// Weapon cooldown after getting hit in psycho, in seconds. Longer cooldowns are kept
 		"weaponCooldown": 15,
 		// Extra bat recharge time per hit after the free hits, in seconds
-		"batDelayPerHit": 0.5,
+		"batDelayPerHit": 0.35,
 		// Maximum extra bat recharge time, in seconds
-		"maxBatDelay": 1.5
+		"maxBatDelay": 1
 	},
 	// Enable freezing
 	"freeze": true,
@@ -42,5 +42,5 @@
 	// Enable killer having role color instinct on killer-aligned neutrals
 	"killerSpecialInstinct": false,
 	// Killer instinct brightness. 0 keeps normal darkness, 1 matches spectators
-	"killerInstinctBrightness": 0.4
+	"killerInstinctBrightness": 0.5
 }
