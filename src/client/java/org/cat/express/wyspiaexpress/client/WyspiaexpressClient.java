@@ -42,6 +42,7 @@ import org.cat.express.wyspiaexpress.client.ui.InventoryAbilityPanel;
 import org.cat.express.wyspiaexpress.client.ui.PlayerConfigButtons;
 import org.cat.express.wyspiaexpress.mixin.generic.PlayerStaminaAccessor;
 import org.cat.express.wyspiaexpress.packets.StaminaS2CPacket;
+import org.cat.express.wyspiaexpress.packets.ResetAttackCooldownS2CPacket;
 import org.cat.express.wyspiaexpress.packets.VersionCheckNetwork;
 import org.cat.express.wyspiaexpress.util.VersionUtil;
 import org.lwjgl.glfw.GLFW;
@@ -61,6 +62,8 @@ public class WyspiaexpressClient implements ClientModInitializer {
         ClientConfigSync.initialize();
         ClientPlayNetworking.registerGlobalReceiver(StaminaS2CPacket.ID, (packet, context) ->
                 ((PlayerStaminaAccessor) context.player()).wyspiaexpress$setStamina(packet.ticks()));
+        ClientPlayNetworking.registerGlobalReceiver(ResetAttackCooldownS2CPacket.ID, (packet, context) ->
+                context.player().resetLastAttackedTicks());
         registerItemToolTips();
         registerItemsBlood();
         registerAbilityKey();

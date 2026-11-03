@@ -193,6 +193,7 @@ public class WyspiaExpress implements ModInitializer {
     }
     private void registerPackets(){
         StaminaS2CPacket.register();
+        ResetAttackCooldownS2CPacket.register();
         PlayerConfigC2SPacket.register();
         LichReviveC2SPacket.register();
         CultLeaderReviveC2SPacket.register();

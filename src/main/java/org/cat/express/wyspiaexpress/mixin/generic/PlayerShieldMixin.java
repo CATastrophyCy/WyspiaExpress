@@ -13,6 +13,7 @@ import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.components.PsychoModeState;
 import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
+import org.cat.express.wyspiaexpress.packets.ResetAttackCooldownS2CPacket;
 import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,6 +49,8 @@ public class PlayerShieldMixin {
                 if (WyspiaExpress.RULES_CONFIG.psycho.rework() || psycho.getArmour() > 0) {
                     if (!WyspiaExpress.RULES_CONFIG.psycho.rework()) psycho.setArmour(psycho.getArmour() - 1);
                     PsychoModeState.get(victim).blockHit();
+                    victim.resetLastAttackedTicks();
+                    ResetAttackCooldownS2CPacket.send(victim);
                     victim.playSoundToPlayer(WatheSounds.ITEM_PSYCHO_ARMOUR, SoundCategory.MASTER, 5F, 1F);
                     wyspiaexpress$showProtection(victim, deathReason, WyspiaExpress.RULES_CONFIG.psychoStunTicks());
                     ci.cancel();
