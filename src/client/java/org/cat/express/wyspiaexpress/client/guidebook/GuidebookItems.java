@@ -26,7 +26,9 @@ import java.util.List;
 
 public final class GuidebookItems {
     private GuidebookItems() {}
-    public record Offer(ItemStack stack, int amount, Integer price, boolean action) {}
+    public record Offer(ItemStack stack, int amount, Integer price, boolean action, int purchaseLimit) {
+        public Offer(ItemStack stack, int amount, Integer price, boolean action) { this(stack, amount, price, action, -1); }
+    }
 
     public static List<Offer> starting(GuidebookEntry entry) {
         List<ItemStack> stacks = new ArrayList<>();
@@ -102,8 +104,14 @@ public final class GuidebookItems {
             return world == null ? List.of() : List.of(new Offer(ModItems.DEFENSE_VIAL.getDefaultStack(), 1,
                     org.agmas.noellesroles.ConfigWorldComponent.KEY.get(world).defenseVialPrice, false));
         }
-        var entries = WyspiaExpressRoles.ROLES_BASIC_CONFIG.containsKey(entry.role())
-                ? RoleShopResolver.configured(entry.role()) : entry.role() == SERoles.INITIATE ? SERoles.INITIATE_SHOP
+        if (WyspiaExpressRoles.ROLES_BASIC_CONFIG.containsKey(entry.role())) {
+            return RoleShopResolver.getShopConfig(entry.role()).stream().map(config -> {
+                var offer = org.cat.express.wyspiaexpress.shop.ShopUtil.fromShopEntryConfig(config);
+                return new Offer(offer.stack().copyWithCount(1), RoleShopResolver.purchaseQuantity(offer.stack().getItem()),
+                        offer.price(), RoleShopResolver.isAction(offer.stack().getItem()), config.purchaseLimit);
+            }).toList();
+        }
+        var entries = entry.role() == SERoles.INITIATE ? SERoles.INITIATE_SHOP
                 : entry.role().canUseKiller() ? GameConstants.SHOP_ENTRIES : List.<dev.doctor4t.wathe.util.ShopEntry>of();
         return entries.stream().map(offer -> new Offer(offer.stack().copyWithCount(1),
                 RoleShopResolver.purchaseQuantity(offer.stack().getItem()), offer.price(), RoleShopResolver.isAction(offer.stack().getItem()))).toList();

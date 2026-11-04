@@ -2,24 +2,21 @@ package org.cat.express.wyspiaexpress.guidebook;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.index.WatheItems;
-import dev.doctor4t.wathe.util.ShopEntry;
 import net.minecraft.item.Item;
 import org.BsXinQin.kinswathe.KinsWatheItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.config.ShopConfig;
-import org.cat.express.wyspiaexpress.shop.ShopUtil;
 
 import java.util.List;
 
-/** Read-only shop definitions shared by the guide, inventory screen and purchase validation. */
 public final class RoleShopResolver {
     private RoleShopResolver() {}
 
-    public static List<ShopEntry> configured(Role role) {
+    public static List<ShopConfig.ShopEntryConfig> getShopConfig(Role role) {
         var config = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role);
         if (config == null || !config.enableShop()) return List.of();
-        return ShopUtil.fromShopEntryConfigs(ShopConfig.fromStrings(config.shopEntries()));
+        return ShopConfig.fromStrings(config.shopEntries());
     }
 
     public static boolean isAction(Item item) {

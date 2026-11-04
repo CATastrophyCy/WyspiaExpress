@@ -17,6 +17,7 @@ import org.ladysnake.cca.api.v3.world.WorldComponentInitializer;
 public class WyspiaExpressComponents implements EntityComponentInitializer, WorldComponentInitializer{
     @Override
     public void registerEntityComponentFactories(@NotNull EntityComponentFactoryRegistry registry) {
+        registry.beginRegistration(PlayerEntity.class, PlayerShopComponent.KEY).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).end(PlayerShopComponent::new);
         registry.beginRegistration(PlayerEntity.class, PlayerConfigComponent.KEY).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).end(PlayerConfigComponent::new);
         registry.beginRegistration(PlayerEntity.class, ItemCooldownComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(ItemCooldownComponent::new);
         registry.beginRegistration(PlayerEntity.class, PlayerTaskComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerTaskComponent::new);

@@ -645,5 +645,9 @@
   "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.1": "Use your ability to teleport to your partner. Cooldown: %1$s.",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.2": "Your pair shares two lives. If Ritual Dagger converts one of you, both of you becomes Cultist",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.3": "Use instinct to see other players.",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.4": "Use your phone to join an open private voice chat group"
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.4": "Use your phone to join an open private voice chat group",
+
+  "shop.wyspiaexpress.sold_out": "Sold out",
+  "shop.wyspiaexpress.remaining": "Purchases remaining: %1$s / %2$s",
+  "gui.wyspiaexpress.guidebook.purchase_limit": "Purchase limit: %s"
 }

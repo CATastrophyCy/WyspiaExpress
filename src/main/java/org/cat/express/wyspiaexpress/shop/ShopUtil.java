@@ -195,13 +195,6 @@ public class ShopUtil {
         }
 
     }
-    public static List<ShopEntry> fromShopEntryConfigs(List<ShopConfig.ShopEntryConfig> shopConfigs ) {
-        List<ShopEntry> shopEntries = new ArrayList<>();
-        for( ShopConfig.ShopEntryConfig shopConfig : shopConfigs ) {
-            shopEntries.add(fromShopEntryConfig(shopConfig));
-        }
-        return shopEntries;
-    }
     public static ShopEntry fromShopEntryConfig(ShopConfig.ShopEntryConfig entry) {
         return new ShopEntry(fromEnumShopEntry(entry.item).getDefaultStack(), entry.price, entry.type);
     }

@@ -316,6 +316,7 @@ public class WyspiaExpressRoles {
     }
 
     private static void registerRoleAssigned(){
+        ModdedRoleAssigned.EVENT.register((player, role) -> PlayerShopComponent.KEY.get(player).setRoleShop(role));
         registerStartingItems();
         registerRoleEffect();
         registerCopyCat();

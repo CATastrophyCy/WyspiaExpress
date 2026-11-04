@@ -312,6 +312,7 @@ public final class WyspiaGuidebookScreen extends Screen {
                 Integer cooldown = cooldowns.get(offer.stack().getItem());
                 if (cooldown != null && cooldown >= 0) tooltip.add(label("cooldown", cooldown).copy().withColor(0xC5ADFF));
                 if (offer.action()) tooltip.add(label("action").copy().withColor(GOLD));
+                if (offer.price() != null && offer.purchaseLimit() >= 0) tooltip.add(label("purchase_limit", offer.purchaseLimit()).copy().withColor(GOLD));
                 parts.add(new ItemPart(col * (cellWidth + gap), y, cellWidth, height, offer, List.copyOf(tooltip)));
             }
             y += height + 4;
