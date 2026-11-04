@@ -40,6 +40,7 @@ import org.cat.express.wyspiaexpress.client.roles.NoTargetAbilityUtil;
 import org.cat.express.wyspiaexpress.client.roles.TargetAbilityUtil;
 import org.cat.express.wyspiaexpress.client.ui.InventoryAbilityPanel;
 import org.cat.express.wyspiaexpress.client.ui.PlayerConfigButtons;
+import org.cat.express.wyspiaexpress.client.ui.InventoryTrash;
 import org.cat.express.wyspiaexpress.mixin.generic.PlayerStaminaAccessor;
 import org.cat.express.wyspiaexpress.packets.StaminaS2CPacket;
 import org.cat.express.wyspiaexpress.packets.ResetAttackCooldownS2CPacket;
@@ -57,6 +58,7 @@ public class WyspiaexpressClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         PlayerConfigButtons.register();
+        InventoryTrash.register();
         registerGuidebook();
         registerInventoryFocus();
         ClientConfigSync.initialize();

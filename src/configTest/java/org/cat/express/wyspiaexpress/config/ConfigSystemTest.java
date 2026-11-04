@@ -53,6 +53,24 @@ public final class ConfigSystemTest {
         check(decoded.get("tasks.minTaskDelaySeconds").equals(30),"typed int");
         check(decoded.get("mode.hideGamemode").equals(false),"gamemode role restrictions visible by default");
         check(decoded.get("rules.maxTimeForDeathBonus").equals(-1),"civilian death time limit disabled by default");
+        check(decoded.get("rules.inventoryTrash.enabled").equals(false),"inventory trash disabled until configured");
+        check(((List<?>) decoded.get("rules.inventoryTrash.items")).isEmpty(),"inventory trash item list starts empty");
+        var trashShared = new TreeMap<>(defaults);
+        schema.overlay("rules", JsonParser.parseString("{\"inventoryTrash\":{\"enabled\":true,\"items\":[\"wathe:key\",\"wathe:note\"]}}")
+                .getAsJsonObject(), trashShared, "shared trash config");
+        var trashOverride = new TreeMap<>(trashShared);
+        schema.overlay("rules", JsonParser.parseString("{\"inventoryTrash\":{\"items\":[\"wathe:note\"]}}")
+                .getAsJsonObject(), trashOverride, "trash list override");
+        var trashValues = schema.decodeComplete(trashOverride, "trash list override");
+        check(trashValues.get("rules.inventoryTrash.items").equals(List.of("wathe:note")),"gamemode trash item list replaces shared list");
+        check(trashValues.get("rules.inventoryTrash.enabled").equals(true),"item-only override inherits trash enable setting");
+        var trashDisabled = new TreeMap<>(trashShared);
+        schema.overlay("rules", JsonParser.parseString("{\"inventoryTrash\":{\"enabled\":false}}")
+                .getAsJsonObject(), trashDisabled, "trash enabled override");
+        var disabledTrashValues = schema.decodeComplete(trashDisabled, "trash enabled override");
+        check(disabledTrashValues.get("rules.inventoryTrash.enabled").equals(false)
+                && disabledTrashValues.get("rules.inventoryTrash.items").equals(List.of("wathe:key", "wathe:note")),"disabling trash preserves inherited item list");
+
         check(decoded.get("items.itemConfig.grenadeConfig.showTrajectory").equals(true),"grenade preview enabled by default");
         check(decoded.get("items.itemConfig.smokeBombConfig.showTrajectory").equals(true),"smoke bomb preview enabled by default");
         check(decoded.get("roles.roleConfig.kinsWatheRoles.physicianConfig.seePoisonedPlayers").equals(true),"physician poison instinct enabled by default");

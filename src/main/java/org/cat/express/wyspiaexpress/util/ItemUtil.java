@@ -1,6 +1,7 @@
 package org.cat.express.wyspiaexpress.util;
 
 import dev.doctor4t.wathe.cca.PlayerMoodComponent;
+import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
 import dev.doctor4t.wathe.index.WatheItems;
@@ -25,6 +26,17 @@ public final class ItemUtil {
     private static final TagKey<Item> WEAPONS = TagKey.of(RegistryKeys.ITEM, Identifier.of(WyspiaExpress.MOD_ID, "weapons"));
     private static Map<Item, Integer> nativeCooldowns;
     private ItemUtil() {}
+
+    public static boolean canUseInventoryTrash(PlayerEntity player) {
+        return WyspiaExpress.RULES_CONFIG.inventoryTrash.enabled()
+                && GameWorldComponent.KEY.get(player.getWorld()).isRunning()
+                && GameFunctions.isPlayerAliveAndSurvival(player);
+    }
+
+    public static boolean canTrash(ItemStack stack) {
+        return !stack.isEmpty() && WyspiaExpress.RULES_CONFIG.inventoryTrash.items()
+                .contains(Registries.ITEM.getId(stack.getItem()).toString());
+    }
 
     public static void setWeaponCooldown(PlayerEntity player, int ticks) {
         if (ticks <= 0) return;

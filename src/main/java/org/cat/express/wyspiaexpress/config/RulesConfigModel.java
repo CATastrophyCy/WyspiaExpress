@@ -1,9 +1,21 @@
 package org.cat.express.wyspiaexpress.config;
 
 import blue.endless.jankson.Comment;
+import java.util.ArrayList;
+import java.util.List;
 
 @ConfigModel("RulesConfig")
 public class RulesConfigModel {
+    public InventoryTrashConfig inventoryTrash = new InventoryTrashConfig();
+
+    public static class InventoryTrashConfig {
+        @Comment("Allow players to delete selected items from their inventory during a game")
+        public boolean enabled;
+
+        @Comment("Items that can be deleted. Gamemode overrides replace this list")
+        public List<String> items = new ArrayList<>();
+    }
+
     @Comment("Multiply to crawling speed. i.e. 1.5 means crawling is 50% faster")
     @ConfigRange(min = 0, max = 100)
     public double crawlSpeedMultiplier = 2.0;

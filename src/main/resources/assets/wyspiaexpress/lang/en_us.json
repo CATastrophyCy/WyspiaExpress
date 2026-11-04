@@ -192,6 +192,11 @@
   "gui.wyspiaexpress.inventory.morphling": "Morphling",
   "gui.wyspiaexpress.inventory.swapper": "Swapper",
 
+  "gui.wyspiaexpress.trash": "Trash",
+  "gui.wyspiaexpress.trash.tooltip": "Select highlighted items to discard. Confirm deletes whole stacks; closing the inventory cancels.",
+  "gui.wyspiaexpress.trash.confirm": "Delete selected stacks (%s)",
+  "gui.wyspiaexpress.trash.changed": "Your inventory changed. Select the items again.",
+
   "gui.wyspiaexpress.lobby.credit": "credit to RAT/doctor4t for creating the original Harpy Express",
 
   "gui.wyspiaexpress.guidebook.ability": "Abilities",
