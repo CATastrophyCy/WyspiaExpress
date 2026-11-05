@@ -23,7 +23,7 @@
 		// Enable infinite psycho shield, slow and time loss from hits. Duration and cooldowns always apply
 		"rework": true,
 		// Psycho duration, in seconds
-		"duration": 60,
+		"duration": 50,
 		// Blocked hits before the slow and duration penalties start
 		"freeHits": 0,
 		// Movement slow per hit after the free hits. 0.15 = 15%
@@ -31,13 +31,13 @@
 		// Maximum movement slow. 0.4 = 40%
 		"maxSlow": 0.4,
 		// Fraction of remaining psycho time removed per hit after the free hits. 0.35 = 35%
-		"timeLostPerHit": 0.25,
+		"timeLostPerHit": 0.35,
 		// Weapon cooldown after getting hit in psycho, in seconds. Longer cooldowns are kept
 		"weaponCooldown": 15,
 		// Extra bat recharge time per hit after the free hits, in seconds
-		"batDelayPerHit": 0.35,
+		"batDelayPerHit": 0.5,
 		// Maximum extra bat recharge time, in seconds
-		"maxBatDelay": 1
+		"maxBatDelay": 1.5
 	},
 	// Enable freezing
 	"freeze": true,
