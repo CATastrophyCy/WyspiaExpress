@@ -4,7 +4,7 @@
 	// Number of roles to pick
 	"pickRoles": 3,
 	// Amount of time, in seconds before a random role is assigned instead
-	"randomRoleTime": 60,
+	"randomRoleTime": 120,
 	/*  === ROLE CONFIGURATION GUIDE ===
 	    Inside each role's 'basic' config, you can configure:
 	    - enableShop: Whether this role has access to the shop, as well as rendering the money hud
@@ -353,10 +353,11 @@
 			"basic": {
 				"enableShop": true,
 				"shopEntries": [
-					"KNIFE;250;-1;WEAPON",
-					"PSYCHO_MODE;500;-1;WEAPON",
-					"GRENADE;450;-1;WEAPON",
+					"KNIFE;300;-1;WEAPON",
+					"PSYCHO_MODE;475;-1;WEAPON",
+					"GRENADE;425;-1;WEAPON",
 					"POISON_VIAL;35;-1;POISON",
+					"FAKE_REVOLVER;75;-1;TOOL",
 					"FIRECRACKER;5;-1;TOOL",
 					"NOTE;10;-1;TOOL",
 					"MEGAPHONE;10;-1;TOOL"
@@ -367,7 +368,7 @@
 				"itemAmount": [],
 				"minimumPlayerSpawn": 12,
 				"maximumPlayerSpawn": 99,
-				"playersPerAdditionalSpawn": 0,
+				"playersPerAdditionalSpawn": 12,
 				"maximumSpawn": 1,
 				"seePoison": true
 			},
@@ -383,8 +384,10 @@
 						"SMOKE_BOMB;125;-1;TOOL",
 						"PAN;175;-1;TOOL",
 						"LOCKPICK;200;-1;TOOL",
-						"WRENCH;125;-1;TOOL",
-						"CROWBAR;125;-1;TOOL",
+						"WRENCH;100;-1;TOOL",
+						"FAKE_REVOLVER;75;-1;TOOL",
+						"CROWBAR;100;-1;TOOL",
+						"BODY_BAG;75;-1;TOOL",
 						"SCORPION;35;-1;POISON",
 						"FIRECRACKER;5;-1;TOOL",
 						"NOTE;10;-1;TOOL",
@@ -396,7 +399,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
-					"playersPerAdditionalSpawn": 0,
+					"playersPerAdditionalSpawn": 12,
 					"maximumSpawn": 1,
 					"seePoison": true
 				}
