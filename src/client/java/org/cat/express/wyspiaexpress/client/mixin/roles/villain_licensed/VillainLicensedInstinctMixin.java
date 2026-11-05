@@ -16,6 +16,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(WatheClient.class)
 public class VillainLicensedInstinctMixin {
 
+    @Inject(method = "isInstinctEnabled", at = @At("HEAD"), cancellable = true)
+    private static void isInstinctEnabled(CallbackInfoReturnable<Boolean> cir) {
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        if (player == null || WatheClient.isPlayerSpectatingOrCreative()) return;
+        if (GameWorldComponent.KEY.get(player.getWorld()).isRole(player, WyspiaExpressRoles.VILLAIN_LICENSED)
+                && WatheClient.instinctKeybind.isPressed()) {
+            cir.setReturnValue(true);
+        }
+    }
+
     @Inject(method = "getInstinctHighlight", at = @At("HEAD"), cancellable = true)
     private static void getInstinctHighlight(@NotNull Entity target, @NotNull CallbackInfoReturnable<Integer> cir) {
         PlayerEntity player = MinecraftClient.getInstance().player;

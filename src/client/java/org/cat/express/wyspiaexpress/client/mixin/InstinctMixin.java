@@ -78,11 +78,6 @@ public abstract class InstinctMixin {
             cir.cancel();
             return;
         }
-        if ((gameWorld.isRole(MinecraftClient.getInstance().player, WyspiaExpressRoles.VILLAIN_LICENSED)
-                || LoversComponent.isLover(gameWorld.getRole(MinecraftClient.getInstance().player)))
-                && WatheClient.instinctKeybind.isPressed()) {
-            cir.setReturnValue(true);
-        }
     }
 
     @Inject(method = "getInstinctHighlight", at = @At("HEAD"), cancellable = true)
@@ -122,12 +117,9 @@ public abstract class InstinctMixin {
                         return;
                     }
                 }
-                if (LoversComponent.isLover(gameWorldComponent.getRole(player))
-                        && LoversComponent.KEY.get(player.getWorld()).arePartners(player.getUuid(), targetPlayer.getUuid())) {
-                    cir.setReturnValue(WyspiaExpressRoles.LOVER_1.color());
-                    return;
-                }
-                if (worldModifierComponent.isModifier(targetPlayer, WyspiaExpressRoles.ELUSIVE)) {
+                if (worldModifierComponent.isModifier(targetPlayer, WyspiaExpressRoles.ELUSIVE)
+                        && !(LoversComponent.isLover(gameWorldComponent.getRole(player))
+                        && LoversComponent.KEY.get(player.getWorld()).arePartners(player.getUuid(), targetPlayer.getUuid()))) {
                     double distance = player.squaredDistanceTo(targetPlayer);
                     if (distance >= WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.minimumDistance() * WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.minimumDistance()
                             && distance <= WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.maximumDistance() * WyspiaExpress.MODIFIERS_CONFIG.elusiveConfig.maximumDistance()) {
@@ -135,10 +127,6 @@ public abstract class InstinctMixin {
                         cir.cancel();
                         return;
                     }
-                }
-                if (LoversComponent.isLover(gameWorldComponent.getRole(player)) && WatheClient.isInstinctEnabled()) {
-                    cir.setReturnValue(MathHelper.hsvToRgb(0.0F, 0.0F, 0.6F));
-                    return;
                 }
                 if (gameWorldComponent.isRole(player, Noellesroles.BARTENDER)) {
                     cir.setReturnValue(handleBartender(player, targetPlayer));

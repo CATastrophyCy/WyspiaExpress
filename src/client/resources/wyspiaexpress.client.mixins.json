@@ -21,6 +21,7 @@
     "roles.NoTargetAbilityHudMixin",
     "roles.MorphlingRendererMixin",
     "roles.cult.CultLeaderAbilityHudMixin",
+    "roles.lovers.LoversInstinctMixin",
     "roles.phantom.PhantomPsychosisMixin",
     "roles.villain_licensed.VillainLicensedInstinctMixin",
     "ui.CoinMixin",
