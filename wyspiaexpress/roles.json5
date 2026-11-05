@@ -278,7 +278,7 @@
 			"basic": {
 				"enableShop": true,
 				"shopEntries": [
-					"RITUAL_DAGGER;175;-1;WEAPON",
+					"RITUAL_DAGGER;225;-1;WEAPON",
 					"SMOKE_BOMB;100;-1;TOOL",
 					"PAN;100;-1;TOOL",
 					"FAKE_REVOLVER;50;-1;TOOL",
@@ -310,7 +310,7 @@
 			// Revive stun duration, in ticks
 			"stun": 80,
 			// The amount of coin rewarded when you convert a player
-			"convertionReward": 35,
+			"convertionReward": 20,
 			// The amount of coin converted player starts with
 			"startingCoin": 75,
 			// Configuration for their CULTIST

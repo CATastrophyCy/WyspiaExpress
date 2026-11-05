@@ -80,7 +80,7 @@
 				"dropOnDeath": false
 			},
 			// Cooldown, in seconds, minimum 0
-			"cooldown": 240,
+			"cooldown": 300,
 			// Duration of the stun, in ticks
 			"duration": 80
 		},
