@@ -14,24 +14,27 @@ public final class PlayerConfigComponent implements AutoSyncedComponent {
     public static final ComponentKey<PlayerConfigComponent> KEY = ComponentRegistry.getOrCreate(
             Identifier.of(WyspiaExpress.MOD_ID, "player_config"), PlayerConfigComponent.class);
 
-    public enum Option { AVOID_KILLER, AVOID_NEUTRAL, AUTO_JOIN }
+    public enum Option { AVOID_KILLER, AVOID_NEUTRAL, AUTO_JOIN, SPECTATOR_INFO }
 
     private final PlayerEntity player;
     private boolean avoidKiller;
     private boolean avoidNeutral;
     private boolean autoJoin;
+    private boolean spectatorInfo = true;
 
     public PlayerConfigComponent(PlayerEntity player) { this.player = player; }
 
     public boolean avoidKiller() { return avoidKiller; }
     public boolean avoidNeutral() { return avoidNeutral; }
     public boolean autoJoin() { return autoJoin; }
+    public boolean spectatorInfo() { return spectatorInfo; }
 
     public boolean isEnabled(Option option) {
         return switch (option) {
             case AVOID_KILLER -> avoidKiller;
             case AVOID_NEUTRAL -> avoidNeutral;
             case AUTO_JOIN -> autoJoin;
+            case SPECTATOR_INFO -> spectatorInfo;
         };
     }
 
@@ -44,6 +47,7 @@ public final class PlayerConfigComponent implements AutoSyncedComponent {
             case AVOID_KILLER -> avoidKiller = enabled;
             case AVOID_NEUTRAL -> avoidNeutral = enabled;
             case AUTO_JOIN -> autoJoin = enabled;
+            case SPECTATOR_INFO -> spectatorInfo = enabled;
         }
         sync();
     }
@@ -55,6 +59,7 @@ public final class PlayerConfigComponent implements AutoSyncedComponent {
         tag.putBoolean("avoidKiller", avoidKiller);
         tag.putBoolean("avoidNeutral", avoidNeutral);
         tag.putBoolean("autoJoin", autoJoin);
+        tag.putBoolean("spectatorInfo", spectatorInfo);
     }
 
     @Override
@@ -62,5 +67,6 @@ public final class PlayerConfigComponent implements AutoSyncedComponent {
         avoidKiller = tag.getBoolean("avoidKiller");
         avoidNeutral = tag.getBoolean("avoidNeutral");
         autoJoin = tag.getBoolean("autoJoin");
+        spectatorInfo = !tag.contains("spectatorInfo") || tag.getBoolean("spectatorInfo");
     }
 }

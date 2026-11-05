@@ -8,6 +8,9 @@
   "gui.wyspiaexpress.player_config.auto_join": "Auto Join",
   "gui.wyspiaexpress.player_config.auto_join.tooltip": "Automatically join the round when it starts. Remember to tick this off if you are afk!",
 
+  "gui.wyspiaexpress.player_config.spectator_info": "Spectator info",
+  "gui.wyspiaexpress.player_config.spectator_info.tooltip": "Show the stats and statuses of the player you are looking at. Their name and role stay visible when this is off.",
+
   "commands.setrole.fail": "The game must be running to use this command!",
   "commands.setrole.success": "Set player %s to role %s",
 
@@ -70,6 +73,7 @@
 
   "hud.wyspiaexpress.spectator.lives": "Lives: ",
   "hud.wyspiaexpress.spectator.deluded": "Deluded: ",
+  "hud.wyspiaexpress.spectator.ability_cooldown": "Ability cooldown: %ss",
 
   "hud.wyspiaexpress.task.current": "Task: %s",
   "hud.wyspiaexpress.task.waiting": "Next task: %ss",

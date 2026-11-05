@@ -44,8 +44,15 @@ public final class PlayerConfigButtons extends ButtonWidget {
                     : screen instanceof CreativeInventoryScreen ? 136 : 166;
             int inventoryBottom = (height - inventoryHeight) / 2 + inventoryHeight;
             if (screen instanceof CreativeInventoryScreen) inventoryBottom += 28; // Bottom creative tabs.
-            int y = Math.max(0, Math.min(height - 24, inventoryBottom + 4));
+            int y = Math.max(0, Math.min(height - (client.player.isSpectator() ? 48 : 24), inventoryBottom + 4));
             for (var option : PlayerConfigComponent.Option.values()) {
+                if (option == PlayerConfigComponent.Option.SPECTATOR_INFO) {
+                    if (client.player.isSpectator()) {
+                        Screens.getButtons(screen).add(new PlayerConfigButtons((width - buttonWidth) / 2,
+                                y + 24, buttonWidth, option));
+                    }
+                    continue;
+                }
                 Screens.getButtons(screen).add(new PlayerConfigButtons(x, y, buttonWidth, option));
                 x += buttonWidth + 4;
             }
@@ -70,6 +77,7 @@ public final class PlayerConfigButtons extends ButtonWidget {
     private void updateState() {
         var player = MinecraftClient.getInstance().player;
         visible = active = player != null && PlayerConfigComponent.canEdit(player);
+        if (option == PlayerConfigComponent.Option.SPECTATOR_INFO && player != null && !player.isSpectator()) visible = active = false;
         if (!visible) return;
         boolean enabled = PlayerConfigComponent.KEY.get(player).isEnabled(option);
         if (displayedState == null || displayedState != enabled) {
