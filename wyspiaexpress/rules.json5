@@ -1,4 +1,14 @@
 {
+	"inventoryTrash": {
+		// Allow players to delete selected items from their inventory during a game
+		"enabled": true,
+		// Items that can be deleted. Gamemode overrides replace this list
+		"items": [
+			"wathe:key", "wyspiaexpress:fake_revolver", "noellesroles:fake_knife",
+			"wathe:scorpion", "wathe:poison_vial", "noellesroles:delusion_vial", "wathe:body_bag",
+			"wyspiaexpress:megaphone", "wathe:note", "wathe:firecracker"
+		]
+	},
 	// Multiply to crawling speed. i.e. 1.5 means crawling is 50% faster
 	"crawlSpeedMultiplier": 2.2,
 	// By setting this to true shooting a protected player won't drop your revolver regardless if they are innocent or not
