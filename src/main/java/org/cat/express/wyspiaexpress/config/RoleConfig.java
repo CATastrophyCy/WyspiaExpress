@@ -54,6 +54,9 @@ public class RoleConfig {
         @ConfigRange(min = 0, max = 2147483647)
         public int targetReward;
 
+        @Comment("Can pick up revolvers in both stages")
+        public boolean canPickUpGuns;
+
         @Comment("Shop used in stage 2. Uses basic.enableShop")
         public List<String> stage2ShopEntries = new ArrayList<>();
     }

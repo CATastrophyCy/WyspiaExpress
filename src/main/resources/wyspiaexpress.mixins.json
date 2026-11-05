@@ -44,6 +44,7 @@
     "roles.CaptureDeviceMixin",
     "roles.ConvertedDeadBodyMixin",
     "roles.EddieHearDeadPeopleMixin",
+    "roles.HitmanGunPickupMixin",
     "roles.ThiefItemRuleMixin",
     "roles.ThiefPacketC2SMixin",
     "starryexpress.StarryExpressMixin",

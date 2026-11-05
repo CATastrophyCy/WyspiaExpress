@@ -4,6 +4,11 @@
     "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.summary"
   },
   "values": {
+    "pickupGuns": {
+      "config": "roles",
+      "path": "roleConfig.hitmanConfig.canPickUpGuns",
+      "format": "boolean"
+    },
     "reward": {
       "config": "roles",
       "path": "roleConfig.hitmanConfig.targetReward",
@@ -39,6 +44,15 @@
     {
       "text": {
         "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.ability.5"
+      }
+    },
+    {
+      "when": {
+        "value": "pickupGuns",
+        "equals": true
+      },
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.ability.6"
       }
     }
   ]
