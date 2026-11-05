@@ -34,6 +34,27 @@
 	    
 	*/
 	"roleConfig": {
+		// Config options for HITMAN
+		"hitmanConfig": {
+			// Basic role configuration. The shop here is used in stage 1
+			"basic": {
+				"enableShop": true,
+				"shopEntries": [],
+				"passiveIncome": false,
+				"taskIncome": 0,
+				"items": [],
+				"itemAmount": [],
+				"minimumPlayerSpawn": 1,
+				"maximumPlayerSpawn": 99,
+				"playersPerAdditionalSpawn": 0,
+				"maximumSpawn": 1,
+				"seePoison": false
+			},
+			// Coins received for killing your target
+			"targetReward": 100,
+			// Shop used in stage 2. Uses basic.enableShop
+			"stage2ShopEntries": []
+		},
 		// Config options for COPYCAT
 		"copycatConfig": {
 			// Basic role configuration
