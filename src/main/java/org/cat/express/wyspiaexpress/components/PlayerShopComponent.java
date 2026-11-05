@@ -2,6 +2,7 @@ package org.cat.express.wyspiaexpress.components;
 
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.index.WatheSounds;
 import dev.doctor4t.wathe.util.ShopEntry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -10,6 +11,7 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
@@ -86,6 +88,7 @@ public final class PlayerShopComponent implements AutoSyncedComponent {
         ShopItem item = items.get(index);
         if (item.isSoldOut()) {
             player.sendMessage(Text.translatable("shop.wyspiaexpress.sold_out"), true);
+            player.playSoundToPlayer(WatheSounds.UI_SHOP_BUY_FAIL, SoundCategory.PLAYERS, 1.0f, 1.0f);
             return;
         }
         var coins = dev.doctor4t.wathe.cca.PlayerShopComponent.KEY.get(player);

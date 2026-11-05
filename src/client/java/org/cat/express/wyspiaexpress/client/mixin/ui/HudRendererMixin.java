@@ -35,17 +35,13 @@ public abstract class HudRendererMixin {
         SurvivalHud.render(context);
         if (gameWorld.isRole(client.player, WyspiaExpressRoles.HITMAN) && GameFunctions.isPlayerAliveAndSurvival(client.player)) {
             HitmanComponent hitman = HitmanComponent.KEY.get(client.player);
-            Text text = Text.translatable("hud.wyspiaexpress.hitman.target", hitman.targetName());
-            context.drawTextWithShadow(client.textRenderer, text,
-                    (context.getScaledWindowWidth() - client.textRenderer.getWidth(text)) / 2,
-                    context.getScaledWindowHeight() - 64, WyspiaExpressRoles.HITMAN.color());
             if (hitman.target() != null) {
                 String task = hitman.getTargetTask() == null ? "none" : hitman.getTargetTask().name().toLowerCase(java.util.Locale.ROOT);
                 Text taskText = Text.translatable("hud.wyspiaexpress.hitman.task." + task,
                         hitman.targetName().copy().withColor(WyspiaExpressRoles.HITMAN.color()));
                 context.drawTextWithShadow(client.textRenderer, taskText,
                         context.getScaledWindowWidth() - client.textRenderer.getWidth(taskText) - 6,
-                        context.getScaledWindowHeight() - 38, 0xFFFFFF);
+                        context.getScaledWindowHeight() - client.textRenderer.fontHeight - 6, 0xFFFFFF);
             }
         }
     }

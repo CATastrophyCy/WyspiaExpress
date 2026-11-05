@@ -44,6 +44,7 @@ import org.cat.express.wyspiaexpress.components.PlayerDepressedComponent;
 import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
 import org.cat.express.wyspiaexpress.components.PlayerTaskComponent;
 import org.cat.express.wyspiaexpress.components.PlayerConfigComponent;
+import org.cat.express.wyspiaexpress.components.RoundResultComponent;
 import org.cat.express.wyspiaexpress.components.PsychoModeState;
 import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
 import org.cat.express.wyspiaexpress.components.roles.HitmanComponent;
@@ -132,9 +133,18 @@ public abstract class RoleNameRendererMixin {
             details.add(valueText("Hacking: ", hacker.hackingTime * 100 / hackingDuration + "%", KinsWatheRoles.HACKER.color()));
         }
         if (LoversComponent.isLover(role)) {
+            LoversComponent lovers = LoversComponent.KEY.get(player.getWorld());
             details.add(Text.translatable("hud.wyspiaexpress.spectator.lives")
-                    .append(Text.literal(String.valueOf(LoversComponent.KEY.get(player.getWorld()).getLives(targetPlayer.getUuid())))
+                    .append(Text.literal(String.valueOf(lovers.getLives(targetPlayer.getUuid())))
                             .withColor(WyspiaExpressRoles.LOVER_1.color())));
+            UUID partner = lovers.getPartner(targetPlayer.getUuid());
+            if (partner != null) {
+                var profile = RoundResultComponent.KEY.get(player.getWorld()).profile(partner);
+                if (profile != null) {
+                    details.add(Text.translatable("hud.wyspiaexpress.spectator.partner",
+                            Text.literal(profile.getName()).withColor(WyspiaExpressRoles.LOVER_1.color())));
+                }
+            }
         }
         if (role == WyspiaExpressRoles.HITMAN) {
             HitmanComponent hitman = HitmanComponent.KEY.get(targetPlayer);
@@ -203,8 +213,8 @@ public abstract class RoleNameRendererMixin {
             details.add(Text.literal("Dreamed").withColor(0xFF6BFA));
         }
 
-        float scale = 0.6f;
-        int width = Math.max(1, (int) (Math.min(160, context.getScaledWindowWidth() * 0.32f) / scale));
+        float scale = 0.7f;
+        int width = Math.max(1, (int) (Math.min(188, context.getScaledWindowWidth() * 0.375f) / scale));
         List<HudLine> lines = new ArrayList<>();
         int height = layoutEntries(renderer, lines, stats, 0, width);
         if (!details.isEmpty()) height = layoutEntries(renderer, lines, details, height + 3, width);

@@ -6,6 +6,8 @@ import dev.doctor4t.wathe.game.GameFunctions;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
@@ -75,6 +77,7 @@ public final class HitmanComponent implements AutoSyncedComponent, ServerTicking
                 boolean advancing = !stage2;
                 stage2 = true;
                 ShopUtil.addCoin(player, WyspiaExpress.ROLES_CONFIG.roleConfig.hitmanConfig.targetReward());
+                player.playSoundToPlayer(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.8f, 1.1f);
                 if (advancing) {
                     var config = WyspiaExpress.ROLES_CONFIG.roleConfig.hitmanConfig;
                     PlayerShopComponent.KEY.get(player).setShop(config.basic.enableShop()

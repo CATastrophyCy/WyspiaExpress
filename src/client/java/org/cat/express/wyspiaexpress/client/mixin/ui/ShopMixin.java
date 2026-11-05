@@ -76,7 +76,7 @@ public abstract class ShopMixin extends LimitedHandledScreen<PlayerScreenHandler
             var stack = entry.stack().copy();
             if (item.purchaseLimit() >= 0) {
                 var lore = new ArrayList<>(stack.getOrDefault(DataComponentTypes.LORE, LoreComponent.DEFAULT).lines());
-                lore.add(item.isSoldOut() ? Text.translatable("shop.wyspiaexpress.sold_out").withColor(0xFF7777)
+                lore.add(item.isSoldOut() ? Text.translatable("shop.wyspiaexpress.sold_out").withColor(0xAAAAAA)
                         : Text.translatable("shop.wyspiaexpress.remaining", item.getRemainingPurchases(), item.purchaseLimit()).withColor(0xF0C66E));
                 stack.set(DataComponentTypes.LORE, new LoreComponent(lore));
             }
@@ -87,14 +87,26 @@ public abstract class ShopMixin extends LimitedHandledScreen<PlayerScreenHandler
             return visible && mouseX >= getX() && mouseX < getRight() && mouseY >= getY() && mouseY < getBottom();
         }
 
+        @Override public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            if (item.isSoldOut() && button == 0 && isMouseOver(mouseX, mouseY)) {
+                onPress();
+                return true;
+            }
+            return super.mouseClicked(mouseX, mouseY, button);
+        }
+
         @Override protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
             super.renderWidget(context, mouseX, mouseY, delta);
-            if (item.isSoldOut()) context.fill(getX(), getY(), getRight(), getBottom(), 0x99000000);
             if (item.purchaseLimit() >= 0) {
+                context.draw();
+                context.getMatrices().push();
+                context.getMatrices().translate(0, 0, 200);
+                if (item.isSoldOut()) context.fill(getX() - 7, getY() - 10, getX() + 23, getY() + 23, 0xA0666666);
                 var textRenderer = net.minecraft.client.MinecraftClient.getInstance().textRenderer;
                 String remaining = Integer.toString(item.getRemainingPurchases());
                 context.drawTextWithShadow(textRenderer, remaining, getRight() - textRenderer.getWidth(remaining), getY() + 10,
-                        item.isSoldOut() ? 0xFF7777 : 0xFFFFFF);
+                        item.isSoldOut() ? 0xBBBBBB : 0xFFFFFF);
+                context.getMatrices().pop();
             }
         }
     }

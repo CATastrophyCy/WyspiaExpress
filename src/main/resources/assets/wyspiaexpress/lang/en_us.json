@@ -72,6 +72,7 @@
   "hud.wyspiaexpress.status.psycho": "Psycho %1$ss · %2$s hits",
 
   "hud.wyspiaexpress.spectator.lives": "Lives: ",
+  "hud.wyspiaexpress.spectator.partner": "Partner: %s",
   "hud.wyspiaexpress.spectator.deluded": "Deluded: ",
   "hud.wyspiaexpress.spectator.ability_cooldown": "Ability cooldown: %ss",
 
@@ -155,7 +156,7 @@
 
   "item.wyspiaexpress.tp_ready": "Teleport to Ready Area",
 
-  "message.wyspiaexpress.hitman.stage2": "Contract complete!",
+  "message.wyspiaexpress.hitman.stage2": "You completed your contract!",
   "message.wyspiaexpress.hitman.wrong_kill": "You killed someone other than your target.",
 
   "message.wyspiaexpress.lovers.life_saved": "Your bond saved you. Lives remaining: %s",
@@ -232,9 +233,9 @@
   "gui.wyspiaexpress.inventory.swapper": "Swapper",
 
   "gui.wyspiaexpress.trash": "Trash",
-  "gui.wyspiaexpress.trash.tooltip": "Select highlighted items to discard. Confirm deletes whole stacks; closing the inventory cancels.",
-  "gui.wyspiaexpress.trash.confirm": "Delete selected stacks (%s)",
-  "gui.wyspiaexpress.trash.changed": "Your inventory changed. Select the items again.",
+  "gui.wyspiaexpress.trash.tooltip": "Click to select highlighted items to discard.",
+  "gui.wyspiaexpress.trash.confirm": "Delete selected items (%s)",
+  "gui.wyspiaexpress.trash.changed": "Your inventory has changed.",
 
   "gui.wyspiaexpress.lobby.credit": "credit to RAT/doctor4t for creating the original Harpy Express",
 
