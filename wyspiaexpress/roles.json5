@@ -39,21 +39,45 @@
 			// Basic role configuration. The shop here is used in stage 1
 			"basic": {
 				"enableShop": true,
-				"shopEntries": [],
-				"passiveIncome": false,
-				"taskIncome": 0,
-				"items": [],
-				"itemAmount": [],
-				"minimumPlayerSpawn": 1,
+				"shopEntries": [
+					"KNIFE;200;-1;WEAPON",
+					"CAPTURE_DEVICE;50;-1;TOOL",
+					"SMOKE_BOMB;75;-1;TOOL",
+					"PAN;125;-1;TOOL",
+					"LOCKPICK;150;-1;TOOL",
+					"WRENCH;75;-1;TOOL",
+					"FAKE_REVOLVER;50;-1;TOOL",
+					"CROWBAR;50;-1;TOOL",
+					"FIRECRACKER;5;-1;TOOL",
+					"NOTE;10;-1;TOOL",
+					"MEGAPHONE;10;-1;TOOL"
+				],
+				"passiveIncome": true,
+				"taskIncome": 50,
+				"items": ["BODY_BAG"],
+				"itemAmount": [1],
+				"minimumPlayerSpawn": 6,
 				"maximumPlayerSpawn": 99,
 				"playersPerAdditionalSpawn": 0,
 				"maximumSpawn": 1,
-				"seePoison": false
+				"seePoison": true
 			},
 			// Coins received for killing your target
 			"targetReward": 100,
+			// Can pick up guns from the floor in both stages
+			"canPickUpGuns": false,
 			// Shop used in stage 2. Uses basic.enableShop
-			"stage2ShopEntries": []
+			"stage2ShopEntries": [
+				"KNIFE;100;-1;WEAPON",
+				"POISON_INJECTOR;125;-1;WEAPON",
+				"BLOWGUN;225;-1;WEAPON",
+				"REVOLVER;300;-1;WEAPON",
+				"PSYCHO_MODE;450;-1;WEAPON",
+				"GRENADE;400;-1;WEAPON",
+				"FIRECRACKER;5;-1;TOOL",
+				"NOTE;10;-1;TOOL",
+				"MEGAPHONE;10;-1;TOOL"
+			]
 		},
 		// Config options for COPYCAT
 		"copycatConfig": {
