@@ -44,6 +44,7 @@ import org.cat.express.wyspiaexpress.components.PlayerFreezeComponent;
 import org.cat.express.wyspiaexpress.components.PlayerTaskComponent;
 import org.cat.express.wyspiaexpress.components.PsychoModeState;
 import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
+import org.cat.express.wyspiaexpress.components.roles.HitmanComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.cat.express.wyspiaexpress.client.util.PlayerProfileUtil;
@@ -146,6 +147,11 @@ public abstract class RoleNameRendererMixin {
                         .append(Text.translatable("hud.wyspiaexpress.spectator.lives").withColor(white))
                         .append(Text.literal(String.valueOf(LoversComponent.KEY.get(player.getWorld()).getLives(targetPlayer.getUuid())))
                                 .withColor(WyspiaExpressRoles.LOVER_1.color()));
+            }
+            if (worldComponent.isRole(targetPlayer, WyspiaExpressRoles.HITMAN)) {
+                HitmanComponent hitman = HitmanComponent.KEY.get(targetPlayer);
+                hudText.append(Text.literal(" || ").withColor(white))
+                        .append(Text.translatable("hud.wyspiaexpress.hitman.target", hitman.targetName()).withColor(WyspiaExpressRoles.HITMAN.color()));
             }
             if (worldComponent.isRole(targetPlayer, KinsWatheRoles.DREAMER)) {
                 DreamerKillerComponent dreamer = DreamerKillerComponent.KEY.get(targetPlayer);

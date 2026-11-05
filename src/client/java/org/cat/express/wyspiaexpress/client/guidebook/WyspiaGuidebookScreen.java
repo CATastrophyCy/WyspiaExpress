@@ -248,7 +248,10 @@ public final class WyspiaGuidebookScreen extends Screen {
             if (starting.isEmpty()) y = paragraph(label(GuidebookItems.startingKnown(selected) ? "starting.none" : "starting.unavailable"), 0, y, w, MUTED, 1) + 5;
             else y = itemGrid(starting, y, w);
         }
-        if (LoversComponent.isLover(selected.role())) {
+        if (selected.role() == WyspiaExpressRoles.HITMAN) {
+            y = shopSection(selected, "shop.stage1", y, w, accent);
+            y = shopSection(selected, "shop.stage2", y, w, accent, true);
+        } else if (LoversComponent.isLover(selected.role())) {
             y = shopSection(GuidebookEntry.role(WyspiaExpressRoles.LOVER_1), "shop.lover_1", y, w, accent);
             y = shopSection(GuidebookEntry.role(WyspiaExpressRoles.LOVER_2), "shop.lover_2", y, w, accent);
         } else if (selected.role() != null) {
@@ -266,8 +269,12 @@ public final class WyspiaGuidebookScreen extends Screen {
     }
 
     private int shopSection(GuidebookEntry entry, String headingKey, int y, int width, int color) {
+        return shopSection(entry, headingKey, y, width, color, false);
+    }
+
+    private int shopSection(GuidebookEntry entry, String headingKey, int y, int width, int color, boolean stage2) {
         y = heading(headingKey, y, width, color);
-        List<GuidebookItems.Offer> offers = GuidebookItems.shop(entry);
+        List<GuidebookItems.Offer> offers = GuidebookItems.shop(entry, stage2);
         return offers.isEmpty()
                 ? paragraph(label(GuidebookItems.shopKnown(entry) ? "shop.none" : "shop.unavailable"), 0, y, width, MUTED, 1) + 5
                 : itemGrid(offers, y, width);

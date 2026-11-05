@@ -3,6 +3,7 @@ package org.cat.express.wyspiaexpress.config;
 import blue.endless.jankson.Comment;
 import org.cat.express.wyspiaexpress.shop.EnumShopEntry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoleConfig {
@@ -27,6 +28,9 @@ public class RoleConfig {
     @Comment("Config options for LOVERS (one spawn is one pair)")
     public LoversConfig loversConfig = new LoversConfig();
 
+    @Comment("Config options for HITMAN")
+    public HitmanConfig hitmanConfig = new HitmanConfig();
+
 
     // wathe
     @Comment("Config options for VIGILANTE")
@@ -42,6 +46,18 @@ public class RoleConfig {
     public KinsWatheRoles kinsWatheRoles = new KinsWatheRoles();
 
     // Mine
+    public static class HitmanConfig {
+        @Comment("Basic role configuration. The shop here is used in stage 1")
+        public RoleBasicConfig basic = new RoleBasicConfig();
+
+        @Comment("Coins received for killing your target")
+        @ConfigRange(min = 0, max = 2147483647)
+        public int targetReward;
+
+        @Comment("Shop used in stage 2. Uses basic.enableShop")
+        public List<String> stage2ShopEntries = new ArrayList<>();
+    }
+
     public static class LoversConfig {
         @Comment("Basic role configuration for Lover 1")
         public RoleBasicConfig basic = new RoleBasicConfig();

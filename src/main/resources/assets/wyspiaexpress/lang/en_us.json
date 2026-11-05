@@ -39,6 +39,14 @@
   "hud.wyspiaexpress.cult_leader.target": "Convertion progression",
   "hud.wyspiaexpress.cult_leader.target_converted": "Converted",
 
+  "hud.wyspiaexpress.hitman.target": "Target: %s",
+  "hud.wyspiaexpress.hitman.no_target": "No target left",
+  "hud.wyspiaexpress.hitman.task.sleep": "%s wants to sleep",
+  "hud.wyspiaexpress.hitman.task.eat": "%s wants to eat",
+  "hud.wyspiaexpress.hitman.task.drink": "%s wants to drink",
+  "hud.wyspiaexpress.hitman.task.outside": "%s wants fresh air",
+  "hud.wyspiaexpress.hitman.task.none": "%s is being lazy",
+
   "hud.wyspiaexpress.duration.blackout": "Blackout",
   "hud.wyspiaexpress.duration.blackout_range": "Min %ss · Max %ss",
   "hud.wyspiaexpress.duration.glowing": "Glowing",
@@ -73,7 +81,11 @@
 
   "hud.wyspiaexpress.lich.revive": "Press %s to revive",
 
+  "hud.wyspiaexpress.lovers.lives": " · %s shared lives",
+
   "hud.wyspiaexpress.survival.remaining": "%s%%",
+
+  "death_reason.wyspiaexpress.broken_heart": "a broken heart",
 
   "death_reason.wyspiaexpress.player_depressed": "depression.",
   "death_reason.wyspiaexpress.player_freeze": "freezing.",
@@ -91,6 +103,8 @@
 
   "tip.wyspiaexpress.ability.lich.no_revive": "There is no available revive",
   "tip.wyspiaexpress.ability.lich.revive": "%s available revives",
+
+  "tip.wyspiaexpress.ability.lovers": "Press %s to teleport to your partner",
 
   "tip.wyspiaexpress.ability.morphling": "Press %s to cancel disguise",
 
@@ -114,6 +128,9 @@
 
   "item.wyspiaexpress.invisible_leggings": "Invisible Leggings",
 
+  "item.wyspiaexpress.lovers_phone": "Lovers’ Phone",
+  "item.wyspiaexpress.lovers_phone.tooltip": "Toggle your private phone channel with your partner.",
+
   "item.wyspiaexpress.megaphone": "Megaphone",
   "item.wyspiaexpress.megaphone.tooltip": "Right click to report a dead body",
 
@@ -133,6 +150,15 @@
   "item.wyspiaexpress.tape.tooltip": "Use on another player to silence their pathetic cries\nSilenced players will suffocate if left outside for too long\nInvisible in hand\nMuzzled players will provide passive coin income for Morphling",
 
   "item.wyspiaexpress.tp_ready": "Teleport to Ready Area",
+
+  "message.wyspiaexpress.hitman.stage2": "Contract complete!",
+  "message.wyspiaexpress.hitman.wrong_kill": "You killed someone other than your target.",
+
+  "message.wyspiaexpress.lovers.life_saved": "Your bond saved you. Lives remaining: %s",
+  "message.wyspiaexpress.lovers.partner_unavailable": "Your partner is unavailable.",
+  "message.wyspiaexpress.lovers.voice_unavailable": "Connect to voice chat to use your phone.",
+  "message.wyspiaexpress.lovers.phone_on": "Phone connected.",
+  "message.wyspiaexpress.lovers.phone_off": "Phone disconnected.",
 
   "announcement.modifier.wyspiaexpress.bomber": "Bomber",
   "announcement.modifier.wyspiaexpress.elusive": "Elusive",
@@ -164,11 +190,20 @@
   "announcement.role.wyspiaexpress.gambler": "Gambler",
   "announcement.goals.wyspiaexpress.gambler": "Spin the wheel, and survive",
 
+  "announcement.role.wyspiaexpress.hitman": "Hitman",
+  "announcement.goals.wyspiaexpress.hitman": "Eliminate your target.",
+
   "announcement.role.wyspiaexpress.lich": "Lich",
   "announcement.goals.wyspiaexpress.lich": "Reanimate the dead to do your biding",
 
   "announcement.role.wyspiaexpress.lich_ghoul": "Fragile Ghoul",
   "announcement.goals.wyspiaexpress.lich_ghoul": "You have been reanimated from death, serve your master",
+
+  "announcement.role.wyspiaexpress.lover_1": "Lover 1",
+  "announcement.goals.wyspiaexpress.lover_1": "Be the last ones alive with your partner.",
+
+  "announcement.role.wyspiaexpress.lover_2": "Lover 2",
+  "announcement.goals.wyspiaexpress.lover_2": "Be the last ones alive with your partner.",
 
   "announcement.role.wyspiaexpress.note_taker": "Amazing Note Taker",
   "announcement.goals.wyspiaexpress.note_taker": "Observe, and take notes. You are amazing and not binglus anymore",
@@ -271,6 +306,9 @@
   "gui.wyspiaexpress.guidebook.shop": "Shop",
   "gui.wyspiaexpress.guidebook.shop.lover_1": "Shop · Lover 1",
   "gui.wyspiaexpress.guidebook.shop.lover_2": "Shop · Lover 2",
+  "gui.wyspiaexpress.guidebook.shop.stage1": "Shop · Stage 1",
+  "gui.wyspiaexpress.guidebook.shop.stage2": "Shop · Stage 2",
+
   "gui.wyspiaexpress.guidebook.shop.none": "No shop",
   "gui.wyspiaexpress.guidebook.shop.unavailable": "Shop information not available",
 
@@ -521,6 +559,16 @@
   "guidebook.wyspiaexpress.roles.wyspiaexpress.gambler.lore": "They are no stranger to chance. Their mastery of luck leads them to a game of roulette they must survive.",
   "guidebook.role.description.wyspiaexpress:gambler": "They're no stranger to chance, but their chance has gone to another level. Their mastery of luck manipulation leads them to a game of roulette that they must survive. They can get a random item from a mystery box.",
 
+  "guidebook.role.wyspiaexpress:hitman": "Hitman",
+  "guidebook.role.title.wyspiaexpress:hitman": "The Contracted",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.summary": "Eliminate all your targets.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.ability.1": "You receive a random civilian target. If no civilians remain, your target can be another neutral or a killer.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.ability.2": "Stage 1: your target is passively highlighted in yellow. You cannot use active instinct. Killing anyone else will kill you as well.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.ability.3": "Killing your target awards %1$s coins. Each time your target dies or disconnects, you receive another target if one is available.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.ability.4": "After eliminating your target once, you enter stage 2",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.ability.5": "Stage 2: your shop changes and you can use instinct to see all players. Killing non-target will no longer kill you.",
+
+
   "guidebook.role.wyspiaexpress:lich": "Lich",
   "guidebook.role.title.wyspiaexpress:lich": "Master of Necromancy",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.lich.summary": "Reanimate the dead as Fragile Ghouls to fight for your team.",
@@ -536,6 +584,14 @@
   "guidebook.wyspiaexpress.roles.wyspiaexpress.lich_ghoul.summary": "A fragile killer brought back by the Lich.",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.lich_ghoul.ability.1": "Fight for the killers and protect the Lich. You cannot kill your master and cannot be revived as a Ghoul again.",
   "guidebook.wyspiaexpress.roles.wyspiaexpress.lich_ghoul.ability.2": "Your sprint stamina lasts %1$s. Available equipment is shown in your shop.",
+
+  "guidebook.role.wyspiaexpress:lover_1": "Lovers",
+  "guidebook.role.title.wyspiaexpress:lover_1": "Two hearts, one fate",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.summary": "Be the last ones alive with your partner.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.1": "Use your ability to teleport to your partner. Cooldown: %1$s.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.2": "Your pair shares two lives. If Ritual Dagger converts one of you, both of you becomes Cultist",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.3": "Use instinct to see other players.",
+  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.4": "Use your phone to join a voice chat group with your partner",
 
   "guidebook.role.wyspiaexpress:note_taker": "Amazing Note Taker",
   "guidebook.role.title.wyspiaexpress:note_taker": "NOTES",
@@ -612,40 +668,20 @@
   "announcement.win.stupid_express.arsonist": "The Arsonist Wins!",
   "game.win.stupid_express.arsonist": "The Arsonist has doused all players and set the train ablaze!",
 
+  "announcement.win.wyspiaexpress.hitman": "The Hitman Wins!",
+  "game.win.wyspiaexpress.hitman": "The Hitman is the last one standing!",
+
+  "announcement.win.kinswathe.hitman": "The Hitman Wins!",
+  "game.win.kinswathe.hitman": "The Hitman is the last one standing!",
+
   "announcement.win.stupid_express.lovers": "The Lovers Win!",
   "game.win.stupid_express.lovers": "The lovers survived together.",
-
-  "announcement.win.wyspiaexpress.neutral": "A Neutral Victory!",
-  "game.win.wyspiaexpress.neutral": "The winning passengers are shown below.",
-
-  "item.wyspiaexpress.lovers_phone": "Lovers’ Phone",
-  "item.wyspiaexpress.lovers_phone.tooltip": "Toggle your private phone channel with your partner.",
-
-  "message.wyspiaexpress.lovers.life_saved": "Your bond saved you. Shared lives remaining: %s",
-  "message.wyspiaexpress.lovers.partner_unavailable": "Your partner is unavailable.",
-  "message.wyspiaexpress.lovers.voice_unavailable": "Connect to voice chat to use your phone.",
-  "message.wyspiaexpress.lovers.phone_on": "Lovers’ phone connected.",
-  "message.wyspiaexpress.lovers.phone_off": "Lovers’ phone disconnected.",
-  "death_reason.wyspiaexpress.broken_heart": "a broken heart",
-
-  "hud.wyspiaexpress.lovers.lives": " · %s shared lives",
-  "tip.wyspiaexpress.ability.lovers": "Press %s to teleport to your partner",
-
-  "announcement.role.wyspiaexpress.lover_1": "Lover 1",
-  "announcement.goals.wyspiaexpress.lover_1": "Be the last ones alive with your partner.",
-  "announcement.role.wyspiaexpress.lover_2": "Lover 2",
-  "announcement.goals.wyspiaexpress.lover_2": "Be the last ones alive with your partner.",
 
   "announcement.win.kinswathe.lovers": "The Lovers win",
   "game.win.kinswathe.lovers": "Only their bond remains.",
 
-  "guidebook.role.wyspiaexpress:lover_1": "Lovers",
-  "guidebook.role.title.wyspiaexpress:lover_1": "Two hearts, one fate",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.summary": "Be the last ones alive with your partner.",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.1": "Use your ability to teleport to your partner. Cooldown: %1$s.",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.2": "Your pair shares two lives. If Ritual Dagger converts one of you, both of you becomes Cultist",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.3": "Use instinct to see other players.",
-  "guidebook.wyspiaexpress.roles.wyspiaexpress.lover_1.ability.4": "Use your phone to join an open private voice chat group",
+  "announcement.win.wyspiaexpress.neutral": "A Neutral Victory!",
+  "game.win.wyspiaexpress.neutral": "The winning passengers are shown below.",
 
   "shop.wyspiaexpress.sold_out": "Sold out",
   "shop.wyspiaexpress.remaining": "Purchases remaining: %1$s / %2$s",

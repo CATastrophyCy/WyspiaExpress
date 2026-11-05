@@ -42,7 +42,7 @@ public final class RoundResultComponent implements AutoSyncedComponent {
 
     public enum Outcome {
         CIVILIANS("civilian", "passengers"), KILLERS("killer", "killers"), TIMEOUT("civilian", "time"),
-        CULT("kinswathe.cult"), LICENSED_VILLAIN("kinswathe.villain_licensed"),
+        HITMAN("wyspiaexpress.hitman"), CULT("kinswathe.cult"), LICENSED_VILLAIN("kinswathe.villain_licensed"),
         EDDIE_WAFFLES("kinswathe.eddie_waffles"), THIEF("kinswathe.thief"),
         ARSONIST("stupid_express.arsonist"), LOVERS("stupid_express.lovers"), NEUTRAL("wyspiaexpress.neutral");
 

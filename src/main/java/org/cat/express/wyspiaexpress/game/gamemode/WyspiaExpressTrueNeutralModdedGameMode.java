@@ -22,6 +22,7 @@ public final class WyspiaExpressTrueNeutralModdedGameMode extends WyspiaExpressM
 
     public static boolean isMainRole(Role role) {
         return role != null && (LoversComponent.isLover(role)
+                || role == WyspiaExpressRoles.HITMAN
                 || role == WyspiaExpressRoles.CULT_LEADER
                 || role == WyspiaExpressRoles.VILLAIN_LICENSED || role == SERoles.THIEF);
     }

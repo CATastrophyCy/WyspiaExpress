@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "summary": {
+    "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.summary"
+  },
+  "values": {
+    "reward": {
+      "config": "roles",
+      "path": "roleConfig.hitmanConfig.targetReward",
+      "format": "number"
+    }
+  },
+  "abilities": [
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.ability.1"
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.ability.2"
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.ability.3",
+        "with": [
+          {
+            "value": "reward"
+          }
+        ]
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.ability.4"
+      }
+    },
+    {
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.ability.5"
+      }
+    }
+  ]
+}

@@ -98,6 +98,10 @@ public final class GuidebookItems {
     }
 
     public static List<Offer> shop(GuidebookEntry entry) {
+        return shop(entry, false);
+    }
+
+    public static List<Offer> shop(GuidebookEntry entry, boolean stage2) {
         if (entry.role() == null) return List.of();
         if (entry.role() == Noellesroles.BARTENDER) {
             var world = net.minecraft.client.MinecraftClient.getInstance().world;
@@ -105,7 +109,7 @@ public final class GuidebookItems {
                     org.agmas.noellesroles.ConfigWorldComponent.KEY.get(world).defenseVialPrice, false));
         }
         if (WyspiaExpressRoles.ROLES_BASIC_CONFIG.containsKey(entry.role())) {
-            return RoleShopResolver.getShopConfig(entry.role()).stream().map(config -> {
+            return RoleShopResolver.getShopConfig(entry.role(), stage2).stream().map(config -> {
                 var offer = org.cat.express.wyspiaexpress.shop.ShopUtil.fromShopEntryConfig(config);
                 return new Offer(offer.stack().copyWithCount(1), RoleShopResolver.purchaseQuantity(offer.stack().getItem()),
                         offer.price(), RoleShopResolver.isAction(offer.stack().getItem()), config.purchaseLimit);

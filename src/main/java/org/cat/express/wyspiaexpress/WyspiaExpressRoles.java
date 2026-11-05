@@ -1,6 +1,7 @@
 package org.cat.express.wyspiaexpress;
 
 import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
+import org.cat.express.wyspiaexpress.components.roles.HitmanComponent;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.api.event.AllowPlayerDeath;
@@ -198,6 +199,10 @@ public class WyspiaExpressRoles {
             WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2,
             true
     ));
+    public static final Role HITMAN = registerRole(new Role(
+            Identifier.of(WyspiaExpress.MOD_ID, "hitman"), 0xD7B85B, false, false,
+            Role.MoodType.FAKE, WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2, true));
+
     public static final Role LOVER_1 = registerRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "lover_1"), 0xFFB7C5, false, false,
             Role.MoodType.FAKE, WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2, true));
@@ -305,6 +310,7 @@ public class WyspiaExpressRoles {
         TRUE_NEUTRALS.add(CULT_LEADER);
         TRUE_NEUTRALS.add(CULTIST);
         TRUE_NEUTRALS.add(VILLAIN_LICENSED);
+        TRUE_NEUTRALS.add(HITMAN);
         TRUE_NEUTRALS.add(LOVER_1);
         TRUE_NEUTRALS.add(LOVER_2);
 
@@ -388,6 +394,8 @@ public class WyspiaExpressRoles {
 
     private static void registerRoleEffect(){
         ModdedRoleAssigned.EVENT.register((player, role)->{
+            if (role == HITMAN) HitmanComponent.KEY.get(player).assign();
+            else HitmanComponent.KEY.get(player).reset();
             if (!LoversComponent.isLover(role)) LoversComponent.KEY.get(player.getWorld()).endBond(player.getUuid());
             if(role.equals(EDGE_LORD)){
                 // give edge lord night vision
@@ -421,6 +429,7 @@ public class WyspiaExpressRoles {
             PlayerCultistComponent.KEY.get(playerEntity).reset();
             PlayerMovementComponent.KEY.get(playerEntity).reset();
             GuesserComponent.KEY.get(playerEntity).reset();
+            HitmanComponent.KEY.get(playerEntity).reset();
         }));
     }
     private static void registerStringRoleMap(){
@@ -440,6 +449,7 @@ public class WyspiaExpressRoles {
 
     private static void registerRoleConfigs(){
         // mine
+        registerRoleBasicConfig(HITMAN, WyspiaExpress.ROLES_CONFIG.roleConfig.hitmanConfig.basic);
         registerRoleBasicConfig(LOVER_1, WyspiaExpress.ROLES_CONFIG.roleConfig.loversConfig.basic);
         registerRoleBasicConfig(LOVER_2, WyspiaExpress.ROLES_CONFIG.roleConfig.loversConfig.lover2Config.basic);
         registerRoleBasicConfig(COPYCAT, WyspiaExpress.ROLES_CONFIG.roleConfig.copycatConfig.basic);

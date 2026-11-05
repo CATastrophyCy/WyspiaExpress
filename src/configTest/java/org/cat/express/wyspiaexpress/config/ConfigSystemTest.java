@@ -71,6 +71,17 @@ public final class ConfigSystemTest {
         check(disabledTrashValues.get("rules.inventoryTrash.enabled").equals(false)
                 && disabledTrashValues.get("rules.inventoryTrash.items").equals(List.of("wathe:key", "wathe:note")),"disabling trash preserves inherited item list");
 
+        var hitmanProfile = new TreeMap<>(defaults);
+        schema.overlay("roles", JsonParser.parseString("{\"roleConfig\":{\"hitmanConfig\":{\"targetReward\":125,\"basic\":{\"enableShop\":true,\"shopEntries\":[\"NOTE;10;-1;TOOL\"]}}}}")
+                .getAsJsonObject(), hitmanProfile, "shared Hitman config");
+        schema.overlay("roles", JsonParser.parseString("{\"roleConfig\":{\"hitmanConfig\":{\"stage2ShopEntries\":[\"KNIFE;45;-1;WEAPON\"]}}}")
+                .getAsJsonObject(), hitmanProfile, "Hitman stage 2 override");
+        var hitmanValues = schema.decodeComplete(hitmanProfile, "Hitman profile");
+        check(hitmanValues.get("roles.roleConfig.hitmanConfig.targetReward").equals(125)
+                && hitmanValues.get("roles.roleConfig.hitmanConfig.basic.shopEntries").equals(List.of("NOTE;10;-1;TOOL"))
+                && hitmanValues.get("roles.roleConfig.hitmanConfig.stage2ShopEntries").equals(List.of("KNIFE;45;-1;WEAPON")),
+                "stage 2 shop override preserves Hitman reward and first shop");
+
         check(decoded.get("items.itemConfig.grenadeConfig.showTrajectory").equals(true),"grenade preview enabled by default");
         check(decoded.get("items.itemConfig.smokeBombConfig.showTrajectory").equals(true),"smoke bomb preview enabled by default");
         check(decoded.get("roles.roleConfig.kinsWatheRoles.physicianConfig.seePoisonedPlayers").equals(true),"physician poison instinct enabled by default");

@@ -1,6 +1,7 @@
 package org.cat.express.wyspiaexpress;
 
 import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
+import org.cat.express.wyspiaexpress.components.roles.HitmanComponent;
 import dev.doctor4t.wathe.entity.PlayerBodyEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.BsXinQin.kinswathe.entities.CaptureDeviceEntity;
@@ -18,6 +19,7 @@ public class WyspiaExpressComponents implements EntityComponentInitializer, Worl
     @Override
     public void registerEntityComponentFactories(@NotNull EntityComponentFactoryRegistry registry) {
         registry.beginRegistration(PlayerEntity.class, PlayerShopComponent.KEY).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).end(PlayerShopComponent::new);
+        registry.beginRegistration(PlayerEntity.class, HitmanComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(HitmanComponent::new);
         registry.beginRegistration(PlayerEntity.class, PlayerConfigComponent.KEY).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).end(PlayerConfigComponent::new);
         registry.beginRegistration(PlayerEntity.class, ItemCooldownComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(ItemCooldownComponent::new);
         registry.beginRegistration(PlayerEntity.class, PlayerTaskComponent.KEY).respawnStrategy(RespawnCopyStrategy.NEVER_COPY).end(PlayerTaskComponent::new);

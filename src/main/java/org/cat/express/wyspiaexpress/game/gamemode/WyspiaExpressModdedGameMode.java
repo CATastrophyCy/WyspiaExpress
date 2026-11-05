@@ -131,7 +131,7 @@ public class WyspiaExpressModdedGameMode extends GameMode {
                     .anyMatch(player -> gameWorld.isInnocent(player) && !GameFunctions.isPlayerEliminated(player));
             if (!civilianAlive) result = GameFunctions.WinStatus.KILLERS;
             if (result == GameFunctions.WinStatus.NONE && gameWorld.getAllKillerTeamPlayers().stream()
-                    .noneMatch(uuid -> !GameFunctions.isPlayerEliminated(world.getPlayerByUuid(uuid)))) {
+                    .allMatch(uuid -> GameFunctions.isPlayerEliminated(world.getPlayerByUuid(uuid)))) {
                 result = GameFunctions.WinStatus.PASSENGERS;
             }
 
@@ -239,6 +239,7 @@ public class WyspiaExpressModdedGameMode extends GameMode {
         boolean loversAlive = alive.stream().anyMatch(player -> LoversComponent.isLover(gameWorld.getRole(player)));
         boolean kinVillain = false;
         boolean eddie = false;
+        boolean hitman = false;
         boolean wyspiaVillain = false;
         boolean cult = false;
         boolean onlyCult = !alive.isEmpty();
@@ -248,6 +249,7 @@ public class WyspiaExpressModdedGameMode extends GameMode {
             Role role = gameWorld.getRole(player);
             kinVillain |= role == KinsWatheRoles.LICENSED_VILLAIN;
             eddie |= role == WyspiaExpressRoles.EDDIE_WAFFLES;
+            hitman |= role == WyspiaExpressRoles.HITMAN;
             wyspiaVillain |= role == WyspiaExpressRoles.VILLAIN_LICENSED;
             boolean cultMember = role == WyspiaExpressRoles.CULTIST || role == WyspiaExpressRoles.CULT_LEADER;
             cult |= cultMember;
@@ -258,7 +260,8 @@ public class WyspiaExpressModdedGameMode extends GameMode {
         // All custom claims use the same positions as the old keep-alive patches, before ordinary endings.
         if (alive.size() == 1) {
             Role role = gameWorld.getRole(alive.getFirst());
-            if (kinVillain) finishCustom(world, gameWorld, alive, role, Outcome.LICENSED_VILLAIN);
+            if (hitman) finishCustom(world, gameWorld, alive, role, Outcome.HITMAN);
+            else if (kinVillain) finishCustom(world, gameWorld, alive, role, Outcome.LICENSED_VILLAIN);
             else if (eddie) finishCustom(world, gameWorld, alive, role, Outcome.EDDIE_WAFFLES);
             else if (wyspiaVillain) finishCustom(world, gameWorld, alive, role, Outcome.LICENSED_VILLAIN);
             else if (arsonist) finishCustom(world, gameWorld, alive, role, Outcome.ARSONIST);
@@ -266,7 +269,7 @@ public class WyspiaExpressModdedGameMode extends GameMode {
         }
         if (cult && onlyCult) finishCustom(world, gameWorld, alive, WyspiaExpressRoles.CULT_LEADER, Outcome.CULT);
         boolean teamEnding = result == GameFunctions.WinStatus.KILLERS || result == GameFunctions.WinStatus.PASSENGERS;
-        return teamEnding && (loversAlive || kinVillain || eddie || wyspiaVillain || cult || arsonist
+        return teamEnding && (hitman || loversAlive || kinVillain || eddie || wyspiaVillain || cult || arsonist
                 || (thief && ThiefItemTracker.isWeaponAvailable()));
     }
 

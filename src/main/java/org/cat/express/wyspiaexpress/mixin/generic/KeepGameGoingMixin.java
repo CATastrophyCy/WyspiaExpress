@@ -26,6 +26,18 @@ public abstract class KeepGameGoingMixin {
     private void keepLicensedvillainGame(@NotNull ServerWorld world, @NotNull GameWorldComponent gameWorld, @NotNull CallbackInfo ci, @Local(name = "winStatus") @NotNull GameFunctions.@NotNull WinStatus winStatus) {
         List<ServerPlayerEntity> players = world.getPlayers();
         List<ServerPlayerEntity> alivePlayers = players.stream().filter(GameFunctions::isPlayerAliveAndSurvival).toList();
+        boolean hitmanAlive = alivePlayers.stream().anyMatch(player -> gameWorld.isRole(player, WyspiaExpressRoles.HITMAN));
+        if (winStatus != GameFunctions.WinStatus.TIME && hitmanAlive && alivePlayers.size() == 1) {
+            CustomWinnerComponent winner = CustomWinnerComponent.KEY.get(world);
+            winner.setWinningTextId("hitman");
+            winner.setWinners(alivePlayers);
+            winner.setColor(WyspiaExpressRoles.HITMAN.color());
+            winner.sync();
+            GameRoundEndComponent.KEY.get(world).setRoundEndData(players, GameFunctions.WinStatus.KILLERS);
+            GameFunctions.stopGame(world);
+            ci.cancel();
+            return;
+        }
         LoversComponent lovers = LoversComponent.KEY.get(world);
         var winningPair = lovers.winningPair(alivePlayers);
         if (winStatus != GameFunctions.WinStatus.TIME && !winningPair.isEmpty()) {
@@ -42,7 +54,7 @@ public abstract class KeepGameGoingMixin {
             ci.cancel();
             return;
         }
-        if (alivePlayers.stream().anyMatch(player -> LoversComponent.isLover(gameWorld.getRole(player)))
+        if ((hitmanAlive || alivePlayers.stream().anyMatch(player -> LoversComponent.isLover(gameWorld.getRole(player))))
                 && (winStatus == GameFunctions.WinStatus.KILLERS || winStatus == GameFunctions.WinStatus.PASSENGERS)) {
             ci.cancel();
             return;

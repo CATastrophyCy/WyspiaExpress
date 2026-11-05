@@ -1,6 +1,7 @@
 package org.cat.express.wyspiaexpress.guidebook;
 
 import dev.doctor4t.wathe.api.Role;
+import org.cat.express.wyspiaexpress.WyspiaExpress;
 import dev.doctor4t.wathe.index.WatheItems;
 import net.minecraft.item.Item;
 import org.BsXinQin.kinswathe.KinsWatheItems;
@@ -17,6 +18,14 @@ public final class RoleShopResolver {
         var config = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role);
         if (config == null || !config.enableShop()) return List.of();
         return ShopConfig.fromStrings(config.shopEntries());
+    }
+
+    public static List<ShopConfig.ShopEntryConfig> getShopConfig(Role role, boolean stage2) {
+        if (role == WyspiaExpressRoles.HITMAN && stage2) {
+            return WyspiaExpress.ROLES_CONFIG.roleConfig.hitmanConfig.basic.enableShop()
+                    ? ShopConfig.fromStrings(WyspiaExpress.ROLES_CONFIG.roleConfig.hitmanConfig.stage2ShopEntries()) : List.of();
+        }
+        return getShopConfig(role);
     }
 
     public static boolean isAction(Item item) {

@@ -59,6 +59,7 @@ import org.cat.express.wyspiaexpress.components.PlayerSenseDeadComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.cat.express.wyspiaexpress.components.roles.LoversComponent;
+import org.cat.express.wyspiaexpress.components.roles.HitmanComponent;
 import org.cat.express.wyspiaexpress.components.roles.PlayerCultistComponent;
 import org.cat.express.wyspiaexpress.mixin.generic.PlayerStaminaAccessor;
 import org.cat.express.wyspiaexpress.packets.StaminaS2CPacket;
@@ -166,6 +167,7 @@ public final class GameUtil {
 
             GameUtil.sendPlayerDeathMessage(serverWorld, component, victim, killer, deathReason);
 
+            HitmanComponent.onPlayerDeath(victim, killer, deathReason);
             LoversComponent.KEY.get(serverWorld).onDeath(victim);
 
             if (killer == null) return;
