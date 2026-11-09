@@ -215,14 +215,14 @@ public abstract class RoleNameRendererMixin {
             details.add(Text.literal("Dreamed").withColor(0xFF6BFA));
         }
 
-        float scale = 0.7f;
-        int width = Math.max(1, (int) (Math.min(188, context.getScaledWindowWidth() * 0.375f) / scale));
+        int width = 270;
         List<HudLine> lines = new ArrayList<>();
         int height = layoutEntries(renderer, lines, stats, 0, width);
         if (!details.isEmpty()) height = layoutEntries(renderer, lines, details, height + 3, width);
         int bottom = player.isSpectator() ? 8 : 36;
-        scale = Math.min(scale, (context.getScaledWindowHeight() - bottom - 8f) / (height + 5));
         int contentWidth = lines.stream().mapToInt(line -> line.x() + renderer.getWidth(line.text())).max().orElse(0);
+        float scale = Math.min(1f, Math.min((context.getScaledWindowWidth() - 16f) / (contentWidth + 8),
+                (context.getScaledWindowHeight() - bottom - 8f) / (height + 5)));
         float left = (context.getScaledWindowWidth() - contentWidth * scale) / 2;
         float top = context.getScaledWindowHeight() - bottom - (height + 2) * scale;
         int color = ((int) (nametagAlpha * 255) << 24) | 0xDDDAD3;
