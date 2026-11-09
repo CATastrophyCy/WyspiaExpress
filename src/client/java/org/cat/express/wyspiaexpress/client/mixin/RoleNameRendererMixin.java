@@ -11,6 +11,7 @@ import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import dev.doctor4t.wathe.client.WatheClient;
 import dev.doctor4t.wathe.client.gui.RoleNameRenderer;
 import dev.doctor4t.wathe.game.GameFunctions;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -102,6 +103,7 @@ public abstract class RoleNameRendererMixin {
         if (!game.isRunning() || !WatheClient.isPlayerSpectatingOrCreative()
                 || !PlayerConfigComponent.KEY.get(player).spectatorInfo()
                 || !GameFunctions.isPlayerAliveAndSurvival(targetPlayer) || nametagAlpha <= 0.05f) return;
+        if (player.isSpectator() && MinecraftClient.getInstance().inGameHud.getSpectatorHud().isOpen()) return;
 
         Role role = game.getRole(targetPlayer);
         List<Text> stats = new ArrayList<>();
@@ -218,15 +220,16 @@ public abstract class RoleNameRendererMixin {
         List<HudLine> lines = new ArrayList<>();
         int height = layoutEntries(renderer, lines, stats, 0, width);
         if (!details.isEmpty()) height = layoutEntries(renderer, lines, details, height + 3, width);
-        scale = Math.min(scale, (context.getScaledWindowHeight() - 32f) / height);
-        int top = Math.max(8, Math.min(context.getScaledWindowHeight() / 3,
-                context.getScaledWindowHeight() - 24 - (int) Math.ceil(height * scale)));
+        int bottom = player.isSpectator() ? 8 : 36;
+        scale = Math.min(scale, (context.getScaledWindowHeight() - bottom - 8f) / (height + 5));
+        int contentWidth = lines.stream().mapToInt(line -> line.x() + renderer.getWidth(line.text())).max().orElse(0);
+        float left = (context.getScaledWindowWidth() - contentWidth * scale) / 2;
+        float top = context.getScaledWindowHeight() - bottom - (height + 2) * scale;
         int color = ((int) (nametagAlpha * 255) << 24) | 0xDDDAD3;
         var matrices = context.getMatrices();
         matrices.push();
-        matrices.translate(8, top, 0);
+        matrices.translate(left, top, 0);
         matrices.scale(scale, scale, 1);
-        int contentWidth = lines.stream().mapToInt(line -> line.x() + renderer.getWidth(line.text())).max().orElse(0);
         context.fill(-4, -3, contentWidth + 4, height + 2, ((int) (nametagAlpha * 92) << 24) | 0x1C1B19);
         for (HudLine line : lines) {
             OrderedText text = visitor -> line.text().accept((index, style, codePoint) -> visitor.accept(index,
