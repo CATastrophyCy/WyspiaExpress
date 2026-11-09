@@ -56,10 +56,10 @@
 				"taskIncome": 50,
 				"items": ["BODY_BAG"],
 				"itemAmount": [1],
-				"minimumPlayerSpawn": 6,
+				"minimumPlayerSpawn": 12,
 				"maximumPlayerSpawn": 99,
-				"playersPerAdditionalSpawn": 0,
-				"maximumSpawn": 1,
+				"playersPerAdditionalSpawn": 12,
+				"maximumSpawn": 2,
 				"seePoison": true
 			},
 			// Coins received for killing your target
@@ -414,7 +414,7 @@
 				"minimumPlayerSpawn": 12,
 				"maximumPlayerSpawn": 99,
 				"playersPerAdditionalSpawn": 12,
-				"maximumSpawn": 1,
+				"maximumSpawn": 2,
 				"seePoison": true
 			},
 			// Teleport cooldown, in seconds
