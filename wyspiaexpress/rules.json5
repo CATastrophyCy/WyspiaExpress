@@ -6,7 +6,8 @@
 		"items": [
 			"wathe:key", "wyspiaexpress:fake_revolver", "noellesroles:fake_knife",
 			"wathe:scorpion", "wathe:poison_vial", "noellesroles:delusion_vial", "wathe:body_bag",
-			"wyspiaexpress:megaphone", "wathe:note", "wathe:firecracker"
+			"wyspiaexpress:megaphone", "wathe:note", "wathe:firecracker", "wyspiaexpress:tape", "starexpress:tape",
+			"kinswathe:knockout_drug"
 		]
 	},
 	// Multiply to crawling speed. i.e. 1.5 means crawling is 50% faster
@@ -23,7 +24,7 @@
 		// Enable infinite psycho shield, slow and time loss from hits. Duration and cooldowns always apply
 		"rework": true,
 		// Psycho duration, in seconds
-		"duration": 50,
+		"duration": 60,
 		// Blocked hits before the slow and duration penalties start
 		"freeHits": 0,
 		// Movement slow per hit after the free hits. 0.15 = 15%
@@ -31,7 +32,7 @@
 		// Maximum movement slow. 0.4 = 40%
 		"maxSlow": 0.4,
 		// Fraction of remaining psycho time removed per hit after the free hits. 0.35 = 35%
-		"timeLostPerHit": 0.35,
+		"timeLostPerHit": 0.30,
 		// Weapon cooldown after getting hit in psycho, in seconds. Longer cooldowns are kept
 		"weaponCooldown": 15,
 		// Extra bat recharge time per hit after the free hits, in seconds
