@@ -4,6 +4,11 @@
     "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.summary"
   },
   "values": {
+    "stage1Instinct": {
+      "config": "roles",
+      "path": "roleConfig.hitmanConfig.stage1Instinct",
+      "format": "boolean"
+    },
     "pickupGuns": {
       "config": "roles",
       "path": "roleConfig.hitmanConfig.canPickUpGuns",
@@ -24,6 +29,15 @@
     {
       "text": {
         "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.ability.2"
+      }
+    },
+    {
+      "when": {
+        "value": "stage1Instinct",
+        "equals": true
+      },
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.wyspiaexpress.hitman.ability.stage1_instinct"
       }
     },
     {

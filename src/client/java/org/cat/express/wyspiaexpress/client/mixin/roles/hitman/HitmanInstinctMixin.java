@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
+import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.roles.HitmanComponent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +23,9 @@ public abstract class HitmanInstinctMixin {
         PlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null || WatheClient.isPlayerSpectatingOrCreative()) return;
         if (GameWorldComponent.KEY.get(player.getWorld()).isRole(player, WyspiaExpressRoles.HITMAN)) {
-            cir.setReturnValue(HitmanComponent.KEY.get(player).isStage2() && WatheClient.instinctKeybind.isPressed());
+            cir.setReturnValue((HitmanComponent.KEY.get(player).isStage2()
+                    || WyspiaExpress.ROLES_CONFIG.roleConfig.hitmanConfig.stage1Instinct())
+                    && WatheClient.instinctKeybind.isPressed());
         }
     }
 
@@ -36,7 +39,7 @@ public abstract class HitmanInstinctMixin {
 
         HitmanComponent hitman = HitmanComponent.KEY.get(player);
         cir.setReturnValue(hitman.isTarget(targetPlayer) ? 0xFFFF00
-                : hitman.isStage2() && WatheClient.isInstinctEnabled()
+                : WatheClient.isInstinctEnabled()
                 ? MathHelper.hsvToRgb(0.0F, 0.0F, 0.6F) : -1);
     }
 }

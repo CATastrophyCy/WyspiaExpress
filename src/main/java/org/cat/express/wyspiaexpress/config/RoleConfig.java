@@ -57,6 +57,9 @@ public class RoleConfig {
         @Comment("Can pick up revolvers in both stages")
         public boolean canPickUpGuns;
 
+        @Comment("Can use active instinct before finishing the first contract")
+        public boolean stage1Instinct;
+
         @Comment("Shop used in stage 2. Uses basic.enableShop")
         public List<String> stage2ShopEntries = new ArrayList<>();
     }
