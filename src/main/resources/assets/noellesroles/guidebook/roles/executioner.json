@@ -4,6 +4,11 @@
     "translate": "guidebook.wyspiaexpress.roles.noellesroles.executioner.summary"
   },
   "values": {
+    "instinct": {
+      "config": "roles",
+      "path": "roleConfig.noellesRoles.executionerConfig.enableInstinct",
+      "format": "boolean"
+    },
     "reward": {
       "config": "roles",
       "path": "roleConfig.noellesRoles.executionerConfig.reward",
@@ -24,6 +29,15 @@
     {
       "text": {
         "translate": "guidebook.wyspiaexpress.roles.noellesroles.executioner.ability.2"
+      }
+    },
+    {
+      "when": {
+        "value": "instinct",
+        "equals": true
+      },
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.noellesroles.executioner.ability.instinct"
       }
     }
   ],

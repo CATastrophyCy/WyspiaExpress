@@ -397,6 +397,8 @@ public class RoleConfig {
         public static class VultureConfig{
             @Comment("Basic role configuration")
             public RoleBasicConfig basic = new RoleBasicConfig();
+            @Comment("Enable instinct before becoming a killer")
+            public boolean enableInstinct;
         }
 
         public static class ExecutionerConfig{
@@ -404,6 +406,9 @@ public class RoleConfig {
             public RoleBasicConfig basic = new RoleBasicConfig();
             @Comment("Executioner coin reward after their target dies from revolver by non killer")
             public int reward = 150;
+
+            @Comment("Enable instinct before becoming a killer")
+            public boolean enableInstinct;
 
         }
 

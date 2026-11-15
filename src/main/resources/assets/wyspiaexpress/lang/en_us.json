@@ -424,6 +424,7 @@
   "guidebook.wyspiaexpress.roles.noellesroles.executioner.summary": "Arrange for your assigned target to be executed.",
   "guidebook.wyspiaexpress.roles.noellesroles.executioner.ability.1": "You start with a passenger as your target. If the target dies by a non killer passenger, including yourself, you become a killer and receive %1$s. If your target falls to a killer, you will receive a new target.",
   "guidebook.wyspiaexpress.roles.noellesroles.executioner.ability.2": "Unlike other non-civilian roles, the Executioner can pick up guns on the floor the same way a civilian can. But be careful, if you kill any passenger that isn't your target, you will also fall!",
+  "guidebook.wyspiaexpress.roles.noellesroles.executioner.ability.instinct": "Use instinct to highlight players.",
   "guidebook.wyspiaexpress.roles.noellesroles.executioner.lore": "The Executioner boarded the train awaiting one particular passenger’s demise. Sometimes it is better to let someone else do the dirty work.",
 
   "guidebook.wyspiaexpress.roles.noellesroles.mimic.summary": "Appear to killers as one of their cohorts.",
@@ -460,6 +461,7 @@
   "guidebook.wyspiaexpress.roles.noellesroles.vulture.summary": "Consume bodies to become a killer.",
   "guidebook.wyspiaexpress.roles.noellesroles.vulture.ability.1": "Use your ability while looking at an uneaten body to eat it. Eating the amount shown on your HUD to become a killer",
   "guidebook.wyspiaexpress.roles.noellesroles.vulture.ability.2": "Eating a body makes an audible cue and briefly slows you. Ability cooldown: %1$s.",
+  "guidebook.wyspiaexpress.roles.noellesroles.vulture.ability.instinct": "Use instinct to highlight players.",
   "guidebook.wyspiaexpress.roles.noellesroles.vulture.lore": "Vultures hunger for flesh and bone. Once their hunger is satisfied, another killer will arrive on the train.",
 
   "guidebook.wyspiaexpress.modifiers.noellesroles.chameleon.summary": "Standing still lets you blend into your surroundings; moving reveals you.",

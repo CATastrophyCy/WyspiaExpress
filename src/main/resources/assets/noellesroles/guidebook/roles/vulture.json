@@ -18,12 +18,26 @@
           }
         ]
       }
+    },
+    {
+      "when": {
+        "value": "instinct",
+        "equals": true
+      },
+      "text": {
+        "translate": "guidebook.wyspiaexpress.roles.noellesroles.vulture.ability.instinct"
+      }
     }
   ],
   "lore": {
     "translate": "guidebook.wyspiaexpress.roles.noellesroles.vulture.lore"
   },
   "values": {
+    "instinct": {
+      "config": "roles",
+      "path": "roleConfig.noellesRoles.vultureConfig.enableInstinct",
+      "format": "boolean"
+    },
     "cooldown": {
       "config": "derived",
       "path": "noelles.vultureCooldown",
