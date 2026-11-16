@@ -88,6 +88,7 @@ public class WyspiaExpressGameFunctions {
                     joining.changeGameMode(GameMode.ADVENTURE);
                 }
                 LoversComponent.KEY.get(overworld).onJoin(joining);
+                wc.restoreHackerPhones(joining);
             });
         });
     }

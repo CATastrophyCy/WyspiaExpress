@@ -1,19 +1,33 @@
 package org.cat.express.wyspiaexpress.components;
 
+import dev.doctor4t.wathe.api.Role;
+import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.game.GameFunctions;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.LoreComponent;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import org.BsXinQin.kinswathe.KinsWatheItems;
+import org.BsXinQin.kinswathe.KinsWatheRoles;
+import org.agmas.harpymodloader.Harpymodloader;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,6 +40,7 @@ public class WorldComponent implements AutoSyncedComponent {
     @NotNull
     private final World world;
     private final Set<UUID> playerDead = new HashSet<UUID>();
+    private final Set<Text> hackerReveals = new LinkedHashSet<>();
     private UUID roundId = UUID.randomUUID();
 
     public WorldComponent(@NotNull World world) {
@@ -46,6 +61,43 @@ public class WorldComponent implements AutoSyncedComponent {
     public void startRound() {
         // Invalidates cooldown snapshots for players who stayed offline across a round boundary.
         roundId = UUID.randomUUID();
+        hackerReveals.clear();
+    }
+
+    public void recordHack(PlayerEntity target, Role role) {
+        hackerReveals.add(Text.literal(target.getName().getString() + " ")
+                .styled(style -> style.withItalic(false).withColor(0xFFFFFF))
+                .append(Harpymodloader.getRoleName(role).copy()
+                        .styled(style -> style.withItalic(false).withColor(role.color()))));
+    }
+
+    public void restoreHackerPhone(PlayerEntity player, ItemStack phone) {
+        if (phone.isOf(KinsWatheItems.PHONE) && canReceiveHackerReveals(player)) restoreHackerPhone(phone);
+    }
+
+    public void restoreHackerPhones(PlayerEntity player) {
+        if (!canReceiveHackerReveals(player)) return;
+        for (int slot = 0; slot < player.getInventory().size(); slot++) {
+            restoreHackerPhone(player.getInventory().getStack(slot));
+        }
+        restoreHackerPhone(player.currentScreenHandler.getCursorStack());
+    }
+
+    private boolean canReceiveHackerReveals(PlayerEntity player) {
+        if (hackerReveals.isEmpty() || !GameFunctions.isPlayerAliveAndSurvival(player)) return false;
+        GameWorldComponent game = GameWorldComponent.KEY.get(world);
+        return game.isRunning() && game.getRole(player) != null
+                && (game.canUseKillerFeatures(player) || game.isRole(player, KinsWatheRoles.HACKER));
+    }
+
+    private void restoreHackerPhone(ItemStack phone) {
+        if (!phone.isOf(KinsWatheItems.PHONE)) return;
+        LoreComponent lore = phone.getOrDefault(DataComponentTypes.LORE, LoreComponent.DEFAULT);
+        List<Text> missing = hackerReveals.stream().filter(reveal -> !lore.lines().contains(reveal)).toList();
+        if (missing.isEmpty()) return;
+        List<Text> lines = new ArrayList<>(lore.lines());
+        lines.addAll(missing);
+        phone.set(DataComponentTypes.LORE, new LoreComponent(lines));
     }
 
    public void addPlayerDead(UUID uuid) {
