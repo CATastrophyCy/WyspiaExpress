@@ -8,13 +8,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Map;
+
 @Mixin(ScoreboardRoleSelectorComponent.class)
 public class WeightsResetMixin {
 
     @Inject(method = "reset", at = @At("TAIL"), cancellable = false)
     public void wyspiaexpress$reset(CallbackInfoReturnable<Integer> cir) {
-        ModdedWeights.roleRounds.clear();
-        ModdedWeights.roleWeights.clear();
+        ModdedWeights.roleRounds.values().forEach(Map::clear);
+        ModdedWeights.roleWeights.values().forEach(Map::clear);
         if (RoleDraftStatisticsManager.getInstance() != null) RoleDraftStatisticsManager.getInstance().reset();
     }
 }
