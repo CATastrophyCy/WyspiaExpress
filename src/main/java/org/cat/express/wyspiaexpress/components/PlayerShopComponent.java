@@ -47,6 +47,13 @@ public final class PlayerShopComponent implements AutoSyncedComponent {
     public boolean hasCustomShop() { return customShop; }
     public int getVersion() { return version; }
 
+    public void reset() {
+        if (!customShop && items.isEmpty()) return;
+        customShop = false;
+        items = List.of();
+        sync();
+    }
+
     public void setRoleShop(Role role) {
         var config = WyspiaExpressRoles.ROLES_BASIC_CONFIG.get(role);
         customShop = config != null;

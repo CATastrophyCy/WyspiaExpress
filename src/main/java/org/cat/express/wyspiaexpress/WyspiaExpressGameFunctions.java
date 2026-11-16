@@ -26,6 +26,7 @@ import net.minecraft.world.TeleportTarget;
 import org.cat.express.wyspiaexpress.components.RoleComponent;
 import org.cat.express.wyspiaexpress.components.ItemCooldownComponent;
 import org.cat.express.wyspiaexpress.components.PlayerConfigComponent;
+import org.cat.express.wyspiaexpress.components.PlayerShopComponent;
 import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.config.ServerConfigModel;
@@ -74,6 +75,9 @@ public class WyspiaExpressGameFunctions {
                 ServerWorld overworld = server.getOverworld();
                 GameWorldComponent gwc = GameWorldComponent.KEY.get(overworld);
                 WorldComponent wc = WorldComponent.KEY.get(overworld);
+                if (!gwc.isRunning() || gwc.getRole(joining) == null) {
+                    PlayerShopComponent.KEY.get(joining).reset();
+                }
                 if (gwc.isRunning() && wc.isPlayerDead(joining.getUuid())) {
                     joining.changeGameMode(GameMode.SPECTATOR);
                 }

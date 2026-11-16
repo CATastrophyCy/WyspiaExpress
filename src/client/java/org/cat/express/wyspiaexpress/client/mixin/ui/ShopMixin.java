@@ -1,5 +1,6 @@
 package org.cat.express.wyspiaexpress.client.mixin.ui;
 
+import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.client.gui.screen.ingame.LimitedHandledScreen;
 import dev.doctor4t.wathe.client.gui.screen.ingame.LimitedInventoryScreen;
 import dev.doctor4t.wathe.util.ShopEntry;
@@ -33,26 +34,39 @@ public abstract class ShopMixin extends LimitedHandledScreen<PlayerScreenHandler
     @Inject(method = "init", at = @At("RETURN"))
     private void wyspiaexpress$setupShop(CallbackInfo ci) {
         var shop = PlayerShopComponent.KEY.get(player);
-        wyspiaexpress$shopVersion = shop.getVersion();
-        if (shop.hasCustomShop()) wyspiaexpress$createShopButtons(shop);
+        wyspiaexpress$shopVersion = wyspiaexpress$getShopVersion(shop);
+        if (wyspiaexpress$shopVersion == -1) wyspiaexpress$clearShopButtons();
+        else if (shop.hasCustomShop()) wyspiaexpress$createShopButtons(shop);
     }
 
     @Inject(method = "render", at = @At("HEAD"))
     private void wyspiaexpress$refreshShop(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         var shop = PlayerShopComponent.KEY.get(player);
-        if (wyspiaexpress$shopVersion == shop.getVersion()) return;
-        wyspiaexpress$shopVersion = shop.getVersion();
-        if (shop.hasCustomShop()) wyspiaexpress$createShopButtons(shop);
+        int version = wyspiaexpress$getShopVersion(shop);
+        if (wyspiaexpress$shopVersion == version) return;
+        wyspiaexpress$shopVersion = version;
+        if (version == -1) wyspiaexpress$clearShopButtons();
+        else if (shop.hasCustomShop()) wyspiaexpress$createShopButtons(shop);
         else ((LimitedInventoryScreen) (Object) this).init(client, width, height);
     }
 
     @Unique
-    private void wyspiaexpress$createShopButtons(PlayerShopComponent shop) {
+    private int wyspiaexpress$getShopVersion(PlayerShopComponent shop) {
+        return GameWorldComponent.KEY.get(player.getWorld()).isRunning() ? shop.getVersion() : -1;
+    }
+
+    @Unique
+    private void wyspiaexpress$clearShopButtons() {
         if (getFocused() instanceof LimitedInventoryScreen.StoreItemWidget) setFocused(null);
         ScreenAccessor accessor = (ScreenAccessor) this;
         accessor.getDrawables().removeIf(widget -> widget instanceof LimitedInventoryScreen.StoreItemWidget);
         accessor.getChildren().removeIf(widget -> widget instanceof LimitedInventoryScreen.StoreItemWidget);
         accessor.getSelectables().removeIf(widget -> widget instanceof LimitedInventoryScreen.StoreItemWidget);
+    }
+
+    @Unique
+    private void wyspiaexpress$createShopButtons(PlayerShopComponent shop) {
+        wyspiaexpress$clearShopButtons();
         int apart = 36;
         int x = width / 2 - shop.getItems().size() * apart / 2 + 9;
         int y = (height - 32) / 2 - 46;

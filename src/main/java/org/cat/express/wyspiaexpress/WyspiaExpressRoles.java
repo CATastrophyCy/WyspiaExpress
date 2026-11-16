@@ -430,6 +430,7 @@ public class WyspiaExpressRoles {
             PlayerMovementComponent.KEY.get(playerEntity).reset();
             GuesserComponent.KEY.get(playerEntity).reset();
             HitmanComponent.KEY.get(playerEntity).reset();
+            PlayerShopComponent.KEY.get(playerEntity).reset();
         }));
     }
     private static void registerStringRoleMap(){
