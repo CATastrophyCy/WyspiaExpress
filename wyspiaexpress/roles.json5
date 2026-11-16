@@ -42,12 +42,12 @@
 				"shopEntries": [
 					"KNIFE;200;-1;WEAPON",
 					"CAPTURE_DEVICE;50;-1;TOOL",
-					"SMOKE_BOMB;75;-1;TOOL",
-					"PAN;125;-1;TOOL",
-					"LOCKPICK;150;-1;TOOL",
-					"WRENCH;75;-1;TOOL",
-					"FAKE_REVOLVER;50;-1;TOOL",
-					"CROWBAR;50;-1;TOOL",
+					"SMOKE_BOMB;50;-1;TOOL",
+					"PAN;75;-1;TOOL",
+					"LOCKPICK;100;-1;TOOL",
+					"WRENCH;50;-1;TOOL",
+					"FAKE_REVOLVER;25;-1;TOOL",
+					"CROWBAR;35;-1;TOOL",
 					"FIRECRACKER;5;-1;TOOL",
 					"NOTE;10;-1;TOOL",
 					"MEGAPHONE;10;-1;TOOL"
@@ -59,7 +59,7 @@
 				"minimumPlayerSpawn": 12,
 				"maximumPlayerSpawn": 99,
 				"playersPerAdditionalSpawn": 12,
-				"maximumSpawn": 2,
+				"maximumSpawn": 3,
 				"seePoison": true
 			},
 			// Coins received for killing your target
@@ -305,7 +305,7 @@
 				"enableShop": true,
 				"shopEntries": [
 					"RITUAL_DAGGER;225;-1;WEAPON",
-					"SMOKE_BOMB;100;-1;TOOL",
+					"SMOKE_BOMB;75;-1;TOOL",
 					"PAN;100;-1;TOOL",
 					"FAKE_REVOLVER;50;-1;TOOL",
 					"LOCKPICK;125;-1;TOOL",
@@ -403,8 +403,8 @@
 					"KNIFE;300;-1;WEAPON",
 					"PSYCHO_MODE;475;-1;WEAPON",
 					"GRENADE;425;-1;WEAPON",
-					"POISON_VIAL;35;-1;POISON",
-					"FAKE_REVOLVER;75;-1;TOOL",
+					"POISON_VIAL;50;-1;POISON",
+					"FAKE_REVOLVER;50;-1;TOOL",
 					"FIRECRACKER;5;-1;TOOL",
 					"NOTE;10;-1;TOOL",
 					"MEGAPHONE;10;-1;TOOL"
@@ -416,7 +416,7 @@
 				"minimumPlayerSpawn": 12,
 				"maximumPlayerSpawn": 99,
 				"playersPerAdditionalSpawn": 12,
-				"maximumSpawn": 2,
+				"maximumSpawn": 3,
 				"seePoison": true
 			},
 			// Teleport cooldown, in seconds
@@ -428,14 +428,14 @@
 					"enableShop": true,
 					"shopEntries": [
 						"CAPTURE_DEVICE;75;-1;TOOL",
-						"SMOKE_BOMB;125;-1;TOOL",
-						"PAN;175;-1;TOOL",
-						"LOCKPICK;200;-1;TOOL",
-						"WRENCH;100;-1;TOOL",
-						"FAKE_REVOLVER;75;-1;TOOL",
-						"CROWBAR;100;-1;TOOL",
+						"SMOKE_BOMB;75;-1;TOOL",
+						"PAN;150;-1;TOOL",
+						"LOCKPICK;175;-1;TOOL",
+						"WRENCH;75;-1;TOOL",
+						"FAKE_REVOLVER;50;-1;TOOL",
+						"CROWBAR;75;-1;TOOL",
 						"BODY_BAG;75;-1;TOOL",
-						"SCORPION;35;-1;POISON",
+						"SCORPION;50;-1;POISON",
 						"FIRECRACKER;5;-1;TOOL",
 						"NOTE;10;-1;TOOL",
 						"MEGAPHONE;10;-1;TOOL"
@@ -1321,7 +1321,8 @@
 					"enableShop": true,
 					"shopEntries": [
 						"REVOLVER;400;-1;WEAPON",
-						"SMOKE_BOMB;100;-1;TOOL",
+						"SMOKE_BOMB;75;-1;TOOL",
+						"CROWBAR;100;-1;TOOL",
 						"LOCKPICK;125;-1;TOOL"
 					],
 					"passiveIncome": true,
