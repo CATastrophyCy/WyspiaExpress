@@ -66,6 +66,8 @@
 			"targetReward": 100,
 			// Can pick up guns from the floor in both stages
 			"canPickUpGuns": false,
+			// Can use active instinct before finishing the first contract
+			"stage1Instinct": true,
 			// Shop used in stage 2. Uses basic.enableShop
 			"stage2ShopEntries": [
 				"KNIFE;100;-1;WEAPON",
@@ -912,7 +914,9 @@
 					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
 					"seePoison": true
-				}
+				},
+				// Enable instinct before becoming a killer
+				"enableInstinct": true
 			},
 			// Config options for EXECUTIONER
 			"executionerConfig": {
@@ -939,7 +943,9 @@
 					"seePoison": true
 				},
 				// Executioner coin reward after their target dies from revolver by non killer
-				"reward": 150
+				"reward": 150,
+				// Enable instinct before becoming a killer
+				"enableInstinct": true
 			}
 		},
 		"kinsWatheRoles": {
