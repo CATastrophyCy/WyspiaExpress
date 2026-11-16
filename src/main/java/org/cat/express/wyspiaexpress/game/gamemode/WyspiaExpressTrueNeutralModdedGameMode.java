@@ -10,7 +10,6 @@ import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.KinsWatheRoles;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
-import org.cat.express.wyspiaexpress.RoleDraftStatisticsManager;
 import org.cat.express.wyspiaexpress.RoleDraftStatisticsManager.Pool;
 import org.cat.express.wyspiaexpress.config.GameConfigs;
 import pro.fazeclan.river.stupid_express.constants.SERoles;
@@ -49,16 +48,15 @@ public final class WyspiaExpressTrueNeutralModdedGameMode extends WyspiaExpressM
         List<Role> eligibleRoles = round.eligibleRoles(role -> !WyspiaExpressRoles.HIDDEN_ROLES.contains(role) && isRoleAllowed(role));
 
         // Main threats and aligned neutrals have separate quotas and histories.
-        var trueNeutralDraft = round.assignNeutralPool(eligibleRoles.stream().filter(WyspiaExpressTrueNeutralModdedGameMode::isMainRole).toList(),
+        int trueNeutralCount = round.assignNeutralPool(eligibleRoles.stream().filter(WyspiaExpressTrueNeutralModdedGameMode::isMainRole).toList(),
                 players.size() / WyspiaExpress.MODE_CONFIG.trueNeutralDividend(), Pool.TRUE_NEUTRAL);
         round.assignVigilantes(players.size() / GameConfigs.vigilanteDividend(gameWorld));
-        var alignedNeutralDraft = round.assignNeutralPool(eligibleRoles.stream().filter(WyspiaExpressRoles.KILLER_SIDED_NEUTRALS::contains).toList(),
+        round.assignNeutralPool(eligibleRoles.stream().filter(WyspiaExpressRoles.KILLER_SIDED_NEUTRALS::contains).toList(),
                 players.size() / WyspiaExpress.MODE_CONFIG.killerAlignedNeutralDividend(), Pool.KILLER_ALIGNED_NEUTRAL);
-        round.assignCivilianReplacements(eligibleRoles.stream()
-                .filter(role -> role.isInnocent() && !role.canUseKiller()).toList())
+        round.assignCivilianReplacements(eligibleRoles)
                 .assignAmnesiacFallback();
-        RoleDraftStatisticsManager.getInstance().recordRound(players, gameWorld, Pool.TRUE_NEUTRAL, alignedNeutralDraft.hadEligibleCapacity());
-        round.completeAssignments(trueNeutralDraft.assignedCount(),
+        round.recordDraftHistory();
+        round.completeAssignments(trueNeutralCount,
                 WyspiaExpressTrueNeutralModdedGameMode::isMainRole);
     }
 }

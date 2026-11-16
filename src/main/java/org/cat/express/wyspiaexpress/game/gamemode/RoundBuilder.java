@@ -7,12 +7,9 @@ import dev.doctor4t.wathe.cca.GameTimeComponent;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.ScoreboardRoleSelectorComponent;
 import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
-import dev.doctor4t.wathe.game.GameConstants;
-import dev.doctor4t.wathe.index.WatheItems;
 import dev.doctor4t.wathe.util.AnnounceWelcomePayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
@@ -35,10 +32,8 @@ import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.RoleComponent;
 import org.cat.express.wyspiaexpress.components.RoundResultComponent;
-import org.cat.express.wyspiaexpress.components.PlayerConfigComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
 import org.cat.express.wyspiaexpress.config.GameConfigs;
-import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.cat.express.wyspiaexpress.util.RoleUtil;
 import pro.fazeclan.river.stupid_express.constants.SERoles;
 
@@ -58,11 +53,12 @@ final class RoundBuilder {
     private final ScoreboardRoleSelectorComponent nativeRoleSelector;
     private final ToDoubleBiFunction<Pool, ServerPlayerEntity> selectionWeights;
     private final WorldModifierComponent worldModifiers;
+    private final Map<Pool, List<ServerPlayerEntity>> draftCandidates = new EnumMap<>(Pool.class);
     private boolean nativeTeamSelection;
 
     RoundBuilder(ServerWorld world, GameWorldComponent gameWorld, List<ServerPlayerEntity> participants) {
-        this(world, gameWorld, participants, (pool, player) -> gameWorld.areWeightsEnabled()
-                ? RoleDraftStatisticsManager.getInstance().computeWeight(player.getUuid(), pool) : 1);
+        this(world, gameWorld, participants,
+                (pool, player) -> RoleDraftStatisticsManager.getInstance().computeWeight(player.getUuid(), pool));
     }
 
     RoundBuilder(ServerWorld world, GameWorldComponent gameWorld, List<ServerPlayerEntity> participants,
@@ -120,27 +116,22 @@ final class RoundBuilder {
     }
 
     int assignBaseKillers(int killerQuota) {
-        List<ServerPlayerEntity> candidates = new ArrayList<>(participants);
-        candidates.removeIf(player -> {
-            Role forced = Harpymodloader.FORCED_MODDED_ROLE_FLIP.get(player.getUuid());
-            if (forced == null) return false;
-            if (forced.canUseKiller()) nativeRoleSelector.forcedKillers.add(player.getUuid());
-            return true;
-        });
-        if (candidates.stream().anyMatch(player -> PlayerConfigComponent.KEY.get(player).avoidKiller())) {
-            candidates.removeIf(player -> nativeRoleSelector.forcedKillers.contains(player.getUuid()));
-            candidates = RoleUtil.preferRoleCandidates(candidates, killerQuota - nativeRoleSelector.forcedKillers.size(),
-                    player -> !PlayerConfigComponent.KEY.get(player).avoidKiller());
-        }
-        return nativeTeamSelection ? nativeRoleSelector.assignKillers(world, gameWorld, candidates, killerQuota)
-                : assignWeightedBaseKillers(candidates, killerQuota);
+        List<ServerPlayerEntity> candidates = RoleUtil.prepareKillerCandidates(participants, nativeRoleSelector);
+        draftCandidates.put(Pool.KILLER, candidates);
+        return nativeTeamSelection ? RoleUtil.assignNativeKillers(world, gameWorld, nativeRoleSelector, candidates, killerQuota)
+                : RoleUtil.assignWeightedKillers(world, gameWorld, nativeRoleSelector, candidates, killerQuota,
+                        player -> getWeight(Pool.KILLER, player));
     }
 
     RoundBuilder assignVigilantes(int vigilanteQuota) {
         List<ServerPlayerEntity> candidates = unassignedCivilians();
         candidates.removeIf(player -> Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid()));
+        RoleUtil.restrictForcedPlayers(nativeRoleSelector.forcedVigilantes, candidates);
+        draftCandidates.put(Pool.VIGILANTE, candidates.stream()
+                .filter(player -> !nativeRoleSelector.forcedVigilantes.contains(player.getUuid())).toList());
         if (nativeTeamSelection) nativeRoleSelector.assignVigilantes(world, gameWorld, candidates, vigilanteQuota);
-        else assignWeightedVigilantes(candidates, vigilanteQuota);
+        else RoleUtil.assignWeightedVigilantes(world, gameWorld, nativeRoleSelector, candidates, vigilanteQuota,
+                player -> getWeight(Pool.VIGILANTE, player));
         return this;
     }
 
@@ -160,37 +151,41 @@ final class RoundBuilder {
                         && RoleUtil.roleMeetPlayerRequirement(role)).toList();
     }
 
-    /** Assigned count excludes fallback; availability includes forced picks and pre-draw role capacity. */
-    record DraftResult(int assignedCount, boolean hadEligibleCapacity) {}
-
-    DraftResult assignNeutralPool(List<Role> rolePool, int quota, Pool historyPool) {
-        boolean hadEligibleCapacity = quota > 0 && rolePool.stream()
-                .anyMatch(role -> RoleUtil.getRemainingRoleSpawnLimit(role, gameWorld) > 0);
+    int assignNeutralPool(List<Role> rolePool, int quota, Pool historyPool) {
         List<ServerPlayerEntity> candidates = unassignedCivilians();
         int forcedCount = assignForcedRoles(candidates, rolePool);
         int remainingQuota = Math.max(0, quota - forcedCount);
-        List<ServerPlayerEntity> selectedPlayers = selectPlayersForNeutralPool(candidates, remainingQuota, historyPool);
+        draftCandidates.put(historyPool, RoleUtil.eligibleNeutralCandidates(gameWorld, candidates));
+        List<ServerPlayerEntity> selectedPlayers = new ArrayList<>(
+                selectPlayersForNeutralPool(candidates, remainingQuota, historyPool));
         int assignedCount = assignNeutralRoleCopies(selectedPlayers, rolePool, remainingQuota);
+        // A partner can come from the shortlist, but Lover 2 does not fill a neutral slot.
+        List<ServerPlayerEntity> picks = selectedPlayers;
+        while (assignedCount < remainingQuota
+                && picks.stream().anyMatch(player -> gameWorld.isRole(player, WyspiaExpressRoles.LOVER_2))) {
+            int slots = remainingQuota - assignedCount;
+            picks = selectPlayersForNeutralPool(candidates, slots, historyPool);
+            int added = assignNeutralRoleCopies(picks, rolePool, slots);
+            if (added == 0) break;
+            assignedCount += added;
+            selectedPlayers.addAll(picks);
+        }
         assignAmnesiacFallback(selectedPlayers);
-        return new DraftResult(forcedCount + assignedCount, forcedCount > 0 || hadEligibleCapacity);
+        return forcedCount + assignedCount;
+    }
+
+    void recordDraftHistory() {
+        RoleDraftStatisticsManager.getInstance().recordRound(participants, gameWorld, draftCandidates);
     }
 
     List<ServerPlayerEntity> selectPlayersForNeutralPool(List<ServerPlayerEntity> candidates, int quota, Pool historyPool) {
-        if (quota <= 0 || candidates.isEmpty()) return List.of();
-        return selectPlayersByPoolWeight(eligibleNeutralCandidates(candidates, quota), quota, historyPool);
+        return RoleUtil.selectPreferredPlayers(RoleUtil.eligibleNeutralCandidates(gameWorld, candidates), quota, RoleUtil::wantsNeutral,
+                (players, slots) -> RoleUtil.selectPlayersByWeight(players, slots,
+                        player -> getWeight(historyPool, player), world.getRandom()));
     }
 
-    private List<ServerPlayerEntity> eligibleNeutralCandidates(List<ServerPlayerEntity> candidates, int quota) {
-        List<ServerPlayerEntity> eligibleCandidates = new ArrayList<>(candidates);
-        eligibleCandidates.removeIf(player -> Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())
-                || !Harpymodloader.OVERWRITE_ROLES.contains(gameWorld.getRole(player)));
-        return RoleUtil.preferRoleCandidates(eligibleCandidates, quota,
-                player -> !PlayerConfigComponent.KEY.get(player).avoidNeutral());
-    }
-
-    private List<ServerPlayerEntity> selectPlayersByPoolWeight(List<ServerPlayerEntity> candidates, int quota, Pool historyPool) {
-        return RoleUtil.selectPlayersByWeight(candidates, quota,
-                player -> selectionWeights.applyAsDouble(historyPool, player), world.getRandom());
+    private double getWeight(Pool pool, ServerPlayerEntity player) {
+        return gameWorld.areWeightsEnabled() ? selectionWeights.applyAsDouble(pool, player) : 1;
     }
 
     RoundBuilder assignAmnesiacFallback() {
@@ -235,71 +230,12 @@ final class RoundBuilder {
         return this;
     }
 
-    private int assignWeightedBaseKillers(List<ServerPlayerEntity> candidates, int remainingKillerQuota) {
-        ArrayList<UUID> selectedKillerIds = new ArrayList<>();
-        for (UUID uuid : nativeRoleSelector.forcedKillers) {
-            selectedKillerIds.add(uuid);
-            remainingKillerQuota--;
-            nativeRoleSelector.killerRounds.put(uuid, nativeRoleSelector.killerRounds.getOrDefault(uuid, 1) + 1);
-        }
-        nativeRoleSelector.forcedKillers.clear();
-
-        if (remainingKillerQuota > 0) {
-            List<ServerPlayerEntity> eligibleCandidates = new ArrayList<>(candidates);
-            eligibleCandidates.removeIf(player -> selectedKillerIds.contains(player.getUuid())
-                    || Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid()));
-            eligibleCandidates = RoleUtil.preferRoleCandidates(eligibleCandidates, remainingKillerQuota,
-                    player -> !PlayerConfigComponent.KEY.get(player).avoidKiller());
-            for (ServerPlayerEntity player : selectPlayersByPoolWeight(eligibleCandidates, remainingKillerQuota, Pool.KILLER)) {
-                selectedKillerIds.add(player.getUuid());
-                nativeRoleSelector.killerRounds.put(player.getUuid(), nativeRoleSelector.killerRounds.getOrDefault(player.getUuid(), 1) + 1);
-            }
-        }
-        for (UUID killerId : selectedKillerIds) {
-            gameWorld.addRole(killerId, WatheRoles.KILLER);
-            PlayerEntity killer = world.getPlayerByUuid(killerId);
-            if (killer != null) {
-                ShopUtil.setCoin(killer, GameConstants.MONEY_START);
-            }
-        }
-        return selectedKillerIds.size();
-    }
-
-    private void assignWeightedVigilantes(List<ServerPlayerEntity> candidates, int remainingVigilanteQuota) {
-        ArrayList<UUID> selectedVigilanteIds = new ArrayList<>();
-        for (UUID uuid : nativeRoleSelector.forcedVigilantes) {
-            selectedVigilanteIds.add(uuid);
-            remainingVigilanteQuota--;
-            nativeRoleSelector.vigilanteRounds.put(uuid, nativeRoleSelector.vigilanteRounds.getOrDefault(uuid, 1) + 1);
-
-        }
-        nativeRoleSelector.forcedVigilantes.clear();
-
-        if (remainingVigilanteQuota > 0) {
-            List<ServerPlayerEntity> eligibleCandidates = new ArrayList<>(candidates);
-            eligibleCandidates.removeIf(player -> selectedVigilanteIds.contains(player.getUuid())
-                    || Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid()));
-            for (ServerPlayerEntity player : selectPlayersByPoolWeight(eligibleCandidates, remainingVigilanteQuota, Pool.VIGILANTE)) {
-                selectedVigilanteIds.add(player.getUuid());
-                nativeRoleSelector.vigilanteRounds.put(player.getUuid(), nativeRoleSelector.vigilanteRounds.getOrDefault(player.getUuid(), 1) + 1);
-            }
-        }
-
-        for (UUID uuid : selectedVigilanteIds) {
-            PlayerEntity player = world.getPlayerByUuid(uuid);
-            if (player instanceof ServerPlayerEntity serverPlayer && candidates.contains(serverPlayer) && !gameWorld.canUseKillerFeatures(player)) {
-                // Preserve Wathe's base Vigilante equipment before role-assignment callbacks.
-                player.giveItemStack(new ItemStack(WatheItems.REVOLVER));
-                gameWorld.addRole(player, WatheRoles.VIGILANTE);
-            }
-        }
-    }
-
     List<ServerPlayerEntity> selectNeutralPlayersByRoleHistory(List<ServerPlayerEntity> candidates,
             List<Role> rolePool, int quota) {
-        if (quota <= 0 || candidates.isEmpty()) return new ArrayList<>();
-        return RoleUtil.selectPlayersByRoleHistory(eligibleNeutralCandidates(candidates, quota), rolePool, quota,
-                gameWorld.areWeightsEnabled(), world.getRandom());
+        if (rolePool.isEmpty()) return List.of();
+        return RoleUtil.selectPreferredPlayers(RoleUtil.eligibleNeutralCandidates(gameWorld, candidates), quota, RoleUtil::wantsNeutral,
+                (players, slots) -> RoleUtil.selectPlayersByRoleHistory(players, rolePool, slots,
+                        gameWorld.areWeightsEnabled(), world.getRandom()));
     }
 
     int assignForcedRoles(List<ServerPlayerEntity> candidates, List<Role> eligibleRoles) {
@@ -340,19 +276,20 @@ final class RoundBuilder {
         return assignedCount;
     }
 
-    RoundBuilder assignCivilianReplacements(List<Role> civilianRoles) {
+    RoundBuilder assignCivilianReplacements(List<Role> eligibleRoles) {
+        List<Role> civilianRoles = new ArrayList<>(eligibleRoles);
+        civilianRoles.removeIf(role -> !role.isInnocent() || role.canUseKiller());
         List<ServerPlayerEntity> candidates = unassignedCivilians();
         if (candidates.isEmpty() || civilianRoles.isEmpty()) return this;
-        List<Role> shuffledCivilianRoles = new ArrayList<>(civilianRoles);
-        Collections.shuffle(shuffledCivilianRoles);
+        Collections.shuffle(civilianRoles);
 
         List<ServerPlayerEntity> unassignedCandidates = new ArrayList<>(candidates);
-        for (Role role : shuffledCivilianRoles) {
+        for (Role role : civilianRoles) {
             int copyCount = Math.min(RoleUtil.getRemainingRoleSpawnLimit(role, gameWorld),
                     unassignedCandidates.size());
             if (!Harpymodloader.ROLE_MAX.containsKey(role.identifier())
                     && !WyspiaExpressRoles.ROLES_BASIC_CONFIG.containsKey(role)) {
-                copyCount = Math.min(Math.round((float) candidates.size() / shuffledCivilianRoles.size()), copyCount);
+                copyCount = Math.min(Math.round((float) candidates.size() / civilianRoles.size()), copyCount);
             }
             if (copyCount > 0) {
                 copyCount = world.random.nextInt(copyCount) + 1;
@@ -397,7 +334,7 @@ final class RoundBuilder {
         }
         List<ServerPlayerEntity> eligibleCandidates = new ArrayList<>(candidates);
         eligibleCandidates.removeIf(player -> Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid()));
-        for (ServerPlayerEntity player : RoleUtil.selectPlayersByRoleHistory(eligibleCandidates, List.of(role),
+        for (ServerPlayerEntity player : RoleUtil.selectPlayersForRole(eligibleCandidates, role,
                 requestedCount, gameWorld.areWeightsEnabled(), world.getRandom())) {
             assignedPlayers.add(player);
             RoleUtil.recordRoleAssignment(player, role);

@@ -8,12 +8,9 @@ import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.ScoreboardRoleSelectorComponent;
 import dev.doctor4t.wathe.cca.TrainWorldComponent;
 import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
-import dev.doctor4t.wathe.game.GameConstants;
-import dev.doctor4t.wathe.index.WatheItems;
 import dev.doctor4t.wathe.util.AnnounceWelcomePayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
@@ -37,9 +34,7 @@ import org.cat.express.wyspiaexpress.RoleCategoryStatisticsManager;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.RoleComponent;
-import org.cat.express.wyspiaexpress.components.PlayerConfigComponent;
 import org.cat.express.wyspiaexpress.components.roles.LichReviveComponent;
-import org.cat.express.wyspiaexpress.shop.ShopUtil;
 import org.cat.express.wyspiaexpress.util.RoleUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -49,6 +44,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pro.fazeclan.river.stupid_express.constants.SERoles;
 
 import java.util.*;
+import java.util.function.ToDoubleFunction;
 
 @Mixin(ModdedMurderGameMode.class)
 public abstract class HMLGameInitializeMixin {
@@ -205,166 +201,41 @@ public abstract class HMLGameInitializeMixin {
                 Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())
         );
 
-        List<ServerPlayerEntity> killerCandidates = new ArrayList<>(participants);
-        killerCandidates.removeIf(player -> {
-            if (!Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())) {
-                return false;
-            }
-            Role forced = Harpymodloader.FORCED_MODDED_ROLE_FLIP.get(player.getUuid());
-            if (forced.canUseKiller()) {
-                roleSelector.forcedKillers.add(player.getUuid());
-            }
-            return true;
-        });
-        if (killerCandidates.stream().anyMatch(player -> PlayerConfigComponent.KEY.get(player).avoidKiller())) {
-            killerCandidates.removeIf(player -> roleSelector.forcedKillers.contains(player.getUuid()));
-            killerCandidates = RoleUtil.preferRoleCandidates(killerCandidates,
-                    killerSlots - roleSelector.forcedKillers.size(),
-                    player -> !PlayerConfigComponent.KEY.get(player).avoidKiller());
-        }
-        int assignedKillerCount;
-        if(WyspiaExpress.GAMEMODES_CONFIG.useCustomWeightedAssignment()){
-            assignedKillerCount = wyspiaexpress$assignKillersUsingCategoryHistory(world, roleSelector, gameWorld, killerCandidates, killerSlots);
-            vigilanteCandidates.removeIf(gameWorld::canUseKillerFeatures);
-            wyspiaexpress$assignVigilantesUsingCategoryHistory(world, roleSelector, gameWorld, vigilanteCandidates, vigilanteSlots);
-        }
-        else {
-            assignedKillerCount = roleSelector.assignKillers(world, gameWorld, killerCandidates, killerSlots);
-            vigilanteCandidates.removeIf(gameWorld::canUseKillerFeatures);
+        List<ServerPlayerEntity> killerCandidates = RoleUtil.prepareKillerCandidates(participants, roleSelector);
+        boolean useCustomWeights = WyspiaExpress.GAMEMODES_CONFIG.useCustomWeightedAssignment();
+        int assignedKillerCount = useCustomWeights
+                ? RoleUtil.assignWeightedKillers(world, gameWorld, roleSelector, killerCandidates, killerSlots,
+                        wyspiaexpress$categoryWeight(gameWorld, gameWorld.getKillerDividend(), RoleCategoryStatisticsManager.RoleCategory.KILLER))
+                : RoleUtil.assignNativeKillers(world, gameWorld, roleSelector, killerCandidates, killerSlots);
+        vigilanteCandidates.removeIf(gameWorld::canUseKillerFeatures);
+        RoleUtil.restrictForcedPlayers(roleSelector.forcedVigilantes, vigilanteCandidates);
+        if (useCustomWeights) {
+            RoleUtil.assignWeightedVigilantes(world, gameWorld, roleSelector, vigilanteCandidates, vigilanteSlots,
+                    wyspiaexpress$categoryWeight(gameWorld, gameWorld.getVigilanteDividend(), RoleCategoryStatisticsManager.RoleCategory.VIGILANTE));
+        } else {
             roleSelector.assignVigilantes(world, gameWorld, vigilanteCandidates, vigilanteSlots);
         }
         return assignedKillerCount;
     }
+
     @Unique
-    private int wyspiaexpress$assignKillersUsingCategoryHistory(ServerWorld world, ScoreboardRoleSelectorComponent roleSelector, GameWorldComponent gameWorld,
-            List<ServerPlayerEntity> candidatePlayers, int remainingKillerSlots) {
-        ArrayList<UUID> selectedKillerIds = new ArrayList<>();
-        for (UUID uuid : roleSelector.forcedKillers) {
-            selectedKillerIds.add(uuid);
-            remainingKillerSlots--;
-            roleSelector.killerRounds.put(uuid, roleSelector.killerRounds.getOrDefault(uuid, 1) + 1);
-        }
-        roleSelector.forcedKillers.clear();
-
-        if(remainingKillerSlots > 0) {
-            List<ServerPlayerEntity> eligiblePlayers = new ArrayList<>(candidatePlayers);
-            eligiblePlayers.removeIf(player -> selectedKillerIds.contains(player.getUuid())
-                    || Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid()));
-            eligiblePlayers = RoleUtil.preferRoleCandidates(eligiblePlayers, remainingKillerSlots,
-                    player -> !PlayerConfigComponent.KEY.get(player).avoidKiller());
-            double totalWeight = 0;
-            HashMap<UUID, Double> playerWeights = new HashMap<>();
-            for (ServerPlayerEntity player : eligiblePlayers) {
-                double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(gameWorld.getKillerDividend(), player.getUuid(),
-                        RoleCategoryStatisticsManager.RoleCategory.KILLER);
-                playerWeights.put(player.getUuid(), weight);
-                totalWeight += weight;
-            }
-
-            for (int i = 0; i < remainingKillerSlots && !playerWeights.isEmpty(); i++) {
-                double random = world.getRandom().nextDouble() * totalWeight;
-
-                UUID selectedPlayerId = RoleUtil.selectWeightedPlayerId(playerWeights, random);
-                double weight = playerWeights.get(selectedPlayerId);
-
-                selectedKillerIds.add(selectedPlayerId);
-                playerWeights.remove(selectedPlayerId);
-                totalWeight -= weight;
-
-                roleSelector.killerRounds.put(selectedPlayerId, roleSelector.killerRounds.getOrDefault(selectedPlayerId, 1) + 1);
-            }
-        }
-        for (UUID killerUUID : selectedKillerIds) {
-            gameWorld.addRole(killerUUID, WatheRoles.KILLER);
-            PlayerEntity killer = world.getPlayerByUuid(killerUUID);
-            if (killer != null) {
-                ShopUtil.setCoin(killer, GameConstants.MONEY_START);
-            }
-        }
-        return selectedKillerIds.size();
+    private List<ServerPlayerEntity> wyspiaexpress$selectNeutralsUsingCategoryHistory(ServerWorld world,
+            GameWorldComponent gameWorld, List<ServerPlayerEntity> candidates, int slots) {
+        var weight = wyspiaexpress$categoryWeight(gameWorld, WyspiaExpress.GAMEMODES_CONFIG.neutralDividend(),
+                RoleCategoryStatisticsManager.RoleCategory.NEUTRAL);
+        return RoleUtil.selectPreferredPlayers(RoleUtil.eligibleNeutralCandidates(gameWorld, candidates),
+                slots, RoleUtil::wantsNeutral,
+                (players, count) -> RoleUtil.selectPlayersByWeight(players, count, weight, world.getRandom()));
     }
 
     @Unique
-    private void wyspiaexpress$assignVigilantesUsingCategoryHistory(ServerWorld world, ScoreboardRoleSelectorComponent roleSelector, GameWorldComponent gameWorld,
-            List<ServerPlayerEntity> candidatePlayers, int remainingVigilanteSlots) {
-        ArrayList<UUID> selectedVigilanteIds = new ArrayList<>();
-        for (UUID uuid : roleSelector.forcedVigilantes) {
-            selectedVigilanteIds.add(uuid);
-            remainingVigilanteSlots--;
-            roleSelector.vigilanteRounds.put(uuid, roleSelector.vigilanteRounds.getOrDefault(uuid, 1) + 1);
-
-        }
-        roleSelector.forcedVigilantes.clear();
-
-        if(remainingVigilanteSlots > 0) {
-            double totalWeight = 0;
-            HashMap<UUID, Double> playerWeights = new HashMap<>();
-            for (ServerPlayerEntity player : candidatePlayers) {
-                double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(gameWorld.getVigilanteDividend(), player.getUuid(),
-                        RoleCategoryStatisticsManager.RoleCategory.VIGILANTE);
-                playerWeights.put(player.getUuid(), weight);
-                totalWeight += weight;
-            }
-
-            for (int i = 0; i < remainingVigilanteSlots && !playerWeights.isEmpty(); i++) {
-                double random = world.getRandom().nextDouble() * totalWeight;
-
-                UUID selectedPlayerId = RoleUtil.selectWeightedPlayerId(playerWeights, random);
-                double weight = playerWeights.get(selectedPlayerId);
-
-                selectedVigilanteIds.add(selectedPlayerId);
-                playerWeights.remove(selectedPlayerId);
-                totalWeight -= weight;
-
-                roleSelector.vigilanteRounds.put(selectedPlayerId, roleSelector.vigilanteRounds.getOrDefault(selectedPlayerId, 1) + 1);
-            }
-        }
-
-        for (UUID uuid : selectedVigilanteIds) {
-            PlayerEntity player = world.getPlayerByUuid(uuid);
-            if (player instanceof ServerPlayerEntity serverPlayer && candidatePlayers.contains(serverPlayer) && !gameWorld.canUseKillerFeatures(player)) {
-                player.giveItemStack(new ItemStack(WatheItems.REVOLVER)); // I'd like to change this to roleAssigned, but that would break the normal behavior
-                gameWorld.addRole(player, WatheRoles.VIGILANTE);
-            }
-        }
+    private ToDoubleFunction<ServerPlayerEntity> wyspiaexpress$categoryWeight(GameWorldComponent gameWorld, int dividend,
+            RoleCategoryStatisticsManager.RoleCategory category) {
+        return player -> gameWorld.areWeightsEnabled()
+                ? RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(dividend, player.getUuid(), category)
+                : 1;
     }
-    @Unique
-    private List<ServerPlayerEntity> wyspiaexpress$selectNeutralsUsingCategoryHistory(ServerWorld world, GameWorldComponent gameWorld, List<ServerPlayerEntity> candidatePlayers,
-            int remainingSlots) {
-        List<ServerPlayerEntity> selectedPlayers = new ArrayList<>();
-        if (remainingSlots <= 0 || candidatePlayers.isEmpty()) {
-            return selectedPlayers;
-        }
-        List<ServerPlayerEntity> eligiblePlayers = new ArrayList<>(candidatePlayers);
-        eligiblePlayers.removeIf(player -> Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())
-                || !Harpymodloader.OVERWRITE_ROLES.contains(gameWorld.getRole(player)));
-        eligiblePlayers = RoleUtil.preferRoleCandidates(eligiblePlayers, remainingSlots,
-                player -> !PlayerConfigComponent.KEY.get(player).avoidNeutral());
-        double totalWeight = 0;
-        HashMap<UUID, Double> playerWeights = new HashMap<>();
-        for (ServerPlayerEntity player : eligiblePlayers) {
-            if (Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())) continue;
-            if (!Harpymodloader.OVERWRITE_ROLES.contains(gameWorld.getRole(player))) continue;
-            double weight = RoleCategoryStatisticsManager.getInstance().computeCategoryWeight(WyspiaExpress.GAMEMODES_CONFIG.neutralDividend(), player.getUuid(),
-                    RoleCategoryStatisticsManager.RoleCategory.NEUTRAL);
-            playerWeights.put(player.getUuid(), weight);
-            totalWeight += weight;
-        }
 
-        for (int i = 0; i < remainingSlots && !playerWeights.isEmpty(); i++) {
-            double random = world.getRandom().nextDouble() * totalWeight;
-
-            UUID selectedPlayerId = RoleUtil.selectWeightedPlayerId(playerWeights, random);
-            double weight = playerWeights.get(selectedPlayerId);
-            PlayerEntity player = world.getPlayerByUuid(selectedPlayerId);
-            if (player instanceof ServerPlayerEntity serverPlayer) {
-                selectedPlayers.add(serverPlayer);
-                playerWeights.remove(selectedPlayerId);
-                totalWeight -= weight;
-            }
-        }
-        return selectedPlayers;
-    }
     @Unique
     private void wyspiaexpress$assignKillerRoles(ServerWorld world,
             GameWorldComponent gameWorld,
@@ -463,19 +334,13 @@ public abstract class HMLGameInitializeMixin {
             List<Role> trueNeutralRoles,
             List<Role> killerAlignedNeutralRoles,
             int remainingSlots) {
-        List<ServerPlayerEntity> selectedPlayers = new ArrayList<>();
-        if (remainingSlots <= 0 || candidatePlayers.isEmpty()) {
-            return selectedPlayers;
-        }
-        List<ServerPlayerEntity> eligiblePlayers = new ArrayList<>(candidatePlayers);
-        eligiblePlayers.removeIf(player -> Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid())
-                || !Harpymodloader.OVERWRITE_ROLES.contains(gameWorld.getRole(player)));
-        eligiblePlayers = RoleUtil.preferRoleCandidates(eligiblePlayers, remainingSlots,
-                player -> !PlayerConfigComponent.KEY.get(player).avoidNeutral());
         List<Role> eligibleRoles = new ArrayList<>(trueNeutralRoles);
         eligibleRoles.addAll(killerAlignedNeutralRoles);
-        return RoleUtil.selectPlayersByRoleHistory(eligiblePlayers, eligibleRoles, remainingSlots,
-                gameWorld.areWeightsEnabled(), world.getRandom());
+        if (eligibleRoles.isEmpty()) return List.of();
+        return RoleUtil.selectPreferredPlayers(RoleUtil.eligibleNeutralCandidates(gameWorld, candidatePlayers),
+                remainingSlots, RoleUtil::wantsNeutral,
+                (players, slots) -> RoleUtil.selectPlayersByRoleHistory(players, eligibleRoles, slots,
+                        gameWorld.areWeightsEnabled(), world.getRandom()));
     }
     @Unique
     private void wyspiaexpress$assignNeutralRoles(ServerWorld world,
@@ -581,7 +446,7 @@ public abstract class HMLGameInitializeMixin {
         }
         List<ServerPlayerEntity> eligiblePlayers = new ArrayList<>(candidatePlayers);
         eligiblePlayers.removeIf(player -> Harpymodloader.FORCED_MODDED_ROLE_FLIP.containsKey(player.getUuid()));
-        for (ServerPlayerEntity player : RoleUtil.selectPlayersByRoleHistory(eligiblePlayers, List.of(role),
+        for (ServerPlayerEntity player : RoleUtil.selectPlayersForRole(eligiblePlayers, role,
                 requestedAssignments, gameWorld.areWeightsEnabled(), world.getRandom())) {
             assignedPlayers.add(player);
             RoleUtil.recordRoleAssignment(player, role);

@@ -20,7 +20,6 @@ import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.components.AbilityCooldownComponent;
-import org.cat.express.wyspiaexpress.components.PlayerConfigComponent;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.cat.express.wyspiaexpress.util.RoleUtil;
@@ -110,15 +109,15 @@ public final class LoversComponent implements AutoSyncedComponent {
         while (count < limit && (count < requestedPairs || !forced.isEmpty())) {
             if (forced.isEmpty() && candidates.isEmpty()) break;
             ServerPlayerEntity first = !forced.isEmpty() ? forced.removeFirst()
-                    : RoleUtil.selectPlayersByRoleHistory(candidates, List.of(WyspiaExpressRoles.LOVER_1),
-                            1, game.areWeightsEnabled(), world.getRandom()).getFirst();
+                    : RoleUtil.selectPlayersForRole(candidates, WyspiaExpressRoles.LOVER_1,
+                    1, game.areWeightsEnabled(), world.getRandom()).getFirst();
             List<ServerPlayerEntity> partners = companions.stream().filter(player -> player != first).toList();
             if (partners.isEmpty()) break;
-            partners = RoleUtil.preferRoleCandidates(partners, 1,
-                    player -> !PlayerConfigComponent.KEY.get(player).avoidNeutral());
+            List<ServerPlayerEntity> willing = partners.stream().filter(RoleUtil::wantsNeutral).toList();
+            if (!willing.isEmpty()) partners = willing;
             // Prefer civilians outside this draft's already-selected neutral recipients.
             List<ServerPlayerEntity> civilians = partners.stream().filter(player -> !primaryCandidates.contains(player)).toList();
-            if (!civilians.isEmpty()) partners = new ArrayList<>(civilians);
+            if (!civilians.isEmpty()) partners = civilians;
             ServerPlayerEntity second = RoleUtil.selectPlayersByRoleHistory(partners,
                     List.of(WyspiaExpressRoles.LOVER_1), 1, game.areWeightsEnabled(), world.getRandom()).getFirst();
             pair(first.getUuid(), second.getUuid());

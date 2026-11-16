@@ -7,7 +7,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
-import org.cat.express.wyspiaexpress.RoleDraftStatisticsManager;
 import org.cat.express.wyspiaexpress.RoleDraftStatisticsManager.Pool;
 import org.cat.express.wyspiaexpress.config.GameConfigs;
 import pro.fazeclan.river.stupid_express.constants.SERoles;
@@ -42,13 +41,12 @@ public final class WyspiaExpressKillerModdedGameMode extends WyspiaExpressModded
         }
 
         List<Role> eligibleRoles = round.eligibleRoles(role -> !WyspiaExpressRoles.HIDDEN_ROLES.contains(role) && isRoleAllowed(role));
-        var alignedNeutralDraft = round.assignNeutralPool(eligibleRoles.stream().filter(WyspiaExpressRoles.KILLER_SIDED_NEUTRALS::contains).toList(),
+        round.assignNeutralPool(eligibleRoles.stream().filter(WyspiaExpressRoles.KILLER_SIDED_NEUTRALS::contains).toList(),
                 players.size() / WyspiaExpress.MODE_CONFIG.killerAlignedNeutralDividend(), Pool.KILLER_ALIGNED_NEUTRAL);
-        round.assignCivilianReplacements(eligibleRoles.stream()
-                .filter(role -> role.isInnocent() && !role.canUseKiller()).toList())
+        round.assignCivilianReplacements(eligibleRoles)
                 .assignAmnesiacFallback()
                 .configureLichRevives(killerQuota);
-        RoleDraftStatisticsManager.getInstance().recordRound(players, gameWorld, Pool.KILLER, alignedNeutralDraft.hadEligibleCapacity());
+        round.recordDraftHistory();
         round.completeAssignments(assignedKillerCount);
     }
 }

@@ -15,10 +15,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.EnumMap;
-import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /** Selection history for the new modes; legacy/HML reporting and weights remain independent. */
@@ -83,22 +84,26 @@ public final class RoleDraftStatisticsManager {
     }
 
     public void recordRound(List<ServerPlayerEntity> participants, GameWorldComponent gameWorld,
-                            Pool mainPool, boolean alignedDraft) {
-        if (participants.isEmpty()) return;
-        var activePools = EnumSet.of(mainPool, Pool.VIGILANTE);
-        if (alignedDraft) activePools.add(Pool.KILLER_ALIGNED_NEUTRAL);
-        var assignedCounts = new EnumMap<Pool, Integer>(Pool.class);
+                            Map<Pool, List<ServerPlayerEntity>> draftCandidates) {
+        var assignments = new EnumMap<Pool, Set<ServerPlayerEntity>>(Pool.class);
         for (ServerPlayerEntity player : participants) {
-            Pool assigned = assignedPool(gameWorld.getRole(player));
-            if (assigned != null) assignedCounts.merge(assigned, 1, Integer::sum);
+            Pool pool = assignedPool(gameWorld.getRole(player));
+            if (pool != null) assignments.computeIfAbsent(pool, ignored -> new HashSet<>()).add(player);
         }
-        for (ServerPlayerEntity player : participants) {
-            Pool assigned = assignedPool(gameWorld.getRole(player));
-            for (Pool pool : activePools) {
-                // Actual allocations account for rounded quotas, capacity and forced picks.
-                // All participants earn their share, including those who opted out.
-                double expectedShare = assignedCounts.getOrDefault(pool, 0) / (double) participants.size();
-                record(player.getUuid(), pool, expectedShare, assigned == pool);
+        for (var draft : draftCandidates.entrySet()) {
+            Pool pool = draft.getKey();
+            List<ServerPlayerEntity> candidates = draft.getValue();
+            Set<ServerPlayerEntity> recipients = assignments.getOrDefault(pool, Set.of());
+            long filledSlots = candidates.stream().filter(recipients::contains).count();
+            if (filledSlots > 0) {
+                // Candidates include opt-outs. Only slots filled by the draw contribute credit.
+                double expectedShare = filledSlots / (double) candidates.size();
+                for (ServerPlayerEntity player : candidates) {
+                    record(player.getUuid(), pool, expectedShare, recipients.contains(player));
+                }
+            }
+            for (ServerPlayerEntity player : recipients) {
+                if (!candidates.contains(player)) record(player.getUuid(), pool, 0, true);
             }
         }
         save();

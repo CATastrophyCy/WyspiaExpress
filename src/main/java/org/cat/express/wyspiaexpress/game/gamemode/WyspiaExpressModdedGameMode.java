@@ -65,8 +65,7 @@ public class WyspiaExpressModdedGameMode extends GameMode {
         else round.assignKillerReplacements(role -> true);
 
         assignLegacyNeutrals(world, gameWorld, round, players.size() / WyspiaExpress.GAMEMODES_CONFIG.neutralDividend());
-        round.assignCivilianReplacements(round.eligibleRoles(role -> role.isInnocent() && !role.canUseKiller()
-                && !WyspiaExpressRoles.TRUE_NEUTRALS.contains(role) && !WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)))
+        round.assignCivilianReplacements(round.eligibleRoles(role -> true))
                 .assignAmnesiacFallback()
                 .configureLichRevives(killerQuota);
         round.completeAssignments(assignedKillerCount);
