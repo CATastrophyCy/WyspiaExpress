@@ -31,15 +31,7 @@
   "abilities": [
     {
       "text": {
-        "translate": "guidebook.wyspiaexpress.roles.kinswathe.dreamer.ability.1",
-        "with": [
-          {
-            "value": "minimum"
-          },
-          {
-            "value": "maximum"
-          }
-        ]
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.dreamer.ability.1"
       }
     },
     {
@@ -53,7 +45,15 @@
     },
     {
       "text": {
-        "translate": "guidebook.wyspiaexpress.roles.kinswathe.dreamer.ability.3"
+        "translate": "guidebook.wyspiaexpress.roles.kinswathe.dreamer.ability.3",
+        "with": [
+          {
+            "value": "minimum"
+          },
+          {
+            "value": "maximum"
+          }
+        ]
       }
     },
     {
