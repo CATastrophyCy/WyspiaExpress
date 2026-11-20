@@ -4,10 +4,12 @@
 		"enabled": true,
 		// Items that can be deleted. Gamemode overrides replace this list
 		"items": [
-			"wathe:key", "wyspiaexpress:fake_revolver", "noellesroles:fake_knife",
+			"wathe:key", "wyspiaexpress:fake_revolver", "noellesroles:fake_knife","wathe:knife", "wathe:lockpick",
 			"wathe:scorpion", "wathe:poison_vial", "noellesroles:delusion_vial", "wathe:body_bag",
 			"wyspiaexpress:megaphone", "wathe:note", "wathe:firecracker", "wyspiaexpress:tape", "starexpress:tape",
-			"kinswathe:knockout_drug"
+			"kinswathe:knockout_drug", "kinswathe:hunting_knife", "kinswathe:blowgun", "kinswathe:poison_injector",
+			"wathe:crowbar", "kinswathe:medical_kit", "kinswathe:capture_device", "kinswathe:pan", "kinswathe:dream_imprint",
+			"wyspiaexpress:smoke_bomb", "kinswathe:wrench"
 		]
 	},
 	// Multiply to crawling speed. i.e. 1.5 means crawling is 50% faster
