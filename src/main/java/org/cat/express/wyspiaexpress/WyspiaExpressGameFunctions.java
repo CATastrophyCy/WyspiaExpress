@@ -30,6 +30,8 @@ import org.cat.express.wyspiaexpress.components.PlayerShopComponent;
 import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.cat.express.wyspiaexpress.components.WorldComponent;
 import org.cat.express.wyspiaexpress.config.ServerConfigModel;
+import org.cat.express.wyspiaexpress.mixin.generic.PlayerStaminaAccessor;
+import org.cat.express.wyspiaexpress.packets.StaminaS2CPacket;
 
 import java.util.*;
 
@@ -71,6 +73,7 @@ public class WyspiaExpressGameFunctions {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             ServerPlayerEntity joining = handler.player;
             ItemCooldownComponent.KEY.get(joining).restore();
+            StaminaS2CPacket.send(joining, ((PlayerStaminaAccessor) joining).wyspiaexpress$getStamina());
             server.execute(() -> {
                 ServerWorld overworld = server.getOverworld();
                 GameWorldComponent gwc = GameWorldComponent.KEY.get(overworld);

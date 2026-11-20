@@ -14,6 +14,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.awt.Color;
+
 @Mixin(value = WatheClient.class, priority = 200)
 public abstract class ExecutionerInstinctMixin {
 
@@ -33,9 +35,10 @@ public abstract class ExecutionerInstinctMixin {
         if (player == null || !(target instanceof PlayerEntity targetPlayer)
                 || !GameFunctions.isPlayerAliveAndSurvival(player)
                 || !GameFunctions.isPlayerAliveAndSurvival(targetPlayer)) return;
-        if (GameWorldComponent.KEY.get(player.getWorld()).isRole(player, Noellesroles.EXECUTIONER)
-                && WatheClient.isInstinctEnabled()
-                && !targetPlayer.getUuid().equals(ExecutionerPlayerComponent.KEY.get(player).target)) {
+        if (!GameWorldComponent.KEY.get(player.getWorld()).isRole(player, Noellesroles.EXECUTIONER)) return;
+        if (targetPlayer.getUuid().equals(ExecutionerPlayerComponent.KEY.get(player).target)) {
+            cir.setReturnValue(Color.YELLOW.getRGB());
+        } else if (WatheClient.isInstinctEnabled()) {
             cir.setReturnValue(0x999999);
         }
     }

@@ -25,18 +25,35 @@ public abstract class SleepingPlayerHitboxMixin extends LivingEntity {
     }
 
     @Override
+    public boolean isPushable() {
+        return !isInPose(EntityPose.SLEEPING) && super.isPushable();
+    }
+
+    @Override
+    protected void tickCramming() {
+        if (!isInPose(EntityPose.SLEEPING)) super.tickCramming();
+    }
+
+    @Override
     protected Box calculateBoundingBox() {
         if (!isInPose(EntityPose.SLEEPING)) return super.calculateBoundingBox();
+        BlockPos bed = getSleepingPosition().orElse(null);
+        if (bed == null) return super.calculateBoundingBox();
         Direction facing = getSleepingDirection();
         if (facing == null) return super.calculateBoundingBox();
 
-        // Match the player renderer's offset from the bed's head and its 15/16 model scale.
-        double scale = getScale() * 0.9375;
+        // Match the renderer's offset and scale along the bed and keep the normal player width.
+        double playerScale = getScale();
+        double modelScale = playerScale * 0.9375;
         Vec3d alongBed = Vec3d.of(facing.getVector());
         Vec3d feet = getPos().subtract(alongBed.multiply(getEyeHeight(EntityPose.STANDING) - 0.1));
-        Vec3d head = feet.add(alongBed.multiply(2 * scale));
-        double halfWidth = 0.53 * scale;
-        return new Box(feet.subtract(0, 0.125, 0), head.add(0, 0.29 * scale, 0))
+        Vec3d head = feet.add(alongBed.multiply(2 * modelScale));
+        double halfWidth = getDimensions(EntityPose.STANDING).width() / 2;
+        double height = 0.125 * playerScale + 0.29 * modelScale;
+        double bedTop = bed.getY() + getWorld().getBlockState(bed)
+                .getCollisionShape(getWorld(), bed).getMax(Direction.Axis.Y);
+        double bottom = Math.max(feet.y - 0.125 * playerScale, bedTop);
+        return new Box(feet.x, bottom, feet.z, head.x, bottom + height, head.z)
                 .expand(facing.getAxis() == Direction.Axis.X ? 0 : halfWidth, 0,
                         facing.getAxis() == Direction.Axis.Z ? 0 : halfWidth);
     }

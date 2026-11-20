@@ -11,6 +11,7 @@
     "WatheMixin",
     "WeightsCommandMixin",
     "WeightsResetMixin",
+    "forcecrawl.CrawlComponentMixin",
     "generic.AutoStartMixin",
     "generic.BlackoutDetailsAccessor",
     "generic.BlackoutDurationMixin",
