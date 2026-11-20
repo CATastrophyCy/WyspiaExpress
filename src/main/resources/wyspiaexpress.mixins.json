@@ -9,6 +9,7 @@
     "ListRolesCommandMixin",
     "TrainMapEffectMixin",
     "WatheMixin",
+    "WeightsCommandMixin",
     "WeightsResetMixin",
     "generic.AutoStartMixin",
     "generic.BlackoutDetailsAccessor",
