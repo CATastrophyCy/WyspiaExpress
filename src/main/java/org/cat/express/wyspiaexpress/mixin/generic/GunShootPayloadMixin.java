@@ -25,6 +25,7 @@ import org.agmas.noellesroles.config.NoellesRolesConfig;
 import org.agmas.noellesroles.executioner.ExecutionerPlayerComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressRoles;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -55,7 +56,7 @@ public abstract class GunShootPayloadMixin {
         PlayerEffectComponent stunComponent = PlayerEffectComponent.KEY.get(player);
         if(stunComponent.stunTicks > 0) return null;
         if (WyspiaExpress.RULES_CONFIG.disableProtectionGunDrop()) {
-            if (targetEntity instanceof PlayerEntity target && target.distanceTo(player) < 65.0) {
+            if (targetEntity instanceof PlayerEntity target && GameUtil.weaponDistance(player, target) < 65.0) {
                 GameWorldComponent game = GameWorldComponent.KEY.get(player.getWorld());
                 boolean backfire = false;
 

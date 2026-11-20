@@ -18,6 +18,7 @@ import dev.doctor4t.wathe.util.AnnounceWelcomePayload;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -34,6 +35,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.TeleportTarget;
@@ -451,11 +453,31 @@ public final class GameUtil {
         return isUnderSmokeEffect(viewer) || isUnderSmokeEffect(target);
     }
 
-    public static boolean isWithinCylinder(Entity entity, Vec3d origin, double radius, double verticalRange) {
-        double dx = entity.getX() - origin.x;
-        double dz = entity.getZ() - origin.z;
-        return Math.abs(entity.getY() - origin.y) <= verticalRange
-                && dx * dx + dz * dz <= radius * radius;
+    public static boolean isSleepingOnBed(PlayerEntity player) {
+        return player.isInPose(EntityPose.SLEEPING) && player.getSleepingDirection() != null;
+    }
+
+    public static float distanceToSleepingHitbox(Entity attacker, PlayerEntity target) {
+        return (float) Math.sqrt(target.getBoundingBox().squaredMagnitude(attacker.getEyePos()));
+    }
+
+    public static float weaponDistance(Entity attacker, PlayerEntity target) {
+        return isSleepingOnBed(target) ? distanceToSleepingHitbox(attacker, target) : target.distanceTo(attacker);
+    }
+
+    public static boolean isWithinCylinder(PlayerEntity player, Vec3d origin, double radius, double verticalRange) {
+        double x = player.getX();
+        double y = player.getY();
+        double z = player.getZ();
+        if (isSleepingOnBed(player)) {
+            Box box = player.getBoundingBox();
+            x = MathHelper.clamp(origin.x, box.minX, box.maxX);
+            y = MathHelper.clamp(origin.y, box.minY, box.maxY);
+            z = MathHelper.clamp(origin.z, box.minZ, box.maxZ);
+        }
+        double dx = x - origin.x;
+        double dz = z - origin.z;
+        return Math.abs(y - origin.y) <= verticalRange && dx * dx + dz * dz <= radius * radius;
     }
 
     public static long countAutoJoinPlayersOutsideReadyArea(World world) {

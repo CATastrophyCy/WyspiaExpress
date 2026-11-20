@@ -51,7 +51,8 @@ public  record RitualDaggerC2SPacket (int target) implements CustomPayload {
             ItemStack mainHandStack = player.getMainHandStack();
             if (!mainHandStack.isOf(WyspiaExpressItems.RITUAL_DAGGER)) return;
             if (player.getItemCooldownManager().isCoolingDown(mainHandStack.getItem())) return;
-            if (!(world.getEntityById(payload.target()) instanceof @NotNull ServerPlayerEntity target) || target.distanceTo(player) > 3.0F) return;
+            if (!(world.getEntityById(payload.target()) instanceof ServerPlayerEntity target)
+                    || GameUtil.weaponDistance(player, target) > 3.0F) return;
 
             GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(target.getWorld());
 

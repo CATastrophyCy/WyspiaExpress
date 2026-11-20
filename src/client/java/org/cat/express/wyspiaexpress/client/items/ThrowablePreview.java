@@ -21,6 +21,7 @@ import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -39,7 +40,6 @@ import java.util.UUID;
 
 public final class ThrowablePreview {
     private static final int RING_SEGMENTS = 32;
-    private static boolean selfHitWarning;
     private static @Nullable BlastPreview blastPreview;
 
     private ThrowablePreview() {}
@@ -48,10 +48,7 @@ public final class ThrowablePreview {
         WorldRenderEvents.BEFORE_ENTITIES.register(ThrowablePreview::update);
         WorldRenderEvents.BEFORE_DEBUG_RENDER.register(ThrowablePreview::renderArea);
         HudRenderCallback.EVENT.register(ThrowablePreview::renderWarning);
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-            blastPreview = null;
-            selfHitWarning = false;
-        });
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> blastPreview = null);
     }
 
     @Nullable
@@ -69,7 +66,6 @@ public final class ThrowablePreview {
     }
 
     private static void update(WorldRenderContext context) {
-        selfHitWarning = false;
         var client = MinecraftClient.getInstance();
         Item item = previewItem(client);
         if (item == null) {
@@ -81,8 +77,30 @@ public final class ThrowablePreview {
         var items = WyspiaExpress.ITEMS_CONFIG.itemConfig;
         double radius = smoke ? items.smokeBombConfig.radius() : items.grenadeConfig.radius();
         double ownerRadius = smoke ? items.smokeBombConfig.ownerRadius() : items.grenadeConfig.ownerRadius();
-        BlastPreview preview = preview(player, context.tickCounter().getTickDelta(false), smoke, radius, ownerRadius);
-        selfHitWarning = preview.selfHit();
+        World world = player.getWorld();
+        long tick = world.getTime();
+        // Predict and test exposure only once per game tick, regardless of frame rate.
+        if (blastPreview != null && blastPreview.world() == world && blastPreview.tick() == tick
+                && blastPreview.smoke() == smoke && blastPreview.radius() == radius
+                && blastPreview.ownerRadius() == ownerRadius) return;
+
+        Impact impact = predict(player, context.tickCounter().getTickDelta(false), smoke);
+        if (impact == null) {
+            blastPreview = new BlastPreview(world, tick, smoke, radius, ownerRadius, null, new Vec3d[0][], Set.of(), false);
+            return;
+        }
+
+        Vec3d origin = impact.origin();
+        Vec3d camera = context.camera().getPos();
+        boolean selfHit = isWithinBlast(player, origin, Math.min(radius, ownerRadius));
+        Set<UUID> targets = new HashSet<>();
+        for (PlayerEntity target : world.getPlayers()) {
+            if (!GameFunctions.isPlayerAliveAndSurvival(target)) continue;
+            boolean inBlast = target == player ? selfHit : isWithinBlast(target, origin, radius);
+            if (inBlast && Explosion.getExposure(camera, target) > 0) targets.add(target.getUuid());
+        }
+        blastPreview = new BlastPreview(world, tick, smoke, radius, ownerRadius, impact,
+                boundary(player, origin, radius, ownerRadius), Set.copyOf(targets), selfHit);
     }
 
     private static void renderArea(WorldRenderContext context) {
@@ -94,7 +112,7 @@ public final class ThrowablePreview {
         Vec3d camera = context.camera().getPos();
         var lines = consumers.getBuffer(RenderLayer.getLines());
         ring(lines, matrix, camera, blastPreview.boundary()[0], 0xB0FFD080);
-        ring(lines, matrix, camera, blastPreview.boundary()[1], selfHitWarning ? 0xF0FF4040 : 0xC0FF6060);
+        ring(lines, matrix, camera, blastPreview.boundary()[1], blastPreview.selfHit() ? 0xF0FF4040 : 0xC0FF6060);
         // Snap the small cross to the hit face; the server's blast origin remains separate.
         Impact impact = blastPreview.impact();
         Vec3d first = impact.face().getAxis() == Direction.Axis.X ? new Vec3d(0, 0.08, 0) : new Vec3d(0.08, 0, 0);
@@ -106,26 +124,31 @@ public final class ThrowablePreview {
     public static boolean shouldHighlight(PlayerEntity target) {
         var client = MinecraftClient.getInstance();
         return blastPreview != null && previewItem(client) != null
-                && !target.isInvisibleTo(client.player) && blastPreview.targets().contains(target.getUuid());
+                && blastPreview.targets().contains(target.getUuid())
+                && !target.isInvisibleTo(client.player) && !GameUtil.isObscuredBySmoke(client.player, target);
     }
 
-    private static boolean isAffected(PlayerEntity owner, PlayerEntity target, Vec3d impact,
-                                      double radius, double ownerRadius) {
-        double effectiveRadius = target.getUuid().equals(owner.getUuid()) ? Math.min(radius, ownerRadius) : radius;
-        return GameFunctions.isPlayerAliveAndSurvival(target)
-                && GameUtil.isWithinCylinder(target, impact, effectiveRadius, 3.5)
+    public static boolean hasGrenadePreview() {
+        return blastPreview != null && !blastPreview.smoke() && blastPreview.impact() != null;
+    }
+
+    public static boolean isVisibleGrenadeTarget(PlayerEntity target, Vec3d camera) {
+        if (!hasGrenadePreview()) return false;
+        UUID id = target.getUuid();
+        return blastPreview.targets().contains(id)
+                || (id.equals(blastPreview.impact().hitPlayer()) && Explosion.getExposure(camera, target) > 0);
+    }
+
+    private static boolean isWithinBlast(PlayerEntity target, Vec3d impact, double radius) {
+        return GameUtil.isWithinCylinder(target, impact, radius, 3.5)
                 && Explosion.getExposure(impact, target) > 0;
     }
 
-    private static boolean isSelfHit(PlayerEntity player, Vec3d impact, double radius, double ownerRadius) {
-        return GameUtil.isWithinCylinder(player, impact, Math.min(radius, ownerRadius), 3.5)
-                && Explosion.getExposure(impact, player) > 0;
-    }
-
     private static void renderWarning(DrawContext context, RenderTickCounter tickCounter) {
+        if (blastPreview == null || !blastPreview.selfHit()) return;
         var client = MinecraftClient.getInstance();
         Item item = previewItem(client);
-        if (!selfHitWarning || item == null) return;
+        if (item == null) return;
         context.drawCenteredTextWithShadow(client.textRenderer,
                 Text.translatable(item == WyspiaExpressItems.SMOKE_BOMB
                     ? "hud.wyspiaexpress.smoke_bomb.self_hit" : "hud.wyspiaexpress.grenade.self_hit"),
@@ -148,9 +171,11 @@ public final class ThrowablePreview {
                 Vec3d origin = probe.getBoundingBox().getCenter();
                 if (hit instanceof BlockHitResult block) {
                     Vec3d marker = block.getPos().add(Vec3d.of(block.getSide().getVector()).multiply(0.01));
-                    return new Impact(origin, marker, block.getSide());
+                    return new Impact(origin, marker, block.getSide(), null);
                 }
-                return new Impact(origin, origin, Direction.UP);
+                UUID hitPlayer = hit instanceof EntityHitResult entityHit && entityHit.getEntity() instanceof PlayerEntity target
+                        ? target.getUuid() : null;
+                return new Impact(origin, origin, Direction.UP, hitPlayer);
             }
             Vec3d velocity = probe.getVelocity();
             probe.setPosition(probe.getPos().add(velocity));
@@ -158,27 +183,6 @@ public final class ThrowablePreview {
                     .subtract(0, probe.getFinalGravity(), 0));
         }
         return null;
-    }
-
-    private static BlastPreview preview(PlayerEntity player, float tickDelta, boolean smoke,
-                                        double radius, double ownerRadius) {
-        World world = player.getWorld();
-        long tick = world.getTime();
-        // Predict and test exposure only once per game tick, regardless of frame rate.
-        if (blastPreview == null || blastPreview.world() != world || blastPreview.tick() != tick
-                || blastPreview.smoke() != smoke || blastPreview.radius() != radius || blastPreview.ownerRadius() != ownerRadius) {
-            Impact impact = predict(player, tickDelta, smoke);
-            Set<UUID> targets = new HashSet<>();
-            if (impact != null) {
-                for (PlayerEntity target : world.getPlayers()) {
-                    if (isAffected(player, target, impact.origin(), radius, ownerRadius)) targets.add(target.getUuid());
-                }
-            }
-            Vec3d[][] boundary = impact == null ? new Vec3d[0][] : boundary(player, impact.origin(), radius, ownerRadius);
-            blastPreview = new BlastPreview(world, tick, smoke, radius, ownerRadius, impact, boundary, Set.copyOf(targets),
-                    impact != null && isSelfHit(player, impact.origin(), radius, ownerRadius));
-        }
-        return blastPreview;
     }
 
     private static Vec3d[][] boundary(PlayerEntity player, Vec3d impact, double radius, double ownerRadius) {
@@ -238,7 +242,7 @@ public final class ThrowablePreview {
                 .normal(matrix, (float) direction.x, (float) direction.y, (float) direction.z);
     }
 
-    private record Impact(Vec3d origin, Vec3d marker, Direction face) {}
+    private record Impact(Vec3d origin, Vec3d marker, Direction face, @Nullable UUID hitPlayer) {}
 
     private record BlastPreview(World world, long tick, boolean smoke, double radius, double ownerRadius,
                                 @Nullable Impact impact, Vec3d[][] boundary, Set<UUID> targets, boolean selfHit) {}

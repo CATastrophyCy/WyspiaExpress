@@ -19,6 +19,7 @@ import net.minecraft.util.Identifier;
 import org.BsXinQin.kinswathe.component.PlayerEffectComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.cat.express.wyspiaexpress.WyspiaExpressItems;
+import org.cat.express.wyspiaexpress.util.GameUtil;
 import org.cat.express.wyspiaexpress.util.ItemUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,7 +54,8 @@ public record OutlawRevolverC2SPacket(int target) implements CustomPayload {
             if(stunComponent.stunTicks > 0) return ;
             player.getWorld().playSound(null, player.getX(), player.getEyeY(), player.getZ(), WatheSounds.ITEM_REVOLVER_CLICK, SoundCategory.PLAYERS, 0.5f, 1f + player.getRandom().nextFloat() * .1f - .05f);
 
-            if (!(player.getServerWorld().getEntityById(payload.target()) instanceof @NotNull PlayerEntity target) || target.distanceTo(player) > 15.0F) {
+            if (!(player.getServerWorld().getEntityById(payload.target()) instanceof PlayerEntity target)
+                    || GameUtil.weaponDistance(player, target) > 15.0F) {
                 setCooldown(player, WyspiaExpress.ITEMS_CONFIG.itemConfig.outlawRevolverConfig.missCooldown());;
             }
             else {
