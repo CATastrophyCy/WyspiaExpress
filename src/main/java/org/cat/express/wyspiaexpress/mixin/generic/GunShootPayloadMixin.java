@@ -35,6 +35,12 @@ import java.util.UUID;
 @Mixin(GunShootPayload.Receiver.class)
 public abstract class GunShootPayloadMixin {
 
+    @WrapOperation(method = "receive(Ldev/doctor4t/wathe/util/GunShootPayload;Lnet/fabricmc/fabric/api/networking/v1/ServerPlayNetworking$Context;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;distanceTo(Lnet/minecraft/entity/Entity;)F"))
+    private float useSleepingHitbox(PlayerEntity target, Entity attacker, Operation<Float> original) {
+        return GameUtil.isSleepingOnBed(target)
+                ? GameUtil.distanceToSleepingHitbox(attacker, target) : original.call(target, attacker);
+    }
 
     @WrapOperation(
             method = "receive(Ldev/doctor4t/wathe/util/GunShootPayload;Lnet/fabricmc/fabric/api/networking/v1/ServerPlayNetworking$Context;)V",
