@@ -187,7 +187,7 @@ public class WyspiaExpressRoles {
             false,
             false,
             Role.MoodType.FAKE,
-            WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2,
+            300,
             true
     ));
     public static Role CULTIST = registerRole(new Role(
@@ -196,19 +196,19 @@ public class WyspiaExpressRoles {
             false,
             false,
             Role.MoodType.FAKE,
-            WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2,
+            300,
             true
     ));
     public static final Role HITMAN = registerRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "hitman"), 0xD7B85B, false, false,
-            Role.MoodType.FAKE, WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2, true));
+            Role.MoodType.FAKE, 300, true));
 
     public static final Role LOVER_1 = registerRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "lover_1"), 0xFFB7C5, false, false,
-            Role.MoodType.FAKE, WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2, true));
+            Role.MoodType.FAKE, 300, true));
     public static final Role LOVER_2 = registerRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "lover_2"), 0xFFB7C5, false, false,
-            Role.MoodType.FAKE, WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2, true));
+            Role.MoodType.FAKE, 300, true));
 
     public static Role VILLAIN_LICENSED = registerRole(new Role(
             Identifier.of(WyspiaExpress.MOD_ID, "villain_licensed"),
@@ -216,7 +216,7 @@ public class WyspiaExpressRoles {
             false,
             false,
             Role.MoodType.FAKE,
-            WatheRoles.CIVILIAN.getMaxSprintTime() * 3 / 2,
+            200,
             true
     ));
     public static Modifier GUESSER = registerModifier(new Modifier(
