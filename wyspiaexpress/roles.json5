@@ -338,7 +338,7 @@
 			// Revive stun duration, in ticks
 			"stun": 80,
 			// The amount of coin rewarded when you convert a player
-			"convertionReward": 20,
+			"conversionReward": 20,
 			// The amount of coin converted player starts with
 			"startingCoin": 0,
 			// Configuration for their CULTIST
