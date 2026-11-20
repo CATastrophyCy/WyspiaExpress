@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.agmas.noellesroles.Noellesroles;
+import org.agmas.noellesroles.executioner.ExecutionerPlayerComponent;
 import org.cat.express.wyspiaexpress.WyspiaExpress;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -33,7 +34,8 @@ public abstract class ExecutionerInstinctMixin {
                 || !GameFunctions.isPlayerAliveAndSurvival(player)
                 || !GameFunctions.isPlayerAliveAndSurvival(targetPlayer)) return;
         if (GameWorldComponent.KEY.get(player.getWorld()).isRole(player, Noellesroles.EXECUTIONER)
-                && WatheClient.isInstinctEnabled()) {
+                && WatheClient.isInstinctEnabled()
+                && !targetPlayer.getUuid().equals(ExecutionerPlayerComponent.KEY.get(player).target)) {
             cir.setReturnValue(0x999999);
         }
     }
