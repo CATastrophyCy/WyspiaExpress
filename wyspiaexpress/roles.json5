@@ -916,6 +916,10 @@
 					"maximumSpawn": 1,
 					"seePoison": true
 				},
+				// Minimum number of bodies required to become a killer
+				"minimumRequirement": 2,
+				// Maximum number of bodies required to become a killer
+				"maximumRequirement": 3,
 				// Enable instinct before becoming a killer
 				"enableInstinct": true
 			},
@@ -1311,7 +1315,7 @@
 				// Minimum delusion requirement
 				"minimumRequirement": 2,
 				// Maximum delusion requirement
-				"maximumRequirement": 4,
+				"maximumRequirement": 2,
 				// Enable instinct
 				"enableInstinct": true
 			},
