@@ -125,22 +125,7 @@ public abstract class HMLGameInitializeMixin {
             if (role == null) continue;
 
             ModdedRoleAssigned.EVENT.invoker().assignModdedRole(player, role);
-
-            if (gameWorld.canUseKillerFeatures(player)) {
-                RoleCategoryStatisticsManager.getInstance()
-                        .recordRoleCategory(player.getUuid(), player.getName().getString(), RoleCategoryStatisticsManager.RoleCategory.KILLER);
-            } else if (gameWorld.isInnocent(player) || role == WyspiaExpressRoles.LOVER_2) {
-                if (gameWorld.isRole(player, WatheRoles.VIGILANTE)) {
-                    RoleCategoryStatisticsManager.getInstance()
-                            .recordRoleCategory(player.getUuid(), player.getName().getString(), RoleCategoryStatisticsManager.RoleCategory.VIGILANTE);
-                } else {
-                    RoleCategoryStatisticsManager.getInstance()
-                            .recordRoleCategory(player.getUuid(), player.getName().getString(), RoleCategoryStatisticsManager.RoleCategory.CIVILIAN);
-                }
-            } else {
-                RoleCategoryStatisticsManager.getInstance()
-                        .recordRoleCategory(player.getUuid(), player.getName().getString(), RoleCategoryStatisticsManager.RoleCategory.NEUTRAL);
-            }
+            RoleCategoryStatisticsManager.getInstance().recordRoundRole(player, role);
         }
 
         // modifier assign

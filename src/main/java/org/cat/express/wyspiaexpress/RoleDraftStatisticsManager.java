@@ -111,11 +111,11 @@ public final class RoleDraftStatisticsManager {
 
     private static Pool assignedPool(Role role) {
         // Lover 2 will count as a civilian
-        if (role == null || role == WyspiaExpressRoles.LOVER_2) return null;
+        if (role == null || role == SERoles.AMNESIAC || role == WyspiaExpressRoles.LOVER_2) return null;
         if (WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)) return Pool.KILLER_ALIGNED_NEUTRAL;
         if (role.canUseKiller()) return Pool.KILLER;
         if (role == WatheRoles.VIGILANTE) return Pool.VIGILANTE;
-        if (WyspiaExpressRoles.TRUE_NEUTRALS.contains(role) && role != SERoles.AMNESIAC) return Pool.TRUE_NEUTRAL;
+        if (WyspiaExpressRoles.TRUE_NEUTRALS.contains(role)) return Pool.TRUE_NEUTRAL;
         return null;
     }
 

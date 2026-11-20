@@ -1,13 +1,19 @@
 package org.cat.express.wyspiaexpress;
 
 import com.google.gson.*;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
+import dev.doctor4t.wathe.api.Role;
+import dev.doctor4t.wathe.api.WatheRoles;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.WorldSavePath;
+import org.cat.express.wyspiaexpress.util.RoleUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pro.fazeclan.river.stupid_express.constants.SERoles;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -58,43 +64,55 @@ public class RoleCategoryStatisticsManager {
         return INSTANCE;
     }
 
-    /**
-     * Direct way to register a role-category assignment by UUID.
-     */
-    public void recordRoleCategory(@NotNull UUID playerUuid,@NotNull String playerName,@NotNull RoleCategory roleCategory) {
+    public void recordRoundRole(ServerPlayerEntity player, Role role) {
+        MutablePlayerStats stats = getPlayerStats(player);
+        stats.rolesReceived.add(RoleUtil.getRoleId(role));
+        if (role == SERoles.AMNESIAC) {
+            stats.amnesiacCount++;
+        } else if (WyspiaExpressRoles.KILLER_SIDED_NEUTRALS.contains(role)) {
+            stats.killerAlignedNeutralCount++;
+        } else if (role.canUseKiller()) {
+            stats.killerCount++;
+        } else if (role == WatheRoles.VIGILANTE) {
+            stats.vigilanteCount++;
+        } else if (role.isInnocent() || role == WyspiaExpressRoles.LOVER_2) {
+            stats.civilianCount++;
+        } else {
+            stats.trueNeutralCount++;
+        }
+    }
 
-        MutablePlayerStats stats = playerStats.computeIfAbsent(playerUuid, ignored -> new MutablePlayerStats(playerUuid));
-
+    private MutablePlayerStats getPlayerStats(ServerPlayerEntity player) {
+        MutablePlayerStats stats = playerStats.computeIfAbsent(player.getUuid(), MutablePlayerStats::new);
+        String playerName = player.getName().getString();
         stats.lastKnownName = playerName;
         if (!stats.namesUsed.contains(playerName)) {
             stats.namesUsed.add(playerName);
         }
-        switch (roleCategory) {
-            case VIGILANTE -> stats.vigilanteCount++;
-            case KILLER -> stats.killerCount++;
-            case CIVILIAN -> stats.civilianCount++;
-            case NEUTRAL -> stats.neutralCount++;
-        }
-    }
-    public PlayerAggregateStats getStats(@NotNull UUID playerUuid) {
-        MutablePlayerStats stats = playerStats.get(playerUuid);
-        return stats == null ? new PlayerAggregateStats(playerUuid, null, null,
-                0, 0, 0, 0, 0, 0, 0, 0, 0)
-                : stats.toImmutable();
+        return stats;
     }
 
-    public double computeCategoryWeight(int dividend,@NotNull UUID playerUuid,@NotNull RoleCategory roleCategory) {
-        PlayerAggregateStats stats = getStats(playerUuid);
-        double target = 1.0 / dividend;
-        double percentage = switch (roleCategory){
-            case VIGILANTE -> stats.vigilantePercentage;
-            case KILLER -> stats.killerPercentage;
-            case NEUTRAL -> stats.neutralPercentage;
-            case CIVILIAN -> stats.civilianPercentage;
-        };
-        double deficit = Math.max(target - percentage / 100.0, 0.0);
-        return WyspiaExpress.GAMEMODES_CONFIG.baseWeight() + deficit;
+    public PlayerAggregateStats getStats(@NotNull UUID playerUuid) {
+        MutablePlayerStats stats = playerStats.get(playerUuid);
+        return (stats == null ? new MutablePlayerStats(playerUuid) : stats).toImmutable();
     }
+
+    public double computeCategoryWeight(int dividend, @NotNull UUID playerUuid, @NotNull RoleCategory roleCategory) {
+        MutablePlayerStats stats = playerStats.get(playerUuid);
+        double frequency = 0;
+        if (stats != null && stats.roundsPlayed() > 0) {
+            int count = switch (roleCategory) {
+                case VIGILANTE -> stats.vigilanteCount;
+                case KILLER -> stats.killerCount;
+                case CIVILIAN -> stats.civilianCount;
+                case NEUTRAL -> stats.legacyNeutralCount + stats.killerAlignedNeutralCount
+                        + stats.trueNeutralCount;
+            };
+            frequency = count / (double) stats.roundsPlayed();
+        }
+        return WyspiaExpress.GAMEMODES_CONFIG.baseWeight() + Math.max(1.0 / dividend - frequency, 0.0);
+    }
+
     private File getFile() {
         String fileName = String.format("player_role_category_stats_%s.json", currentDate.toString());
         return statsDir.resolve(fileName).toFile();
@@ -148,10 +166,14 @@ public class RoleCategoryStatisticsManager {
                         MutablePlayerStats mutable = new MutablePlayerStats(entry.playerUuid());
                         mutable.lastKnownName = entry.lastKnownName();
                         mutable.namesUsed.addAll(entry.namesUsed());
+                        mutable.rolesReceived.addAll(entry.rolesReceived());
                         mutable.vigilanteCount = entry.vigilanteCount();
                         mutable.killerCount = entry.killerCount();
                         mutable.civilianCount = entry.civilianCount();
-                        mutable.neutralCount = entry.neutralCount();
+                        mutable.killerAlignedNeutralCount = entry.killerAlignedNeutralCount();
+                        mutable.trueNeutralCount = entry.trueNeutralCount();
+                        mutable.amnesiacCount = entry.amnesiacCount();
+                        mutable.legacyNeutralCount = entry.legacyNeutralCount();
                         playerStats.put(entry.playerUuid(), mutable);
                     }
                 }
@@ -167,37 +189,51 @@ public class RoleCategoryStatisticsManager {
         private final UUID playerUuid;
         private String lastKnownName;
         private final List<String> namesUsed = new ArrayList<>();
+        private final List<String> rolesReceived = new ArrayList<>();
         private int vigilanteCount;
         private int killerCount;
         private int civilianCount;
-        private int neutralCount;
+        private int killerAlignedNeutralCount;
+        private int trueNeutralCount;
+        private int amnesiacCount;
+        private int legacyNeutralCount;
 
         private MutablePlayerStats(UUID playerUuid) {
             this.playerUuid = playerUuid;
         }
 
-        private PlayerAggregateStats toImmutable() {
-            int total = vigilanteCount + killerCount + civilianCount + neutralCount;
+        private int roundsPlayed() {
+            return killerCount + vigilanteCount + civilianCount + killerAlignedNeutralCount
+                    + trueNeutralCount + amnesiacCount + legacyNeutralCount;
+        }
 
-            double vigilantePct = total == 0 ? 0.0 : (vigilanteCount * 100.0) / total;
-            double killerPct = total == 0 ? 0.0 : (killerCount * 100.0) / total;
-            double civilianPct = total == 0 ? 0.0 : (civilianCount * 100.0) / total;
-            double neutralPct = total == 0 ? 0.0 : (neutralCount * 100.0) / total;
+        private PlayerAggregateStats toImmutable() {
+            int total = roundsPlayed();
             return new PlayerAggregateStats(
                     playerUuid,
                     lastKnownName,
-                    new ArrayList<>(namesUsed),
+                    namesUsed,
                     total,
-                    vigilanteCount,
                     killerCount,
+                    vigilanteCount,
                     civilianCount,
-                    neutralCount,
-                    vigilantePct,
-                    killerPct,
-                    neutralPct,
-                    civilianPct
+                    killerAlignedNeutralCount,
+                    trueNeutralCount,
+                    amnesiacCount,
+                    legacyNeutralCount,
+                    percentage(killerCount, total),
+                    percentage(vigilanteCount, total),
+                    percentage(civilianCount, total),
+                    percentage(killerAlignedNeutralCount, total),
+                    percentage(trueNeutralCount, total),
+                    percentage(amnesiacCount, total),
+                    rolesReceived
             );
         }
+    }
+
+    private static double percentage(int count, int total) {
+        return total == 0 ? 0 : count * 100.0 / total;
     }
 
     public record PlayerAggregateStats(
@@ -205,17 +241,24 @@ public class RoleCategoryStatisticsManager {
             @Nullable String lastKnownName,
             @Nullable List<String> namesUsed,
             int roundsPlayed,
-            int vigilanteCount,
             int killerCount,
+            int vigilanteCount,
             int civilianCount,
-            int neutralCount,
-            double vigilantePercentage,
+            int killerAlignedNeutralCount,
+            int trueNeutralCount,
+            int amnesiacCount,
+            @SerializedName(value = "legacyNeutralCount", alternate = "neutralCount") int legacyNeutralCount,
             double killerPercentage,
-            double neutralPercentage,
-            double civilianPercentage
+            double vigilantePercentage,
+            double civilianPercentage,
+            double killerAlignedNeutralPercentage,
+            double trueNeutralPercentage,
+            double amnesiacPercentage,
+            List<String> rolesReceived
     ) {
         public PlayerAggregateStats {
             namesUsed = namesUsed == null ? List.of() : List.copyOf(namesUsed);
+            rolesReceived = rolesReceived == null ? List.of() : List.copyOf(rolesReceived);
         }
     }
 }
