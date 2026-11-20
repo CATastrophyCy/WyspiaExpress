@@ -340,7 +340,7 @@
 			// The amount of coin rewarded when you convert a player
 			"convertionReward": 20,
 			// The amount of coin converted player starts with
-			"startingCoin": 75,
+			"startingCoin": 0,
 			// Configuration for their CULTIST
 			"cultistConfig": {
 				// Basic role configuration
@@ -348,14 +348,15 @@
 					"enableShop": true,
 					"shopEntries": [
 						"KNIFE;75;-1;WEAPON",
+						"PAN;120;-1;TOOL",
 						"FIRECRACKER;5;-1;TOOL",
 						"NOTE;10;-1;TOOL",
 						"MEGAPHONE;10;-1;TOOL"
 					],
 					"passiveIncome": true,
 					"taskIncome": 0,
-					"items": [],
-					"itemAmount": [],
+					"items": ["KNIFE"],
+					"itemAmount": [1],
 					"minimumPlayerSpawn": 1,
 					"maximumPlayerSpawn": 99,
 					"playersPerAdditionalSpawn": 0,
