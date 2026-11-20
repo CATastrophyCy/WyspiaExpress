@@ -55,7 +55,7 @@ public class PlayerCultistComponent implements AutoSyncedComponent, ServerTickin
                     if(otherPlayer.isConverted()) {
                         otherPlayer.forceSync();
                         player.playSoundToPlayer(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.7f, 1.0f);
-                        ShopUtil.addCoin(player,config.convertionReward());
+                        ShopUtil.addCoin(player,config.conversionReward());
                     }
                     else otherPlayer.sync();
                 }

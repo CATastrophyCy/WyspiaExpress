@@ -22,7 +22,7 @@
     },
     "reward": {
       "config": "roles",
-      "path": "roleConfig.cultLeaderConfig.convertionReward",
+      "path": "roleConfig.cultLeaderConfig.conversionReward",
       "format": "coins"
     },
     "cooldown": {

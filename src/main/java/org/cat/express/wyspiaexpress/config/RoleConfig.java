@@ -181,7 +181,7 @@ public class RoleConfig {
         public int stun = 100;
 
         @Comment("The amount of coin rewarded when you convert a player")
-        public int convertionReward = 50;
+        public int conversionReward = 50;
 
         @Comment("The amount of coin converted player starts with")
         public int startingCoin = 150;
