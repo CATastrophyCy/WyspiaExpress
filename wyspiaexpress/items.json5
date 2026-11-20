@@ -306,13 +306,13 @@
 				"dropOnDeath": false
 			},
 			// Cooldown, in seconds
-			"cooldown": 60,
+			"cooldown": 45,
 			// Whether to enable light restoration function
 			"lightRestoration": true,
 			// Radius of light restoration
 			"radius": 18,
 			// Cooldown of light restoration
-			"lightRestorationCooldown": 120
+			"lightRestorationCooldown": 45
 		}
 	}
 }

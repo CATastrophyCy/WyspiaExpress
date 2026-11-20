@@ -10,5 +10,5 @@
 	// Minimum amount of players for alternate mode to start a true neutral round. At least 12 players are still needed
 	"minimumPlayersForNeutralMode": 12,
 	// Chance of alternate mode starting a true neutral round. 0.5 means 50%
-	"neutralModeChance": 0.5
+	"neutralModeChance": 0.4
 }
