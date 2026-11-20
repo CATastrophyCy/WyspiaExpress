@@ -397,6 +397,12 @@ public class RoleConfig {
         public static class VultureConfig{
             @Comment("Basic role configuration")
             public RoleBasicConfig basic = new RoleBasicConfig();
+            @Comment("Minimum number of bodies required to become a killer")
+            @ConfigRange(min = 1, max = Integer.MAX_VALUE)
+            public int minimumRequirement = 2;
+            @Comment("Maximum number of bodies required to become a killer")
+            @ConfigRange(min = 1, max = Integer.MAX_VALUE)
+            public int maximumRequirement = 4;
             @Comment("Enable instinct before becoming a killer")
             public boolean enableInstinct;
         }
