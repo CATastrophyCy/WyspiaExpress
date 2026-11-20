@@ -79,7 +79,13 @@ import java.util.Objects;
 import java.util.UUID;
 
 public final class GameUtil {
+    private static final UUID DELUSION_MARKER = UUID.fromString("00000000-0000-0000-dead-c0de00000000");
+
     private GameUtil() {}
+
+    public static boolean isDeluded(PlayerPoisonComponent poison) {
+        return poison.poisonTicks > 0 && DELUSION_MARKER.equals(poison.poisoner);
+    }
 
     public static float refillStamina(PlayerEntity player) {
         var role = GameWorldComponent.KEY.get(player.getWorld()).getRole(player);

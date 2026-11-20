@@ -69,7 +69,6 @@ import java.util.UUID;
 @Mixin(value = RoleNameRenderer.class, priority = 1100)
 public abstract class RoleNameRendererMixin {
     @Shadow private static float nametagAlpha;
-    @Unique private static final UUID DELUSION_MARKER = UUID.fromString("00000000-0000-0000-dead-c0de00000000"); // unique string used by Kinswathe
 
     @Unique private static PlayerEntity targetPlayer;
 
@@ -184,7 +183,7 @@ public abstract class RoleNameRendererMixin {
         PlayerPoisonComponent poison = PlayerPoisonComponent.KEY.get(targetPlayer);
         if (poison.poisonTicks > 0) {
             double seconds = Math.ceil(poison.poisonTicks / 2.0) / 10.0;
-            boolean deluded = DELUSION_MARKER.equals(poison.poisoner);
+            boolean deluded = GameUtil.isDeluded(poison);
             details.add(Text.literal((deluded ? "Deluded " : "Poisoned ") + seconds + "s")
                     .withColor(deluded ? 0xB77BFF : 0xFF6B6B));
         }

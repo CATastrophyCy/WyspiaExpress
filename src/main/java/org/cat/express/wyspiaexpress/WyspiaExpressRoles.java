@@ -394,7 +394,7 @@ public class WyspiaExpressRoles {
 
     private static void registerRoleEffect(){
         ModdedRoleAssigned.EVENT.register((player, role)->{
-            if (role == HITMAN) HitmanComponent.KEY.get(player).assign();
+            if (role == HITMAN) HitmanComponent.KEY.get(player).onAssign();
             else HitmanComponent.KEY.get(player).reset();
             if (!LoversComponent.isLover(role)) LoversComponent.KEY.get(player.getWorld()).endBond(player.getUuid());
             if(role.equals(EDGE_LORD)){
