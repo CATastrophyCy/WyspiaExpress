@@ -208,7 +208,7 @@
 				"minimumPlayerSpawn": 9,
 				"maximumPlayerSpawn": 99,
 				"playersPerAdditionalSpawn": 6,
-				"maximumSpawn": 3,
+				"maximumSpawn": 5,
 				"seePoison": false
 			},
 			// Miss chance
@@ -347,16 +347,16 @@
 				"basic": {
 					"enableShop": true,
 					"shopEntries": [
-						"KNIFE;75;-1;WEAPON",
-						"PAN;120;-1;TOOL",
+						"KNIFE;0;1;WEAPON",
+						"PAN;150;1;TOOL",
 						"FIRECRACKER;5;-1;TOOL",
 						"NOTE;10;-1;TOOL",
 						"MEGAPHONE;10;-1;TOOL"
 					],
 					"passiveIncome": true,
 					"taskIncome": 0,
-					"items": ["KNIFE"],
-					"itemAmount": [1],
+					"items": [],
+					"itemAmount": [],
 					"minimumPlayerSpawn": 1,
 					"maximumPlayerSpawn": 99,
 					"playersPerAdditionalSpawn": 0,
@@ -418,7 +418,7 @@
 				"minimumPlayerSpawn": 12,
 				"maximumPlayerSpawn": 99,
 				"playersPerAdditionalSpawn": 12,
-				"maximumSpawn": 3,
+				"maximumSpawn": 4,
 				"seePoison": true
 			},
 			// Teleport cooldown, in seconds
@@ -524,7 +524,7 @@
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
 					"playersPerAdditionalSpawn": 6,
-					"maximumSpawn": 2,
+					"maximumSpawn": 3,
 					"seePoison": false
 				},
 				// Enable ability sound
@@ -625,8 +625,8 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
-					"playersPerAdditionalSpawn": 0,
-					"maximumSpawn": 1,
+					"playersPerAdditionalSpawn": 12,
+					"maximumSpawn": 3,
 					"seePoison": true
 				},
 				// Cooldown, in seconds, when failing a steal (target has no stealable item)
@@ -785,7 +785,7 @@
 					"minimumPlayerSpawn": 15,
 					"maximumPlayerSpawn": 99,
 					"playersPerAdditionalSpawn": 9,
-					"maximumSpawn": 2,
+					"maximumSpawn": 3,
 					"seePoison": false
 				}
 			},
@@ -806,7 +806,7 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 9,
 					"maximumPlayerSpawn": 99,
-					"playersPerAdditionalSpawn": 6,
+					"playersPerAdditionalSpawn": 9,
 					"maximumSpawn": 2,
 					"seePoison": false
 				}
@@ -826,8 +826,8 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 6,
 					"maximumPlayerSpawn": 99,
-					"playersPerAdditionalSpawn": 0,
-					"maximumSpawn": 1,
+					"playersPerAdditionalSpawn": 18,
+					"maximumSpawn": 2,
 					"seePoison": false
 				}
 			},
@@ -912,8 +912,8 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 6,
 					"maximumPlayerSpawn": 99,
-					"playersPerAdditionalSpawn": 0,
-					"maximumSpawn": 1,
+					"playersPerAdditionalSpawn": 15,
+					"maximumSpawn": 2,
 					"seePoison": true
 				},
 				// Minimum number of bodies required to become a killer
@@ -943,8 +943,8 @@
 					"itemAmount": [],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
-					"playersPerAdditionalSpawn": 0,
-					"maximumSpawn": 1,
+					"playersPerAdditionalSpawn": 15,
+					"maximumSpawn": 2,
 					"seePoison": true
 				},
 				// Executioner coin reward after their target dies from revolver by non killer
@@ -1139,7 +1139,7 @@
 					"taskIncome": 0,
 					"items": [],
 					"itemAmount": [],
-					"minimumPlayerSpawn": 1,
+					"minimumPlayerSpawn": 6,
 					"maximumPlayerSpawn": 99,
 					"playersPerAdditionalSpawn": 0,
 					"maximumSpawn": 1,
@@ -1340,8 +1340,8 @@
 					],
 					"minimumPlayerSpawn": 12,
 					"maximumPlayerSpawn": 99,
-					"playersPerAdditionalSpawn": 0,
-					"maximumSpawn": 1,
+					"playersPerAdditionalSpawn": 12,
+					"maximumSpawn": 3,
 					"seePoison": true
 				}
 			}
