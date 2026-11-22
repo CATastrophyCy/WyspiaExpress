@@ -49,7 +49,7 @@
   "hud.wyspiaexpress.hitman.task.drink": "%s wants to drink",
   "hud.wyspiaexpress.hitman.task.outside": "%s wants fresh air",
   "hud.wyspiaexpress.hitman.task.none": "%s is being lazy",
-  "hud.wyspiaexpress.hitman.status.armed": "Armed",
+  "hud.wyspiaexpress.hitman.status.line": "Your target is %s",
   "hud.wyspiaexpress.hitman.status.protected": "Protected",
   "hud.wyspiaexpress.hitman.status.in_love": "In love",
   "hud.wyspiaexpress.hitman.status.poisoned": "Poisoned",

@@ -6,12 +6,9 @@ import dev.doctor4t.wathe.cca.PlayerMoodComponent;
 import dev.doctor4t.wathe.cca.PlayerPoisonComponent;
 import dev.doctor4t.wathe.game.GameFunctions;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -39,9 +36,7 @@ import java.util.UUID;
 public final class HitmanComponent implements AutoSyncedComponent, ServerTickingComponent {
     public static final ComponentKey<HitmanComponent> KEY = ComponentRegistry.getOrCreate(
             Identifier.of(WyspiaExpress.MOD_ID, "hitman"), HitmanComponent.class);
-    private static final TagKey<Item> WEAPONS = TagKey.of(RegistryKeys.ITEM, Identifier.of(WyspiaExpress.MOD_ID, "hitman_weapons"));
-
-    public enum TargetStatus { ARMED, PROTECTED, IN_LOVE, POISONED, DELUDED }
+    public enum TargetStatus { PROTECTED, IN_LOVE, POISONED, DELUDED }
 
     private final PlayerEntity player;
     private UUID target;
@@ -113,9 +108,6 @@ public final class HitmanComponent implements AutoSyncedComponent, ServerTicking
 
     private static EnumSet<TargetStatus> getStatuses(PlayerEntity target, GameWorldComponent game) {
         var statuses = EnumSet.noneOf(TargetStatus.class);
-        if (target.getMainHandStack().isIn(WEAPONS) || target.getOffHandStack().isIn(WEAPONS)) {
-            statuses.add(TargetStatus.ARMED);
-        }
         if (isProtected(target)) statuses.add(TargetStatus.PROTECTED);
         if (LoversComponent.isLover(game.getRole(target))) statuses.add(TargetStatus.IN_LOVE);
         var poison = PlayerPoisonComponent.KEY.get(target);

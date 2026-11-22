@@ -52,9 +52,8 @@ public abstract class HudRendererMixin {
         var statuses = Text.empty();
         for (TargetStatus status : TargetStatus.values()) {
             if (!hitman.hasTargetStatus(status)) continue;
-            if (!statuses.getSiblings().isEmpty()) statuses.append(Text.literal(" · ").withColor(0xAAAAAA));
+            if (!statuses.getSiblings().isEmpty()) statuses.append(Text.literal(", ").withColor(0xAAAAAA));
             int color = switch (status) {
-                case ARMED -> 0xF0C66E;
                 case PROTECTED -> 0x7CA8FF;
                 case IN_LOVE -> WyspiaExpressRoles.LOVER_1.color();
                 case POISONED -> 0xFF6B6B;
@@ -65,7 +64,7 @@ public abstract class HudRendererMixin {
         }
         if (statuses.getSiblings().isEmpty()) return;
         int lineHeight = renderer.fontHeight + 2;
-        var lines = renderer.wrapLines(statuses, right - 6);
+        var lines = renderer.wrapLines(Text.translatable("hud.wyspiaexpress.hitman.status.line", statuses), right - 6);
         int y = taskY - lineHeight * lines.size();
         for (var line : lines) {
             context.drawTextWithShadow(renderer, line, right - renderer.getWidth(line), y, 0xFFFFFF);
